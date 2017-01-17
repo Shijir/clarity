@@ -1,0 +1,43 @@
+<!--
+~ Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+~ This software is released under MIT license.
+~ The full license information can be found in LICENSE in the root directory of this project.
+-->
+
+<!-- FIXME: we will need a class to say whether or not there's a close X so we can slide actions and title to the right...-->
+
+<clr-modal 
+    [clrModalOpen]="_open"
+    [clrModalSize]="size"
+    [clrModalClosable]="closable"
+    [clrModalStaticBackdrop]="true"
+    (clrModalOpenChange)="close()">
+    
+    <div class="modal-body clr-Wizard-content">
+        <!-- FIXME: do we need this much nesting??? -->
+        <div class="content-container clr-Wizard-contentWrapper">
+            <main class="content-area clr-Wizard-contentArea">
+                <ng-content></ng-content>
+            </main>
+
+            <nav class="nav-panel sidenav clr-Wizard-stepNav">
+                <ng-content select="clr-wizard-stepnav"></ng-content>
+            </nav>
+
+            <nav class="nav-panel sidenav clr-Wizard-stepNav xs-hidden">
+                <h3 class="clr-Wizard-title">
+                    <ng-content select="clr-wizard-title"></ng-content>
+                </h3>
+                <!-- FIXME: we will need actions area here... -->
+                <ol class="nav navList clr-Wizard-stepNavList" role="tablist">
+                    <ng-content select="clr-wizard-step"></ng-content>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="modal-footer clr-Wizard-footer">
+        <button class="btn btn-link clr-Wizard-tertiaryAction" (click)="_close($event)">Cancel</button>
+        <button class="btn btn-outline clr-Wizard-secondaryAction" *ngIf="!isFirst" (click)="prev($event)">Back</button>
+        <button class="btn btn-primary clr-Wizard-primaryAction" [class.disabled]="currentPage?.nextDisabled" (click)="_next($event)">{{isLast? 'Finish' : 'Next'}}</button>
+    </div>
+</clr-modal>
