@@ -12,6 +12,7 @@ import {ClarityModule} from "../../clarity-angular";
 import {FormsModule} from "@angular/forms";
 import {ROUTING} from "./wizard.demo.routing";
 import {NewWizardDemo} from "./wizard.demo";
+import {NewWizardBasicDemo} from "./wizard-basic.demo";
 
 @NgModule({
     imports: [
@@ -21,10 +22,12 @@ import {NewWizardDemo} from "./wizard.demo";
         ROUTING
     ],
     declarations: [
-        NewWizardDemo
+        NewWizardDemo,
+        NewWizardBasicDemo
     ],
     exports: [
-        NewWizardDemo
+        NewWizardDemo,
+        NewWizardBasicDemo
     ]
 })
 export default class NewWizardDemoModule {

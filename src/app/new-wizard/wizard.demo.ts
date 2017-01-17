@@ -10,7 +10,7 @@ import {Component, ViewEncapsulation} from "@angular/core";
 @Component({
    moduleId: module.id,
    selector: "clr-new-wizard-demo",
-   styleUrls: ["./wizard.demo.css"],
+//    styleUrls: ["./wizard.demo.css"],
    template: `
       <h2>New Wizard</h2>
       <ul>

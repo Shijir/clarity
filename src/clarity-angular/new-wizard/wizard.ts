@@ -5,20 +5,33 @@
  */
 import {
     Component,
-    ContentChildren,
+    // ContentChildren,
     Input,
     Output,
     EventEmitter,
-    QueryList,
+    // QueryList,
     SimpleChange,
     HostListener
 } from "@angular/core";
 
 // TODO: remove "NEW" when finishing up
 
+// TODO: Eventually we will have...
+// • NewWizardService
+// • NewWizard
+    // • NewWizardTitle
+    // • NewWizardStepNav
+    // • NewWizardPage
+        // • NewStepNavItem template reference? Or NewWizardStepNavItem?
+        // • NewWizardButton
+        // • NewWizardHeaderAction
+        // • NewWizardPageContent
+
 // import {Tabs} from "../tabs/tabs";
 // import {WizardStep} from "./wizard-step";
 // import {WizardPage} from "./wizard-page";
+
+// TODO: probaby don't need this
 import {ScrollingService} from "../main/scrolling-service";
 
 let nbWizardComponents: number = 0;
@@ -64,10 +77,10 @@ export class NewWizard {
     isFirst: boolean = true;
 
     // The current page
-    currentPage: WizardPage = null;
+    // currentPage: WizardPage = null;
+    currentPage: any = null;
 
     constructor(private _scrollingService: ScrollingService) {
-        super();
         this.id = "clr-wizard-" + (nbWizardComponents++);
     }
 
@@ -84,36 +97,41 @@ export class NewWizard {
 
     ngAfterContentInit(): void {
         // set the tab content's title to match the tab link's title
-        this.wizardPageChildren.forEach((wizardPage: WizardPage, index: number): void => {
-            let children: WizardStep[] = this.wizardStepChildren.toArray();
-            if (children[index] && !wizardPage.hasProjectedTitleContent) {
-                wizardPage.title = children[index].title;
-            }
-        });
+
+        // this.wizardPageChildren.forEach((wizardPage: WizardPage, index: number): void => {
+        //     let children: WizardStep[] = this.wizardStepChildren.toArray();
+        //     if (children[index] && !wizardPage.hasProjectedTitleContent) {
+        //         wizardPage.title = children[index].title;
+        //     }
+        // });
 
         // override superclass' children to setup the proper linked relationship between
         // tabs and contents
-        super.overrideTabLinkChildren(this.wizardStepChildren);
-        super.overrideTabContentChildren(this.wizardPageChildren);
+        // super.overrideTabLinkChildren(this.wizardStepChildren);
+        // super.overrideTabContentChildren(this.wizardPageChildren);
 
         // set first step of the wizard as active/current one
         if (this.tabLinks.length > 0) {
-            this.selectTab(this.tabLinks[0] as WizardStep);
+            // this.selectTab(this.tabLinks[0] as WizardStep);
         }
     }
 
     // returns only tabLinks that are not skipped
-    get tabLinks(): WizardStep[] {
-        return this.wizardStepChildren.filter((wizardStep: WizardStep) => {
-            return !wizardStep.isSkipped;
-        });
+    // get tabLinks(): WizardStep[] {
+    get tabLinks(): any[] {
+        // return this.wizardStepChildren.filter((wizardStep: WizardStep) => {
+        //     return !wizardStep.isSkipped;
+        // });
+        return [];
     }
 
     // returns only tabContents that are not skipped
-    get tabContents(): WizardPage[] {
-        return this.wizardPageChildren.filter((wizardPage: WizardPage) => {
-            return !wizardPage.isSkipped;
-        });
+    // get tabContents(): WizardPage[] {
+    get tabContents(): any[] {
+        // return this.wizardPageChildren.filter((wizardPage: WizardPage) => {
+        //     return !wizardPage.isSkipped;
+        // });
+        return [];
     }
 
     // open --
@@ -150,8 +168,10 @@ export class NewWizard {
     // button and emits the onCommit event of the active tab.
     _next(event?: any): void {
         let totalSteps: number = this.tabLinks.length - 1;
-        let i: number = this.currentTabIndex;
-        let page: WizardPage = this.tabContents[i];
+        // let i: number = this.currentTabIndex;
+        let i: number = 0;
+        // let page: WizardPage = this.tabContents[i];
+        let page: any = this.tabContents[i];
         if (!page.nextDisabled) {
             page.onCommit.emit(null);
 
@@ -174,15 +194,19 @@ export class NewWizard {
     // This is a public function that can be used to programmatically advance
     // the user to the next page.
     next(): void {
-        let i: number = this.currentTabIndex;
+        // let i: number = this.currentTabIndex;
+        let i: number = 0;
         let totalSteps: number = this.tabLinks.length - 1;
-        let page: WizardPage = this.tabContents[i];
+        // let page: WizardPage = this.tabContents[i];
+        let page: any = this.tabContents[i];
 
         // Call the onCommit or the Validation function of that step, and if it
         // returns true, continue to the next step.
         if (i < totalSteps && !page.nextDisabled) {
-            let wizardStep: WizardStep = this.tabLinks[i];
-            let nextStep: WizardStep = this.tabLinks[i + 1];
+            // let wizardStep: WizardStep = this.tabLinks[i];
+            // let nextStep: WizardStep = this.tabLinks[i + 1];
+            let wizardStep: any = this.tabLinks[i];
+            let nextStep: any = this.tabLinks[i + 1];
             wizardStep.isCompleted = true;
             this.selectTab(nextStep);
         }
@@ -194,11 +218,14 @@ export class NewWizard {
     // This is a public function that can be used to programmatically go back
     // to the previous step.
     prev(): void {
-        let i: number = this.currentTabIndex;
+        // let i: number = this.currentTabIndex;
+        let i: number = 0;
 
         if (i > 0) {
-            let wizardStep: WizardStep = this.tabLinks[i];
-            let prevStep: WizardStep = this.tabLinks[i - 1];
+            // let wizardStep: WizardStep = this.tabLinks[i];
+            // let prevStep: WizardStep = this.tabLinks[i - 1];
+            let wizardStep: any = this.tabLinks[i];
+            let prevStep: any = this.tabLinks[i - 1];
             wizardStep.isCompleted = false;
             prevStep.isCompleted = false;
             this.selectTab(prevStep);
@@ -208,17 +235,21 @@ export class NewWizard {
     // selectTab --
     //
     // Base class function overridden to call the onLoad event emitter
-    selectTab(wizardNav: WizardStep): void {
-        super.selectTab(wizardNav);
+    // selectTab(wizardNav: WizardStep): void {
+    selectTab(wizardNav: any): void {
+        // super.selectTab(wizardNav);
 
-        let page: WizardPage = this.currentTabContent as WizardPage;
+        // let page: WizardPage = this.currentTabContent as WizardPage;
+        let page: any = {};
         this.currentPage = page;
         page.onLoad.emit(false);
 
         // Toggles next and finish button
         let totalSteps: number = this.tabLinks.length - 1;
-        this.isLast = this.currentTabIndex === totalSteps;
-        this.isFirst = this.currentTabIndex === 0;
+        // this.isLast = this.currentTabIndex === totalSteps;
+        // this.isFirst = this.currentTabIndex === 0;
+        this.isLast = 1 === totalSteps;
+        this.isFirst = 0 === 0;
     }
 
     // skipTab --
@@ -236,15 +267,15 @@ export class NewWizard {
     }
 
     _setTabIsSkipped(tabId: string, isSkipped: boolean): void {
-        this.wizardStepChildren.forEach((wizardStep: WizardStep, index: number) => {
-            if (wizardStep.id === tabId) {
-                wizardStep.isSkipped = isSkipped;
-                // set the isSkipped property of the matching content if it exists
-                if (index < this.wizardPageChildren.length) {
-                    let children: WizardPage[] = this.wizardPageChildren.toArray();
-                    children[index].isSkipped = isSkipped;
-                }
-            }
-        });
+        // this.wizardStepChildren.forEach((wizardStep: WizardStep, index: number) => {
+        //     if (wizardStep.id === tabId) {
+        //         wizardStep.isSkipped = isSkipped;
+        //         // set the isSkipped property of the matching content if it exists
+        //         if (index < this.wizardPageChildren.length) {
+        //             let children: WizardPage[] = this.wizardPageChildren.toArray();
+        //             children[index].isSkipped = isSkipped;
+        //         }
+        //     }
+        // });
     }
 }

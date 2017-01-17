@@ -3,7 +3,8 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Component, ViewChild} from "@angular/core";
+// import {Component, ViewChild} from "@angular/core";
+import { Component } from "@angular/core";
 
 // TODO: remove "NEW" when finishing up
 

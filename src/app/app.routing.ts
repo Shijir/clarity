@@ -9,6 +9,8 @@ import {LandingComponent} from "./landing.component";
 
 export const APP_ROUTES: Routes  = [
     { path: "", component: LandingComponent },
+    { path: "new-wizard", loadChildren: "app/new-wizard/wizard.demo.module" },
+
     { path: "alert", loadChildren: "app/alert/alert.demo.module" },
     { path: "badges", loadChildren: "app/badges/badges.demo.module" },
     { path: "buttons", loadChildren: "app/buttons/buttons.demo.module" },
@@ -40,8 +42,7 @@ export const APP_ROUTES: Routes  = [
     { path: "toggles", loadChildren: "app/toggles/toggles.demo.module" },
     { path: "tooltips", loadChildren: "app/tooltips/tooltips.demo.module" },
     { path: "typography", loadChildren: "app/typography/typography.demo.module" },
-    { path: "wizard", loadChildren: "app/wizard/wizard.demo.module" },
-    { path: "new-wizard", loadChildren: "app/new-wizard/wizard.demo.module" }
+    { path: "wizard", loadChildren: "app/wizard/wizard.demo.module" }
 ];
 
 // TODO: remove "NEW" when finishing up
