@@ -11,10 +11,12 @@
 <button class="btn btn-primary" (click)="wizardDefault.open()">Default Wizard</button>
 -->
 
-<clr-wizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'">
-    <!--<clr-wizard-title>My 5th Level Wizard</clr-wizard-title>-->
+<clr-newwizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'">
+    <div clr-newwizard-title>My 5th Level Wizard</div>
 
-    <clr-wizard-page>
+    <clr-newwizard-page>
+        <clr-newwizard-stepitem-title>Title for Page 1</clr-newwizard-stepitem-title>
+        <clr-newwizard-page-title>Longer Title for Page 1</clr-newwizard-page-title>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
         <!--<clr-wizard-stepnav-item>-->
@@ -43,9 +45,10 @@
                 quas! Quaerat explicabo expedita placeat vero.
             </p>
         <!--</clr-wizard-pageContent>-->
-    </clr-wizard-page>
+    </clr-newwizard-page>
 
-    <clr-wizard-page>
+    <clr-newwizard-page clrPageId="my_custom_id">
+        <clr-newwizard-page-title>Title for Page 2</clr-newwizard-page-title>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
         <!--<clr-wizard-stepnav-item>-->
@@ -74,9 +77,11 @@
                 quas! Quaerat explicabo expedita placeat vero.
             </p>
         <!--</clr-wizard-pageContent>-->
-    </clr-wizard-page>
+    </clr-newwizard-page>
 
-    <clr-wizard-page>
+    <clr-newwizard-page>
+        <clr-newwizard-stepitem-title>S-S-S... Sibillance</clr-newwizard-stepitem-title>
+        <clr-newwizard-page-title>Title for Page 3</clr-newwizard-page-title>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
         <!--<clr-wizard-stepnav-item>-->
@@ -105,20 +110,20 @@
                 quas! Quaerat explicabo expedita placeat vero.
             </p>
         <!--</clr-wizard-pageContent>-->
-    </clr-wizard-page>
-</clr-wizard>
+    </clr-newwizard-page>
+</clr-newwizard>
 
 <!--
 <clr-wizard #wizardlg [(clrWizardOpen)]="open" [clrWizardSize]="'lg'">
-    <div class="wizard-title">Wizard Title</div>
+    <div class="wizard-title">Wizard Title</clr-newwizard-page>
 
     <clr-wizard-step>Step 1</clr-wizard-step>
     <clr-wizard-step>Step 2</clr-wizard-step>
     <clr-wizard-step>Step 3</clr-wizard-step>
 
-    <clr-wizard-page>Content for step 1</clr-wizard-page>
-    <clr-wizard-page>Content for step 2</clr-wizard-page>
-    <clr-wizard-page>Content for step 3</clr-wizard-page>
+    <clr-newwizard-page>Content for step 1</clr-newwizard-page>
+    <clr-newwizard-page>Content for step 2</clr-newwizard-page>
+    <clr-newwizard-page>Content for step 3</clr-newwizard-page>
 </clr-wizard>
 
 <clr-wizard #wizardxl [(clrWizardOpen)]="open">
@@ -128,9 +133,9 @@
     <clr-wizard-step>Step 2</clr-wizard-step>
     <clr-wizard-step>Step 3</clr-wizard-step>
 
-    <clr-wizard-page>Content for step 1</clr-wizard-page>
-    <clr-wizard-page>Content for step 2</clr-wizard-page>
-    <clr-wizard-page>Content for step 3</clr-wizard-page>
+    <clr-newwizard-page>Content for step 1</clr-newwizard-page>
+    <clr-newwizard-page>Content for step 2</clr-newwizard-page>
+    <clr-newwizard-page>Content for step 3</clr-newwizard-page>
 </clr-wizard>
 -->
 

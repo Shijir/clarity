@@ -6,15 +6,24 @@
 import { NewWizard } from "./wizard";
 // import { NewWizardStep } from "./wizard-step";
 import { NewWizardPage } from "./wizard-page";
+import { NewWizardStepitemTitle } from "./wizard-stepitem-title";
+import { NewWizardPageTitle } from "./wizard-page-title";
+import { NewWizardCustomTags } from "./wizard-custom-tags";
 
 export * from "./wizard";
 // export * from "./wizard-step";
 export * from "./wizard-page";
+export * from "./wizard-stepitem-title";
+export * from "./wizard-page-title";
+export * from "./wizard-custom-tags";
 
 // TODO: remove "NEW" when finishing up
 
 export const NEW_WIZARD_DIRECTIVES: any[] = [
     NewWizard,
+    NewWizardCustomTags,
+    NewWizardStepitemTitle,
+    NewWizardPageTitle,
     // NewWizardStep,
     NewWizardPage
 ];

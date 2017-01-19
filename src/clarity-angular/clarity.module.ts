@@ -19,6 +19,7 @@ import {STACK_VIEW_DIRECTIVES} from "./stack-view/index";
 import {TABS_DIRECTIVES} from "./tabs/index";
 import {TREE_VIEW_DIRECTIVES} from "./tree-view/index";
 import {WIZARD_DIRECTIVES} from "./wizard/index";
+import {NEW_WIZARD_DIRECTIVES} from "./new-wizard/index";
 import {ICON_DIRECTIVES} from "./iconography/index";
 
 import {ClrResponsiveNavigationService} from "./nav/clrResponsiveNavigationService";
@@ -41,6 +42,7 @@ import {ClrResponsiveNavigationService} from "./nav/clrResponsiveNavigationServi
         TABS_DIRECTIVES,
         TREE_VIEW_DIRECTIVES,
         WIZARD_DIRECTIVES,
+        NEW_WIZARD_DIRECTIVES,
         ICON_DIRECTIVES
     ],
     exports: [
@@ -56,6 +58,7 @@ import {ClrResponsiveNavigationService} from "./nav/clrResponsiveNavigationServi
         TABS_DIRECTIVES,
         TREE_VIEW_DIRECTIVES,
         WIZARD_DIRECTIVES,
+        NEW_WIZARD_DIRECTIVES,
         ICON_DIRECTIVES
     ]
 })

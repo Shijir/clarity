@@ -16,6 +16,7 @@ export * from "./nav/index";
 export * from "./stack-view/index";
 export * from "./tabs/index";
 export * from "./wizard/index";
+export * from "./new-wizard/index";
 export * from "./animations/collapse/index";
 export * from "./animations/fade/index";
 export * from "./animations/fade-slide/index";

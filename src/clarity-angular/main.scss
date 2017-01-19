@@ -53,5 +53,8 @@
 @import "./animations/animations.clarity"; // no dependencies on other clarity scss
 @import "./tabs/tabs.clarity"; // no dependencies on other clarity scss
 @import "./wizard/wizard.clarity"; // depends on variables.clarity, mixins.clarity, helpers.clarity, color.clarity, layers.clarity
+
+// -- HERE
+@import "./new-wizard/wizard.clarity"; // depends on variables.clarity, mixins.clarity, helpers.clarity, color.clarity, layers.clarity
 @import "./responsive-embed/responsive-embed.clarity"; // no dependencies on other clarity scss
 @import "./typography/fonts.clarity"; // no dependencies on other clarity scss

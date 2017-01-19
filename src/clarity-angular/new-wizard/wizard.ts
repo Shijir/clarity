@@ -37,7 +37,7 @@ import {ScrollingService} from "../main/scrolling-service";
 let nbWizardComponents: number = 0;
 
 @Component({
-    selector: "clr-new-wizard",
+    selector: "clr-newwizard",
     viewProviders: [ScrollingService],
     templateUrl: "./wizard.html",
     host: {
