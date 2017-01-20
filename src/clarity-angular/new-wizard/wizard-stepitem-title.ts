@@ -4,7 +4,11 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 // import { Component, ViewChild } from "@angular/core";
-import { Component } from "@angular/core";
+import {
+    Output,
+    Component,
+    AfterViewInit
+} from "@angular/core";
 
 // TODO: remove "NEW" when finishing up
 
@@ -17,4 +21,5 @@ import { Component } from "@angular/core";
     }
 })
 export class NewWizardStepitemTitle {
+    
 }

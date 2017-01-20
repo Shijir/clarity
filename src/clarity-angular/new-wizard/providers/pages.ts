@@ -2,11 +2,30 @@ import {Injectable} from "@angular/core";
 // import {Subject, Observable} from "rxjs";
 
 @Injectable()
-export class WizardNavigationService {
+export class Pages {
+    // constructor() {}
+
+    // TODIE: nope, it ain't going to work like that...
+    private _all: any[] = [];
+
+    // TODIE: nope, it ain't going to work like that...
+    public add(page: any): void {
+        this._all.push(page);
+        // need to notify that a page was added
+    }
+
+    // TODIE: nope, it ain't going to work like that...
+    public list(onlyVisible: boolean = true): any[] {
+        if (onlyVisible) {
+            // return this._all.filter("by only visible attr prolly !hidden tbh");
+            return this._all;
+        }
+        return this._all;
+    }
 
     // selectable: boolean = false;
 
-    // //Boolean not necessary. Just emitting any value will indicate that a change has occurred
+    // Boolean not necessary. Just emitting any value will indicate that a change has occurred
     // private _change: Subject<boolean> = new Subject<boolean>();
 
     // public get change(): Observable<boolean> {
@@ -30,6 +49,4 @@ export class WizardNavigationService {
     //         selection.children.forEach(child => this.verifyTreeSelection(child));
     //     }
     // }
-
-
 }

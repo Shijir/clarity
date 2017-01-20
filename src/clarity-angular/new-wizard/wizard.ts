@@ -5,14 +5,19 @@
  */
 import {
     Component,
-    // ContentChildren,
+    ContentChildren,
+    // forwardRef,
     Input,
     Output,
     EventEmitter,
-    // QueryList,
+    OnInit,
+    AfterContentInit,
+    QueryList,
     SimpleChange,
     HostListener
 } from "@angular/core";
+import { NewWizardPage } from "./wizard-page";
+import { Pages } from "./providers/pages";
 
 // TODO: remove "NEW" when finishing up
 
@@ -34,11 +39,12 @@ import {
 // TODO: probaby don't need this
 import {ScrollingService} from "../main/scrolling-service";
 
-let nbWizardComponents: number = 0;
+let wizardIdIndex: number = 0;
 
 @Component({
     selector: "clr-newwizard",
     viewProviders: [ScrollingService],
+    providers: [ Pages ],
     templateUrl: "./wizard.html",
     host: {
         "[class.clr-wizard]": "true",
@@ -48,7 +54,7 @@ let nbWizardComponents: number = 0;
         "[class.wizard-xl]": "size == 'xl'" // <= 'xl'!!!
     }
 })
-export class NewWizard {
+export class NewWizard implements OnInit, AfterContentInit {
     id: string;
 
     // @ContentChildren(WizardStep) wizardStepChildren: QueryList<WizardStep>;
@@ -70,6 +76,8 @@ export class NewWizard {
     @Output("clrWizardOnCancel") onCancel: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
+
     // Flag to toggle between Next and Finish button
     isLast: boolean = false;
 
@@ -80,8 +88,7 @@ export class NewWizard {
     // currentPage: WizardPage = null;
     currentPage: any = null;
 
-    constructor(private _scrollingService: ScrollingService) {
-        this.id = "clr-wizard-" + (nbWizardComponents++);
+    constructor(private _scrollingService: ScrollingService, public navService: Pages) {
     }
 
     //Detect when _open is set to true and set no-scrolling to true
@@ -96,6 +103,8 @@ export class NewWizard {
     }
 
     ngAfterContentInit(): void {
+        console.log(this.pages);
+
         // set the tab content's title to match the tab link's title
 
         // this.wizardPageChildren.forEach((wizardPage: WizardPage, index: number): void => {
@@ -277,5 +286,17 @@ export class NewWizard {
         //         }
         //     }
         // });
+    }
+
+    /*
+        users can pass in their own ids for the wizard using clrWizardId="whatever"
+    */
+    @Input("clrWizardId") private userDefinedId: string;
+    ngOnInit() {
+        // if wizard ID exists (check via WizardNavigationService then use it in place of "clr_wizard_") <= TODO
+        // otherwise generate... no, don't worry about that. id will be generated on wizard...
+        this.id = this.userDefinedId ? this.userDefinedId : "clr_wizard_" + (wizardIdIndex++);
+        console.log(this.id);
+        /* SPECME ^ */
     }
 }

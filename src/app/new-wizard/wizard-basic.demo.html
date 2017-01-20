@@ -15,8 +15,8 @@
     <div clr-newwizard-title>My 5th Level Wizard</div>
 
     <clr-newwizard-page>
-        <clr-newwizard-stepitem-title>Title for Page 1</clr-newwizard-stepitem-title>
-        <clr-newwizard-page-title>Longer Title for Page 1</clr-newwizard-page-title>
+        <clr-newwizard-stepitem-title #stepTitle>Title for Page 1</clr-newwizard-stepitem-title>
+        <clr-newwizard-page-title #pageTitle>Longer Title for Page 1</clr-newwizard-page-title>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
         <!--<clr-wizard-stepnav-item>-->
@@ -48,7 +48,8 @@
     </clr-newwizard-page>
 
     <clr-newwizard-page clrPageId="my_custom_id">
-        <clr-newwizard-page-title>Title for Page 2</clr-newwizard-page-title>
+        <clr-newwizard-page-title #pageTitle>Title for Page 2</clr-newwizard-page-title>
+        <label #wtf>OHAI!!</label>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
         <!--<clr-wizard-stepnav-item>-->
@@ -80,8 +81,8 @@
     </clr-newwizard-page>
 
     <clr-newwizard-page>
-        <clr-newwizard-stepitem-title>S-S-S... Sibillance</clr-newwizard-stepitem-title>
-        <clr-newwizard-page-title>Title for Page 3</clr-newwizard-page-title>
+        <clr-newwizard-stepitem-title #stepTitle>S-S-S... Sibillance</clr-newwizard-stepitem-title>
+        <clr-newwizard-page-title #pageTitle>Title for Page 3</clr-newwizard-page-title>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
         <!--<clr-wizard-stepnav-item>-->
