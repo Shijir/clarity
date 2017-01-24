@@ -46,6 +46,7 @@ let wizardIdIndex: number = 0;
     providers: [ WizardNavigationService ],
     templateUrl: "./wizard.html",
     host: {
+        "[id]": "id",
         "[class.clr-wizard]": "true",
         "[class.main-container]": "true", // <= ???
         "[class.wizard-md]": "size == 'md'",
@@ -54,7 +55,6 @@ let wizardIdIndex: number = 0;
     }
 })
 export class NewWizard implements OnInit, AfterContentInit {
-    id: string;
 
     // @ContentChildren(WizardStep) wizardStepChildren: QueryList<WizardStep>;
     // @ContentChildren(WizardPage) wizardPageChildren: QueryList<WizardPage>;
@@ -297,17 +297,29 @@ export class NewWizard implements OnInit, AfterContentInit {
         // });
     }
 
+    private _id: string;
+    public get id(): string {
+        return this._id;
+    }
+
+    private wizardIdPrefix = "clr-wizard-";
+
     /*
         users can pass in their own ids for the wizard using clrWizardId="whatever"
     */
-    @Input("clrWizardId") private userDefinedId: string;
+    @Input("clrWizardId") public userDefinedId: string;
     ngOnInit() {
         // if wizard ID exists (check via WizardNavigationService then use it in place of "clr_wizard_") <= TODO
         // otherwise generate... no, don't worry about that. id will be generated on wizard...
 
         // TODO: get rid of... reference/grab things through template variables or components
-        this.id = this.userDefinedId ? this.userDefinedId : "clr_wizard_" + (wizardIdIndex++);
-        console.log("wizard.ts - ngOnInit - this.id", this.id);
+        let myId = this.userDefinedId ? this.userDefinedId : this.wizardIdPrefix + wizardIdIndex.toString();
         /* SPECME ^ */
+
+        if (!this.userDefinedId) {
+            wizardIdIndex++;
+        }
+        /* SPECME ^ */
+        this.navService.id = this._id = myId;
     }
 }

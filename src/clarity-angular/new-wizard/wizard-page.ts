@@ -11,19 +11,25 @@ import {
     Output,
     EventEmitter,
     ContentChild,
-    TemplateRef
+    TemplateRef,
+    OnInit
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { WizardPageTitleDirective } from "./directives/page-title";
 import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 
+let wizardPageIndex = 0;
+
 // TODO: remove "NEW" when finishing up
 
 @Component({
     moduleId: module.id,
     selector: "clr-newwizard-page",
-    templateUrl: "./wizard-page.html"
+    templateUrl: "./wizard-page.html",
+    host: {
+        "[id]": "id"
+    }
 })
 export class NewWizardPage implements AfterContentInit {
     // EventEmitter which is emitted on open/close of the wizard.
@@ -34,6 +40,12 @@ export class NewWizardPage implements AfterContentInit {
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
 
     constructor(private navService: WizardNavigationService) {
+    }
+
+    private _id: string;
+
+    public get id() {
+        return this._id;
     }
 
     /*
@@ -88,5 +100,11 @@ export class NewWizardPage implements AfterContentInit {
     ngAfterContentInit(): void {
         this.navService.add(this);
         // SPECME^ check that all pages are loaded and the first !hidden one is current
+    }
+
+    ngOnInit(): void {
+        this._id = this.navService.id + "-page-" + wizardPageIndex;
+        wizardPageIndex++;
+        // SPECME -- make sure page ids are incremented as expected
     }
 }

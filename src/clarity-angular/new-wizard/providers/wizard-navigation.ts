@@ -21,7 +21,20 @@ export class WizardNavigationService {
 
     public count = 0;
 
-    get currentPageTitle(): TemplateRef<any> {
+    private _id: string;
+    public get id(): string {
+        return this._id;
+    }
+    public set id(value: string) {
+        // if already defined we want to early return; ghetto private;
+        // SPECME
+        if (this._id) {
+            return;
+        }
+        this._id = value;
+    }
+
+    public get currentPageTitle(): TemplateRef<any> {
         return this.currentPage.title;
     }
 

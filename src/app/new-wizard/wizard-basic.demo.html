@@ -11,8 +11,10 @@
 <button class="btn btn-primary" (click)="wizardDefault.open()">Default Wizard</button>
 -->
 
-<clr-newwizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'">
+<!-- this is how we can pass in a custom ID. verified. SPECME -->
+<!-- clr-newwizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'" [clrWizardId]="'omakase'" -->
 
+<clr-newwizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'">
     <clr-wizard-title>
         My 5th Level Wizard
     </clr-wizard-title>
@@ -54,7 +56,7 @@
         <!--</clr-wizard-pageContent>-->
     </clr-newwizard-page>
 
-    <clr-newwizard-page clrPageId="my_custom_id">
+    <clr-newwizard-page>
 
         <template pageTitle>Title for Page {{ 4/2 }}</template> <!-- mandatory -->
 

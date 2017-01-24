@@ -3,11 +3,9 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-// import { Component, ViewChild } from "@angular/core";
+
 import {
-    // Output,
     Component
-    // AfterViewInit
 } from "@angular/core";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 
@@ -18,9 +16,7 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     selector: "clr-wizard-stepnav",
     template: `
         <ol class="nav navList clr-wizard-stepnav-list" role="tablist">
-            <li *ngFor="let page of navService.pages" [class.active]="page.current">
-                <template [ngTemplateOutlet]="page.navTitle"></template>
-            </li>
+            <li *ngFor="let page of navService.pages" clr-wizard-stepnav-item [page]="page"></li>
         </ol>
     `,
     host: {

@@ -9,6 +9,7 @@ import { NewWizardPage } from "./wizard-page";
 import { NewWizardStepitemTitle } from "./wizard-stepitem-title";
 import { NewWizardPageTitle } from "./wizard-page-title";
 import { NewWizardStepnav } from "./wizard-stepnav";
+import { NewWizardStepnavItem } from "./wizard-stepnav-item";
 
 //directives
 import { NewWizardCustomTags } from "./wizard-custom-tags";
@@ -21,6 +22,7 @@ export * from "./wizard-page";
 export * from "./wizard-stepitem-title";
 export * from "./wizard-page-title";
 export * from "./wizard-stepnav"
+export * from "./wizard-stepnav-item"
 
 // directives
 export * from "./wizard-custom-tags";
@@ -36,6 +38,7 @@ export const NEW_WIZARD_DIRECTIVES: any[] = [
     // NewWizardStep,
     NewWizardPage,
     NewWizardStepnav,
+    NewWizardStepnavItem,
     NewWizardCustomTags,
     WizardPageTitleDirective,
     WizardPageNavTitleDirective
