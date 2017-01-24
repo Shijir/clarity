@@ -78,6 +78,8 @@ export class NewWizard implements OnInit, AfterContentInit {
     @Output("clrWizardOnCancel") onCancel: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    // TODO: need a wizardCurrentPageChanged event... bubbling up from page to service to wizard
+
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
     // Flag to toggle between Next and Finish button... TODO: move to service
