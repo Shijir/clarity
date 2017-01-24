@@ -6,18 +6,20 @@
 import {
     Component,
     ContentChildren,
+    ViewChildren,
     // forwardRef,
     Input,
     Output,
     EventEmitter,
     OnInit,
     AfterContentInit,
+    AfterViewInit,
     QueryList,
     SimpleChange,
     HostListener
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
-import { Pages } from "./providers/pages";
+import { WizardNavigationService } from "./providers/wizard-navigation";
 
 // TODO: remove "NEW" when finishing up
 
@@ -44,7 +46,7 @@ let wizardIdIndex: number = 0;
 @Component({
     selector: "clr-newwizard",
     viewProviders: [ScrollingService],
-    providers: [ Pages ],
+    providers: [ WizardNavigationService ],
     templateUrl: "./wizard.html",
     host: {
         "[class.clr-wizard]": "true",
@@ -78,21 +80,22 @@ export class NewWizard implements OnInit, AfterContentInit {
 
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
-    // Flag to toggle between Next and Finish button
+    // Flag to toggle between Next and Finish button... TODO: move to service
     isLast: boolean = false;
 
-    // Flag to hide/show back button
+    // Flag to hide/show back button... TODO: move to service
     isFirst: boolean = true;
 
     // The current page
     // currentPage: WizardPage = null;
     currentPage: any = null;
 
-    constructor(private _scrollingService: ScrollingService, public navService: Pages) {
+    constructor(private _scrollingService: ScrollingService, public navService: WizardNavigationService) {
     }
 
     //Detect when _open is set to true and set no-scrolling to true
     ngOnChanges(changes: {[propName: string]: SimpleChange}): void {
+        // can get rid of ... TODO: move to service
         if (changes && changes.hasOwnProperty("_open")) {
             if (changes["_open"].currentValue) {
                 this._scrollingService.stopScrolling();
@@ -103,7 +106,7 @@ export class NewWizard implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
-        console.log(this.pages);
+        console.log("wizard.ts - ngAfterContentInit - this.pages", this.pages);
 
         // set the tab content's title to match the tab link's title
 
@@ -123,6 +126,15 @@ export class NewWizard implements OnInit, AfterContentInit {
         if (this.tabLinks.length > 0) {
             // this.selectTab(this.tabLinks[0] as WizardStep);
         }
+
+        console.log("*** are we getting the same pages service? (answer should be 3, not 0) => ", this.navService.count);
+    }
+
+    ngAfterViewInit(): void {
+        console.log("wizard.ts - ngAfterViewInit - this.pages", this.pages);
+
+        console.log("*** are we getting the same pages service? (answer should be 3, not 0; if it's 1 then title worked)");
+        console.log("answer => ", this.navService.count);
     }
 
     // returns only tabLinks that are not skipped
@@ -166,6 +178,9 @@ export class NewWizard implements OnInit, AfterContentInit {
     //
     // This is a private function that is called on the click of the close / cancel
     // button and emits the onCancel event of the active tab.
+
+    // any code that exists in modal we can get rid of... TODO: get rid of
+    // listen to what modal is doing...
     @HostListener("body:keyup.escape")
     _close(event?: any): void {
         this.close();
@@ -295,8 +310,10 @@ export class NewWizard implements OnInit, AfterContentInit {
     ngOnInit() {
         // if wizard ID exists (check via WizardNavigationService then use it in place of "clr_wizard_") <= TODO
         // otherwise generate... no, don't worry about that. id will be generated on wizard...
+
+        // TODO: get rid of... reference/grab things through template variables or components
         this.id = this.userDefinedId ? this.userDefinedId : "clr_wizard_" + (wizardIdIndex++);
-        console.log(this.id);
+        console.log("wizard.ts - ngOnInit - this.id", this.id);
         /* SPECME ^ */
     }
 }

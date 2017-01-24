@@ -5,9 +5,9 @@
  */
 // import { Component, ViewChild } from "@angular/core";
 import {
-    Output,
-    Component,
-    AfterViewInit
+    // Output,
+    Component
+    // AfterViewInit
 } from "@angular/core";
 
 // TODO: remove "NEW" when finishing up
@@ -21,5 +21,5 @@ import {
     }
 })
 export class NewWizardStepitemTitle {
-    
+
 }

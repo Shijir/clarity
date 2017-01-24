@@ -8,20 +8,23 @@ import {
     AfterContentInit,
     Component,
     Input,
-    forwardRef,
+    // forwardRef,
     OnInit,
     ContentChild,
     ContentChildren,
     ViewChild,
-    ViewChildren,
+    // ViewChildren,
     ElementRef,
     AfterViewInit,
-    QueryList
+    QueryList,
+    TemplateRef
 } from "@angular/core";
 
 import { NewWizardStepitemTitle } from "./wizard-stepitem-title";
 import { NewWizardPageTitle } from "./wizard-page-title";
-import { Pages } from "./providers/pages";
+import { WizardNavigationService } from "./providers/wizard-navigation";
+import { WizardPageTitleDirective } from "./directives/page-title";
+import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 
 let wizIndex = 0;
 
@@ -30,33 +33,29 @@ let wizIndex = 0;
 @Component({
     moduleId: module.id,
     selector: "clr-newwizard-page",
-    providers: [ Pages ],
     templateUrl: "./wizard-page.html"
 })
 export class NewWizardPage implements OnInit, AfterContentInit, AfterViewInit {
-    public id: string;
+    @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
+    @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
 
-    @ViewChild("pageTitle") private pageTitle: ElementRef;
-    @ViewChild("stepTitle") private navItemTitle: ElementRef;
-    @ContentChildren("wtf") private whatdafuq: QueryList<ElementRef>;
-
-    constructor(private pages: Pages) {
+    constructor(private navService: WizardNavigationService) {
     }
 
-    /*
-        users can pass in their own ids for wizard pages using clrPageId="whatever"
-    */
-    @Input("clrPageId") private userDefinedId: string;
+    current: boolean = false;
+
     ngOnInit(): void {
         // if wizard ID exists (check via WizardNavigationService then use it in place of "clr_wizard_") <= TODO
         // otherwise generate... no, don't worry about that. id will be generated on wizard...
-        this.id = this.userDefinedId ? this.userDefinedId : "clr_wizardpage_" + (wizIndex++);
-        /* SPECME ^ */
 
         /* TODO: PULL IN WIZARD ID ^^^ AND APPEND WITH "_page_[num]". Or userDefinedId goes on the back...
-        need to grab ID from parent Component
+            need to grab ID from parent Component
         */
-        console.log("after init:", this.whatdafuq);
+        this.navService.count = this.navService.count + 1;
+    }
+
+    get title(): TemplateRef<any> {
+        return this.pageTitle.pageTitleTemplateRef;
     }
 
     ngAfterContentInit(): void {
@@ -65,26 +64,21 @@ export class NewWizardPage implements OnInit, AfterContentInit, AfterViewInit {
         // also pass page id? how important are ids here???
 
         //this.wizardNavigation.whut(???);
-        console.log("after content init",this.whatdafuq);
+        let wiznav = this.navService;
+
+        if(!wiznav.currentPage) {
+            this.current = true;
+            // emit updateCurrent event
+            wiznav.currentPage = this;
+        }
+
+        wiznav.pages.push(this);
+
+        // if (!wiznav.currentPageTitle) {
+        //     wiznav.currentPageTitle = this.pageTitle.pageTitleTemplateRef;
+        // }
     }
 
-// LEFTOFF: stuck here with a very hard problem of trying to find my titles in child components
-// may need to pass them up through. may need to just do something or whatever. it's pretty awful right now.
-
     ngAfterViewInit(): void {
-        console.log("after view init",this.pageTitle);
-        console.log("after view init",this.navItemTitle);
-        if (this.pageTitle) {
-            console.log("after view init",this.pageTitle.nativeElement);
-        }
-        if (this.navItemTitle) {
-            console.log("after view init",this.navItemTitle.nativeElement);
-        }
-
-        this.whatdafuq.changes.subscribe(item => {
-            if (this.whatdafuq.length) {
-                console.log("after view init","what the fuck", this.whatdafuq.first.nativeElement);
-            }
-        });
     }
 }

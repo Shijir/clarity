@@ -1,26 +1,28 @@
-import {Injectable} from "@angular/core";
+import {
+    Injectable,
+    TemplateRef
+} from "@angular/core";
 // import {Subject, Observable} from "rxjs";
+import {NewWizardPage} from "../wizard-page";
 
 @Injectable()
-export class Pages {
+export class WizardNavigationService {
     // constructor() {}
 
     // TODIE: nope, it ain't going to work like that...
-    private _all: any[] = [];
+    public pages: NewWizardPage[] = [];
+
+    public count: number = 0;
+
+    public currentPage: NewWizardPage;
+
+    public currentPageTitle: TemplateRef<any>;
 
     // TODIE: nope, it ain't going to work like that...
-    public add(page: any): void {
-        this._all.push(page);
-        // need to notify that a page was added
-    }
+    public add(page: NewWizardPage): void {
+        this.pages.push(page);
 
-    // TODIE: nope, it ain't going to work like that...
-    public list(onlyVisible: boolean = true): any[] {
-        if (onlyVisible) {
-            // return this._all.filter("by only visible attr prolly !hidden tbh");
-            return this._all;
-        }
-        return this._all;
+        // TODO: need to notify that a page was added
     }
 
     // selectable: boolean = false;
