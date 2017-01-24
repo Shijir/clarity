@@ -19,6 +19,8 @@ export class WizardNavigationService {
 
     public currentPage: NewWizardPage;
 
+    public count = 0;
+
     get currentPageTitle(): TemplateRef<any> {
         return this.currentPage.title;
     }
@@ -27,6 +29,8 @@ export class WizardNavigationService {
         this.pages.push(page);
         this.pageAdded.emit(this);
 
+        this.count++;
+
         if (!this.currentPage && !page.hidden) {
             this.updateCurrent(page);
         }
@@ -34,6 +38,7 @@ export class WizardNavigationService {
 
     public updateCurrent(page: NewWizardPage) {
         this.currentPage = page;
+        console.log("wizard-nav - updateCurrent() - current page is now: ", this.currentPage);
         this.currentPageUpdated.emit(this);
     }
 

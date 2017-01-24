@@ -85,13 +85,8 @@ export class NewWizardPage implements AfterContentInit {
         }
     }
 
-
     ngAfterContentInit(): void {
-        let wiznav = this.navService;
-
-        // TODO: create an add() fn on wiznav that adds the pages and sets up listeners
-        wiznav.add(this);
-
-        console.log("wizard-page - get current: ", this.title, " - isCurrent? ", this.current);
+        this.navService.add(this);
+        // SPECME^ check that all pages are loaded and the first !hidden one is current
     }
 }
