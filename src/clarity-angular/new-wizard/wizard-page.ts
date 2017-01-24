@@ -7,7 +7,7 @@
 import {
     AfterContentInit,
     Component,
-    // Input,
+    Input,
     Output,
     EventEmitter,
     ContentChild,
@@ -36,22 +36,13 @@ export class NewWizardPage implements AfterContentInit {
     constructor(private navService: WizardNavigationService) {
     }
 
-
     /*
         sets/unsets page to current and emits an event that should tell observers which page's current state 
         changed and also whether it was changed to true or false...
         TODO: does it do that?
     */
-
-    _current: boolean = false;
-
     get current() {
-        return this._current;
-    }
-
-    set current(setTo: boolean) {
-        this._current = setTo;
-        this.pageCurrentChanged.emit(this);
+        return this.navService.currentPage === this;
     }
 
     get title(): TemplateRef<any> {
@@ -66,14 +57,41 @@ export class NewWizardPage implements AfterContentInit {
         return this.pageTitle.pageTitleTemplateRef;
     }
 
+    private _hidden = false;
+    /**
+     * Indicates if the wizard page is hidden
+     */
+    public get hidden(): boolean {
+        return this._hidden;
+    }
+    @Input("clrWizardPageHidden")
+    public set hidden(value: boolean) {
+        this._hidden = value;
+    }
+
+    @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
+
+    public hide() {
+        if (!this.hidden) {
+            this.hidden = true;
+            this.hiddenChanged.emit(true);
+        }
+    }
+
+    public show() {
+        if (this.hidden) {
+            this.hidden = false;
+            this.hiddenChanged.emit(false);
+        }
+    }
+
+
     ngAfterContentInit(): void {
         let wiznav = this.navService;
 
         // TODO: create an add() fn on wiznav that adds the pages and sets up listeners
         wiznav.add(this);
 
-        if (!wiznav.currentPage) {
-            this.current = true;
-        }
+        console.log("wizard-page - get current: ", this.title, " - isCurrent? ", this.current);
     }
 }

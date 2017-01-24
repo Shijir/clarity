@@ -15,13 +15,7 @@ export class WizardNavigationService {
     @Output("clrWiznavPageAdded") pageAdded: EventEmitter<any> =
         new EventEmitter<any>(false);
 
-
-    // constructor() {}
-
-    // TODIE: nope, it ain't going to work like that...
     public pages: NewWizardPage[] = [];
-
-    public count: number = 0;
 
     public currentPage: NewWizardPage;
 
@@ -30,13 +24,12 @@ export class WizardNavigationService {
     }
 
     public add(page: NewWizardPage): void {
-        if (!this.currentPage) {
-            // FIXME: state loop here. set on page then bubble back up...
-            this.currentPage = page;
-            page.current = true;
-        }
         this.pages.push(page);
         this.pageAdded.emit(this);
+
+        if (!this.currentPage && !page.hidden) {
+            this.updateCurrent(page);
+        }
     }
 
     public updateCurrent(page: NewWizardPage) {
