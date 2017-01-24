@@ -21,8 +21,8 @@
         <!-- TemplateRef? -->
         <!-- v makes a directive, not a component. use this with ngTemplateOutlet -->
 
-        <template page-title>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
-        <template page-navtitle>Title for Page 1</template> <!-- optional -->
+        <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
+        <template pageNavTitle>Title for Page 1</template> <!-- optional -->
 
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->
@@ -56,7 +56,7 @@
 
     <clr-newwizard-page clrPageId="my_custom_id">
 
-        <template page-title>Title for Page {{ 4/2 }}</template> <!-- mandatory -->
+        <template pageTitle>Title for Page {{ 4/2 }}</template> <!-- mandatory -->
 
         <label #wtf>OHAI!!</label>
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
@@ -90,8 +90,8 @@
     </clr-newwizard-page>
 
     <clr-newwizard-page>
-        <template page-title>Longer Title for Page 3</template> <!-- mandatory -->
-        <template page-navtitle>S-S-S... Sibillance</template> <!-- optional -->
+        <template pageTitle>Longer Title for Page 3</template> <!-- mandatory -->
+        <template pageNavTitle>S-S-S... Sibillance</template> <!-- optional -->
 
         <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
         <!-- <template clrWizardNavStep> -->

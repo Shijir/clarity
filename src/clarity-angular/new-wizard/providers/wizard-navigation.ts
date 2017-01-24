@@ -1,12 +1,21 @@
 import {
+    EventEmitter,
     Injectable,
-    TemplateRef
+    TemplateRef,
+    Output
 } from "@angular/core";
 // import {Subject, Observable} from "rxjs";
 import {NewWizardPage} from "../wizard-page";
 
 @Injectable()
 export class WizardNavigationService {
+    @Output("clrWiznavCurrentPageUpdated") currentPageUpdated: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
+    @Output("clrWiznavPageAdded") pageAdded: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
+
     // constructor() {}
 
     // TODIE: nope, it ain't going to work like that...
@@ -16,13 +25,23 @@ export class WizardNavigationService {
 
     public currentPage: NewWizardPage;
 
-    public currentPageTitle: TemplateRef<any>;
+    get currentPageTitle(): TemplateRef<any> {
+        return this.currentPage.title;
+    }
 
-    // TODIE: nope, it ain't going to work like that...
     public add(page: NewWizardPage): void {
+        if (!this.currentPage) {
+            // FIXME: state loop here. set on page then bubble back up...
+            this.currentPage = page;
+            page.current = true;
+        }
         this.pages.push(page);
+        this.pageAdded.emit(this);
+    }
 
-        // TODO: need to notify that a page was added
+    public updateCurrent(page: NewWizardPage) {
+        this.currentPage = page;
+        this.currentPageUpdated.emit(this);
     }
 
     // selectable: boolean = false;

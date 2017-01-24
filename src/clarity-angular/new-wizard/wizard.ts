@@ -6,14 +6,11 @@
 import {
     Component,
     ContentChildren,
-    ViewChildren,
-    // forwardRef,
     Input,
     Output,
     EventEmitter,
     OnInit,
     AfterContentInit,
-    AfterViewInit,
     QueryList,
     SimpleChange,
     HostListener
@@ -129,13 +126,15 @@ export class NewWizard implements OnInit, AfterContentInit {
             // this.selectTab(this.tabLinks[0] as WizardStep);
         }
 
-        console.log("*** are we getting the same pages service? (answer should be 3, not 0) => ", this.navService.count);
+        console.log("*** are we getting the same pages service? (answer should be 3, not 0) => ",
+            this.navService.count);
     }
 
     ngAfterViewInit(): void {
         console.log("wizard.ts - ngAfterViewInit - this.pages", this.pages);
 
-        console.log("*** are we getting the same pages service? (answer should be 3, not 0; if it's 1 then title worked)");
+        console.log("*** are we getting the same pages service? ",
+            "(answer should be 3, not 0; if it's 1 then title worked)");
         console.log("answer => ", this.navService.count);
     }
 

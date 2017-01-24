@@ -7,7 +7,7 @@
 import {
     AfterContentInit,
     Component,
-    Input,
+    // Input,
     Output,
     EventEmitter,
     ContentChild,
@@ -17,8 +17,6 @@ import {
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { WizardPageTitleDirective } from "./directives/page-title";
 import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
-
-let wizIndex = 0;
 
 // TODO: remove "NEW" when finishing up
 
@@ -72,9 +70,9 @@ export class NewWizardPage implements AfterContentInit {
         let wiznav = this.navService;
 
         // TODO: create an add() fn on wiznav that adds the pages and sets up listeners
-        wiznav.pages.push(this);
+        wiznav.add(this);
 
-        if(!wiznav.currentPage) {
+        if (!wiznav.currentPage) {
             this.current = true;
         }
     }

@@ -9,7 +9,7 @@ import {
 } from "@angular/core";
 
 @Directive({
-    selector: "[page-navtitle]"
+    selector: "[pageNavTitle]"
 })
 export class WizardPageNavTitleDirective {
     constructor(public pageNavTitleTemplateRef: TemplateRef<any>) {
