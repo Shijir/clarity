@@ -32,9 +32,6 @@
         </div>
     </div>
     <div class="modal-footer clr-wizard-footer">
-          BUTTONS GO HERE!
-        <!--<button class="btn btn-link clr-wizard-tertiaryAction" (click)="_close($event)">Cancel</button>-->
-        <!--<button class="btn btn-outline clr-wizard-secondaryAction" *ngIf="!isFirst" (click)="prev($event)">Back</button>-->
-        <!--<button class="btn btn-primary clr-wizard-primaryAction" [class.disabled]="currentPage?.nextDisabled" (click)="_next($event)">{{isLast? 'Finish' : 'Next'}}</button>-->
+       <template [ngTemplateOutlet]="navService.currentPage.buttons"></template>
     </div>
 </clr-modal>

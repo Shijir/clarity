@@ -20,22 +20,24 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     moduleId: module.id,
     selector: "[clr-wizard-stepnav-item]",
     template: `
-        <button type="button" class="btn btn-link nav-link">
+        <button type="button" class="btn btn-link nav-link" (click)="doClick()">
             <template [ngTemplateOutlet]="page.navTitle"></template>
         </button>
     `,
     host: {
         "[id]": "id",
-        "[class.active]": "page.current",
-        "[class.complete]": "page.complete",
-        "[class.nav-item]": "true",
-        "role": "presentation",
         "[attr.aria-selected]": "page.current",
         "[attr.aria-controls]": "page.id",
-        "[class.clr-nav-link]": "true"
+        "role": "presentation",
+        "[class.clr-nav-link]": "true",
+        "[class.nav-item]": "true",
+        "[class.active]": "page.current",
+        "[class.disabled]": "page.disabled",
+        "[class.complete]": "page.complete"
     }
 })
-export class NewWizardStepnavItem {
+
+export class NewWizardStepnavItem implements OnInit {
     constructor(private navService: WizardNavigationService) {
     }
 
@@ -54,16 +56,18 @@ export class NewWizardStepnavItem {
         pageIdParts[1] = "tab";
         this._id = pageIdParts.reverse().join("-");
     }
+
+    doClick(): boolean {
+        // this.tabs.selectTab(this);
+
+        // SPECME: if we click on our own link, we don't want it to do anything
+        if (this.page === this.navService.currentPage) {
+            console.log("OHNOEZ!");
+            return false;
+        }
+
+        // TODO: communicate to navService to update the page
+        console.log("OHAI!");
+        return false; // so that browser doesn't navigate to the href of the anchor tag
+    }
 }
-
-
-/*
-
-<li _ngcontent-gsp-41="" aria-controls="clr-tabs-0-content-0" aria-selected="true" 
-class="clr-nav-link complete" id="clr-tabs-0-tab-0" role="presentation">
-    <button _ngcontent-gsp-41="" class="btn btn-link nav-link" type="button">
-        Step 1
-    </button>
-</li>
-
-*/

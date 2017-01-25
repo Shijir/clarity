@@ -41,10 +41,13 @@
             <a href="#" title="click me for something else">WTF ICON</a>
         </clr-wizard-headerActions>-->
 
-        <!-- do a generic button; add behavior on top of it -->
-        <!--<clr-wizard-button type="cancel">Cancel</clr-wizard-button>-->
-        <!--<clr-wizard-btnPrevious>Previous</clr-wizard-btnPrevious>-->
-        <!--<clr-wizard-btnNext>Next</clr-wizard-btnNext>-->
+        <template pageButtons>
+            <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+            <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
+            <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+            <clr-wizard-button [type]="'danger'">Doitbad</clr-wizard-button>
+            <clr-wizard-button [type]="'finish'">Finish {{ 14 * 2 }}</clr-wizard-button>
+        </template>
 
         <!--<clr-wizard-pageContent>-->
             <p>Content for step 1</p>
@@ -89,6 +92,15 @@
                 quas! Quaerat explicabo expedita placeat vero.
             </p>
         <!--</clr-wizard-pageContent>-->
+
+        <template pageButtons>
+            <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+            <clr-wizard-button [type]="'back'">Previous</clr-wizard-button>
+            <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+            <clr-wizard-button type="'finish'">Finish</clr-wizard-button>
+        </template>
+
+
     </clr-newwizard-page>
 
     <clr-newwizard-page>

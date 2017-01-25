@@ -44,15 +44,24 @@ export class WizardNavigationService {
 
         this.count++;
 
+        // TELLME: do we need .hidden?!
         if (!this.currentPage && !page.hidden) {
             this.updateCurrent(page);
         }
     }
 
-    public updateCurrent(page: NewWizardPage) {
+    public updateCurrent(page: NewWizardPage): void {
         this.currentPage = page;
         console.log("wizard-nav - updateCurrent() - current page is now: ", this.currentPage);
         this.currentPageUpdated.emit(this);
+    }
+
+    public isReady(page: NewWizardPage): boolean {
+        // LEFTOFF: find page in group of pages; find previous page that is not hidden;
+        // see if that page is completed;
+        // if first non-hidden page, return true
+        // necessary? 
+        return true;
     }
 
     // selectable: boolean = false;

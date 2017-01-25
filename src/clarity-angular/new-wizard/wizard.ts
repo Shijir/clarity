@@ -105,8 +105,6 @@ export class NewWizard implements OnInit, AfterContentInit {
     }
 
     ngAfterContentInit(): void {
-        console.log("wizard.ts - ngAfterContentInit - this.pages", this.pages);
-
         // set the tab content's title to match the tab link's title
 
         // this.wizardPageChildren.forEach((wizardPage: WizardPage, index: number): void => {
@@ -128,7 +126,6 @@ export class NewWizard implements OnInit, AfterContentInit {
     }
 
     ngAfterViewInit(): void {
-        console.log("wizard.ts - ngAfterViewInit - this.pages", this.pages);
     }
 
     // returns only tabLinks that are not skipped
