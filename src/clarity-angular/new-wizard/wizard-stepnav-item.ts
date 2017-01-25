@@ -20,11 +20,19 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     moduleId: module.id,
     selector: "[clr-wizard-stepnav-item]",
     template: `
-        <template [ngTemplateOutlet]="page.navTitle"></template>
+        <button type="button" class="btn btn-link nav-link">
+            <template [ngTemplateOutlet]="page.navTitle"></template>
+        </button>
     `,
     host: {
-        "id": "dafuq",
-        "[class.active]": "page.current"
+        "[id]": "id",
+        "[class.active]": "page.current",
+        "[class.complete]": "page.complete",
+        "[class.nav-item]": "true",
+        "role": "presentation",
+        "[attr.aria-selected]": "page.current",
+        "[attr.aria-controls]": "page.id",
+        "[class.clr-nav-link]": "true"
     }
 })
 export class NewWizardStepnavItem {
@@ -39,17 +47,12 @@ export class NewWizardStepnavItem {
     }
 
     ngOnInit(): void {
-        console.log("I am a stepNavItem. this is my page's id: ", this.page.id);
-
-        // LEFTOFF: now i need to setup ids on the individual stepnavitems (see below aria stuff)
-        // i can construct the stepnav from the existing page id
-        // have to work backwards though because front part can be anything
-        //
-        // so i'm thinking pageId; "w-t-f-page-0"
-        // so i'm thinking pageId.split("-"); ["w","t","f","page","0"]
-        // then replacing "page" with "step"... ["w","t","f","step","0"].join("-");
-        // "w-t-f-step-0" <= which is what we want
-        // hop into this with debugger to make sure it works the way you want
+        let pageId = this.page.id;
+        // let pageId = "test-page-wizard-0-page-1";
+        // SPECME
+        let pageIdParts = pageId.split("-").reverse();
+        pageIdParts[1] = "tab";
+        this._id = pageIdParts.reverse().join("-");
     }
 }
 
