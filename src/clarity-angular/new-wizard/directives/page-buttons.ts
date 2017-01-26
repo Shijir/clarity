@@ -15,15 +15,3 @@ export class WizardPageButtonsDirective {
     constructor(public pageButtonsTemplateRef: TemplateRef<any>) {
     }
 }
-
-
-
-
-
-// <template pageButtons>
-//     <clr-wizard-button [type]="cancel">Cancel</clr-wizard-button>
-//     <clr-wizard-button [type]="back">Previous</clr-wizard-button>
-//     <clr-wizard-button [type]="next">Next</clr-wizard-button>
-//     <clr-wizard-button [type]="finish">Finish</clr-wizard-button>
-// </template>
-

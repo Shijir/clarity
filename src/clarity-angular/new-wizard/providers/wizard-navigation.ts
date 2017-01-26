@@ -19,8 +19,6 @@ export class WizardNavigationService {
 
     public currentPage: NewWizardPage;
 
-    public count = 0;
-
     private _id: string;
     public get id(): string {
         return this._id;
@@ -42,8 +40,6 @@ export class WizardNavigationService {
         this.pages.push(page);
         this.pageAdded.emit(this);
 
-        this.count++;
-
         // TELLME: do we need .hidden?!
         if (!this.currentPage && !page.hidden) {
             this.updateCurrent(page);
@@ -52,42 +48,6 @@ export class WizardNavigationService {
 
     public updateCurrent(page: NewWizardPage): void {
         this.currentPage = page;
-        console.log("wizard-nav - updateCurrent() - current page is now: ", this.currentPage);
         this.currentPageUpdated.emit(this);
     }
-
-    public isReady(page: NewWizardPage): boolean {
-        // LEFTOFF: find page in group of pages; find previous page that is not hidden;
-        // see if that page is completed;
-        // if first non-hidden page, return true
-        // necessary? 
-        return true;
-    }
-
-    // selectable: boolean = false;
-
-    // Boolean not necessary. Just emitting any value will indicate that a change has occurred
-    // private _change: Subject<boolean> = new Subject<boolean>();
-
-    // public get change(): Observable<boolean> {
-    //     return this._change.asObservable();
-    // };
-
-    // notify(): void {
-    //     this._change.next(true);
-    // }
-
-    // verifyTreeSelection(selection: TreeSelection): void {
-    //     if (!selection.hasOwnProperty("selected")) {
-    //         throw "clrTreeSelection should have the selected property";
-    //     }
-
-    //     //Check if the "children" property exists and is of type array
-    //     if (selection.hasOwnProperty("children")) {
-    //         if (Object.prototype.toString.call(selection.children) !== "[object Array]") {
-    //             throw "clrTreeSelection should be of type array, received typeof"; //TODO
-    //         }
-    //         selection.children.forEach(child => this.verifyTreeSelection(child));
-    //     }
-    // }
 }

@@ -44,15 +44,16 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
     @ContentChild(WizardPageButtonsDirective) private _buttons: WizardPageButtonsDirective;
 
-    // input variable, optional, to set if this tab is skipped
-    @Input("clrWizardPagePreventDefault") preventDefault: boolean = false;
-
     // Next button disabled
     @Input("clrWizardPageNextDisabled") public nextStepDisabled: boolean;
 
     // Error Flag Raised
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
     // todo... error event??
+
+    @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
+
+    @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
 
     // EventEmitter which is emitted on open/close of the wizard.
     @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter<any> =
@@ -69,20 +70,62 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter<any> =
         new EventEmitter(false);
 
+    // Emitters button events
+    @Output("clrWizardPageNextButtonClicked") nextButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+    @Output("clrWizardPageCancelButtonClicked") cancelButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+    @Output("clrWizardPageFinishButtonClicked") finishButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+    @Output("clrWizardPagePreviousButtonClicked") previousButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+    @Output("clrWizardPageDangerButtonClicked") dangerButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+    @Output("clrWizardPagePrimaryButtonClicked") primaryButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+    @Output("clrWizardPageTerminalButtonClicked") terminalButtonClicked: EventEmitter<any> =
+        new EventEmitter(false);
+
+
     constructor(private navService: WizardNavigationService) {
     }
 
-    // input variable, optional, to set if this tab is skipped
-    private _isSkipped: boolean = false;
-
-    @Input("clrWizardPageIsSkipped")
-    public get isSkipped(): boolean {
-        return this._isSkipped;
+    // page skipping is a little more complex because we want to...
+    // a) support a deprecated input for the near-term
+    // b) fire an event when the value changes
+    public get skipped(): boolean {
+        return this._preventDefault || this._pageInactive;
     }
 
-    public set isSkipped(value: boolean) {
-        this._isSkipped = value;
-        // TODO: call up to navService here?
+    // input variable, optional, to set if this tab is skipped... preferred version
+    private _pageInactive: boolean = false;
+    public get pageInactive(): boolean {
+        return this._pageInactive;
+    }
+    @Input("clrWizardPageInactive")
+    public set pageInactive(value: boolean) {
+        this.doSkippedChange(value);
+    }
+
+    // input variable, optional, to set if this tab is skipped... deprecated version
+    private _preventDefault: boolean = false;
+    public get preventDefault(): boolean {
+        return this._preventDefault;
+    }
+    @Input("clrWizardPagePreventDefault")
+    public set preventDefault(value: boolean) {
+        this.doSkippedChange(value);
+    }
+
+    private doSkippedChange(value: boolean) {
+        this._preventDefault = this._pageInactive = value;
+        this.skippedChange.emit(value);
     }
 
     private _id: string;
@@ -149,7 +192,6 @@ export class NewWizardPage implements OnInit, AfterContentInit {
         this._hidden = value;
     }
 
-    @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
     public hide(): void {
         if (!this.hidden) {
             this.hidden = true;

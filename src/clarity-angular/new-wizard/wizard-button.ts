@@ -11,7 +11,6 @@ import {
     EventEmitter
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
-import { WizardNavigationService } from "./providers/wizard-navigation";
 
 // TODO: remove "NEW" when finishing up
 
@@ -29,7 +28,7 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
             [class.btn-success]="isFinish"
             [class.btn-danger]="isDanger"
             [class.disabled]="isDisabled"
-            (click)="doClick($event)">
+            (click)="doClick()">
             <ng-content></ng-content>
         </button>
     `,
@@ -38,14 +37,14 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     }
 })
 export class NewWizardButton {
-    constructor(private navService: WizardNavigationService, private page: NewWizardPage) {
+    constructor(private page: NewWizardPage) {
     }
 
     @Input("type") private type: string = "";
 
     // EventEmitter which is emitted when a next button is clicked.
-    @Output("clrWizardNextButtonClicked") nextButtonClicked: EventEmitter<any> =
-        new EventEmitter<any>(false);
+    @Output("clrWizardButtonClicked") wasClicked: EventEmitter<NewWizardPage> =
+        new EventEmitter<NewWizardPage>(false);
 
     private get isCancel(): boolean {
         return this.type === "cancel";
@@ -107,28 +106,47 @@ export class NewWizardButton {
         return !disabled;
     }
 
-    doClick(event?: any): void {
-        console.log("OHAI");
-        console.log("I can haz events?", event);
-        // TODO: call different routine based on type of button (cancel, previous, next, finish, generic)
+    doClick(): void {
+        // TODO: call different routine based on type of button (cancel, previous, next, finish)
         // TODO: notify up that the type of button has been clicked
+
+        let page: NewWizardPage = this.page;
+
+        if (this.isDisabled) {
+            return;
+        }
+
+        this.wasClicked.emit(page);
+
+        if (this.isCancel) {
+            this.page.cancelButtonClicked.emit();
+        }
+
+        if (this.isPrevious) {
+            this.page.previousButtonClicked.emit();
+        }
+
+        if (this.isNext) {
+            this.page.nextButtonClicked.emit();
+        }
+
+        if (this.isDanger) {
+            this.page.dangerButtonClicked.emit();
+        }
+
+        if (this.isFinish) {
+            this.page.finishButtonClicked.emit();
+        }
+
+        if (this.isPrimaryAction) {
+            this.page.primaryButtonClicked.emit();
+        }
+
+        if (this.isTerminal) {
+            this.page.terminalButtonClicked.emit();
+        }
+
+        // SPECME ^ ALL THIS STUFF UP IN HERE
+        // TOASK ^ DO WE FIRE MULTIPLE EVENTS OR DO WE CARE???
     }
 }
-
-
-
-// <button class="btn btn-link clr-wizard-tertiaryAction" (click)="_close($event)">Cancel</button>
-// <button class="btn btn-outline clr-wizard-secondaryAction" *ngIf="!isFirst" (click)="prev($event)">Back</button>
-// <button class="btn btn-primary clr-wizard-primaryAction" 
-// [class.disabled]="currentPage?.nextDisabled" (click)="_next($event)">{{isLast? 'Finish' : 'Next'}}</button>
-
-
-
-
-
-// <clr-wizard-buttons>
-//     <clr-wizard-button [type]="cancel">Cancel</clr-wizard-button>
-//     <clr-wizard-button [type]="back">Previous</clr-wizard-button>
-//     <clr-wizard-button [type]="next">Next</clr-wizard-button>
-//     <clr-wizard-button [type]="finish">Finish</clr-wizard-button>
-// </clr-wizard-buttons>

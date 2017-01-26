@@ -19,7 +19,9 @@
         My 5th Level Wizard
     </clr-wizard-title>
 
-    <clr-newwizard-page>
+    <!-- TONOTE: this event handler here doesn't work... -->
+    <clr-newwizard-page (clrWizardPageFinishButtonClicked)="handleFinishClick($event)"
+        (clrWizardPageDangerButtonClicked)="highVoltage()">
         <!-- TemplateRef? -->
         <!-- v makes a directive, not a component. use this with ngTemplateOutlet -->
 
@@ -44,7 +46,10 @@
         <template pageButtons>
             <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
             <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
-            <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+
+            <!-- TONOTE: the click handler here works... -->
+            <clr-wizard-button [type]="'next'"
+                (clrWizardButtonClicked)="handlePrimaryClick($event)">Next</clr-wizard-button>
             <clr-wizard-button [type]="'danger'">Doitbad</clr-wizard-button>
             <clr-wizard-button [type]="'finish'">Finish {{ 14 * 2 }}</clr-wizard-button>
         </template>

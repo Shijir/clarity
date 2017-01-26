@@ -9,8 +9,6 @@ import {
     Input,
     Output,
     EventEmitter,
-    OnInit,
-    AfterContentInit,
     QueryList,
     SimpleChange,
     HostListener
@@ -54,10 +52,7 @@ let wizardIdIndex: number = 0;
         "[class.wizard-xl]": "size == 'xl'" // <= 'xl'!!!
     }
 })
-export class NewWizard implements OnInit, AfterContentInit {
-
-    // @ContentChildren(WizardStep) wizardStepChildren: QueryList<WizardStep>;
-    // @ContentChildren(WizardPage) wizardPageChildren: QueryList<WizardPage>;
+export class NewWizard {
 
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
@@ -66,6 +61,9 @@ export class NewWizard implements OnInit, AfterContentInit {
 
     // Variable that toggles open/close of the wizard component.
     @Input("clrWizardClosable") closable: boolean = true;
+
+    // users can pass in their own ids for the wizard using clrWizardId="whatever"
+    @Input("clrWizardId") public userDefinedId: string;
 
     // EventEmitter which is emitted on open/close of the wizard.
     @Output("clrWizardOpenChanged") _openChanged: EventEmitter<boolean> =
@@ -76,24 +74,31 @@ export class NewWizard implements OnInit, AfterContentInit {
         new EventEmitter<any>(false);
 
     // TODO: need a wizardCurrentPageChanged event... bubbling up from page to service to wizard
+    @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
+        new EventEmitter<any>(false);
 
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
-    // Flag to toggle between Next and Finish button... TODO: move to service
-    isLast: boolean = false;
-
-    // Flag to hide/show back button... TODO: move to service
-    isFirst: boolean = true;
-
-    // The current page
-    // currentPage: WizardPage = null;
-    currentPage: any = null;
-
+    // TODO: REMOVE ScrollingService
     constructor(private _scrollingService: ScrollingService, public navService: WizardNavigationService) {
     }
 
+    private _id: string;
+    public get id(): string {
+        return this._id;
+    }
+
+    private wizardIdPrefix = "clr-wizard-";
+
+    // The current page
+    // currentPage: WizardPage = null;
+    public get currentPage(): NewWizardPage {
+        return this.navService.currentPage;
+    }
+
+    // TODO: DO WE NEED THIS STILL???
     //Detect when _open is set to true and set no-scrolling to true
-    ngOnChanges(changes: {[propName: string]: SimpleChange}): void {
+    public ngOnChanges(changes: {[propName: string]: SimpleChange}): void {
         // can get rid of ... TODO: move to service
         if (changes && changes.hasOwnProperty("_open")) {
             if (changes["_open"].currentValue) {
@@ -104,62 +109,24 @@ export class NewWizard implements OnInit, AfterContentInit {
         }
     }
 
-    ngAfterContentInit(): void {
-        // set the tab content's title to match the tab link's title
-
-        // this.wizardPageChildren.forEach((wizardPage: WizardPage, index: number): void => {
-        //     let children: WizardStep[] = this.wizardStepChildren.toArray();
-        //     if (children[index] && !wizardPage.hasProjectedTitleContent) {
-        //         wizardPage.title = children[index].title;
-        //     }
-        // });
-
-        // override superclass' children to setup the proper linked relationship between
-        // tabs and contents
-        // super.overrideTabLinkChildren(this.wizardStepChildren);
-        // super.overrideTabContentChildren(this.wizardPageChildren);
-
-        // set first step of the wizard as active/current one
-        if (this.tabLinks.length > 0) {
-            // this.selectTab(this.tabLinks[0] as WizardStep);
-        }
-    }
-
-    ngAfterViewInit(): void {
-    }
-
-    // returns only tabLinks that are not skipped
-    // get tabLinks(): WizardStep[] {
-    get tabLinks(): any[] {
-        // return this.wizardStepChildren.filter((wizardStep: WizardStep) => {
-        //     return !wizardStep.isSkipped;
-        // });
-        return [];
-    }
-
-    // returns only tabContents that are not skipped
-    // get tabContents(): WizardPage[] {
-    get tabContents(): any[] {
-        // return this.wizardPageChildren.filter((wizardPage: WizardPage) => {
-        //     return !wizardPage.isSkipped;
-        // });
-        return [];
-    }
-
-    // open --
-    //
     // This is a public function that can be used to programmatically open the
     // wizard.
-    open(): void {
+    public open(): void {
         this._open = true;
         this._openChanged.emit(true);
     }
 
-    // close --
-    //
     // This is a public function that can be used to programmatically close the
     // wizard.
-    close(): void {
+    public close(): void {
+        this._open = false;
+        this.onCancel.emit(null);
+        this._openChanged.emit(false);
+    }
+
+    // Convenience function that can be used to programmatically toggle the
+    // wizard.
+    public toggle(value: boolean): void {
         this._open = false;
         this.onCancel.emit(null);
         this._openChanged.emit(false);
@@ -177,31 +144,39 @@ export class NewWizard implements OnInit, AfterContentInit {
         this.close();
     }
 
+
+
+
+
+
+
+    // TODO: GET RID OF THIS ALTOGETHER
     // _next --
     //
     // This is a private function that is called on the click of the next
     // button and emits the onCommit event of the active tab.
     _next(event?: any): void {
-        let totalSteps: number = this.tabLinks.length - 1;
+        // let totalSteps: number = this.tabLinks.length - 1;
         // let i: number = this.currentTabIndex;
-        let i: number = 0;
+        // let i: number = 0;
         // let page: WizardPage = this.tabContents[i];
-        let page: any = this.tabContents[i];
-        if (!page.nextDisabled) {
-            page.onCommit.emit(null);
+        // let page: any = this.tabContents[i];
+        // if (!page.nextDisabled) {
+        //     page.onCommit.emit(null);
 
-            if (!page.preventDefault) {
-                // If no handler for finish button, then close wizard on click
-                // of finish by default
-                if (totalSteps === i) {
-                    this.close();
-                } else {
-                    this.next();
-                }
-            }
-        }
+        //     if (!page.preventDefault) {
+        //         // If no handler for finish button, then close wizard on click
+        //         // of finish by default
+        //         if (totalSteps === i) {
+        //             this.close();
+        //         } else {
+        //             this.next();
+        //         }
+        //     }
+        // }
     }
 
+    // TODO: CAN KEEP THIS BUT IT CALLS THE NAVSERVICE
     // next --
     //
     // When called, after successful validation, the wizard will move to the
@@ -210,23 +185,24 @@ export class NewWizard implements OnInit, AfterContentInit {
     // the user to the next page.
     next(): void {
         // let i: number = this.currentTabIndex;
-        let i: number = 0;
-        let totalSteps: number = this.tabLinks.length - 1;
-        // let page: WizardPage = this.tabContents[i];
-        let page: any = this.tabContents[i];
+        // let i: number = 0;
+        // let totalSteps: number = this.tabLinks.length - 1;
+        // // let page: WizardPage = this.tabContents[i];
+        // let page: any = this.tabContents[i];
 
-        // Call the onCommit or the Validation function of that step, and if it
-        // returns true, continue to the next step.
-        if (i < totalSteps && !page.nextDisabled) {
-            // let wizardStep: WizardStep = this.tabLinks[i];
-            // let nextStep: WizardStep = this.tabLinks[i + 1];
-            let wizardStep: any = this.tabLinks[i];
-            let nextStep: any = this.tabLinks[i + 1];
-            wizardStep.isCompleted = true;
-            this.selectTab(nextStep);
-        }
+        // // Call the onCommit or the Validation function of that step, and if it
+        // // returns true, continue to the next step.
+        // if (i < totalSteps && !page.nextDisabled) {
+        //     // let wizardStep: WizardStep = this.tabLinks[i];
+        //     // let nextStep: WizardStep = this.tabLinks[i + 1];
+        //     let wizardStep: any = this.tabLinks[i];
+        //     let nextStep: any = this.tabLinks[i + 1];
+        //     wizardStep.isCompleted = true;
+        //     this.selectTab(nextStep);
+        // }
     }
 
+    // TODO: CAN KEEP THIS BUT IT CALLS THE NAVSERVICE
     // prev --
     //
     // When called, the wizard will move to the prev page.
@@ -234,19 +210,20 @@ export class NewWizard implements OnInit, AfterContentInit {
     // to the previous step.
     prev(): void {
         // let i: number = this.currentTabIndex;
-        let i: number = 0;
+        // let i: number = 0;
 
-        if (i > 0) {
-            // let wizardStep: WizardStep = this.tabLinks[i];
-            // let prevStep: WizardStep = this.tabLinks[i - 1];
-            let wizardStep: any = this.tabLinks[i];
-            let prevStep: any = this.tabLinks[i - 1];
-            wizardStep.isCompleted = false;
-            prevStep.isCompleted = false;
-            this.selectTab(prevStep);
-        }
+        // if (i > 0) {
+        //     // let wizardStep: WizardStep = this.tabLinks[i];
+        //     // let prevStep: WizardStep = this.tabLinks[i - 1];
+        //     let wizardStep: any = this.tabLinks[i];
+        //     let prevStep: any = this.tabLinks[i - 1];
+        //     wizardStep.isCompleted = false;
+        //     prevStep.isCompleted = false;
+        //     this.selectTab(prevStep);
+        // }
     }
 
+    // TODO: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED IN THE NAVSERVICE, NOT HERE
     // selectTab --
     //
     // Base class function overridden to call the onLoad event emitter
@@ -255,18 +232,19 @@ export class NewWizard implements OnInit, AfterContentInit {
         // super.selectTab(wizardNav);
 
         // let page: WizardPage = this.currentTabContent as WizardPage;
-        let page: any = {};
-        this.currentPage = page;
-        page.onLoad.emit(false);
+        // let page: any = {};
+        // this.currentPage = page;
+        // page.onLoad.emit(false);
 
-        // Toggles next and finish button
-        let totalSteps: number = this.tabLinks.length - 1;
-        // this.isLast = this.currentTabIndex === totalSteps;
-        // this.isFirst = this.currentTabIndex === 0;
-        this.isLast = 1 === totalSteps;
-        this.isFirst = 0 === 0;
+        // // Toggles next and finish button
+        // let totalSteps: number = this.tabLinks.length - 1;
+        // // this.isLast = this.currentTabIndex === totalSteps;
+        // // this.isFirst = this.currentTabIndex === 0;
+        // this.isLast = 1 === totalSteps;
+        // this.isFirst = 0 === 0;
     }
 
+    // TODO: CAN KEEP THIS BUT THE NAVSERVICE DOES THE ACTUAL WORK
     // skipTab --
     //
     // Public function to skip a Tab given its uniqueId
@@ -274,6 +252,7 @@ export class NewWizard implements OnInit, AfterContentInit {
         this._setTabIsSkipped(tabId, true);
     }
 
+    // TODO: CAN KEEP THIS BUT THE NAVSERVICE DOES THE ACTUAL WORK
     // unSkipTab --
     //
     // Public function to unSkip a tab given its uniqueId
@@ -281,6 +260,7 @@ export class NewWizard implements OnInit, AfterContentInit {
         this._setTabIsSkipped(tabId, false);
     }
 
+    // TODO: GET RID OF THIS; IT LIVES IN THE NAVSERVICE
     _setTabIsSkipped(tabId: string, isSkipped: boolean): void {
         // this.wizardStepChildren.forEach((wizardStep: WizardStep, index: number) => {
         //     if (wizardStep.id === tabId) {
@@ -294,22 +274,10 @@ export class NewWizard implements OnInit, AfterContentInit {
         // });
     }
 
-    private _id: string;
-    public get id(): string {
-        return this._id;
-    }
-
-    private wizardIdPrefix = "clr-wizard-";
-
-    /*
-        users can pass in their own ids for the wizard using clrWizardId="whatever"
-    */
-    @Input("clrWizardId") public userDefinedId: string;
     ngOnInit() {
         // if wizard ID exists (check via WizardNavigationService then use it in place of "clr_wizard_") <= TODO
         // otherwise generate... no, don't worry about that. id will be generated on wizard...
 
-        // TODO: get rid of... reference/grab things through template variables or components
         let myId = this.userDefinedId ? this.userDefinedId : this.wizardIdPrefix + wizardIdIndex.toString();
         /* SPECME ^ */
 

@@ -49,4 +49,16 @@ export class WizardSimple {
     <clr-wizard-page>Content for step 3</clr-wizard-page>
 </clr-wizard>
 `;
+
+    public handlePrimaryClick(page: any): void {
+        console.log("I am a button in the demo. The blue primary button was clicked!");
+    }
+
+    public handleFinishClick(page: any): void {
+        console.log("I am a page in the demo. The finish button was clicked!");
+    }
+
+    public highVoltage() {
+        console.log("Danger... Danger... High voltage!");
+    }
 }
