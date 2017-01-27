@@ -11,7 +11,8 @@ import {
     EventEmitter,
     QueryList,
     SimpleChange,
-    HostListener
+    HostListener,
+    OnInit
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -50,7 +51,7 @@ import {ScrollingService} from "../main/scrolling-service";
         "[class.wizard-xl]": "size == 'xl'" // <= 'xl'!!!
     }
 })
-export class NewWizard {
+export class NewWizard implements OnInit {
 
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
@@ -80,6 +81,28 @@ export class NewWizard {
 
     // TODO: REMOVE ScrollingService
     constructor(private _scrollingService: ScrollingService, public navService: WizardNavigationService) {
+    }
+
+    public ngOnInit(): void {
+        this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
+            this.currentPageChanged.emit();
+        });
+
+        this.navService.goNext.subscribe((currentPage: NewWizardPage) => {
+            // TOFIX: THIS IS JUST TO TEST THE SUBSCRIPTION. RETHINK FOR FINAL...
+            let myPages = this.pages.toArray();
+            let currentIndex = myPages.indexOf(currentPage);
+            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.", 
+            "Here's who I think the current page was: ", currentPage.id);
+            console.log("what is my index?", currentIndex);
+            let newIndex = currentIndex + 1;
+            console.log("what is my new index?", newIndex);
+            let newCurrent = myPages[newIndex];
+            console.log("who is newCurrent?", newCurrent);
+            this.navService.setCurrentPage(newCurrent);
+            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.", 
+            "Here's who I think the current page is: ", newCurrent.id);
+        });
     }
 
     private _id: string;

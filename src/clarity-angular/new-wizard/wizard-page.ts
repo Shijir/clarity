@@ -10,7 +10,9 @@ import {
     Output,
     EventEmitter,
     ContentChild,
-    TemplateRef
+    TemplateRef,
+    OnInit,
+    AfterContentInit
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -36,7 +38,7 @@ let wizardPageIndex = 0;
         "[class.clr-wizard-page]": "true"
     }
 })
-export class NewWizardPage {
+export class NewWizardPage implements OnInit, AfterContentInit {
 
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
@@ -166,8 +168,14 @@ export class NewWizardPage {
         return this.pageTitle.pageTitleTemplateRef;
     }
 
-    public get pageButtons(): TemplateRef<any> {
+    public get buttons(): TemplateRef<any> {
         return this._buttons.pageButtonsTemplateRef;
+    }
+
+    public get hasButtons(): boolean {
+        // TOFIX?: this is a very noisy check. uncomment to see it in action.
+        // console.log("OHAYZ! I'm ", this.id, ". I'm in hasButtons! Do I have buttons? ", this._buttons);
+        return !!this._buttons;
     }
 
     public makeCurrent(): void {
@@ -175,9 +183,19 @@ export class NewWizardPage {
         this.pageCurrentChanged.emit();
     }
 
+    public next(): void {
+        // FIXME: THIS IS JUST A TEST SCRIPT HERE TO TEST
+        // OBSERVERS ON NAVSERVICE ... WON'T BE DOING THIS LIKE THIS... MAYBE.
+        this.navService.goNextPage();
+    }
+
     public ngOnInit(): void {
         if (!this.navService.currentPage) {
             this.makeCurrent();
         }
+    }
+
+    public ngAfterContentInit(): void {
+        console.log("OHAI! I'm ", this.id, ". I'm in ngAfterContentInit! My buttons are: ", this._buttons);
     }
 }

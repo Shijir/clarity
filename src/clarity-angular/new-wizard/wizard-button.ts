@@ -11,6 +11,7 @@ import {
     EventEmitter
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
+import { WizardNavigationService } from "./providers/wizard-navigation";
 
 // TODO: remove "NEW" when finishing up
 
@@ -38,14 +39,19 @@ import { NewWizardPage } from "./wizard-page";
     }
 })
 export class NewWizardButton {
-    constructor(private page: NewWizardPage) {
-    }
-
     @Input("type") private type: string = "";
 
     // EventEmitter which is emitted when a next button is clicked.
     @Output("clrWizardButtonClicked") wasClicked: EventEmitter<NewWizardPage> =
         new EventEmitter<NewWizardPage>(false);
+
+    constructor(private navService: WizardNavigationService) {
+    }
+
+    private get page(): NewWizardPage {
+        // buttons only ever care about the current page
+        return this.navService.currentPage;
+    }
 
     private get isCancel(): boolean {
         return this.type === "cancel";
@@ -134,6 +140,7 @@ export class NewWizardButton {
 
         if (this.isDanger) {
             this.page.dangerButtonClicked.emit();
+            this.page.next();
         }
 
         if (this.isFinish) {

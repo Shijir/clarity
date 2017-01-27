@@ -50,6 +50,8 @@ export class WizardSimple {
 </clr-wizard>
 `;
 
+    public showStepThree: boolean = false;
+
     public handlePrimaryClick(page: any): void {
         console.log("I am a button in the demo. The blue primary button was clicked!");
     }
@@ -64,5 +66,9 @@ export class WizardSimple {
 
     public doTestHere(): boolean {
         return true;
+    }
+
+    public handlePageChange(): void {
+        console.log("I changed my current page.")
     }
 }
