@@ -7,6 +7,7 @@
 import {
     Component
 } from "@angular/core";
+import { NewWizard } from "./wizard";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 
 // TODO: remove "NEW" when finishing up
@@ -16,7 +17,7 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     selector: "clr-wizard-stepnav",
     template: `
         <ol class="nav navList clr-wizard-stepnav-list" role="tablist">
-            <li *ngFor="let page of navService.pages" clr-wizard-stepnav-item [page]="page"></li>
+            <li *ngFor="let page of wizard.pages" clr-wizard-stepnav-item [page]="page"></li>
         </ol>
     `,
     host: {
@@ -24,6 +25,6 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     }
 })
 export class NewWizardStepnav {
-    constructor(private navService: WizardNavigationService) {
+    constructor(private navService: WizardNavigationService, private wizard: NewWizard) {
     }
 }

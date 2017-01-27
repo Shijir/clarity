@@ -5,14 +5,12 @@
  */
 
 import {
-    AfterContentInit,
     Component,
     Input,
     Output,
     EventEmitter,
     ContentChild,
-    TemplateRef,
-    OnInit
+    TemplateRef
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -32,13 +30,13 @@ let wizardPageIndex = 0;
         "[id]" : "id",
         "role" : "tabpanel",
         "[attr.aria-hidden]" : "!current",
-        "[attr.aria-labelledby]": "'ariaLabelledBy'",
+        "[attr.aria-labelledby]": "stepItemId",
         "[attr.data-hidden]": "!current",
         "[class.active]" : "current",
         "[class.clr-wizard-page]": "true"
     }
 })
-export class NewWizardPage implements OnInit, AfterContentInit {
+export class NewWizardPage {
 
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
@@ -51,6 +49,7 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
     // todo... error event??
 
+    // TODO: HIDDEN AND SKIPPED ARE THE SAME THING
     @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
 
     @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
@@ -96,41 +95,34 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     constructor(private navService: WizardNavigationService) {
     }
 
-    // page skipping is a little more complex because we want to...
-    // a) support a deprecated input for the near-term
-    // b) fire an event when the value changes
-    public get skipped(): boolean {
-        return this._preventDefault || this._pageInactive;
+    // @Input("clrWizardPagePreventDefault")
+    // TOBREAK: this input was removed. use ngIf instead. note breaking change.
+
+    // TODO: USER-DEFINED IDS ON PAGES!? SO SERVICE CAN SELECT THEM DIRECTLY
+    // OR USE `#myId` REFERENCE <= SIMPLEST WAY TO DO IT <= GRABBING WIZARD THROUGH TEMPLATE VARIABLE
+
+    // private doSkippedChange(value: boolean) {
+    //     this._preventDefault = this._pageInactive = value;
+    //     this.skippedChange.emit(value);
+    // }
+
+    // TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE
+    // skippedChange ^ or other event too... deprecate "skipped"
+
+    // If our host has an ID attribute, we use this instead of our index.
+    @Input("id")
+    _id: string = (wizardPageIndex++).toString();
+
+    public get id() {
+        return `clr-wizard-page-${this._id}`;
     }
 
-    // input variable, optional, to set if this tab is skipped... preferred version
-    private _pageInactive: boolean = false;
-    public get pageInactive(): boolean {
-        return this._pageInactive;
-    }
-    @Input("clrWizardPageInactive")
-    public set pageInactive(value: boolean) {
-        this.doSkippedChange(value);
-    }
-
-    // input variable, optional, to set if this tab is skipped... deprecated version
-    private _preventDefault: boolean = false;
-    public get preventDefault(): boolean {
-        return this._preventDefault;
-    }
-    @Input("clrWizardPagePreventDefault")
-    public set preventDefault(value: boolean) {
-        this.doSkippedChange(value);
-    }
-
-    private doSkippedChange(value: boolean) {
-        this._preventDefault = this._pageInactive = value;
-        this.skippedChange.emit(value);
-    }
-
-    private _id: string;
-    public get id(): string {
-        return this._id;
+    public get stepItemId(): string {
+        let pageId = this.id;
+        let pageIdParts = pageId.split("-").reverse();
+        // SPECME^ (especially with userdefined page ids with dashes in them)
+        pageIdParts[1] = "step";
+        return pageIdParts.reverse().join("-");
     }
 
     public get readyToComplete(): boolean {
@@ -141,10 +133,9 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     public get complete(): boolean {
         return this._complete;
     }
+    // TOASK: DO WE NEED A SETTER HERE?
 
-    /*
-        asks navService if it is the currentPage
-    */
+    // asks navService if it is the currentPage
     public get current(): boolean {
         return this.navService.currentPage === this;
     }
@@ -175,45 +166,18 @@ export class NewWizardPage implements OnInit, AfterContentInit {
         return this.pageTitle.pageTitleTemplateRef;
     }
 
-    public get buttons(): TemplateRef<any> {
+    public get pageButtons(): TemplateRef<any> {
         return this._buttons.pageButtonsTemplateRef;
     }
 
-    /**
-     * Indicates if this wizard page is hidden
-     * QUESTION: WOULD THIS BE HANDLED BETTER BY *NGIF????
-     */
-    private _hidden = false;
-    public get hidden(): boolean {
-        return this._hidden;
-    }
-    @Input("clrWizardPageHidden")
-    public set hidden(value: boolean) {
-        this._hidden = value;
-    }
-
-    public hide(): void {
-        if (!this.hidden) {
-            this.hidden = true;
-            this.hiddenChanged.emit(true);
-        }
-    }
-
-    public show(): void {
-        if (this.hidden) {
-            this.hidden = false;
-            this.hiddenChanged.emit(false);
-        }
-    }
-
-    public ngAfterContentInit(): void {
-        this.navService.add(this);
-        // SPECME^ check that all pages are loaded and the first !hidden one is current
+    public makeCurrent(): void {
+        this.navService.setCurrentPage(this);
+        this.pageCurrentChanged.emit();
     }
 
     public ngOnInit(): void {
-        this._id = this.navService.id + "-page-" + wizardPageIndex;
-        wizardPageIndex++;
-        // SPECME -- make sure page ids are incremented as expected
+        if (!this.navService.currentPage) {
+            this.makeCurrent();
+        }
     }
 }

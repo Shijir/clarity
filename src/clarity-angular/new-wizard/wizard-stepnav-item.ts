@@ -7,9 +7,7 @@
 import {
     // Output,
     Input,
-    Component,
-    OnInit
-    // AfterViewInit
+    Component
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -37,27 +35,17 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     }
 })
 
-export class NewWizardStepnavItem implements OnInit {
+export class NewWizardStepnavItem {
     constructor(private navService: WizardNavigationService) {
     }
 
     @Input("page") private page: NewWizardPage;
-
-    private _id: string;
     public get id(): string {
-        return this._id;
-    }
-
-    ngOnInit(): void {
-        let pageId = this.page.id;
-        // let pageId = "test-page-wizard-0-page-1";
-        // SPECME
-        let pageIdParts = pageId.split("-").reverse();
-        pageIdParts[1] = "tab";
-        this._id = pageIdParts.reverse().join("-");
+        return this.page.stepItemId;
     }
 
     doClick(): boolean {
+        // TODO: call page here (via navService?)
         // this.tabs.selectTab(this);
 
         // SPECME: if we click on our own link, we don't want it to do anything

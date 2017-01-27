@@ -32,6 +32,7 @@ import { NewWizardPage } from "./wizard-page";
             <ng-content></ng-content>
         </button>
     `,
+    // IS HIDDEN <= class that does display:none [aria-hidden="true"]...?
     host: {
         "class": "clr-wizard-btn-wrapper"
     }
@@ -66,6 +67,7 @@ export class NewWizardButton {
         return this.type === "danger";
     }
 
+    // TODO: DANGER BUTTON MAY NOT BE TERMINAL!
     private get isTerminal(): boolean {
         // terminal as in the last button you'll have to click along a path
         return this.type === "finish" || this.type === "danger";

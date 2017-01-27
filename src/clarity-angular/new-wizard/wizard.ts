@@ -36,8 +36,6 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
 // TODO: probaby don't need this
 import {ScrollingService} from "../main/scrolling-service";
 
-let wizardIdIndex: number = 0;
-
 @Component({
     selector: "clr-newwizard",
     viewProviders: [ScrollingService],
@@ -77,6 +75,7 @@ export class NewWizard {
     @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    // TODO: ???
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
     // TODO: REMOVE ScrollingService
@@ -87,8 +86,6 @@ export class NewWizard {
     public get id(): string {
         return this._id;
     }
-
-    private wizardIdPrefix = "clr-wizard-";
 
     // The current page
     // currentPage: WizardPage = null;
@@ -109,6 +106,7 @@ export class NewWizard {
         }
     }
 
+    // TODO: MAKE SURE WIZARD HAS DELEGATES FOR REASONABLE MODAL FNS
     // This is a public function that can be used to programmatically open the
     // wizard.
     public open(): void {
@@ -272,19 +270,5 @@ export class NewWizard {
         //         }
         //     }
         // });
-    }
-
-    ngOnInit() {
-        // if wizard ID exists (check via WizardNavigationService then use it in place of "clr_wizard_") <= TODO
-        // otherwise generate... no, don't worry about that. id will be generated on wizard...
-
-        let myId = this.userDefinedId ? this.userDefinedId : this.wizardIdPrefix + wizardIdIndex.toString();
-        /* SPECME ^ */
-
-        if (!this.userDefinedId) {
-            wizardIdIndex++;
-        }
-        /* SPECME ^ */
-        this.navService.id = this._id = myId;
     }
 }

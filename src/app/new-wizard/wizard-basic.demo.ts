@@ -61,4 +61,8 @@ export class WizardSimple {
     public highVoltage() {
         console.log("Danger... Danger... High voltage!");
     }
+
+    public doTestHere(): boolean {
+        return true;
+    }
 }

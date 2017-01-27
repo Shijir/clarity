@@ -43,6 +43,18 @@
             <a href="#" title="click me for something else">WTF ICON</a>
         </clr-wizard-headerActions>-->
 
+
+        <!--
+            TODO: PAGE EVENTS (COMMITTED, CANCELED, NEXT, ETC.) 
+            BUTTONS TELL SERVICE PLZ-CANCEL. SERVICE TELLS (CURRENT)PAGE WHAT WAS CLICKED.
+            MOVE BUTTONS OUTSIDE OF PAGE...
+
+            NEXT BTN => SERVICE => SERVICE.NEXT
+            CANCEL BTN => SERVICE => WIZARD.CLOSE
+        -->
+
+        <!-- TODO: make types into a const on the index -->
+        <!-- MOVE TO BE A CHILD OF WIZARD. GET RID OF TEMPLATEREF -->
         <template pageButtons>
             <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
             <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
@@ -64,7 +76,8 @@
         <!--</clr-wizard-pageContent>-->
     </clr-newwizard-page>
 
-    <clr-newwizard-page>
+    <!-- TODO: GET RID OF SKIPPED/HIDDEN JUST USE NGIFs -->
+    <clr-newwizard-page *ngIf="doTestHere()">
 
         <template pageTitle>Title for Page {{ 4/2 }}</template> <!-- mandatory -->
 
