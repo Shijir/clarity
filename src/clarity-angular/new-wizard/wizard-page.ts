@@ -11,8 +11,7 @@ import {
     EventEmitter,
     ContentChild,
     TemplateRef,
-    OnInit,
-    AfterContentInit
+    OnInit
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -38,7 +37,7 @@ let wizardPageIndex = 0;
         "[class.clr-wizard-page]": "true"
     }
 })
-export class NewWizardPage implements OnInit, AfterContentInit {
+export class NewWizardPage implements OnInit {
 
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
@@ -132,10 +131,12 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     }
 
     private _complete: boolean = false;
-    public get complete(): boolean {
+    public get completed(): boolean {
         return this._complete;
     }
-    // TOASK: DO WE NEED A SETTER HERE?
+    public set completed(value: boolean) {
+        this._complete = value;
+    }
 
     // asks navService if it is the currentPage
     public get current(): boolean {
@@ -143,21 +144,11 @@ export class NewWizardPage implements OnInit, AfterContentInit {
     }
 
     public get disabled(): boolean {
-        return !this.current && !this.complete;
+        return !this.current && !this.completed;
     }
 
     public get title(): TemplateRef<any> {
         return this.pageTitle.pageTitleTemplateRef;
-    }
-
-    public get isFirst(): boolean {
-        //TODO: have to look up in navService
-        return true;
-    }
-
-    public get isLast(): boolean {
-        //TODO: have to look up in navService
-        return false;
     }
 
     /* SPECME - returns short nav title if specified; otherwise returns page title */
@@ -193,9 +184,5 @@ export class NewWizardPage implements OnInit, AfterContentInit {
         if (!this.navService.currentPage) {
             this.makeCurrent();
         }
-    }
-
-    public ngAfterContentInit(): void {
-        console.log("OHAI! I'm ", this.id, ". I'm in ngAfterContentInit! My buttons are: ", this._buttons);
     }
 }

@@ -29,6 +29,7 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
             [class.btn-success]="isFinish"
             [class.btn-danger]="isDanger"
             [class.disabled]="isDisabled"
+            [attr.aria-hidden]="isHidden"
             (click)="doClick()">
             <ng-content></ng-content>
         </button>
@@ -73,39 +74,29 @@ export class NewWizardButton {
         return this.type === "danger";
     }
 
-    // TODO: DANGER BUTTON MAY NOT BE TERMINAL!
-    private get isTerminal(): boolean {
-        // terminal as in the last button you'll have to click along a path
-        return this.type === "finish" || this.type === "danger";
-    }
-
     private get isPrimaryAction(): boolean {
-        return this.isNext || this.isTerminal;
+        return this.isNext || this.isDanger || this.isFinish;
     }
 
     private get isDisabled(): boolean {
         // dealing with negatives here. cognitively easier to think of it like this...
         let disabled = true;
         let page = this.page;
-
-        // TODO: WE'RE JUST USING THIS HERE SO WE CAN SEE THE BUTTONS!
-        if (2 > 1) {
-            return !disabled;
-        }
+        let nav = this.navService;
 
         if (this.isCancel) {
             return !disabled;
         }
 
-        if (this.isPrevious && page.isFirst) {
+        if (this.isPrevious && nav.isOnFirstPage) {
             return disabled;
         }
 
-        if (this.isNext && (page.isLast || !page.readyToComplete)) {
+        if (this.isNext && (nav.isOnLastPage || !page.readyToComplete)) {
             return disabled;
         }
 
-        if (this.isFinish && (!page.isLast || !page.readyToComplete)) {
+        if (this.isFinish && (!nav.isOnLastPage || !page.readyToComplete)) {
             return disabled;
         }
 
@@ -114,11 +105,42 @@ export class NewWizardButton {
         return !disabled;
     }
 
+    private get isHidden(): boolean {
+        // dealing with negatives here. cognitively easier to think of it like this...
+        let hidden = true;
+        let nav = this.navService;
+
+        // TODO: WE'RE JUST USING THIS HERE SO WE CAN SEE THE BUTTONS!
+        if (2 > 1) {
+            return !hidden;
+        }
+
+        if (this.isCancel) {
+            return !hidden;
+        }
+
+        if (this.isPrevious && nav.isOnFirstPage) {
+            return hidden;
+        }
+
+        if (this.isNext && nav.isOnLastPage) {
+            return hidden;
+        }
+
+        if (this.isFinish && !nav.isOnLastPage) {
+            return hidden;
+        }
+
+        // SPECME ^: ALL THAT BIDNESS UPIN HERE
+
+        return !hidden;
+    }
+
     doClick(): void {
         // TODO: call different routine based on type of button (cancel, previous, next, finish)
         // TODO: notify up that the type of button has been clicked
 
-        let page: NewWizardPage = this.page;
+        let page: NewWizardPage = this.navService.currentPage;
 
         if (this.isDisabled) {
             return;
@@ -126,33 +148,30 @@ export class NewWizardButton {
 
         this.wasClicked.emit(page);
 
+        // TODO: WIRE ALL DISS UP
+
         if (this.isCancel) {
-            this.page.cancelButtonClicked.emit();
+            page.cancelButtonClicked.emit();
         }
 
         if (this.isPrevious) {
-            this.page.previousButtonClicked.emit();
+            page.previousButtonClicked.emit();
         }
 
         if (this.isNext) {
-            this.page.nextButtonClicked.emit();
+            page.nextButtonClicked.emit();
         }
 
         if (this.isDanger) {
-            this.page.dangerButtonClicked.emit();
-            this.page.next();
+            page.dangerButtonClicked.emit();
         }
 
         if (this.isFinish) {
-            this.page.finishButtonClicked.emit();
+            page.finishButtonClicked.emit();
         }
 
         if (this.isPrimaryAction) {
-            this.page.primaryButtonClicked.emit();
-        }
-
-        if (this.isTerminal) {
-            this.page.terminalButtonClicked.emit();
+            page.primaryButtonClicked.emit();
         }
 
         // SPECME ^ ALL THIS STUFF UP IN HERE

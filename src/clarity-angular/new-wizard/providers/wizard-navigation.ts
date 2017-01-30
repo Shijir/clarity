@@ -1,5 +1,6 @@
 import {
     Injectable,
+    QueryList,
     TemplateRef
 } from "@angular/core";
 import { Subject, Observable } from "rxjs";
@@ -17,6 +18,12 @@ export class WizardNavigationService {
         return this._currentChanged.asObservable();
     };
 
+    public pages: QueryList<NewWizardPage>;
+
+    public isOnFirstPage: boolean = true;
+
+    public isOnLastPage: boolean = false;
+
     public currentPage: NewWizardPage;
 
     public get currentPageTitle(): TemplateRef<any> {
@@ -24,8 +31,10 @@ export class WizardNavigationService {
     }
 
     public setCurrentPage(page: NewWizardPage): void {
+        page.completed = false;
         this.currentPage = page;
         this._currentChanged.next(page);
+        // SPECME
     }
 
     private _moveNext = new Subject<NewWizardPage>();

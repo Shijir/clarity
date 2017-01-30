@@ -76,7 +76,9 @@ export class NewWizard implements OnInit {
     @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
         new EventEmitter<any>(false);
 
-    // TODO: ???
+    @Output("clrWizardOnFinish") wizardFinished: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
     // TODO: REMOVE ScrollingService
@@ -85,24 +87,26 @@ export class NewWizard implements OnInit {
 
     public ngOnInit(): void {
         this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
+            if (this.pages) {
+                // first time through it doesn't have pages to look up...
+                this.setFirstLastPages();
+            }
+            // SPECME
             this.currentPageChanged.emit();
         });
 
-        this.navService.goNext.subscribe((currentPage: NewWizardPage) => {
-            // TOFIX: THIS IS JUST TO TEST THE SUBSCRIPTION. RETHINK FOR FINAL...
-            let myPages = this.pages.toArray();
-            let currentIndex = myPages.indexOf(currentPage);
-            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.",
-            "Here's who I think the current page was: ", currentPage.id);
-            console.log("what is my index?", currentIndex);
-            let newIndex = currentIndex + 1;
-            console.log("what is my new index?", newIndex);
-            let newCurrent = myPages[newIndex];
-            console.log("who is newCurrent?", newCurrent);
-            this.navService.setCurrentPage(newCurrent);
-            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.",
-            "Here's who I think the current page is: ", newCurrent.id);
+        this.navService.goNext.subscribe(() => {
+            this.next();
         });
+    }
+
+    public ngOnContentInit() {
+        this.setFirstLastPages();
+    }
+
+    private setFirstLastPages() {
+        this.navService.isOnFirstPage = this.currentPage === this.first;
+        this.navService.isOnLastPage = this.currentPage === this.last;
     }
 
     private _id: string;
@@ -111,7 +115,6 @@ export class NewWizard implements OnInit {
     }
 
     // The current page
-    // currentPage: WizardPage = null;
     public get currentPage(): NewWizardPage {
         return this.navService.currentPage;
     }
@@ -119,14 +122,14 @@ export class NewWizard implements OnInit {
     // TODO: DO WE NEED THIS STILL???
     //Detect when _open is set to true and set no-scrolling to true
     public ngOnChanges(changes: {[propName: string]: SimpleChange}): void {
-        // can get rid of ... TODO: move to service
-        if (changes && changes.hasOwnProperty("_open")) {
-            if (changes["_open"].currentValue) {
-                this._scrollingService.stopScrolling();
-            } else {
-                this._scrollingService.resumeScrolling();
-            }
-        }
+        // can get rid of ... 
+        // if (changes && changes.hasOwnProperty("_open")) {
+        //     if (changes["_open"].currentValue) {
+        //         this._scrollingService.stopScrolling();
+        //     } else {
+        //         this._scrollingService.resumeScrolling();
+        //     }
+        // }
     }
 
     // TODO: MAKE SURE WIZARD HAS DELEGATES FOR REASONABLE MODAL FNS
@@ -148,9 +151,11 @@ export class NewWizard implements OnInit {
     // Convenience function that can be used to programmatically toggle the
     // wizard.
     public toggle(value: boolean): void {
-        this._open = false;
-        this.onCancel.emit(null);
-        this._openChanged.emit(false);
+        if (value) {
+            this.open();
+        } else {
+            this.close();
+        }
     }
 
     // _close --
@@ -197,6 +202,18 @@ export class NewWizard implements OnInit {
         // }
     }
 
+    public get first(): NewWizardPage {
+        return this.pages.toArray()[0];
+        // SPECME
+    }
+
+    public get last(): NewWizardPage {
+        let pages = this.pages.toArray();
+        let pageCount = pages.length;
+        return pages[pageCount - 1];
+        // SPECME
+    }
+
     // TODO: CAN KEEP THIS BUT IT CALLS THE NAVSERVICE
     // next --
     //
@@ -204,45 +221,62 @@ export class NewWizard implements OnInit {
     // next page.
     // This is a public function that can be used to programmatically advance
     // the user to the next page.
-    next(): void {
-        // let i: number = this.currentTabIndex;
-        // let i: number = 0;
-        // let totalSteps: number = this.tabLinks.length - 1;
-        // // let page: WizardPage = this.tabContents[i];
-        // let page: any = this.tabContents[i];
+    public next(): void {
+        let currentPage = this.currentPage;
+        let currentPageIndex: number;
+        let nextPage: NewWizardPage;
+        let myPages: NewWizardPage[];
 
-        // // Call the onCommit or the Validation function of that step, and if it
-        // // returns true, continue to the next step.
-        // if (i < totalSteps && !page.nextDisabled) {
-        //     // let wizardStep: WizardStep = this.tabLinks[i];
-        //     // let nextStep: WizardStep = this.tabLinks[i + 1];
-        //     let wizardStep: any = this.tabLinks[i];
-        //     let nextStep: any = this.tabLinks[i + 1];
-        //     wizardStep.isCompleted = true;
-        //     this.selectTab(nextStep);
-        // }
+        if (!currentPage.readyToComplete) {
+            return;
+        }
+
+        currentPage.onCommit.emit(null);
+
+        if (this.navService.isOnLastPage) {
+            this.wizardFinished.emit();
+            this.close();
+        } else {
+            myPages = this.pages.toArray();
+            currentPageIndex = myPages.indexOf(currentPage);
+            nextPage = myPages[currentPageIndex + 1];
+            this.navService.setCurrentPage(nextPage);
+        }
+        // SPECME
     }
 
-    // TODO: CAN KEEP THIS BUT IT CALLS THE NAVSERVICE
-    // prev --
-    //
     // When called, the wizard will move to the prev page.
     // This is a public function that can be used to programmatically go back
     // to the previous step.
-    prev(): void {
-        // let i: number = this.currentTabIndex;
-        // let i: number = 0;
+    public previous(): void {
+        let currentPage = this.currentPage;
+        let currentPageIndex: number;
+        let previousPage: NewWizardPage;
+        let myPages: NewWizardPage[];
 
-        // if (i > 0) {
-        //     // let wizardStep: WizardStep = this.tabLinks[i];
-        //     // let prevStep: WizardStep = this.tabLinks[i - 1];
-        //     let wizardStep: any = this.tabLinks[i];
-        //     let prevStep: any = this.tabLinks[i - 1];
-        //     wizardStep.isCompleted = false;
-        //     prevStep.isCompleted = false;
-        //     this.selectTab(prevStep);
-        // }
+        // TOASK: SHOULD THIS HANDLE FINISH AND DELETE BUTTONS TOO???
+        // I THINK SO...
+        if (this.navService.isOnFirstPage) {
+            return;
+        }
+        // SPECME
+
+        myPages = this.pages.toArray();
+        currentPageIndex = myPages.indexOf(currentPage);
+        previousPage = myPages[currentPageIndex - 1];
+
+        this.navService.setCurrentPage(previousPage);
     }
+
+    // prev -- DEPRECATED
+    // calls previous(); kept here to avoid breaking change where unnecessary
+    public prev(): void {
+        this.previous();
+    }
+
+    // TODO: NEED TO MOVE PAGE FIRST AND LAST TO HERE!!!
+    // JUST A FUNC THAT RETURNS THE FIRST AND LAST PAGE SO OTHER FUNCS CAN TEST AGAINST IT
+    // NO POINT IN DOING POSITION/INDEX CHECKS
 
     // TODO: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED IN THE NAVSERVICE, NOT HERE
     // selectTab --

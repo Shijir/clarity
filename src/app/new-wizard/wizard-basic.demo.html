@@ -11,9 +11,6 @@
 <button class="btn btn-primary" (click)="wizardDefault.open()">Default Wizard</button>
 -->
 
-<!-- this is how we can pass in a custom ID. verified. SPECME -->
-<!-- clr-newwizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'" [clrWizardId]="'omakase'" -->
-
 <clr-newwizard #wizardmd [(clrWizardOpen)]="open" [clrWizardSize]="'md'" (clrWizardCurrentPageChanged)="handlePageChange()">
     <clr-wizard-title>
         My 5th Level Wizard
@@ -27,27 +24,18 @@
     <!-- TONOTE: this event handler here doesn't work... -->
     <clr-newwizard-page (clrWizardPageFinishButtonClicked)="handleFinishClick($event)"
         (clrWizardPageDangerButtonClicked)="highVoltage()">
-        <!-- TemplateRef? -->
-        <!-- v makes a directive, not a component. use this with ngTemplateOutlet -->
+        <!-- *ngIf probably goes here ^ . it replaces the idea of skipped. -->
 
         <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
         <template pageNavTitle>Title for Page 1</template> <!-- optional -->
 
-        <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
-        <!-- <template clrWizardNavStep> -->
-        <!--<clr-wizard-stepnav-item>-->
-            <!-- just write the fully customizable one here -->
-        <!--</clr-wizard-stepnav-item>-->
-
-        <!--<clr-wizard-pageTitle>Step 1</clr-wizard-pageTitle>-->
-
+        <!-- TODO: TREAT HEADER ACTIONS JUST LIKE THE BUTTONS... FALLBACK... AND THEN SPECIFICS... -->
         <!--<clr-wizard-headerAction>
             <a href="#" title="click me for help">HELP ICON</a>
         </clr-wizard-headerActions>
         <clr-wizard-headerAction>
             <a href="#" title="click me for something else">WTF ICON</a>
         </clr-wizard-headerActions>-->
-
 
         <!--
             TODO: PAGE EVENTS (COMMITTED, CANCELED, NEXT, ETC.) 
@@ -58,13 +46,12 @@
             CANCEL BTN => SERVICE => WIZARD.CLOSE
         -->
 
-        <!--<clr-wizard-pageContent>-->
-            <p>Content for step 1</p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
-                officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
-                quas! Quaerat explicabo expedita placeat vero.
-            </p>
+        <p>Content for step 1</p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
+            officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
+            quas! Quaerat explicabo expedita placeat vero.
+        </p>
 
         <!-- CUSTOME BUTTONS GO HERE -->
         <template pageButtons>
@@ -72,8 +59,6 @@
             <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
             <clr-wizard-button [type]="'danger'">Doitbad</clr-wizard-button>
         </template>
-
-        <!--</clr-wizard-pageContent>-->
     </clr-newwizard-page>
 
     <!-- TODO: GET RID OF SKIPPED/HIDDEN JUST USE NGIFs -->
@@ -81,114 +66,36 @@
 
         <template pageTitle>Title for Page {{ 4/2 }}</template> <!-- mandatory -->
 
-        <label #wtf>OHAI!!</label>
-        <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
-        <!-- <template clrWizardNavStep> -->
-        <!--<clr-wizard-stepnav-item>-->
-            <!-- just write the fully customizable one here -->
-        <!--</clr-wizard-stepnav-item>-->
-
-        <!--<clr-wizard-pageTitle>Step 2</clr-wizard-pageTitle>-->
-
-        <!--<clr-wizard-headerAction>
-            <a href="#" title="click me for help">HELP ICON</a>
-        </clr-wizard-headerActions>
-        <clr-wizard-headerAction>
-            <a href="#" title="click me for something else">WTF ICON</a>
-        </clr-wizard-headerActions>-->
-
-        <!-- do a generic button; add behavior on top of it -->
-        <!--<clr-wizard-button type="cancel">Cancel</clr-wizard-button>-->
-        <!--<clr-wizard-btnPrevious>Previous</clr-wizard-btnPrevious>-->
-        <!--<clr-wizard-btnNext>Next</clr-wizard-btnNext>-->
-
-        <!--<clr-wizard-pageContent>-->
-            <p>Content for step 2</p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
-                officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
-                quas! Quaerat explicabo expedita placeat vero.
-            </p>
-        <!--</clr-wizard-pageContent>-->
-
-        <!-- TODO: make types into a const on the index -->
-        <!-- CUSTOME BUTTONS GO HERE -->
-        <template pageButtons>
-            <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
-            <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
-
-            <!-- TONOTE: the click handler here works... -->
-            <clr-wizard-button [type]="'danger'">Doitbad</clr-wizard-button>
-        </template>
-
+        <p>Content for step 2</p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
+            officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
+            quas! Quaerat explicabo expedita placeat vero.
+        </p>
     </clr-newwizard-page>
 
     <clr-newwizard-page *ngIf="showStepThree">
         <template pageTitle>If you see this, something is badwrong</template> <!-- mandatory -->
         <template pageNavTitle>Step 3 Shouldn't be</template> <!-- optional -->
 
-        <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
-        <!-- <template clrWizardNavStep> -->
-        <!--<clr-wizard-stepnav-item>-->
-            <!-- just write the fully customizable one here -->
-        <!--</clr-wizard-stepnav-item>-->
-
-        <!--<clr-wizard-pageTitle>Step 3</clr-wizard-pageTitle>-->
-
-        <!--<clr-wizard-headerAction>
-            <a href="#" title="click me for help">HELP ICON</a>
-        </clr-wizard-headerActions>
-        <clr-wizard-headerAction>
-            <a href="#" title="click me for something else">WTF ICON</a>
-        </clr-wizard-headerActions>-->
-
-        <!-- do a generic button; add behavior on top of it -->
-        <!--<clr-wizard-button type="cancel">Cancel</clr-wizard-button>-->
-        <!--<clr-wizard-btnPrevious>Previous</clr-wizard-btnPrevious>-->
-        <!--<clr-wizard-btnNext>Next</clr-wizard-btnNext>-->
-
-        <!--<clr-wizard-pageContent>-->
-            <p>Content for step 3</p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
-                officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
-                quas! Quaerat explicabo expedita placeat vero.
-            </p>
-        <!--</clr-wizard-pageContent>-->
+        <p>Content for step 3</p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
+            officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
+            quas! Quaerat explicabo expedita placeat vero.
+        </p>
     </clr-newwizard-page>
 
     <clr-newwizard-page>
         <template pageTitle>Longer Title for Page 4</template> <!-- mandatory -->
         <template pageNavTitle>S-S-S... Sibillance</template> <!-- optional -->
 
-        <!-- problem here with pushing this into a sibling component. template references... Advanced NG -->
-        <!-- <template clrWizardNavStep> -->
-        <!--<clr-wizard-stepnav-item>-->
-            <!-- just write the fully customizable one here -->
-        <!--</clr-wizard-stepnav-item>-->
-
-        <!--<clr-wizard-pageTitle>Step 3</clr-wizard-pageTitle>-->
-
-        <!--<clr-wizard-headerAction>
-            <a href="#" title="click me for help">HELP ICON</a>
-        </clr-wizard-headerActions>
-        <clr-wizard-headerAction>
-            <a href="#" title="click me for something else">WTF ICON</a>
-        </clr-wizard-headerActions>-->
-
-        <!-- do a generic button; add behavior on top of it -->
-        <!--<clr-wizard-button type="cancel">Cancel</clr-wizard-button>-->
-        <!--<clr-wizard-btnPrevious>Previous</clr-wizard-btnPrevious>-->
-        <!--<clr-wizard-btnNext>Next</clr-wizard-btnNext>-->
-
-        <!--<clr-wizard-pageContent>-->
-            <p>Content for step 4</p>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
-                officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
-                quas! Quaerat explicabo expedita placeat vero.
-            </p>
-        <!--</clr-wizard-pageContent>-->
+        <p>Content for step 4</p>
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
+            officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
+            quas! Quaerat explicabo expedita placeat vero.
+        </p>
     </clr-newwizard-page>
 </clr-newwizard>
 
