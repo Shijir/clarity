@@ -92,7 +92,7 @@ export class NewWizard implements OnInit {
             // TOFIX: THIS IS JUST TO TEST THE SUBSCRIPTION. RETHINK FOR FINAL...
             let myPages = this.pages.toArray();
             let currentIndex = myPages.indexOf(currentPage);
-            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.", 
+            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.",
             "Here's who I think the current page was: ", currentPage.id);
             console.log("what is my index?", currentIndex);
             let newIndex = currentIndex + 1;
@@ -100,7 +100,7 @@ export class NewWizard implements OnInit {
             let newCurrent = myPages[newIndex];
             console.log("who is newCurrent?", newCurrent);
             this.navService.setCurrentPage(newCurrent);
-            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.", 
+            console.log("I'm in wizard.ts - ngOnInit. I'm a subscription for going to the next page.",
             "Here's who I think the current page is: ", newCurrent.id);
         });
     }

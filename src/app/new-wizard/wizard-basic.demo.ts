@@ -69,6 +69,6 @@ export class WizardSimple {
     }
 
     public handlePageChange(): void {
-        console.log("I changed my current page.")
+        console.log("I changed my current page.");
     }
 }
