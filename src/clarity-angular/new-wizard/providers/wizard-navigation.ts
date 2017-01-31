@@ -64,8 +64,8 @@ export class WizardNavigationService {
         this._movePrevious.next(page);
     }
 
-    private _cancelWizard = new Subject<NewWizardPage>();
-    public get notifyWizardCancel(): Observable<NewWizardPage> {
+    private _cancelWizard = new Subject<any>();
+    public get notifyWizardCancel(): Observable<any> {
         return this._cancelWizard.asObservable();
     }
     public cancelWizard(): void {
@@ -73,6 +73,19 @@ export class WizardNavigationService {
         this._cancelWizard.next();
     }
 
-    // need finish
-    // need danger
+    private _goTo = new Subject<NewWizardPage>();
+    public get notifyGoTo(): Observable<NewWizardPage> {
+        return this._goTo.asObservable();
+    }
+    public goToPage(pageToGoTo: NewWizardPage) {
+        console.log("OHAI");
+        this._goTo.next(pageToGoTo);
+
+        // LEFTOFF: NEED WIZARD TO HANDLE CHECKING SURROUNDING PAGES, EARLY
+        // RETURN IF PAGE CAN'T BE ACTIVATED, RESETTING PAGES LATER IN THE 
+        // WIZARD...
+
+        // NEED TO BE ABLE TO REUSE THIS FUNCION IN THE WIZARD FOR GRABBING
+        // A PAGE BY REFERENCE OR ID...
+    }
 }

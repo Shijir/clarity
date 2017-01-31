@@ -3,11 +3,12 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-// import { Component, ViewChild } from "@angular/core";
+
 import {
-    // Output,
     Input,
-    Component
+    Component,
+    EventEmitter,
+    Output
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -24,38 +25,50 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     `,
     host: {
         "[id]": "id",
-        "[attr.aria-selected]": "page.current",
-        "[attr.aria-controls]": "page.id",
+        "[attr.aria-selected]": "isCurrent",
+        "[attr.aria-controls]": "id",
         "role": "presentation",
         "[class.clr-nav-link]": "true",
         "[class.nav-item]": "true",
-        "[class.active]": "page.current",
-        "[class.disabled]": "page.disabled",
-        "[class.complete]": "page.complete"
+        "[class.active]": "isCurrent",
+        "[class.disabled]": "isDisabled",
+        "[class.complete]": "isComplete"
     }
 })
 
 export class NewWizardStepnavItem {
-    constructor(private navService: WizardNavigationService) {
+    @Input("page") public page: NewWizardPage;
+
+    // EventEmitter which is emitted when a next button is clicked.
+    @Output("clrWizardStepnavItemClicked") wasClicked: EventEmitter<NewWizardStepnavItem> =
+        new EventEmitter<NewWizardStepnavItem>(false);
+
+    constructor(public navService: WizardNavigationService) {
     }
 
-    @Input("page") private page: NewWizardPage;
     public get id(): string {
         return this.page.stepItemId;
     }
 
-    doClick(): boolean {
-        // TODO: call page here (via navService?)
-        // this.tabs.selectTab(this);
+    public get isDisabled(): boolean {
+        return this.page.disabled;
+    }
 
-        // SPECME: if we click on our own link, we don't want it to do anything
-        if (this.page === this.navService.currentPage) {
-            console.log("OHNOEZ!");
+    public get isCurrent(): boolean {
+        return this.page.current;
+    }
+
+    public get isComplete(): boolean {
+        return this.page.completed;
+    }
+
+    doClick(): boolean {
+        if (this.isDisabled || this.isCurrent) {
             return false;
         }
+        // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
 
-        // TODO: communicate to navService to update the page
-        console.log("OHAI!");
-        return false; // so that browser doesn't navigate to the href of the anchor tag
+        this.wasClicked.emit(this);
+        this.navService.goToPage(this.page);
     }
 }

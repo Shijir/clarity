@@ -106,6 +106,10 @@ export class NewWizard implements OnInit {
         this.navService.notifyWizardCancel.subscribe(() => {
             this.close();
         });
+
+        this.navService.notifyGoTo.subscribe((pageToGoTo: NewWizardPage) => {
+            this.moveToPage(pageToGoTo);
+        });
     }
 
     public ngOnContentInit() {
@@ -241,6 +245,8 @@ export class NewWizard implements OnInit {
         currentPage.primaryButtonClicked.emit();
         currentPage.onCommit.emit(null);
 
+        this.currentPage.completed = true;
+
         if (this.navService.isOnLastPage) {
             this.wizardFinished.emit();
             this.close();
@@ -248,6 +254,7 @@ export class NewWizard implements OnInit {
             myPages = this.pages.toArray();
             currentPageIndex = myPages.indexOf(currentPage);
             nextPage = myPages[currentPageIndex + 1];
+            nextPage.completed = false;
             this.navService.setCurrentPage(nextPage);
         }
         // SPECME
@@ -273,7 +280,79 @@ export class NewWizard implements OnInit {
         currentPageIndex = myPages.indexOf(currentPage);
         previousPage = myPages[currentPageIndex - 1];
 
+        this.currentPage.completed = false;
+        previousPage.completed = false;
         this.navService.setCurrentPage(previousPage);
+    }
+
+    public moveToPage(pageToGoToOrId: any) {
+        let pageToGoTo: NewWizardPage;
+        let pageToGoToIndex: number;
+        let currentPageIndex: number;
+        let myPages: NewWizardPage[];
+        let pagesToCheck: NewWizardPage[];
+        let okayToMove: boolean = true;
+
+        if (typeof pageToGoToOrId === "string") {
+            // we have an ID so we need to look up our page
+            pageToGoTo = this.lookupPageById(pageToGoToOrId);
+        } else {
+            pageToGoTo = pageToGoToOrId;
+        }
+
+        myPages = this.pages.toArray();
+        pageToGoToIndex = myPages.indexOf(pageToGoTo);
+        currentPageIndex = myPages.indexOf(this.currentPage);
+
+        if (pageToGoToIndex === currentPageIndex) {
+            return;
+        } else if (pageToGoToIndex < currentPageIndex) {
+            pagesToCheck = this.pages.filter((page: NewWizardPage, index: number) => {
+                return pageToGoToIndex < index && index < currentPageIndex;
+            });
+        } else {
+            // currentPageIndex < pageToGoToIndex
+            pagesToCheck = this.pages.filter((page: NewWizardPage, index: number) => {
+                return currentPageIndex < index && index < pageToGoToIndex;
+            });
+        }
+
+        // moving forward vs. backward?
+
+        pagesToCheck.forEach((page: NewWizardPage) => {
+            if (!okayToMove) {
+                return;
+            }
+            if (!page.completed) {
+                okayToMove = false;
+            }
+            // need to loop through once more and set completed to false for pages in between....
+        });
+
+        if (!okayToMove) {
+            return;
+        }
+
+        pagesToCheck.forEach((page: NewWizardPage) => page.completed = false);
+        this.currentPage.completed = false;
+        pageToGoTo.completed = false;
+
+        this.navService.setCurrentPage(pageToGoTo);
+    }
+
+    public lookupPageById(id: string): NewWizardPage {
+        let foundPages: NewWizardPage[] = this.pages.filter((page: NewWizardPage) => id === page.id);
+        let foundPagesCount: number = foundPages.length || 0;
+
+        if (foundPagesCount > 1) {
+            // TOASK: TOO MANY FOUND PAGES!!! THROW ERROR?
+            return null;
+        } else if (foundPages.length < 1) {
+            // TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
+            return null;
+        } else {
+            return foundPages[0];
+        }
     }
 
     // prev -- DEPRECATED
