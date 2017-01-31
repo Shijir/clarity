@@ -98,6 +98,14 @@ export class NewWizard implements OnInit {
         this.navService.goNext.subscribe(() => {
             this.next();
         });
+
+        this.navService.goPrevious.subscribe(() => {
+            this.previous();
+        });
+
+        this.navService.notifyWizardCancel.subscribe(() => {
+            this.close();
+        });
     }
 
     public ngOnContentInit() {
@@ -176,7 +184,7 @@ export class NewWizard implements OnInit {
 
 
 
-    // TODO: GET RID OF THIS ALTOGETHER
+    // TODO: GET RID OF THIS ALTOGETHER AFTER YOU HANDLE FINISH WIZARD EVENT
     // _next --
     //
     // This is a private function that is called on the click of the next
@@ -214,7 +222,6 @@ export class NewWizard implements OnInit {
         // SPECME
     }
 
-    // TODO: CAN KEEP THIS BUT IT CALLS THE NAVSERVICE
     // next --
     //
     // When called, after successful validation, the wizard will move to the
@@ -231,6 +238,7 @@ export class NewWizard implements OnInit {
             return;
         }
 
+        currentPage.primaryButtonClicked.emit();
         currentPage.onCommit.emit(null);
 
         if (this.navService.isOnLastPage) {

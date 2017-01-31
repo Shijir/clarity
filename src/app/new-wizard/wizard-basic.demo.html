@@ -20,6 +20,8 @@
     <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
     <clr-wizard-button [type]="'next'"
         (clrWizardButtonClicked)="handlePrimaryClick($event)">Next</clr-wizard-button>
+    <clr-wizard-button [type]="'finish'"
+        (clrWizardButtonClicked)="handlePrimaryClick($event)">Fait Accompli</clr-wizard-button>
 
     <!-- TONOTE: this event handler here doesn't work... -->
     <clr-newwizard-page (clrWizardPageFinishButtonClicked)="handleFinishClick($event)"

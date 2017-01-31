@@ -89,10 +89,6 @@ export class NewWizardPage implements OnInit {
     @Output("clrWizardPagePrimaryButtonClicked") primaryButtonClicked: EventEmitter<any> =
         new EventEmitter(false);
 
-    @Output("clrWizardPageTerminalButtonClicked") terminalButtonClicked: EventEmitter<any> =
-        new EventEmitter(false);
-
-
     constructor(private navService: WizardNavigationService) {
     }
 
@@ -177,7 +173,7 @@ export class NewWizardPage implements OnInit {
     public next(): void {
         // FIXME: THIS IS JUST A TEST SCRIPT HERE TO TEST
         // OBSERVERS ON NAVSERVICE ... WON'T BE DOING THIS LIKE THIS... MAYBE.
-        this.navService.goNextPage();
+        this.navService.goNextPage(null);
     }
 
     public ngOnInit(): void {

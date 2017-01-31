@@ -37,10 +37,15 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
     // IS HIDDEN <= class that does display:none [aria-hidden="true"]...?
     host: {
         "class": "clr-wizard-btn-wrapper"
-    }
+    },
+    styles: ['[aria-hidden="true"] { display: none; }']
 })
 export class NewWizardButton {
     @Input("type") private type: string = "";
+
+    @Input("clrWizardButtonDisabled") private disabledInput: boolean = false;
+
+    @Input("clrWizardButtonHidden") private hiddenInput: boolean = false;
 
     // EventEmitter which is emitted when a next button is clicked.
     @Output("clrWizardButtonClicked") wasClicked: EventEmitter<NewWizardPage> =
@@ -84,11 +89,20 @@ export class NewWizardButton {
         let page = this.page;
         let nav = this.navService;
 
+        if (this.disabledInput) {
+            return true;
+        }
+        // SPECME^ : allow an input to force disabled or not on a button
+
         if (this.isCancel) {
             return !disabled;
         }
 
         if (this.isPrevious && nav.isOnFirstPage) {
+            return disabled;
+        }
+
+        if (this.isDanger && !page.readyToComplete) {
             return disabled;
         }
 
@@ -110,10 +124,10 @@ export class NewWizardButton {
         let hidden = true;
         let nav = this.navService;
 
-        // TODO: WE'RE JUST USING THIS HERE SO WE CAN SEE THE BUTTONS!
-        if (2 > 1) {
-            return !hidden;
+        if (this.hiddenInput) {
+            return true;
         }
+        // SPECME^ : allow an input to force disabled or not on a button
 
         if (this.isCancel) {
             return !hidden;
@@ -141,6 +155,7 @@ export class NewWizardButton {
         // TODO: notify up that the type of button has been clicked
 
         let page: NewWizardPage = this.navService.currentPage;
+        let navService: WizardNavigationService = this.navService;
 
         if (this.isDisabled) {
             return;
@@ -151,27 +166,15 @@ export class NewWizardButton {
         // TODO: WIRE ALL DISS UP
 
         if (this.isCancel) {
-            page.cancelButtonClicked.emit();
+            navService.cancelWizard();
         }
 
         if (this.isPrevious) {
-            page.previousButtonClicked.emit();
-        }
-
-        if (this.isNext) {
-            page.nextButtonClicked.emit();
-        }
-
-        if (this.isDanger) {
-            page.dangerButtonClicked.emit();
-        }
-
-        if (this.isFinish) {
-            page.finishButtonClicked.emit();
+            navService.goPreviousPage();
         }
 
         if (this.isPrimaryAction) {
-            page.primaryButtonClicked.emit();
+            navService.goNextPage(this.type);
         }
 
         // SPECME ^ ALL THIS STUFF UP IN HERE
