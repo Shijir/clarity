@@ -54,6 +54,12 @@ export class NewWizardButton {
     constructor(private navService: WizardNavigationService) {
     }
 
+    // TODO: BUILD OUT A BUTTON SERVICE WITH ONE EMITTER?
+    // BUTTON SERVICE TELLS EVERYONE WHO NEEDS TO KNOW WHAT'S GOING ON
+    // (MAYBE WANT TO DEPRECATE SOME EVENTS -- OR GET RID OF THEM)
+    // EVENT EMITTED IS STRING THAT TELLS US WHAT BUTTON WAS CLICKED
+    // USERS WILL HAVE A TWO-WAY BINDING ON CURRENTPAGE OF WIZARD
+
     private get page(): NewWizardPage {
         // buttons only ever care about the current page
         return this.navService.currentPage;
@@ -162,8 +168,6 @@ export class NewWizardButton {
         }
 
         this.wasClicked.emit(page);
-
-        // TODO: WIRE ALL DISS UP
 
         if (this.isCancel) {
             navService.cancelWizard();

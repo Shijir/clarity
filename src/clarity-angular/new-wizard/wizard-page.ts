@@ -50,7 +50,7 @@ export class NewWizardPage implements OnInit {
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
     // todo... error event??
 
-    // TODO: HIDDEN AND SKIPPED ARE THE SAME THING
+    // TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
     @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
 
     @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
@@ -59,6 +59,7 @@ export class NewWizardPage implements OnInit {
     @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    // IDEALLY THIS IS A TWO WAY BINDING ON page.completed??? EUDES NOT SURE...
     // User can bind an event handler for onCommit of the main content
     @Output("clrWizardPageOnCommit") onCommit: EventEmitter<any> =
         new EventEmitter<any>(false);
@@ -95,15 +96,13 @@ export class NewWizardPage implements OnInit {
     // @Input("clrWizardPagePreventDefault")
     // TOBREAK: this input was removed. use ngIf instead. note breaking change.
 
-    // TODO: USER-DEFINED IDS ON PAGES!? SO SERVICE CAN SELECT THEM DIRECTLY
-    // OR USE `#myId` REFERENCE <= SIMPLEST WAY TO DO IT <= GRABBING WIZARD THROUGH TEMPLATE VARIABLE
-
     // private doSkippedChange(value: boolean) {
     //     this._preventDefault = this._pageInactive = value;
     //     this.skippedChange.emit(value);
     // }
 
-    // TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE
+    // TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
+    // may need to call a pageready event (onLoad) from the page collection service)
     // skippedChange ^ or other event too... deprecate "skipped"
 
     // If our host has an ID attribute, we use this instead of our index.
@@ -114,6 +113,7 @@ export class NewWizardPage implements OnInit {
         return `clr-wizard-page-${this._id}`;
     }
 
+    // TODO: MOVE THIS TO PAGE COLLECTION SERVICE
     public get stepItemId(): string {
         let pageId = this.id;
         let pageIdParts = pageId.split("-").reverse();

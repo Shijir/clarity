@@ -62,6 +62,7 @@ export class NewWizardStepnavItem {
         return this.page.completed;
     }
 
+    // TODO: MOVETOPAGE... 
     doClick(): boolean {
         if (this.isDisabled || this.isCurrent) {
             return false;

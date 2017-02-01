@@ -24,6 +24,9 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
         "class": "clr-wizard-stepnav"
     }
 })
+
+// TODO: ITERATE ON PAGESERVICE INSTEAD OF WIZARD
+
 export class NewWizardStepnav {
     constructor(private navService: WizardNavigationService, private wizard: NewWizard) {
     }

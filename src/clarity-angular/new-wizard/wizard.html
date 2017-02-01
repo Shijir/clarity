@@ -32,10 +32,10 @@
         </div>
     </div>
     <div class="modal-footer clr-wizard-footer">
+        <!-- TODO: FIGURE OUT HOW TO NOT HAVE THE WRAPPER AROUND BUTTONS... V2/CLEANUP -->
         <!-- TODO: USE SAME ARCH FOR HEADER ACTIONS VVVVV -->
         <div *ngIf="!navService.currentPage.hasButtons">
-            <ng-content *ngIf="!navService.currentPage.hasButtons"
-                select="clr-wizard-button"></ng-content>
+            <ng-content select="clr-wizard-button"></ng-content>
         </div>
         <div *ngIf="navService.currentPage.hasButtons">
             <template [ngTemplateOutlet]="navService.currentPage.buttons"></template>

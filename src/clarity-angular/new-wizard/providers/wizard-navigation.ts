@@ -20,6 +20,9 @@ export class WizardNavigationService {
 
     public pages: QueryList<NewWizardPage>;
 
+    // TODO: ANYTHING RELATED TO THE CURRENT PAGE GOES HERE
+    // ANYTHING RELATED TO ALL PAGES BUT NOT NAVIGATION METHODS GOES HERE
+
     public isOnFirstPage: boolean = true;
 
     public isOnLastPage: boolean = false;
@@ -78,14 +81,6 @@ export class WizardNavigationService {
         return this._goTo.asObservable();
     }
     public goToPage(pageToGoTo: NewWizardPage) {
-        console.log("OHAI");
         this._goTo.next(pageToGoTo);
-
-        // LEFTOFF: NEED WIZARD TO HANDLE CHECKING SURROUNDING PAGES, EARLY
-        // RETURN IF PAGE CAN'T BE ACTIVATED, RESETTING PAGES LATER IN THE 
-        // WIZARD...
-
-        // NEED TO BE ABLE TO REUSE THIS FUNCION IN THE WIZARD FOR GRABBING
-        // A PAGE BY REFERENCE OR ID...
     }
 }

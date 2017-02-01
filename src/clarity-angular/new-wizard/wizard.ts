@@ -10,36 +10,18 @@ import {
     Output,
     EventEmitter,
     QueryList,
-    SimpleChange,
     HostListener,
-    OnInit
+    OnInit,
+    OnDestroy
 } from "@angular/core";
+import { Subscription } from "rxjs/Subscription";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 
 // TODO: remove "NEW" when finishing up
 
-// TODO: Eventually we will have...
-// • NewWizardService
-// • NewWizard
-    // • NewWizardTitle
-    // • NewWizardStepNav
-    // • NewWizardPage
-        // • NewStepNavItem template reference? Or NewWizardStepNavItem?
-        // • NewWizardButton
-        // • NewWizardHeaderAction
-        // • NewWizardPageContent
-
-// import {Tabs} from "../tabs/tabs";
-// import {WizardStep} from "./wizard-step";
-// import {WizardPage} from "./wizard-page";
-
-// TODO: probaby don't need this
-import {ScrollingService} from "../main/scrolling-service";
-
 @Component({
     selector: "clr-newwizard",
-    viewProviders: [ScrollingService],
     providers: [ WizardNavigationService ],
     templateUrl: "./wizard.html",
     host: {
@@ -51,7 +33,7 @@ import {ScrollingService} from "../main/scrolling-service";
         "[class.wizard-xl]": "size == 'xl'" // <= 'xl'!!!
     }
 })
-export class NewWizard implements OnInit {
+export class NewWizard implements OnInit, OnDestroy {
 
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
@@ -72,6 +54,15 @@ export class NewWizard implements OnInit {
     @Output("clrWizardOnCancel") onCancel: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    // TOLERN: use this convention for two-way binding
+    // @Input("xxx") x: boolean
+    // @Output("xxxChange") change: EventEmitter<boolean>();
+    // [(xxx)]
+    //
+    // THESE ARE EQUIVALENT
+    // [(xxx)]="myModel"
+    // [xxx]="myModel" (xxxChange)="myModel = $event"
+
     // TODO: need a wizardCurrentPageChanged event... bubbling up from page to service to wizard
     @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
         new EventEmitter<any>(false);
@@ -81,12 +72,26 @@ export class NewWizard implements OnInit {
 
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
-    // TODO: REMOVE ScrollingService
-    constructor(private _scrollingService: ScrollingService, public navService: WizardNavigationService) {
+    constructor(public navService: WizardNavigationService) {
+        this.goNextSubscription = this.navService.goNext.subscribe(() => {
+            this.next();
+        });
+
+        this.goPreviousSubscription = this.navService.goPrevious.subscribe(() => {
+            this.previous();
+        });
+
+        this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
+            this.close();
+        });
+
+        this.goToSubscription = this.navService.notifyGoTo.subscribe((pageToGoTo: NewWizardPage) => {
+            this.moveToPage(pageToGoTo);
+        });
     }
 
     public ngOnInit(): void {
-        this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
+        this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
             if (this.pages) {
                 // first time through it doesn't have pages to look up...
                 this.setFirstLastPages();
@@ -94,27 +99,29 @@ export class NewWizard implements OnInit {
             // SPECME
             this.currentPageChanged.emit();
         });
+    }
 
-        this.navService.goNext.subscribe(() => {
-            this.next();
-        });
+    private goNextSubscription: Subscription;
+    private goPreviousSubscription: Subscription;
+    private cancelSubscription: Subscription;
+    private goToSubscription: Subscription;
+    private currentPageSubscription: Subscription;
 
-        this.navService.goPrevious.subscribe(() => {
-            this.previous();
-        });
-
-        this.navService.notifyWizardCancel.subscribe(() => {
-            this.close();
-        });
-
-        this.navService.notifyGoTo.subscribe((pageToGoTo: NewWizardPage) => {
-            this.moveToPage(pageToGoTo);
-        });
+    ngOnDestroy() {
+        this.goNextSubscription.unsubscribe();
+        this.goPreviousSubscription.unsubscribe();
+        this.cancelSubscription.unsubscribe();
+        this.goToSubscription.unsubscribe();
+        this.currentPageSubscription.unsubscribe();
     }
 
     public ngOnContentInit() {
         this.setFirstLastPages();
     }
+
+    // !TODO: PUT ALL THIS IN THE PAGESERVICE. NGAFTERVIEWINIT ADD...
+    // this.navService.pages = this.pages
+    // CAN GET RID OF ISFIRST OR ISLAST
 
     private setFirstLastPages() {
         this.navService.isOnFirstPage = this.currentPage === this.first;
@@ -129,19 +136,6 @@ export class NewWizard implements OnInit {
     // The current page
     public get currentPage(): NewWizardPage {
         return this.navService.currentPage;
-    }
-
-    // TODO: DO WE NEED THIS STILL???
-    //Detect when _open is set to true and set no-scrolling to true
-    public ngOnChanges(changes: {[propName: string]: SimpleChange}): void {
-        // can get rid of ... 
-        // if (changes && changes.hasOwnProperty("_open")) {
-        //     if (changes["_open"].currentValue) {
-        //         this._scrollingService.stopScrolling();
-        //     } else {
-        //         this._scrollingService.resumeScrolling();
-        //     }
-        // }
     }
 
     // TODO: MAKE SURE WIZARD HAS DELEGATES FOR REASONABLE MODAL FNS
@@ -182,38 +176,7 @@ export class NewWizard implements OnInit {
         this.close();
     }
 
-
-
-
-
-
-
-    // TODO: GET RID OF THIS ALTOGETHER AFTER YOU HANDLE FINISH WIZARD EVENT
-    // _next --
-    //
-    // This is a private function that is called on the click of the next
-    // button and emits the onCommit event of the active tab.
-    _next(event?: any): void {
-        // let totalSteps: number = this.tabLinks.length - 1;
-        // let i: number = this.currentTabIndex;
-        // let i: number = 0;
-        // let page: WizardPage = this.tabContents[i];
-        // let page: any = this.tabContents[i];
-        // if (!page.nextDisabled) {
-        //     page.onCommit.emit(null);
-
-        //     if (!page.preventDefault) {
-        //         // If no handler for finish button, then close wizard on click
-        //         // of finish by default
-        //         if (totalSteps === i) {
-        //             this.close();
-        //         } else {
-        //             this.next();
-        //         }
-        //     }
-        // }
-    }
-
+    // TODO: MOVE FIRST/LAST TO NAVSERVICE
     public get first(): NewWizardPage {
         return this.pages.toArray()[0];
         // SPECME
@@ -225,6 +188,8 @@ export class NewWizard implements OnInit {
         return pages[pageCount - 1];
         // SPECME
     }
+
+    // TODO: MOVE NEXT/PREVIOUS TO NAVSERVICE!!!
 
     // next --
     //
@@ -285,6 +250,12 @@ export class NewWizard implements OnInit {
         this.navService.setCurrentPage(previousPage);
     }
 
+    // TODO: MOVE TO NAVSERVICE
+    // TODO: IS MARKING PAGES INCOMPLETE THE WAY TO GO? ASK YEN.
+    // TODO: SERVICE IS DOING TWO JOBS
+    //      1 - PAGESERVICE: COLLECTION OF PAGES WITH CODE TO ANALYZE LIST OF PAGES (FIRST, LAST, ETC)
+    //      2 - NAVSERVICE: NAVIGATION FROM ONE PAGE TO ANOTHER
+
     public moveToPage(pageToGoToOrId: any) {
         let pageToGoTo: NewWizardPage;
         let pageToGoToIndex: number;
@@ -340,6 +311,7 @@ export class NewWizard implements OnInit {
         this.navService.setCurrentPage(pageToGoTo);
     }
 
+    // TODO: MOVE TO PAGESERVICE
     public lookupPageById(id: string): NewWizardPage {
         let foundPages: NewWizardPage[] = this.pages.filter((page: NewWizardPage) => id === page.id);
         let foundPagesCount: number = foundPages.length || 0;
@@ -355,17 +327,14 @@ export class NewWizard implements OnInit {
         }
     }
 
+    // TODO: CALL TO NAVSERVICE
     // prev -- DEPRECATED
     // calls previous(); kept here to avoid breaking change where unnecessary
     public prev(): void {
         this.previous();
     }
 
-    // TODO: NEED TO MOVE PAGE FIRST AND LAST TO HERE!!!
-    // JUST A FUNC THAT RETURNS THE FIRST AND LAST PAGE SO OTHER FUNCS CAN TEST AGAINST IT
-    // NO POINT IN DOING POSITION/INDEX CHECKS
-
-    // TODO: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED IN THE NAVSERVICE, NOT HERE
+    // TODO: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED ON THE PAGE, NOT HERE
     // selectTab --
     //
     // Base class function overridden to call the onLoad event emitter
@@ -386,33 +355,19 @@ export class NewWizard implements OnInit {
         // this.isFirst = 0 === 0;
     }
 
-    // TODO: CAN KEEP THIS BUT THE NAVSERVICE DOES THE ACTUAL WORK
+    // TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // skipTab --
     //
     // Public function to skip a Tab given its uniqueId
-    skipTab(tabId: string): void {
-        this._setTabIsSkipped(tabId, true);
-    }
+    // skipTab(tabId: string): void {
+    //     this._setTabIsSkipped(tabId, true);
+    // }
 
-    // TODO: CAN KEEP THIS BUT THE NAVSERVICE DOES THE ACTUAL WORK
+    // TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // unSkipTab --
     //
     // Public function to unSkip a tab given its uniqueId
-    unSkipTab(tabId: string): void {
-        this._setTabIsSkipped(tabId, false);
-    }
-
-    // TODO: GET RID OF THIS; IT LIVES IN THE NAVSERVICE
-    _setTabIsSkipped(tabId: string, isSkipped: boolean): void {
-        // this.wizardStepChildren.forEach((wizardStep: WizardStep, index: number) => {
-        //     if (wizardStep.id === tabId) {
-        //         wizardStep.isSkipped = isSkipped;
-        //         // set the isSkipped property of the matching content if it exists
-        //         if (index < this.wizardPageChildren.length) {
-        //             let children: WizardPage[] = this.wizardPageChildren.toArray();
-        //             children[index].isSkipped = isSkipped;
-        //         }
-        //     }
-        // });
-    }
+    // unSkipTab(tabId: string): void {
+    //     this._setTabIsSkipped(tabId, false);
+    // }
 }
