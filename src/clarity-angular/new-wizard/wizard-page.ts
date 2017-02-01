@@ -15,6 +15,9 @@ import {
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
+import { PageCollectionService } from "./providers/page-collection";
+import { ButtonHubService } from "./providers/button-hub";
+
 import { WizardPageTitleDirective } from "./directives/page-title";
 import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 import { WizardPageButtonsDirective } from "./directives/page-buttons";
@@ -39,6 +42,11 @@ let wizardPageIndex = 0;
 })
 export class NewWizardPage implements OnInit {
 
+    constructor(private navService: WizardNavigationService,
+                public pageCollection: PageCollectionService,
+                public buttonService: ButtonHubService) {
+    }
+
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
     @ContentChild(WizardPageButtonsDirective) private _buttons: WizardPageButtonsDirective;
@@ -51,6 +59,7 @@ export class NewWizardPage implements OnInit {
     // todo... error event??
 
     // TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
+    // TODO: MOVE TO PAGE COLLECTION SERVICE
     @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
 
     @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
@@ -89,9 +98,6 @@ export class NewWizardPage implements OnInit {
 
     @Output("clrWizardPagePrimaryButtonClicked") primaryButtonClicked: EventEmitter<any> =
         new EventEmitter(false);
-
-    constructor(private navService: WizardNavigationService) {
-    }
 
     // @Input("clrWizardPagePreventDefault")
     // TOBREAK: this input was removed. use ngIf instead. note breaking change.

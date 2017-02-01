@@ -12,17 +12,22 @@ import {
     QueryList,
     HostListener,
     OnInit,
-    OnDestroy
+    OnDestroy,
+    AfterViewInit
 } from "@angular/core";
 import { Subscription } from "rxjs/Subscription";
 import { NewWizardPage } from "./wizard-page";
+
+// providers
 import { WizardNavigationService } from "./providers/wizard-navigation";
+import { PageCollectionService } from "./providers/page-collection";
+import { ButtonHubService } from "./providers/button-hub";
 
 // TODO: remove "NEW" when finishing up
 
 @Component({
     selector: "clr-newwizard",
-    providers: [ WizardNavigationService ],
+    providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ],
     templateUrl: "./wizard.html",
     host: {
         "[id]": "id",
@@ -30,10 +35,31 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
         "[class.main-container]": "true", // <= ???
         "[class.wizard-md]": "size == 'md'",
         "[class.wizard-lg]": "size == 'lg'",
-        "[class.wizard-xl]": "size == 'xl'" // <= 'xl'!!!
+        "[class.wizard-xl]": "size == 'xl'"
     }
 })
-export class NewWizard implements OnInit, OnDestroy {
+export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
+
+    constructor(public navService: WizardNavigationService,
+                public pageCollection: PageCollectionService,
+                public buttonService: ButtonHubService) {
+
+        this.goNextSubscription = this.navService.goNext.subscribe(() => {
+            this.next();
+        });
+
+        this.goPreviousSubscription = this.navService.goPrevious.subscribe(() => {
+            this.previous();
+        });
+
+        this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
+            this.close();
+        });
+
+        this.goToSubscription = this.navService.notifyGoTo.subscribe((pageToGoTo: NewWizardPage) => {
+            this.moveToPage(pageToGoTo);
+        });
+    }
 
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
@@ -72,31 +98,8 @@ export class NewWizard implements OnInit, OnDestroy {
 
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
 
-    constructor(public navService: WizardNavigationService) {
-        this.goNextSubscription = this.navService.goNext.subscribe(() => {
-            this.next();
-        });
-
-        this.goPreviousSubscription = this.navService.goPrevious.subscribe(() => {
-            this.previous();
-        });
-
-        this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
-            this.close();
-        });
-
-        this.goToSubscription = this.navService.notifyGoTo.subscribe((pageToGoTo: NewWizardPage) => {
-            this.moveToPage(pageToGoTo);
-        });
-    }
-
     public ngOnInit(): void {
         this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
-            if (this.pages) {
-                // first time through it doesn't have pages to look up...
-                this.setFirstLastPages();
-            }
-            // SPECME
             this.currentPageChanged.emit();
         });
     }
@@ -115,17 +118,8 @@ export class NewWizard implements OnInit, OnDestroy {
         this.currentPageSubscription.unsubscribe();
     }
 
-    public ngOnContentInit() {
-        this.setFirstLastPages();
-    }
-
-    // !TODO: PUT ALL THIS IN THE PAGESERVICE. NGAFTERVIEWINIT ADD...
-    // this.navService.pages = this.pages
-    // CAN GET RID OF ISFIRST OR ISLAST
-
-    private setFirstLastPages() {
-        this.navService.isOnFirstPage = this.currentPage === this.first;
-        this.navService.isOnLastPage = this.currentPage === this.last;
+    public ngAfterViewInit() {
+        this.pageCollection.pages = this.pages;
     }
 
     private _id: string;
@@ -176,157 +170,6 @@ export class NewWizard implements OnInit, OnDestroy {
         this.close();
     }
 
-    // TODO: MOVE FIRST/LAST TO NAVSERVICE
-    public get first(): NewWizardPage {
-        return this.pages.toArray()[0];
-        // SPECME
-    }
-
-    public get last(): NewWizardPage {
-        let pages = this.pages.toArray();
-        let pageCount = pages.length;
-        return pages[pageCount - 1];
-        // SPECME
-    }
-
-    // TODO: MOVE NEXT/PREVIOUS TO NAVSERVICE!!!
-
-    // next --
-    //
-    // When called, after successful validation, the wizard will move to the
-    // next page.
-    // This is a public function that can be used to programmatically advance
-    // the user to the next page.
-    public next(): void {
-        let currentPage = this.currentPage;
-        let currentPageIndex: number;
-        let nextPage: NewWizardPage;
-        let myPages: NewWizardPage[];
-
-        if (!currentPage.readyToComplete) {
-            return;
-        }
-
-        currentPage.primaryButtonClicked.emit();
-        currentPage.onCommit.emit(null);
-
-        this.currentPage.completed = true;
-
-        if (this.navService.isOnLastPage) {
-            this.wizardFinished.emit();
-            this.close();
-        } else {
-            myPages = this.pages.toArray();
-            currentPageIndex = myPages.indexOf(currentPage);
-            nextPage = myPages[currentPageIndex + 1];
-            nextPage.completed = false;
-            this.navService.setCurrentPage(nextPage);
-        }
-        // SPECME
-    }
-
-    // When called, the wizard will move to the prev page.
-    // This is a public function that can be used to programmatically go back
-    // to the previous step.
-    public previous(): void {
-        let currentPage = this.currentPage;
-        let currentPageIndex: number;
-        let previousPage: NewWizardPage;
-        let myPages: NewWizardPage[];
-
-        // TOASK: SHOULD THIS HANDLE FINISH AND DELETE BUTTONS TOO???
-        // I THINK SO...
-        if (this.navService.isOnFirstPage) {
-            return;
-        }
-        // SPECME
-
-        myPages = this.pages.toArray();
-        currentPageIndex = myPages.indexOf(currentPage);
-        previousPage = myPages[currentPageIndex - 1];
-
-        this.currentPage.completed = false;
-        previousPage.completed = false;
-        this.navService.setCurrentPage(previousPage);
-    }
-
-    // TODO: MOVE TO NAVSERVICE
-    // TODO: IS MARKING PAGES INCOMPLETE THE WAY TO GO? ASK YEN.
-    // TODO: SERVICE IS DOING TWO JOBS
-    //      1 - PAGESERVICE: COLLECTION OF PAGES WITH CODE TO ANALYZE LIST OF PAGES (FIRST, LAST, ETC)
-    //      2 - NAVSERVICE: NAVIGATION FROM ONE PAGE TO ANOTHER
-
-    public moveToPage(pageToGoToOrId: any) {
-        let pageToGoTo: NewWizardPage;
-        let pageToGoToIndex: number;
-        let currentPageIndex: number;
-        let myPages: NewWizardPage[];
-        let pagesToCheck: NewWizardPage[];
-        let okayToMove: boolean = true;
-
-        if (typeof pageToGoToOrId === "string") {
-            // we have an ID so we need to look up our page
-            pageToGoTo = this.lookupPageById(pageToGoToOrId);
-        } else {
-            pageToGoTo = pageToGoToOrId;
-        }
-
-        myPages = this.pages.toArray();
-        pageToGoToIndex = myPages.indexOf(pageToGoTo);
-        currentPageIndex = myPages.indexOf(this.currentPage);
-
-        if (pageToGoToIndex === currentPageIndex) {
-            return;
-        } else if (pageToGoToIndex < currentPageIndex) {
-            pagesToCheck = this.pages.filter((page: NewWizardPage, index: number) => {
-                return pageToGoToIndex < index && index < currentPageIndex;
-            });
-        } else {
-            // currentPageIndex < pageToGoToIndex
-            pagesToCheck = this.pages.filter((page: NewWizardPage, index: number) => {
-                return currentPageIndex < index && index < pageToGoToIndex;
-            });
-        }
-
-        // moving forward vs. backward?
-
-        pagesToCheck.forEach((page: NewWizardPage) => {
-            if (!okayToMove) {
-                return;
-            }
-            if (!page.completed) {
-                okayToMove = false;
-            }
-            // need to loop through once more and set completed to false for pages in between....
-        });
-
-        if (!okayToMove) {
-            return;
-        }
-
-        pagesToCheck.forEach((page: NewWizardPage) => page.completed = false);
-        this.currentPage.completed = false;
-        pageToGoTo.completed = false;
-
-        this.navService.setCurrentPage(pageToGoTo);
-    }
-
-    // TODO: MOVE TO PAGESERVICE
-    public lookupPageById(id: string): NewWizardPage {
-        let foundPages: NewWizardPage[] = this.pages.filter((page: NewWizardPage) => id === page.id);
-        let foundPagesCount: number = foundPages.length || 0;
-
-        if (foundPagesCount > 1) {
-            // TOASK: TOO MANY FOUND PAGES!!! THROW ERROR?
-            return null;
-        } else if (foundPages.length < 1) {
-            // TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
-            return null;
-        } else {
-            return foundPages[0];
-        }
-    }
-
     // TODO: CALL TO NAVSERVICE
     // prev -- DEPRECATED
     // calls previous(); kept here to avoid breaking change where unnecessary
@@ -339,7 +182,7 @@ export class NewWizard implements OnInit, OnDestroy {
     //
     // Base class function overridden to call the onLoad event emitter
     // selectTab(wizardNav: WizardStep): void {
-    selectTab(wizardNav: any): void {
+    // selectTab(wizardNav: any): void {
         // super.selectTab(wizardNav);
 
         // let page: WizardPage = this.currentTabContent as WizardPage;
@@ -353,7 +196,7 @@ export class NewWizard implements OnInit, OnDestroy {
         // // this.isFirst = this.currentTabIndex === 0;
         // this.isLast = 1 === totalSteps;
         // this.isFirst = 0 === 0;
-    }
+    // }
 
     // TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // skipTab --

@@ -89,6 +89,7 @@ export class NewWizardButton {
         return this.isNext || this.isDanger || this.isFinish;
     }
 
+    // TODO: MOVE BUTTON TYPES TO AN ENUM...
     private get isDisabled(): boolean {
         // dealing with negatives here. cognitively easier to think of it like this...
         let disabled = true;
@@ -104,7 +105,7 @@ export class NewWizardButton {
             return !disabled;
         }
 
-        if (this.isPrevious && nav.isOnFirstPage) {
+        if (this.isPrevious && nav.currentPageIsFirst) {
             return disabled;
         }
 
@@ -112,11 +113,11 @@ export class NewWizardButton {
             return disabled;
         }
 
-        if (this.isNext && (nav.isOnLastPage || !page.readyToComplete)) {
+        if (this.isNext && (nav.currentPageIsLast || !page.readyToComplete)) {
             return disabled;
         }
 
-        if (this.isFinish && (!nav.isOnLastPage || !page.readyToComplete)) {
+        if (this.isFinish && (!nav.currentPageIsLast || !page.readyToComplete)) {
             return disabled;
         }
 
@@ -139,15 +140,15 @@ export class NewWizardButton {
             return !hidden;
         }
 
-        if (this.isPrevious && nav.isOnFirstPage) {
+        if (this.isPrevious && nav.currentPageIsFirst) {
             return hidden;
         }
 
-        if (this.isNext && nav.isOnLastPage) {
+        if (this.isNext && nav.currentPageIsLast) {
             return hidden;
         }
 
-        if (this.isFinish && !nav.isOnLastPage) {
+        if (this.isFinish && !nav.currentPageIsLast) {
             return hidden;
         }
 
