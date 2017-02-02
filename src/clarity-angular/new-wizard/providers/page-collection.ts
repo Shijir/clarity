@@ -7,7 +7,7 @@ import { NewWizardPage } from "../wizard-page";
 
 @Injectable()
 export class PageCollectionService {
-    // create Observables for when list of pages changes
+    // TODO: create Observables for when list of pages changes?
 
     public pages: QueryList<NewWizardPage>;
 
@@ -111,39 +111,38 @@ export class PageCollectionService {
         }
     }
 
-    private rangeStart: number;
-    private rangeEnd: number;
+    public pageRange(start: number, end: number): NewWizardPage[] {
+        let pages: NewWizardPage[] = [];
 
-    public get pageRange(): NewWizardPage[] {
-        let start = this.rangeStart;
-        let end = this.rangeEnd;
-
-        if ( typeof start === "undefined" || typeof end === "undefined") {
-            // using type check because negative number may throw falsy
+        // TODO: slice behaves weirdly if start is a negative number
+        // make sure to test that this catches negative numbers
+        if (!start) {
             return [];
         }
         // SPECME
 
-        return this.slicePageRange(start, end);
-    }
+        pages = this.pagesAsArray;
 
-    private slicePageRange(start: number, end: number): NewWizardPage[] {
-        // slice does not return the last one in the range but it does include the first one
-        // does not modify original array
+        if (!end) {
+            end = pages.length;
+        }
+        // SPECME
 
-        let pages = this.pagesAsArray;
-
-        // slice behaves weirdly if start is a negative number
-        if (start < 0) {
-            start = 0;
+        if (start === end) {
+            // just return the one page they want
+            pages.push(this.getPageByIndex(start));
+            return pages;
         }
         // SPECME
 
         // slice end does not include item referenced by end index, which is weird for users
-        // incrementing end here to overcome that
+        // incrementing end index here to correct for that so users and other methods
+        // don't have to think about it
         end = end + 1;
         // SPECME
 
+        // slice does not return the last one in the range but it does include the first one
+        // does not modify original array
         return pages.slice(start, end);
         // SPECME
     }
@@ -151,7 +150,7 @@ export class PageCollectionService {
     // TODO: MOVE TO PAGESERVICE
     // TAKES TWO PAGES, RETURNS THE PAGES BETWEEN THEM; OPTIONALLY INCLUDES PAGES ON THE END
 
-    public getPageRange(page: NewWizardPage, otherPage: NewWizardPage, onlyMidPages: boolean = true): NewWizardPage[] {
+    public getPageRangeFromPages(page: NewWizardPage, otherPage: NewWizardPage): NewWizardPage[] {
         let pageIndex = this.getPageIndex(page);
         let otherPageIndex = this.getPageIndex(otherPage);
         let startIndex: number;
@@ -166,18 +165,35 @@ export class PageCollectionService {
         }
         // SPECME
 
-        if (onlyMidPages) {
-            startIndex = startIndex + 1;
-        } else {
-            // increase endIndex to make sure we get the last one
-            // here we are saying we want endPages TOO
-            endIndex = endIndex + 1;
+        return this.pageRange(startIndex, endIndex);
+    }
+
+    public getPreviousPage(page: NewWizardPage) {
+        let myPageIndex = this.getPageIndex(page);
+        let previousPageIndex = myPageIndex - 1;
+
+        if (previousPageIndex < 0) {
+            // THROW ERROR HERE?
+            return null;
         }
+
         // SPECME
 
-        this.rangeStart = startIndex;
-        this.rangeEnd = endIndex;
-
-        return this.pageRange;
+        return this.getPageByIndex(previousPageIndex);
     }
+
+    public getNextPage(page: NewWizardPage) {
+        let myPageIndex = this.getPageIndex(page);
+        let nextPageIndex = myPageIndex + 1;
+
+        if (nextPageIndex >= this.pagesAsArray.length) {
+            // THROW ERROR HERE?
+            return null;
+        }
+
+        // SPECME
+
+        return this.getPageByIndex(nextPageIndex);
+    }
+
 }

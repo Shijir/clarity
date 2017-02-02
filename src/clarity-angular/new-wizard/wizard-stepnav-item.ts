@@ -70,6 +70,6 @@ export class NewWizardStepnavItem {
         // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
 
         this.wasClicked.emit(this);
-        this.navService.goToPage(this.page);
+        this.navService.goTo(this.page);
     }
 }

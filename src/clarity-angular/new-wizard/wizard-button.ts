@@ -175,11 +175,11 @@ export class NewWizardButton {
         }
 
         if (this.isPrevious) {
-            navService.goPreviousPage();
+            navService.previous();
         }
 
         if (this.isPrimaryAction) {
-            navService.goNextPage(this.type);
+            navService.next();
         }
 
         // SPECME ^ ALL THIS STUFF UP IN HERE

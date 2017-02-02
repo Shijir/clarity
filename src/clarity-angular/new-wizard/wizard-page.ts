@@ -179,7 +179,7 @@ export class NewWizardPage implements OnInit {
     public next(): void {
         // FIXME: THIS IS JUST A TEST SCRIPT HERE TO TEST
         // OBSERVERS ON NAVSERVICE ... WON'T BE DOING THIS LIKE THIS... MAYBE.
-        this.navService.goNextPage(null);
+        this.navService.next();
     }
 
     public ngOnInit(): void {

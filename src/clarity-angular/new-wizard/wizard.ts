@@ -44,20 +44,16 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
                 public pageCollection: PageCollectionService,
                 public buttonService: ButtonHubService) {
 
-        this.goNextSubscription = this.navService.goNext.subscribe(() => {
-            this.next();
+        this.goNextSubscription = this.navService.movedToNextPage.subscribe(() => {
+            console.log("I, wizard, went to the next page!");
         });
 
-        this.goPreviousSubscription = this.navService.goPrevious.subscribe(() => {
-            this.previous();
+        this.goPreviousSubscription = this.navService.movedToPreviousPage.subscribe(() => {
+            console.log("I, wizard, went to the next page!");
         });
 
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
             this.close();
-        });
-
-        this.goToSubscription = this.navService.notifyGoTo.subscribe((pageToGoTo: NewWizardPage) => {
-            this.moveToPage(pageToGoTo);
         });
     }
 
@@ -170,11 +166,26 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.close();
     }
 
-    // TODO: CALL TO NAVSERVICE
     // prev -- DEPRECATED
     // calls previous(); kept here to avoid breaking change where unnecessary
     public prev(): void {
-        this.previous();
+        this.navService.previous();
+    }
+
+    // the following are convenience functions that are carried over from an older
+    // implementation of the wizard. They have been preserved so as not to create
+    // a breaking change.
+    public previous(): void {
+        this.navService.previous();
+    }
+
+    public next(): void {
+        this.navService.next();
+    }
+
+    public goTo(pageId: string) {
+        // TODO: get funky with it
+        return;
     }
 
     // TODO: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED ON THE PAGE, NOT HERE

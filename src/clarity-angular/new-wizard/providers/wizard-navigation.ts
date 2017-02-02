@@ -12,8 +12,7 @@ export class WizardNavigationService {
     constructor(public pageCollection: PageCollectionService) {
     }
 
-// create Observables for currentPageUpdated and pageChanged
-// maybe for when list of pages changes too?
+// TODO: create Observables for currentPageUpdated and pageChanged
 
     //  lets other components subscribe to when the current page changes
     private _currentChanged = new Subject<NewWizardPage>();
@@ -46,31 +45,117 @@ export class WizardNavigationService {
         // SPECME
     }
 
-    private _moveNext = new Subject<NewWizardPage>();
-    public get goNext(): Observable<NewWizardPage> {
-        return this._moveNext.asObservable();
-    }
-    public goNextPage(buttonType: string): void {
-        let page: NewWizardPage = this.currentPage;
-        if ("danger" === buttonType) {
-            page.dangerButtonClicked.emit(page);
-        } else if ("finish" === buttonType) {
-            page.finishButtonClicked.emit(page);
-        } else {
-            // goNextPage falls back to the "next" button
-            page.nextButtonClicked.emit(page);
-        }
-        this._moveNext.next(page);
+    private _movedToNextPage = new Subject<boolean>();
+    public get movedToNextPage(): Observable<boolean> {
+        return this._movedToNextPage.asObservable();
     }
 
-    private _movePrevious = new Subject<NewWizardPage>();
-    public get goPrevious(): Observable<NewWizardPage> {
-        return this._movePrevious.asObservable();
+    // next --
+    //
+    // When called, after successful validation, the wizard will move to the
+    // next page.
+    // This is a public function that can be used to programmatically advance
+    // the user to the next page.
+    public next(): void {
+        // TODO: MOVE BTN CLICK EVENTS TO BUTTONHUB
+        // let page: NewWizardPage = this.currentPage;
+        // if ("danger" === buttonType) {
+        //     page.dangerButtonClicked.emit(page);
+        // } else if ("finish" === buttonType) {
+        //     page.finishButtonClicked.emit(page);
+        // } else {
+        //     // goNextPage falls back to the "next" button
+        //     page.nextButtonClicked.emit(page);
+        // }
+
+        let currentPage = this.currentPage;
+        let nextPage: NewWizardPage;
+
+        if (!currentPage.readyToComplete) {
+            return;
+        }
+
+        // TODO: MOVE THIS LOGIC TO THE PAGE ITSELF
+        currentPage.primaryButtonClicked.emit();
+        currentPage.onCommit.emit(null);
+        this.currentPage.completed = true;
+
+
+        if (this.currentPageIsLast) {
+            // TODO: FINISH ROUTINE GOES HERE
+            // TODO: MOVE TO AN EVENT EMITTER... SO WIZARD CAN PERFORM THIS FUNCTION
+            // this.wizardFinished.emit();
+            // this.close();
+        } else {
+            nextPage = this.getPageAdjoiningToCurrent("next");
+            // TOASK: DO WE WANT TO PROGRAMMATICALLY SET COMPLETED LIKE THIS??? I DON'T THINK SO...
+            // nextPage.completed = false;
+            if (nextPage) {
+                // catch errant null or undefineds that creep in
+                // SPECME
+                this._movedToNextPage.next(true);
+                this.setCurrentPage(nextPage);
+            } else {
+                // THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
+                return;
+            }
+
+        }
+        // SPECME
     }
-    public goPreviousPage(): void {
-        let page: NewWizardPage = this.currentPage;
-        page.previousButtonClicked.emit(page);
-        this._movePrevious.next(page);
+
+
+
+    // When called, the wizard will move to the prev page.
+    // This is a public function that can be used to programmatically go back
+    // to the previous step.
+    private _movedToPreviousPage = new Subject<boolean>();
+    public get movedToPreviousPage(): Observable<boolean> {
+        return this._movedToPreviousPage.asObservable();
+    }
+    public previous(): void {
+        // TODO: MOVE BTN CLICK EVENTS TO BUTTONHUB
+        // let page: NewWizardPage = this.currentPage;
+        // page.previousButtonClicked.emit(page);
+
+        let previousPage: NewWizardPage;
+
+        if (this.currentPageIsFirst) {
+            return;
+        }
+        // SPECME
+
+        previousPage = this.getPageAdjoiningToCurrent("previous");
+
+        // TOASK: DO WE WANT TO PROGRAMMATICALLY SET COMPLETED LIKE THIS??? I DON'T THINK SO...
+        // this.currentPage.completed = false;
+        // previousPage.completed = false;
+
+        if (previousPage) {
+            this._movedToPreviousPage.next(true);
+            this.setCurrentPage(previousPage);
+        } else {
+            // THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
+            return;
+        }
+    }
+
+    private getPageAdjoiningToCurrent(previousOrNext: string = "next"): NewWizardPage {
+        let currentPage = this.currentPage;
+        let myPages = this.pageCollection;
+
+        if ("previous" === previousOrNext) {
+            return myPages.getPreviousPage(currentPage);
+        }
+
+        if ("next" === previousOrNext) {
+            // we are looking for the next page
+            return myPages.getNextPage(currentPage);
+        }
+        // SPECME
+
+        // THROW ERROR??
+        return null;
     }
 
     private _cancelWizard = new Subject<any>();
@@ -82,117 +167,34 @@ export class WizardNavigationService {
         this._cancelWizard.next();
     }
 
-    private _goTo = new Subject<NewWizardPage>();
-    public get notifyGoTo(): Observable<NewWizardPage> {
-        return this._goTo.asObservable();
-    }
-    public goToPage(pageToGoTo: NewWizardPage) {
-        this._goTo.next(pageToGoTo);
-    }
-
-
-
-    // TODO: MOVE NEXT/PREVIOUS TO NAVSERVICE!!!
-
-    // next --
-    //
-    // When called, after successful validation, the wizard will move to the
-    // next page.
-    // This is a public function that can be used to programmatically advance
-    // the user to the next page.
-    public next(): void {
-        let currentPage = this.currentPage;
-        let currentPageIndex: number;
-        let nextPage: NewWizardPage;
-        let myPages: NewWizardPage[];
-
-        if (!currentPage.readyToComplete) {
-            return;
-        }
-
-        currentPage.primaryButtonClicked.emit();
-        currentPage.onCommit.emit(null);
-
-        this.currentPage.completed = true;
-
-        if (this.currentPageIsLast) {
-            // TODO: MOVE TO AN EVENT EMITTER... SO WIZARD CAN PERFORM THIS FUNCTION
-            // this.wizardFinished.emit();
-            // this.close();
-        } else {
-            myPages = this.pageCollection.pagesAsArray;
-            currentPageIndex = myPages.indexOf(currentPage);
-            nextPage = myPages[currentPageIndex + 1];
-            nextPage.completed = false;
-            this.setCurrentPage(nextPage);
-        }
-        // SPECME
-    }
-
-    // When called, the wizard will move to the prev page.
-    // This is a public function that can be used to programmatically go back
-    // to the previous step.
-    public previous(): void {
-        let currentPage = this.currentPage;
-        let currentPageIndex: number;
-        let previousPage: NewWizardPage;
-        let myPages: NewWizardPage[];
-
-        // TOASK: SHOULD THIS HANDLE FINISH AND DELETE BUTTONS TOO???
-        // I THINK SO...
-        if (this.currentPageIsFirst) {
-            return;
-        }
-        // SPECME
-
-        myPages = this.pageCollection.pagesAsArray;
-        currentPageIndex = myPages.indexOf(currentPage);
-        previousPage = myPages[currentPageIndex - 1];
-
-        this.currentPage.completed = false;
-        previousPage.completed = false;
-        this.setCurrentPage(previousPage);
-    }
-
     // TODO: MOVE TO NAVSERVICE
     // TODO: IS MARKING PAGES INCOMPLETE THE WAY TO GO? ASK YEN.
     // TODO: SERVICE IS DOING TWO JOBS
     //      1 - PAGESERVICE: COLLECTION OF PAGES WITH CODE TO ANALYZE LIST OF PAGES (FIRST, LAST, ETC)
     //      2 - NAVSERVICE: NAVIGATION FROM ONE PAGE TO ANOTHER
 
-    public moveToPage(pageToGoToOrId: any) {
+    public goTo(pageToGoToOrId: any) {
         let pageToGoTo: NewWizardPage;
-        let pageToGoToIndex: number;
-        let currentPageIndex: number;
-        let myPages: NewWizardPage[];
+        let currentPage: NewWizardPage;
+        let myPages: PageCollectionService;
         let pagesToCheck: NewWizardPage[];
         let okayToMove: boolean = true;
 
         if (typeof pageToGoToOrId === "string") {
             // we have an ID so we need to look up our page
-            pageToGoTo = this.lookupPageById(pageToGoToOrId);
+            pageToGoTo = myPages.getPageById(pageToGoToOrId);
         } else {
             pageToGoTo = pageToGoToOrId;
         }
 
-        myPages = this.pageCollection.pagesAsArray;
-        pageToGoToIndex = myPages.indexOf(pageToGoTo);
-        currentPageIndex = myPages.indexOf(this.currentPage);
+        myPages = this.pageCollection;
+        currentPage = this.currentPage;
 
-        if (pageToGoToIndex === currentPageIndex) {
+        if (pageToGoTo === currentPage) {
             return;
-        } else if (pageToGoToIndex < currentPageIndex) {
-            pagesToCheck = this.pageCollection.pages.filter((page: NewWizardPage, index: number) => {
-                return pageToGoToIndex < index && index < currentPageIndex;
-            });
         } else {
-            // currentPageIndex < pageToGoToIndex
-            pagesToCheck = this.pageCollection.pages.filter((page: NewWizardPage, index: number) => {
-                return currentPageIndex < index && index < pageToGoToIndex;
-            });
+            pagesToCheck = myPages.getPageRangeFromPages(this.currentPage, pageToGoTo);
         }
-
-        // moving forward vs. backward?
 
         pagesToCheck.forEach((page: NewWizardPage) => {
             if (!okayToMove) {
@@ -208,26 +210,11 @@ export class WizardNavigationService {
             return;
         }
 
+        // TOASK: do we want to programmatically set the completed states? I don't think so...
         pagesToCheck.forEach((page: NewWizardPage) => page.completed = false);
         this.currentPage.completed = false;
         pageToGoTo.completed = false;
 
         this.setCurrentPage(pageToGoTo);
-    }
-
-    // TODO: MOVE TO PAGESERVICE
-    public lookupPageById(id: string): NewWizardPage {
-        let foundPages: NewWizardPage[] = this.pageCollection.pages.filter((page: NewWizardPage) => id === page.id);
-        let foundPagesCount: number = foundPages.length || 0;
-
-        if (foundPagesCount > 1) {
-            // TOASK: TOO MANY FOUND PAGES!!! THROW ERROR?
-            return null;
-        } else if (foundPages.length < 1) {
-            // TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
-            return null;
-        } else {
-            return foundPages[0];
-        }
     }
 }
