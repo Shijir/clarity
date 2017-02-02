@@ -39,7 +39,7 @@ export class WizardNavigationService {
 
     public setCurrentPage(page: NewWizardPage): void {
         // TODO: SHOULD PAGE.COMPLETED BE TIED TO NAVIGATION??
-        page.completed = false;
+        // page.completed = false;
         this.currentPage = page;
         this._currentChanged.next(page);
         // SPECME
@@ -103,8 +103,6 @@ export class WizardNavigationService {
         }
         // SPECME
     }
-
-
 
     // When called, the wizard will move to the prev page.
     // This is a public function that can be used to programmatically go back
@@ -211,9 +209,9 @@ export class WizardNavigationService {
         }
 
         // TOASK: do we want to programmatically set the completed states? I don't think so...
-        pagesToCheck.forEach((page: NewWizardPage) => page.completed = false);
-        this.currentPage.completed = false;
-        pageToGoTo.completed = false;
+        // pagesToCheck.forEach((page: NewWizardPage) => page.completed = false);
+        // this.currentPage.completed = false;
+        // pageToGoTo.completed = false;
 
         this.setCurrentPage(pageToGoTo);
     }

@@ -132,6 +132,12 @@ export class NewWizardPage implements OnInit {
         return !this.nextStepDisabled;
     }
 
+    // TODO!!! need an errored state to show that a page is marked
+    // completed but is not readyToComplete anymore.
+    // useful to show red bar in stepnav and for when people
+    // are jumping around the wizard
+    // also need an errored event for when this changes
+
     private _complete: boolean = false;
     public get completed(): boolean {
         return this._complete;
