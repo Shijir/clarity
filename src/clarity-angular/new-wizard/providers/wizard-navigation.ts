@@ -20,9 +20,6 @@ export class WizardNavigationService {
         return this._currentChanged.asObservable();
     };
 
-    // TODO: ANYTHING RELATED TO THE CURRENT PAGE GOES HERE
-    // ANYTHING RELATED TO ALL PAGES BUT NOT NAVIGATION METHODS GOES HERE
-
     public currentPage: NewWizardPage;
 
     public get currentPageTitle(): TemplateRef<any> {
@@ -57,17 +54,6 @@ export class WizardNavigationService {
     // This is a public function that can be used to programmatically advance
     // the user to the next page.
     public next(): void {
-        // TODO: MOVE BTN CLICK EVENTS TO BUTTONHUB
-        // let page: NewWizardPage = this.currentPage;
-        // if ("danger" === buttonType) {
-        //     page.dangerButtonClicked.emit(page);
-        // } else if ("finish" === buttonType) {
-        //     page.finishButtonClicked.emit(page);
-        // } else {
-        //     // goNextPage falls back to the "next" button
-        //     page.nextButtonClicked.emit(page);
-        // }
-
         let currentPage = this.currentPage;
         let nextPage: NewWizardPage;
 
@@ -112,10 +98,6 @@ export class WizardNavigationService {
         return this._movedToPreviousPage.asObservable();
     }
     public previous(): void {
-        // TODO: MOVE BTN CLICK EVENTS TO BUTTONHUB
-        // let page: NewWizardPage = this.currentPage;
-        // page.previousButtonClicked.emit(page);
-
         let previousPage: NewWizardPage;
 
         if (this.currentPageIsFirst) {
@@ -165,12 +147,6 @@ export class WizardNavigationService {
         this._cancelWizard.next();
     }
 
-    // TODO: MOVE TO NAVSERVICE
-    // TODO: IS MARKING PAGES INCOMPLETE THE WAY TO GO? ASK YEN.
-    // TODO: SERVICE IS DOING TWO JOBS
-    //      1 - PAGESERVICE: COLLECTION OF PAGES WITH CODE TO ANALYZE LIST OF PAGES (FIRST, LAST, ETC)
-    //      2 - NAVSERVICE: NAVIGATION FROM ONE PAGE TO ANOTHER
-
     public goTo(pageToGoToOrId: any) {
         let pageToGoTo: NewWizardPage;
         let currentPage: NewWizardPage;
@@ -201,7 +177,6 @@ export class WizardNavigationService {
             if (!page.completed) {
                 okayToMove = false;
             }
-            // need to loop through once more and set completed to false for pages in between....
         });
 
         if (!okayToMove) {

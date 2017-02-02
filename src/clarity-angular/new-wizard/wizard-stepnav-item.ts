@@ -12,6 +12,7 @@ import {
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
+import { PageCollectionService } from "./providers/page-collection";
 
 // TODO: remove "NEW" when finishing up
 
@@ -43,11 +44,11 @@ export class NewWizardStepnavItem {
     @Output("clrWizardStepnavItemClicked") wasClicked: EventEmitter<NewWizardStepnavItem> =
         new EventEmitter<NewWizardStepnavItem>(false);
 
-    constructor(public navService: WizardNavigationService) {
+    constructor(public navService: WizardNavigationService, public pageCollection: PageCollectionService) {
     }
 
     public get id(): string {
-        return this.page.stepItemId;
+        return this.pageCollection.getStepItemIdForPage(this.page);
     }
 
     public get isDisabled(): boolean {

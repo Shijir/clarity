@@ -12,6 +12,7 @@ import {
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
+import { ButtonHubService } from "./providers/button-hub";
 
 // TODO: remove "NEW" when finishing up
 
@@ -43,15 +44,15 @@ import { WizardNavigationService } from "./providers/wizard-navigation";
 export class NewWizardButton {
     @Input("type") private type: string = "";
 
-    @Input("clrWizardButtonDisabled") private disabledInput: boolean = false;
+    @Input("clrWizardButtonDisabled") private disabled: boolean = false;
 
-    @Input("clrWizardButtonHidden") private hiddenInput: boolean = false;
+    @Input("clrWizardButtonHidden") private hidden: boolean = false;
 
     // EventEmitter which is emitted when a next button is clicked.
-    @Output("clrWizardButtonClicked") wasClicked: EventEmitter<NewWizardPage> =
-        new EventEmitter<NewWizardPage>(false);
+    @Output("clrWizardButtonClicked") wasClicked: EventEmitter<boolean> =
+        new EventEmitter<boolean>(false);
 
-    constructor(private navService: WizardNavigationService) {
+    constructor(private navService: WizardNavigationService, private buttonService: ButtonHubService) {
     }
 
     // TODO: BUILD OUT A BUTTON SERVICE WITH ONE EMITTER?
@@ -96,7 +97,7 @@ export class NewWizardButton {
         let page = this.page;
         let nav = this.navService;
 
-        if (this.disabledInput) {
+        if (this.disabled) {
             return true;
         }
         // SPECME^ : allow an input to force disabled or not on a button
@@ -131,7 +132,7 @@ export class NewWizardButton {
         let hidden = true;
         let nav = this.navService;
 
-        if (this.hiddenInput) {
+        if (this.hidden) {
             return true;
         }
         // SPECME^ : allow an input to force disabled or not on a button
@@ -160,15 +161,13 @@ export class NewWizardButton {
     doClick(): void {
         // TODO: call different routine based on type of button (cancel, previous, next, finish)
         // TODO: notify up that the type of button has been clicked
-
-        let page: NewWizardPage = this.navService.currentPage;
         let navService: WizardNavigationService = this.navService;
 
         if (this.isDisabled) {
             return;
         }
 
-        this.wasClicked.emit(page);
+        this.wasClicked.emit();
 
         if (this.isCancel) {
             navService.cancelWizard();

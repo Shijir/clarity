@@ -11,8 +11,6 @@ export class PageCollectionService {
 
     public pages: QueryList<NewWizardPage>;
 
-    // TODO: ANYTHING RELATED TO ALL PAGES BUT NOT NAVIGATION METHODS GOES HERE
-
     public get pagesAsArray(): NewWizardPage[] {
         return this.pages ? this.pages.toArray() : [];
         // SPECME
@@ -114,7 +112,6 @@ export class PageCollectionService {
     public pageRange(start: number, end: number): NewWizardPage[] {
         let pages: NewWizardPage[] = [];
 
-        // TODO: slice behaves weirdly if start is a negative number
         // make sure to test that this catches negative numbers
         if (!start) {
             return [];
@@ -146,9 +143,6 @@ export class PageCollectionService {
         return pages.slice(start, end);
         // SPECME
     }
-
-    // TODO: MOVE TO PAGESERVICE
-    // TAKES TWO PAGES, RETURNS THE PAGES BETWEEN THEM; OPTIONALLY INCLUDES PAGES ON THE END
 
     public getPageRangeFromPages(page: NewWizardPage, otherPage: NewWizardPage): NewWizardPage[] {
         let pageIndex = this.getPageIndex(page);
@@ -196,4 +190,11 @@ export class PageCollectionService {
         return this.getPageByIndex(nextPageIndex);
     }
 
+    public getStepItemIdForPage(page: NewWizardPage) {
+        let pageId = page.id;
+        let pageIdParts = pageId.split("-").reverse();
+        // SPECME^ (especially with userdefined page ids with dashes in them)
+        pageIdParts[1] = "step";
+        return pageIdParts.reverse().join("-");
+    }
 }

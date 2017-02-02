@@ -11,7 +11,8 @@ import {
     EventEmitter,
     ContentChild,
     TemplateRef,
-    OnInit
+    OnInit,
+    OnDestroy
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -21,6 +22,8 @@ import { ButtonHubService } from "./providers/button-hub";
 import { WizardPageTitleDirective } from "./directives/page-title";
 import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 import { WizardPageButtonsDirective } from "./directives/page-buttons";
+
+import { Subscription } from "rxjs/Subscription";
 
 let wizardPageIndex = 0;
 
@@ -40,11 +43,19 @@ let wizardPageIndex = 0;
         "[class.clr-wizard-page]": "true"
     }
 })
-export class NewWizardPage implements OnInit {
+export class NewWizardPage implements OnInit, OnDestroy {
 
     constructor(private navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
                 public buttonService: ButtonHubService) {
+
+        this.previousButtonSubscription = this.buttonService.previousBtnClicked.subscribe(() => {
+            if (this.current) {
+                console.log("I, page, had my previous button clicked. Tee hee!");
+                // ###LEFTOFF: MOVE PREV-BUTTON EMIT/NOTIFICATION IN HERE OR AT LEAST call
+                // to it from here...
+            }
+        });
     }
 
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
@@ -65,38 +76,39 @@ export class NewWizardPage implements OnInit {
     @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
 
     // EventEmitter which is emitted on open/close of the wizard.
-    @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter<any> =
+    @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter < any > =
         new EventEmitter<any>(false);
 
     // IDEALLY THIS IS A TWO WAY BINDING ON page.completed??? EUDES NOT SURE...
     // User can bind an event handler for onCommit of the main content
-    @Output("clrWizardPageOnCommit") onCommit: EventEmitter<any> =
+    @Output("clrWizardPageOnCommit") onCommit: EventEmitter < any > =
         new EventEmitter<any>(false);
 
     // User can bind an event handler for onLoad of the main content
-    @Output("clrWizardPageOnLoad") onLoad: EventEmitter<any> = new EventEmitter(false);
+    @Output("clrWizardPageOnLoad") onLoad: EventEmitter < any > = new EventEmitter(false);
 
     // Emitter for Next button state changes
-    @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter<any> =
+    @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
         new EventEmitter(false);
 
+    // TODO: moving some of this work to button hub
     // Emitters button events
-    @Output("clrWizardPageNextButtonClicked") nextButtonClicked: EventEmitter<any> =
+    @Output("clrWizardPageNextButtonClicked") nextButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPageCancelButtonClicked") cancelButtonClicked: EventEmitter<any> =
+    @Output("clrWizardPageCancelButtonClicked") cancelButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPageFinishButtonClicked") finishButtonClicked: EventEmitter<any> =
+    @Output("clrWizardPageFinishButtonClicked") finishButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPagePreviousButtonClicked") previousButtonClicked: EventEmitter<any> =
+    @Output("clrWizardPagePreviousButtonClicked") previousButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPageDangerButtonClicked") dangerButtonClicked: EventEmitter<any> =
+    @Output("clrWizardPageDangerButtonClicked") dangerButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPagePrimaryButtonClicked") primaryButtonClicked: EventEmitter<any> =
+    @Output("clrWizardPagePrimaryButtonClicked") primaryButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
     // @Input("clrWizardPagePreventDefault")
@@ -106,6 +118,9 @@ export class NewWizardPage implements OnInit {
     //     this._preventDefault = this._pageInactive = value;
     //     this.skippedChange.emit(value);
     // }
+
+    private previousButtonSubscription: Subscription;
+
 
     // TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
     // may need to call a pageready event (onLoad) from the page collection service)
@@ -117,15 +132,6 @@ export class NewWizardPage implements OnInit {
 
     public get id() {
         return `clr-wizard-page-${this._id}`;
-    }
-
-    // TODO: MOVE THIS TO PAGE COLLECTION SERVICE
-    public get stepItemId(): string {
-        let pageId = this.id;
-        let pageIdParts = pageId.split("-").reverse();
-        // SPECME^ (especially with userdefined page ids with dashes in them)
-        pageIdParts[1] = "step";
-        return pageIdParts.reverse().join("-");
     }
 
     public get readyToComplete(): boolean {
@@ -155,19 +161,19 @@ export class NewWizardPage implements OnInit {
         return !this.current && !this.completed;
     }
 
-    public get title(): TemplateRef<any> {
+    public get title(): TemplateRef < any > {
         return this.pageTitle.pageTitleTemplateRef;
     }
 
     /* SPECME - returns short nav title if specified; otherwise returns page title */
-    public get navTitle(): TemplateRef<any> {
+    public get navTitle(): TemplateRef < any > {
         if (this.pageNavTitle) {
             return this.pageNavTitle.pageNavTitleTemplateRef;
         }
         return this.pageTitle.pageTitleTemplateRef;
     }
 
-    public get buttons(): TemplateRef<any> {
+    public get buttons(): TemplateRef < any > {
         return this._buttons.pageButtonsTemplateRef;
     }
 
@@ -192,5 +198,10 @@ export class NewWizardPage implements OnInit {
         if (!this.navService.currentPage) {
             this.makeCurrent();
         }
+        // SPECME
+    }
+
+    public ngOnDestroy(): void {
+        this.previousButtonSubscription.unsubscribe();
     }
 }

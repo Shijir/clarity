@@ -49,7 +49,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.goPreviousSubscription = this.navService.movedToPreviousPage.subscribe(() => {
-            console.log("I, wizard, went to the next page!");
+            console.log("I, wizard, went to the previous page!");
         });
 
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
