@@ -1,20 +1,118 @@
 import {
     Injectable,
+    OnDestroy,
     TemplateRef
 } from "@angular/core";
+
 import { Subject, Observable } from "rxjs";
+import { Subscription } from "rxjs/Subscription";
+
 import { NewWizardPage } from "../wizard-page";
 import { PageCollectionService } from "./page-collection";
+import { ButtonHubService } from "./button-hub";
 
 @Injectable()
-export class WizardNavigationService {
+export class WizardNavigationService implements OnDestroy {
 
-    constructor(public pageCollection: PageCollectionService) {
+    public previousButtonSubscription: Subscription;
+    public nextButtonSubscription: Subscription;
+    public dangerButtonSubscription: Subscription;
+    public finishButtonSubscription: Subscription;
+    public customButtonSubscription: Subscription;
+    public cancelButtonSubscription: Subscription;
+
+    constructor(public pageCollection: PageCollectionService, public buttonService: ButtonHubService) {
+        this.previousButtonSubscription = this.buttonService.previousBtnClicked.subscribe(() => {
+            if (this.currentPageIsFirst || this.currentPage.movePreviousDisabled) {
+                return;
+            }
+            this.previous();
+        });
+
+        this.nextButtonSubscription = this.buttonService.nextBtnClicked.subscribe(() => {
+            if (!this.currentPageIsLast && this.currentPage.readyToComplete) {
+                this.next();
+            }
+        });
+
+        this.dangerButtonSubscription = this.buttonService.dangerBtnClicked.subscribe(() => {
+            let currentPage: NewWizardPage = this.currentPage;
+            if (currentPage.stopOnDanger) {
+                console.log("wizard nav - i stopped the page because you told me to!");
+                return;
+            }
+
+            if (!currentPage.readyToComplete) {
+                console.log("wizard nav - you clicked this danger btn but i can't move...");
+                return;
+            }
+
+            // because we made it past the guard up there ^ we know the current page is ready
+            if (this.currentPageIsLast) {
+                // TODO: WE NEED A FINISH ROUTINE
+                // this.finish();
+            } else {
+                this.next();
+            }
+
+            // TODO:
+            // ONDANGER... CHECK FOR A PAGE HAVING AN ACTION ON DANGER CLICK
+            // NOTIFY WIZARD DANGER WAS CLICKED; WIZARD WILL FIGURE OUT IF IT
+            // NEEDS TO DO A FINISH OR CALL BACK HERE FOR NEXT AFTER CHECKING
+            // IF IT HAS ITS OWN ACTION ON DANGER CLICK
+
+        });
+
+        this.finishButtonSubscription = this.buttonService.finishBtnClicked.subscribe(() => {
+            // CHECKS CURRENTPAGE TO SEE IF IT IS READY TO GO...
+            if (this.currentPage.readyToComplete) {
+                // NEED FINISH ROUTINE
+                console.log("wizard nav - are we done yet?!");
+            }
+
+            // TODO: FINISH. GOES STRAIGHT TO THE WIZARD? OR GOES HERE, DOES 
+            // BASIC CHECKS AND THEN EITHER CALLS A FINISH ERROR OR NOTIFIES
+            // WIZARD TO CANCEL
+        });
+
+        this.customButtonSubscription = this.buttonService.customBtnClicked.subscribe(() => {
+            // CHECKS CURRENTPAGE TO SEE IF IT IS READY TO GO...
+            // if (this.currentPage.customButtonAction) {
+                // NEED FINISH ROUTINE
+                console.log("wizard nav - does my page do anything fancy when a custom button is clicked?");
+            // }
+
+            // TODO:
+            // CUSTOME... CHECK IF CURRENTPAGE HAS A CUSTOMBUTTONCLICK ACTION
+            // THEN NOTIFY WIZARD A CUSTOM BUTTON WAS CLICKED SO IT CAN DO ITS
+            // OWN ACTION (SEND WIZARD BACK??? OR WHAT?)
+        });
+
+        this.cancelButtonSubscription = this.buttonService.cancelBtnClicked.subscribe(() => {
+            // CHECKS CURRENTPAGE TO SEE IF IT IS READY TO GO...
+            if (this.currentPage.okToCancel) {
+                // NEED FINISH ROUTINE
+            } else {
+                console.log("wizard nav - i stopped before cancelling because you told me to");
+            }
+
+            // TODO: CANCEL. SHOULD CHECK IF PAGE HAS AN ONCANCEL CHECK FIRST.
+            // THEN NOTIFY WIZARD... WHICH PERFORMS THE CANCEL
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.previousButtonSubscription.unsubscribe();
+        this.nextButtonSubscription.unsubscribe();
+        this.dangerButtonSubscription.unsubscribe();
+        this.finishButtonSubscription.unsubscribe();
+        this.customButtonSubscription.unsubscribe();
+        this.cancelButtonSubscription.unsubscribe();
     }
 
 // TODO: create Observables for currentPageUpdated and pageChanged
 
-    //  lets other components subscribe to when the current page changes
+    // lets other components subscribe to when the current page changes
     private _currentChanged = new Subject<NewWizardPage>();
     public get currentPageChanged(): Observable<NewWizardPage> {
         return this._currentChanged.asObservable();
@@ -36,6 +134,8 @@ export class WizardNavigationService {
 
     public setCurrentPage(page: NewWizardPage): void {
         // TODO: SHOULD PAGE.COMPLETED BE TIED TO NAVIGATION??
+        // LEFTOFF: PAGE.COMPLETED CAN OPTIONALLY BE TIED TO NAVIGATION
+        // BY DEFAULT IT WILL NOT BE...
         // page.completed = false;
         this.currentPage = page;
         this._currentChanged.next(page);
@@ -88,6 +188,11 @@ export class WizardNavigationService {
 
         }
         // SPECME
+    }
+
+    private _checkForMoveToPrevious = new Subject<boolean>();
+    public get checkForMoveToPrevious(): Observable<boolean> {
+        return this._checkForMoveToPrevious.asObservable();
     }
 
     // When called, the wizard will move to the prev page.

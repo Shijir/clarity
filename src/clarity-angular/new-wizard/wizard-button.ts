@@ -10,6 +10,7 @@ import {
     Output,
     EventEmitter
 } from "@angular/core";
+
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { ButtonHubService } from "./providers/button-hub";
@@ -31,7 +32,7 @@ import { ButtonHubService } from "./providers/button-hub";
             [class.btn-danger]="isDanger"
             [class.disabled]="isDisabled"
             [attr.aria-hidden]="isHidden"
-            (click)="doClick()">
+            (click)="click()">
             <ng-content></ng-content>
         </button>
     `,
@@ -48,18 +49,14 @@ export class NewWizardButton {
 
     @Input("clrWizardButtonHidden") private hidden: boolean = false;
 
+    @Input("clrWizardButtonOkToClick") public testBeforeClick: boolean = true;
+
     // EventEmitter which is emitted when a next button is clicked.
     @Output("clrWizardButtonClicked") wasClicked: EventEmitter<boolean> =
         new EventEmitter<boolean>(false);
 
     constructor(private navService: WizardNavigationService, private buttonService: ButtonHubService) {
     }
-
-    // TODO: BUILD OUT A BUTTON SERVICE WITH ONE EMITTER?
-    // BUTTON SERVICE TELLS EVERYONE WHO NEEDS TO KNOW WHAT'S GOING ON
-    // (MAYBE WANT TO DEPRECATE SOME EVENTS -- OR GET RID OF THEM)
-    // EVENT EMITTED IS STRING THAT TELLS US WHAT BUTTON WAS CLICKED
-    // USERS WILL HAVE A TWO-WAY BINDING ON CURRENTPAGE OF WIZARD
 
     private get page(): NewWizardPage {
         // buttons only ever care about the current page
@@ -158,30 +155,16 @@ export class NewWizardButton {
         return !hidden;
     }
 
-    doClick(): void {
-        // TODO: call different routine based on type of button (cancel, previous, next, finish)
-        // TODO: notify up that the type of button has been clicked
-        let navService: WizardNavigationService = this.navService;
-
+    click(): void {
         if (this.isDisabled) {
             return;
         }
+        // SPECME
 
-        this.wasClicked.emit();
-
-        if (this.isCancel) {
-            navService.cancelWizard();
+        if (this.testBeforeClick) {
+            this.wasClicked.emit();
+            this.buttonService.buttonClicked(this.type);
         }
-
-        if (this.isPrevious) {
-            navService.previous();
-        }
-
-        if (this.isPrimaryAction) {
-            navService.next();
-        }
-
-        // SPECME ^ ALL THIS STUFF UP IN HERE
-        // TOASK ^ DO WE FIRE MULTIPLE EVENTS OR DO WE CARE???
+        // SPECME
     }
 }

@@ -21,10 +21,10 @@
     <clr-wizard-button [type]="'next'"
         (clrWizardButtonClicked)="handlePrimaryClick($event)">Next</clr-wizard-button>
     <clr-wizard-button [type]="'finish'"
-        (clrWizardButtonClicked)="handlePrimaryClick($event)">Fait Accompli</clr-wizard-button>
+        (clrWizardButtonClicked)="handleFinishClick($event)">Fait Accompli</clr-wizard-button>
 
     <!-- TONOTE: this event handler here doesn't work... -->
-    <clr-newwizard-page (clrWizardPageFinishButtonClicked)="handleFinishClick($event)"
+    <clr-newwizard-page (clrWizardPageDangerButtonClicked)="handleDangerClick($event)"
         (clrWizardPageDangerButtonClicked)="highVoltage()">
         <!-- *ngIf probably goes here ^ . it replaces the idea of skipped. -->
 
@@ -74,6 +74,25 @@
             officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
             quas! Quaerat explicabo expedita placeat vero.
         </p>
+        <p>
+            Allow to go next?<br>
+            <label (click)="toggleOkToClick(true)">
+            <input type="radio" name="goNext" value="Yes" [attr.checked]="testOkToClick">
+                Yes
+            </label><br>
+            <label (click)="toggleOkToClick(false)">
+            <input type="radio" name="goNext" value="No" [attr.checked]="!testOkToClick">
+                No
+            </label>
+        </p>
+
+        <!-- CUSTOME BUTTONS GO HERE -->
+        <template pageButtons>
+            <clr-wizard-button [type]="'cancel'">Soy un perdidor</clr-wizard-button>
+            <clr-wizard-button [type]="'previous'">Fait Interruptid</clr-wizard-button>
+            <clr-wizard-button [type]="'next'" [clrWizardButtonOkToClick]="testOkToClick">LOLZ</clr-wizard-button>
+        </template>
+
     </clr-newwizard-page>
 
     <clr-newwizard-page *ngIf="showStepThree">

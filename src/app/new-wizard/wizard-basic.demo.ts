@@ -71,4 +71,9 @@ export class WizardSimple {
     public handlePageChange(): void {
         console.log("I changed my current page.");
     }
+
+    public testOkToClick: boolean = false;
+    public toggleOkToClick(value: boolean) {
+        this.testOkToClick = value;
+    }
 }

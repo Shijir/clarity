@@ -48,14 +48,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
     constructor(private navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
                 public buttonService: ButtonHubService) {
-
-        this.previousButtonSubscription = this.buttonService.previousBtnClicked.subscribe(() => {
-            if (this.current) {
-                console.log("I, page, had my previous button clicked. Tee hee!");
-                // ###LEFTOFF: MOVE PREV-BUTTON EMIT/NOTIFICATION IN HERE OR AT LEAST call
-                // to it from here...
-            }
-        });
     }
 
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
@@ -65,9 +57,21 @@ export class NewWizardPage implements OnInit, OnDestroy {
     // Next button disabled
     @Input("clrWizardPageNextDisabled") public nextStepDisabled: boolean;
 
+    // Previous button disabled
+    @Input("clrWizardPagePagePreviousDisabled") public movePreviousDisabled: boolean = false;
+
     // Error Flag Raised
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
     // todo... error event??
+
+    // TOASK: DO WE NEED THIS? OR OKTOCANCEL? CAN WE IMPLEMENT AN OVERALL FREEZE WHILE A PAGE
+    // FIGURES SOMETHING OUT? FREEZE + RESUME?
+    @Input("clrWizardPageStopOnDanger") public stopOnDanger: boolean = false;
+
+    @Input("clrWizardPageOkToCancel") public okToCancel: boolean = true;
+
+    // TOASK: IS THIS EVEN THE RIGHT WAY TO DO THIS?
+    // @Input("clrWizardPageCustomAction") public customButtonAction: any;
 
     // TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
     // TODO: MOVE TO PAGE COLLECTION SERVICE
@@ -120,7 +124,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
     // }
 
     private previousButtonSubscription: Subscription;
-
 
     // TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
     // may need to call a pageready event (onLoad) from the page collection service)
@@ -186,12 +189,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
     public makeCurrent(): void {
         this.navService.setCurrentPage(this);
         this.pageCurrentChanged.emit();
-    }
-
-    public next(): void {
-        // FIXME: THIS IS JUST A TEST SCRIPT HERE TO TEST
-        // OBSERVERS ON NAVSERVICE ... WON'T BE DOING THIS LIKE THIS... MAYBE.
-        this.navService.next();
     }
 
     public ngOnInit(): void {
