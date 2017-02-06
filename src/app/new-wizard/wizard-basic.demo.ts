@@ -18,6 +18,7 @@ export class NewWizardBasicDemo {
     @ViewChild("wizardmd") wizardMedium: NewWizard;
     @ViewChild("wizardlg") wizardLarge: NewWizard;
     @ViewChild("wizardxlg") wizardDefault: NewWizard;
+    @ViewChild("stepTwoInput") myInput: any;
     @ViewChild(CodeHighlight) codeHighlight: CodeHighlight;
 
     code: string = `
@@ -53,11 +54,11 @@ export class WizardSimple {
     public showStepThree: boolean = false;
 
     public handlePrimaryClick(page: any): void {
-        console.log("I am a button in the demo. The blue primary button was clicked!");
+        console.log("I am the demo. The blue primary button was clicked!");
     }
 
     public handleFinishClick(page: any): void {
-        console.log("I am a page in the demo. The finish button was clicked!");
+        console.log("I am the demo. The finish button was clicked!");
     }
 
     public highVoltage() {
@@ -72,8 +73,37 @@ export class WizardSimple {
         console.log("I changed my current page.");
     }
 
-    public testOkToClick: boolean = false;
-    public toggleOkToClick(value: boolean) {
-        this.testOkToClick = value;
+    private _okToClick: string = "false";
+    public get okToClick(): string {
+         return this._okToClick;
+    }
+    public set okToClick(val: string) {
+        this._okToClick = val;
+    }
+
+    public checkOkToClick(): boolean {
+        return this._okToClick === "true";
+    }
+
+    public get stepFourIsReady(): boolean {
+        if (!this.myInput || !this.myInput.nativeElement.value) {
+            return false;
+        }
+        // TOFIX? THIS IS THE ABSOLUTE WORST WAY TO DO THIS...
+        return !isNaN(this.myInput.nativeElement.value);
+    }
+
+    public stepThreeCustomCancel(): void {
+        if (confirm("Do you want to close the wizard?")) {
+            this.wizardMedium.cancel();
+        }
+    }
+
+    public doCustomNext(): void {
+        if (this.checkOkToClick()) {
+            this.wizardMedium.next();
+        } else {
+            console.log("hi, i am the demo. i can't move to the next page...");
+        }
     }
 }

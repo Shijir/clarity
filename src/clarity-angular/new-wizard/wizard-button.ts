@@ -64,23 +64,23 @@ export class NewWizardButton {
     }
 
     private get isCancel(): boolean {
-        return this.type === "cancel";
+        return this.type === "cancel" || this.type === "custom-cancel";
     }
 
     private get isNext(): boolean {
-        return this.type === "next";
+        return this.type === "next" || this.type === "custom-next";
     }
 
     private get isPrevious(): boolean {
-        return this.type === "previous";
+        return this.type === "previous" || this.type === "custom-previous";
     }
 
     private get isFinish(): boolean {
-        return this.type === "finish";
+        return this.type === "finish" || this.type === "custom-finish";
     }
 
     private get isDanger(): boolean {
-        return this.type === "danger";
+        return this.type === "danger" || this.type === "custom-danger";
     }
 
     private get isPrimaryAction(): boolean {
@@ -161,10 +161,6 @@ export class NewWizardButton {
         }
         // SPECME
 
-        if (this.testBeforeClick) {
-            this.wasClicked.emit();
-            this.buttonService.buttonClicked(this.type);
-        }
-        // SPECME
+        this.buttonService.buttonClicked(this.type);
     }
 }

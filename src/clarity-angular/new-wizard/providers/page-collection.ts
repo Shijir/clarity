@@ -67,6 +67,7 @@ export class PageCollectionService {
         return this.checkResults(foundPages);
     }
 
+    // TOREMOVE
     public getPageByObject(page: NewWizardPage): NewWizardPage {
         let foundPages: NewWizardPage[] = this.pages.filter((item: NewWizardPage) => page === item);
         return this.checkResults(foundPages);
@@ -133,7 +134,7 @@ export class PageCollectionService {
         // SPECME
 
         // slice end does not include item referenced by end index, which is weird for users
-        // incrementing end index here to correct for that so users and other methods
+        // incrementing end index here to correct that so users and other methods
         // don't have to think about it
         end = end + 1;
         // SPECME

@@ -18,14 +18,18 @@
 
     <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
     <clr-wizard-button [type]="'previous'">Previous</clr-wizard-button>
+
+    <!-- TODO: GET RID OF CLRWIZARDBUTTONCLICKED -->
     <clr-wizard-button [type]="'next'"
         (clrWizardButtonClicked)="handlePrimaryClick($event)">Next</clr-wizard-button>
     <clr-wizard-button [type]="'finish'"
         (clrWizardButtonClicked)="handleFinishClick($event)">Fait Accompli</clr-wizard-button>
 
     <!-- TONOTE: this event handler here doesn't work... -->
-    <clr-newwizard-page (clrWizardPageDangerButtonClicked)="handleDangerClick($event)"
-        (clrWizardPageDangerButtonClicked)="highVoltage()">
+
+    <!-- TODO: JUST CLRWIZARDPAGEDANGER -->
+    <clr-newwizard-page (clrWizardPageDanger)="handleDangerClick($event)"
+        (clrWizardPagePrevious)="highVoltage()">
         <!-- *ngIf probably goes here ^ . it replaces the idea of skipped. -->
 
         <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
@@ -74,14 +78,18 @@
             officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 
             quas! Quaerat explicabo expedita placeat vero.
         </p>
+        <div class="form-group">
+            <label for="formFields_1">Put a number in here:</label>
+            <input #stepTwoInput type="text" id="formFields_1" placeholder="Number?">
+        </div>
         <p>
             Allow to go next?<br>
-            <label (click)="toggleOkToClick(true)">
-            <input type="radio" name="goNext" value="Yes" [attr.checked]="testOkToClick">
+            <label (click)="okToClick = opt1.value">
+            <input #opt1 type="radio" name="goNext" [value]="true" [attr.checked]="okToClick === opt1.value">
                 Yes
             </label><br>
-            <label (click)="toggleOkToClick(false)">
-            <input type="radio" name="goNext" value="No" [attr.checked]="!testOkToClick">
+            <label (click)="okToClick = opt2.value">
+            <input #opt2 type="radio" name="goNext" [value]="false" [attr.checked]="okToClick !== opt2.value">
                 No
             </label>
         </p>
@@ -90,7 +98,7 @@
         <template pageButtons>
             <clr-wizard-button [type]="'cancel'">Soy un perdidor</clr-wizard-button>
             <clr-wizard-button [type]="'previous'">Fait Interruptid</clr-wizard-button>
-            <clr-wizard-button [type]="'next'" [clrWizardButtonOkToClick]="testOkToClick">LOLZ</clr-wizard-button>
+            <clr-wizard-button [type]="'custom-next'" (click)="doCustomNext()">LOLZ</clr-wizard-button>
         </template>
 
     </clr-newwizard-page>
@@ -107,11 +115,20 @@
         </p>
     </clr-newwizard-page>
 
-    <clr-newwizard-page>
-        <template pageTitle>Longer Title for Page 4</template> <!-- mandatory -->
-        <template pageNavTitle>S-S-S... Sibillance</template> <!-- optional -->
+    <clr-newwizard-page [clrWizardPageNextDisabled]="!stepFourIsReady"
+        [clrWizardPageCustomCancel]="true"
+        (clrWizardCustomCancelAction)="stepThreeCustomCancel()">
+        <template pageTitle>This tests if the page jumping completed thing works</template> <!-- mandatory -->
+        <template pageNavTitle>Test Page Jumping</template> <!-- optional -->
 
-        <p>Content for step 4</p>
+        <p *ngIf="stepFourIsReady">I am ready to go!</p>
+        <p *ngIf="!stepFourIsReady">I am <i>not</i> ready to go! Go back to step 2 and put a number in.</p>
+    </clr-newwizard-page>
+
+    <clr-newwizard-page>
+        <template pageTitle>Longer Title for Last Step</template> <!-- mandatory -->
+        <template pageNavTitle>Last Step</template> <!-- optional -->
+
         <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
             officiis rem id explicabo incidunt, illum deleniti qui doloremque voluptatem, saepe tenetur 

@@ -54,7 +54,7 @@ export class ButtonHubService {
         } else if ("cancel" === buttonType) {
             this._cancelBtnClicked.next();
         } else {
-            this._customBtnClicked.next();
+            this._customBtnClicked.next(buttonType);
         }
 
         // TOARCH:

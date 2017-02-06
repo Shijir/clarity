@@ -6,9 +6,7 @@
 
 import {
     Input,
-    Component,
-    EventEmitter,
-    Output
+    Component
 } from "@angular/core";
 import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -40,10 +38,6 @@ import { PageCollectionService } from "./providers/page-collection";
 export class NewWizardStepnavItem {
     @Input("page") public page: NewWizardPage;
 
-    // EventEmitter which is emitted when a next button is clicked.
-    @Output("clrWizardStepnavItemClicked") wasClicked: EventEmitter<NewWizardStepnavItem> =
-        new EventEmitter<NewWizardStepnavItem>(false);
-
     constructor(public navService: WizardNavigationService, public pageCollection: PageCollectionService) {
     }
 
@@ -63,14 +57,11 @@ export class NewWizardStepnavItem {
         return this.page.completed;
     }
 
-    // TODO: MOVETOPAGE... 
     doClick(): boolean {
         if (this.isDisabled || this.isCurrent) {
             return false;
         }
         // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
-
-        this.wasClicked.emit(this);
         this.navService.goTo(this.page);
     }
 }

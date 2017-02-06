@@ -53,6 +53,12 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
+            this.onCancel.emit();
+            this.close();
+        });
+
+        this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
+            this.wizardFinished.emit();
             this.close();
         });
     }
@@ -105,6 +111,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     private cancelSubscription: Subscription;
     private goToSubscription: Subscription;
     private currentPageSubscription: Subscription;
+    private wizardFinishedSubscription: Subscription;
 
     ngOnDestroy() {
         this.goNextSubscription.unsubscribe();
@@ -112,6 +119,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.cancelSubscription.unsubscribe();
         this.goToSubscription.unsubscribe();
         this.currentPageSubscription.unsubscribe();
+        this.wizardFinishedSubscription.unsubscribe();
     }
 
     public ngAfterViewInit() {
@@ -181,6 +189,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     public next(): void {
         this.navService.next();
+    }
+
+    public cancel(): void {
+        this.navService.cancel();
     }
 
     public goTo(pageId: string) {

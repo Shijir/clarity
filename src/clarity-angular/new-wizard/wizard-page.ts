@@ -68,7 +68,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     // FIGURES SOMETHING OUT? FREEZE + RESUME?
     @Input("clrWizardPageStopOnDanger") public stopOnDanger: boolean = false;
 
-    @Input("clrWizardPageOkToCancel") public okToCancel: boolean = true;
+    @Input("clrWizardPageCustomCancel") public customCancel: any = false;
 
     // TOASK: IS THIS EVEN THE RIGHT WAY TO DO THIS?
     // @Input("clrWizardPageCustomAction") public customButtonAction: any;
@@ -97,22 +97,25 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     // TODO: moving some of this work to button hub
     // Emitters button events
-    @Output("clrWizardPageNextButtonClicked") nextButtonClicked: EventEmitter < any > =
+    @Output("clrWizardPageNext") nextButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPageCancelButtonClicked") cancelButtonClicked: EventEmitter < any > =
+    @Output("clrWizardPageCancel") cancelButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPageFinishButtonClicked") finishButtonClicked: EventEmitter < any > =
+    @Output("clrWizardCustomCancelAction") customCancelClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPagePreviousButtonClicked") previousButtonClicked: EventEmitter < any > =
+    @Output("clrWizardPageFinish") finishButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPageDangerButtonClicked") dangerButtonClicked: EventEmitter < any > =
+    @Output("clrWizardPagePrevious") previousButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardPagePrimaryButtonClicked") primaryButtonClicked: EventEmitter < any > =
+    @Output("clrWizardPageDanger") dangerButtonClicked: EventEmitter < any > =
+        new EventEmitter(false);
+
+    @Output("clrWizardPagePrimary") primaryButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
     // @Input("clrWizardPagePreventDefault")
@@ -141,11 +144,8 @@ export class NewWizardPage implements OnInit, OnDestroy {
         return !this.nextStepDisabled;
     }
 
-    // TODO!!! need an errored state to show that a page is marked
-    // completed but is not readyToComplete anymore.
-    // useful to show red bar in stepnav and for when people
-    // are jumping around the wizard
-    // also need an errored event for when this changes
+    // TODO!!! need an errored event for when ready to complete changes
+    // do we already have one?
 
     private _complete: boolean = false;
     public get completed(): boolean {
@@ -159,6 +159,11 @@ export class NewWizardPage implements OnInit, OnDestroy {
     public get current(): boolean {
         return this.navService.currentPage === this;
     }
+
+    // TODO: PAGE IS ENABLED ONLY IF
+    // EVERY STEP BEFORE IT IS COMPLETED
+    // NEXT STEP TO COMPLETE...
+    // TODEMO -- MAKE SURE THIS WORKS AS EXPECTED VIA DEMO
 
     public get disabled(): boolean {
         return !this.current && !this.completed;
