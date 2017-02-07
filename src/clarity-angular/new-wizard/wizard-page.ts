@@ -64,14 +64,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
     // todo... error event??
 
-    // TOASK: DO WE NEED THIS? OR OKTOCANCEL? CAN WE IMPLEMENT AN OVERALL FREEZE WHILE A PAGE
-    // FIGURES SOMETHING OUT? FREEZE + RESUME?
-    @Input("clrWizardPageStopOnDanger") public stopOnDanger: boolean = false;
-
     @Input("clrWizardPageCustomCancel") public customCancel: any = false;
-
-    // TOASK: IS THIS EVEN THE RIGHT WAY TO DO THIS?
-    // @Input("clrWizardPageCustomAction") public customButtonAction: any;
 
     // TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
     // TODO: MOVE TO PAGE COLLECTION SERVICE
@@ -118,6 +111,9 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPagePrimary") primaryButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
+    @Output("clrWizardPageCustomButton") customButtonClicked: EventEmitter < any > =
+        new EventEmitter(false);
+
     // @Input("clrWizardPagePreventDefault")
     // TOBREAK: this input was removed. use ngIf instead. note breaking change.
 
@@ -128,9 +124,9 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     private previousButtonSubscription: Subscription;
 
-    // TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
-    // may need to call a pageready event (onLoad) from the page collection service)
-    // skippedChange ^ or other event too... deprecate "skipped"
+// TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
+// may need to call a pageready event (onLoad) from the page collection service)
+// skippedChange ^ or other event too... deprecate "skipped"
 
     // If our host has an ID attribute, we use this instead of our index.
     @Input("id")
@@ -138,18 +134,23 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     public get id() {
         return `clr-wizard-page-${this._id}`;
+        // SPECME
     }
 
     public get readyToComplete(): boolean {
         return !this.nextStepDisabled;
     }
 
-    // TODO!!! need an errored event for when ready to complete changes
-    // do we already have one?
+// TODO!!! need an errored event for when ready to complete changes
+// do we already have one?
 
     private _complete: boolean = false;
     public get completed(): boolean {
-        return this._complete;
+// ###LEFTOFF: completed needs to be tied to readyToComplete somehow
+// so that we can track when changes to other pages invalidate them
+// do we show errored? or do we just make invalid??
+        return this._complete && this.readyToComplete;
+        // SPECME
     }
     public set completed(value: boolean) {
         this._complete = value;
@@ -160,13 +161,24 @@ export class NewWizardPage implements OnInit, OnDestroy {
         return this.navService.currentPage === this;
     }
 
-    // TODO: PAGE IS ENABLED ONLY IF
-    // EVERY STEP BEFORE IT IS COMPLETED
-    // NEXT STEP TO COMPLETE...
-    // TODEMO -- MAKE SURE THIS WORKS AS EXPECTED VIA DEMO
-
     public get disabled(): boolean {
-        return !this.current && !this.completed;
+        return !this.enabled;
+    }
+
+    public get enabled(): boolean {
+        return this.current || this.completed || this.previousCompleted;
+        // SPECME
+    }
+
+    public get previousCompleted(): boolean {
+        let previousPage = this.pageCollection.getPreviousPage(this);
+
+        if (!previousPage) {
+            return true;
+        }
+        // SPECME
+
+        return previousPage.completed;
     }
 
     public get title(): TemplateRef < any > {
@@ -186,7 +198,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     }
 
     public get hasButtons(): boolean {
-        // TOFIX?: this is a very noisy check. uncomment to see it in action.
+// TOFIX?: this is a very noisy check. uncomment to see it in action.
         // console.log("OHAYZ! I'm ", this.id, ". I'm in hasButtons! Do I have buttons? ", this._buttons);
         return !!this._buttons;
     }

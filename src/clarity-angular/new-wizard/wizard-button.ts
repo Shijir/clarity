@@ -65,26 +65,32 @@ export class NewWizardButton {
 
     private get isCancel(): boolean {
         return this.type === "cancel" || this.type === "custom-cancel";
+        // SPECME
     }
 
     private get isNext(): boolean {
         return this.type === "next" || this.type === "custom-next";
+        // SPECME
     }
 
     private get isPrevious(): boolean {
         return this.type === "previous" || this.type === "custom-previous";
+        // SPECME
     }
 
     private get isFinish(): boolean {
         return this.type === "finish" || this.type === "custom-finish";
+        // SPECME
     }
 
     private get isDanger(): boolean {
         return this.type === "danger" || this.type === "custom-danger";
+        // SPECME
     }
 
     private get isPrimaryAction(): boolean {
         return this.isNext || this.isDanger || this.isFinish;
+        // SPECME
     }
 
     // TODO: MOVE BUTTON TYPES TO AN ENUM...

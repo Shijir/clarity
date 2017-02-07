@@ -2,12 +2,17 @@ import {
     Injectable,
     QueryList
 } from "@angular/core";
-// import { Subject, Observable } from "rxjs";
+
+import {
+    Subject,
+    Observable
+} from "rxjs";
+
 import { NewWizardPage } from "../wizard-page";
 
 @Injectable()
 export class PageCollectionService {
-    // TODO: create Observables for when list of pages changes?
+// TODO: create Observables for when list of pages changes?
 
     public pages: QueryList<NewWizardPage>;
 
@@ -27,8 +32,9 @@ export class PageCollectionService {
         if (pageCount > 0) {
             return this.pagesAsArray[pageCount - 1];
         }
+        // SPECME
 
-        // TOASK: what to do if no pages?
+// TOASK: what to do if no pages?
         return;
         // SPECME
     }
@@ -38,7 +44,7 @@ export class PageCollectionService {
             return this.pagesAsArray[0];
         }
 
-        // TOASK: what to do if no pages?
+// TOASK: what to do if no pages?
         return;
         // SPECME
     }
@@ -49,15 +55,18 @@ export class PageCollectionService {
         if (typeof pageOrId === "string") {
             // assume string is an id
             page = this.getPageById(pageOrId);
-
         } else {
-            page = this.getPageByObject(pageOrId);
+            page = pageOrId;
+            // assumption is if id is not sent then a page object was...
+// TODO: can we check for this?
         }
+        // SPECME
 
         if (!page) {
-            // THROW ERROR?
+// TODO: THROW ERROR
             return null;
         }
+        // SPECME
 
         return page;
     }
@@ -65,12 +74,7 @@ export class PageCollectionService {
     public getPageById(id: string): NewWizardPage {
         let foundPages: NewWizardPage[] = this.pages.filter((page: NewWizardPage) => id === page.id);
         return this.checkResults(foundPages);
-    }
-
-    // TOREMOVE
-    public getPageByObject(page: NewWizardPage): NewWizardPage {
-        let foundPages: NewWizardPage[] = this.pages.filter((item: NewWizardPage) => page === item);
-        return this.checkResults(foundPages);
+        // SPECME
     }
 
     public getPageByIndex(index: number): NewWizardPage {
@@ -78,36 +82,41 @@ export class PageCollectionService {
         let pageArrayLastIndex: number = (pageArray && pageArray.length > 1) ? pageArray.length - 1 : 0;
 
         if (index < 0 || index > pageArrayLastIndex) {
-            // TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
+// TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
             return null;
         }
+        // SPECME
 
         return this.pagesAsArray[index];
+        // SPECME
     }
 
     public getPageIndex(page: NewWizardPage): number {
         let index = this.pagesAsArray.indexOf(page);
 
         if (index < 0) {
-            // PAGE NOT FOUND; ERROR?
+// TOASK: PAGE NOT FOUND; ERROR? OR SEND -1 LIKE INDEXOF DOES?
             return null;
         }
+        // SPECME
 
         return index;
+        // SPECME
     }
 
     private checkResults(results: NewWizardPage[]) {
         let foundPagesCount: number = results.length || 0;
 
         if (foundPagesCount > 1) {
-            // TOASK: TOO MANY FOUND PAGES!!! THROW ERROR?
+// TOASK: TOO MANY FOUND PAGES!!! THROW ERROR
             return null;
         } else if (foundPagesCount < 1) {
-            // TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
+// TOASK: PAGE NOT FOUND... THROW ERROR
             return null;
         } else {
             return results[0];
         }
+        // SPECME
     }
 
     public pageRange(start: number, end: number): NewWizardPage[] {
@@ -168,12 +177,10 @@ export class PageCollectionService {
         let previousPageIndex = myPageIndex - 1;
 
         if (previousPageIndex < 0) {
-            // THROW ERROR HERE?
             return null;
         }
 
         // SPECME
-
         return this.getPageByIndex(previousPageIndex);
     }
 
@@ -182,10 +189,8 @@ export class PageCollectionService {
         let nextPageIndex = myPageIndex + 1;
 
         if (nextPageIndex >= this.pagesAsArray.length) {
-            // THROW ERROR HERE?
             return null;
         }
-
         // SPECME
 
         return this.getPageByIndex(nextPageIndex);
@@ -195,7 +200,20 @@ export class PageCollectionService {
         let pageId = page.id;
         let pageIdParts = pageId.split("-").reverse();
         // SPECME^ (especially with userdefined page ids with dashes in them)
+
         pageIdParts[1] = "step";
         return pageIdParts.reverse().join("-");
+    }
+
+    private _pagesReset = new Subject<boolean>();
+    public get pagesReset(): Observable<boolean> {
+        return this._pagesReset.asObservable();
+    }
+
+    public reset() {
+        this.pagesAsArray.forEach((page: NewWizardPage) => {
+            page.completed = false;
+        });
+        this._pagesReset.next();
     }
 }

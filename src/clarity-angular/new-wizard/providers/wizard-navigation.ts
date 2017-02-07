@@ -20,6 +20,7 @@ export class WizardNavigationService implements OnDestroy {
     public finishButtonSubscription: Subscription;
     public customButtonSubscription: Subscription;
     public cancelButtonSubscription: Subscription;
+    public pagesResetSubscription: Subscription;
 
     constructor(public pageCollection: PageCollectionService, public buttonService: ButtonHubService) {
         this.previousButtonSubscription = this.buttonService.previousBtnClicked.subscribe(() => {
@@ -27,25 +28,23 @@ export class WizardNavigationService implements OnDestroy {
                 return;
             }
             this.previous();
+            // SPECME
         });
 
         this.nextButtonSubscription = this.buttonService.nextBtnClicked.subscribe(() => {
             if (!this.currentPageIsLast && this.currentPage.readyToComplete) {
                 this.next();
             }
+            // SPECME
         });
 
         this.dangerButtonSubscription = this.buttonService.dangerBtnClicked.subscribe(() => {
             let currentPage: NewWizardPage = this.currentPage;
-            if (currentPage.stopOnDanger) {
-                console.log("wizard nav - i stopped the page because you told me to!");
-                return;
-            }
 
             if (!currentPage.readyToComplete) {
-                console.log("wizard nav - you clicked this danger btn but i can't move...");
                 return;
             }
+            // SPECME
 
             // because we made it past the guard up there ^ we know the current page is ready
             if (this.currentPageIsLast) {
@@ -53,34 +52,19 @@ export class WizardNavigationService implements OnDestroy {
             } else {
                 this.next();
             }
-
-            // TODO:
-            // ONDANGER... CHECK FOR A PAGE HAVING AN ACTION ON DANGER CLICK
-            // NOTIFY WIZARD DANGER WAS CLICKED; WIZARD WILL FIGURE OUT IF IT
-            // NEEDS TO DO A FINISH OR CALL BACK HERE FOR NEXT AFTER CHECKING
-            // IF IT HAS ITS OWN ACTION ON DANGER CLICK
-
+            // SPECME
         });
 
         this.finishButtonSubscription = this.buttonService.finishBtnClicked.subscribe(() => {
             // CHECKS CURRENTPAGE TO SEE IF IT IS READY TO GO...
             if (this.currentPage.readyToComplete) {
-                // NEED FINISH ROUTINE
-                console.log("wizard nav - are we done yet?!");
+                this._wizardFinished.next();
             }
+            // SPECME
         });
 
-        this.customButtonSubscription = this.buttonService.customBtnClicked.subscribe(() => {
-            // CHECKS CURRENTPAGE TO SEE IF IT IS READY TO GO...
-            // if (this.currentPage.customButtonAction) {
-                // NEED FINISH ROUTINE
-                console.log("wizard nav - does my page do anything fancy when a custom button is clicked?");
-            // }
-
-            // TODO:
-            // CUSTOME... CHECK IF CURRENTPAGE HAS A CUSTOMBUTTONCLICK ACTION
-            // THEN NOTIFY WIZARD A CUSTOM BUTTON WAS CLICKED SO IT CAN DO ITS
-            // OWN ACTION (SEND WIZARD BACK??? OR WHAT?)
+        this.customButtonSubscription = this.buttonService.customBtnClicked.subscribe((type: string) => {
+            this.currentPage.customButtonClicked.emit(type);
         });
 
         this.cancelButtonSubscription = this.buttonService.cancelBtnClicked.subscribe(() => {
@@ -89,6 +73,13 @@ export class WizardNavigationService implements OnDestroy {
             } else {
                 this._cancelWizard.next();
             }
+            // SPECME
+        });
+
+        this.pagesResetSubscription = this.pageCollection.pagesReset.subscribe(() => {
+            this.setLastEnabledPageCurrent();
+            this._wizardReset.next();
+            // SPECME
         });
     }
 
@@ -99,6 +90,7 @@ export class WizardNavigationService implements OnDestroy {
         this.finishButtonSubscription.unsubscribe();
         this.customButtonSubscription.unsubscribe();
         this.cancelButtonSubscription.unsubscribe();
+        this.pagesResetSubscription.unsubscribe();
     }
 
     // TODO: create Observables for currentPageUpdated and pageChanged
@@ -124,10 +116,6 @@ export class WizardNavigationService implements OnDestroy {
     }
 
     public setCurrentPage(page: NewWizardPage): void {
-        // TODO: SHOULD PAGE.COMPLETED BE TIED TO NAVIGATION??
-        // LEFTOFF: PAGE.COMPLETED CAN OPTIONALLY BE TIED TO NAVIGATION
-        // BY DEFAULT IT WILL NOT BE...
-        // page.completed = false;
         this.currentPage = page;
         this._currentChanged.next(page);
         // SPECME
@@ -143,6 +131,11 @@ export class WizardNavigationService implements OnDestroy {
         return this._wizardFinished.asObservable();
     }
 
+    private _wizardReset = new Subject<boolean>();
+    public get wizardReset(): Observable<boolean> {
+        return this._wizardReset.asObservable();
+    }
+
     // next --
     //
     // When called, after successful validation, the wizard will move to the
@@ -153,39 +146,51 @@ export class WizardNavigationService implements OnDestroy {
         let currentPage = this.currentPage;
         let nextPage: NewWizardPage;
 
+        if (this.currentPageIsLast) {
+            this.finish();
+        }
+        // SPECME
+
         if (!currentPage.readyToComplete) {
             return;
         }
+        // SPECME
 
-        // TODO: MOVE THIS LOGIC TO THE PAGE ITSELF
-        currentPage.primaryButtonClicked.emit();
-        currentPage.onCommit.emit(null);
-        this.currentPage.completed = true;
+// TODO: MOVE TO PAGE?
+        this.commitPage(currentPage);
 
-        if (this.currentPageIsLast) {
-            // TODO: FINISH ROUTINE GOES HERE
-            // TODO: MOVE TO AN EVENT EMITTER... SO WIZARD CAN PERFORM THIS FUNCTION
-            // this.wizardFinished.emit();
-            // this.close();
+        nextPage = this.pageCollection.getNextPage(currentPage);
+
+        // catch errant null or undefineds that creep in
+        if (nextPage) {
+            this._movedToNextPage.next(true);
+            this.setCurrentPage(nextPage);
+            // SPECME
         } else {
-            nextPage = this.pageCollection.getNextPage(currentPage);
-            // TOASK: DO WE WANT TO PROGRAMMATICALLY SET COMPLETED LIKE THIS??? I DON'T THINK SO...
-            // nextPage.completed = false;
-            if (nextPage) {
-                // catch errant null or undefineds that creep in
-                // SPECME
-                this._movedToNextPage.next(true);
-                this.setCurrentPage(nextPage);
-            } else {
-                // THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
-                return;
-            }
+            // THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
+            return;
         }
         // SPECME
     }
 
     public finish(): void {
+        let currentPage = this.currentPage;
+
+        if (!currentPage.readyToComplete) {
+            return;
+        }
+        // SPECME
+
+// TODO: MOVE TO PAGE?
+        this.commitPage(currentPage);
         this._wizardFinished.next();
+    }
+
+    private commitPage(page: NewWizardPage) {
+        page.primaryButtonClicked.emit();
+        page.onCommit.emit(null);
+        page.completed = true;
+        // SPECME
     }
 
     // When called, the wizard will move to the prev page.
@@ -205,10 +210,6 @@ export class WizardNavigationService implements OnDestroy {
 
         previousPage = this.pageCollection.getPreviousPage(this.currentPage);
 
-        // TOASK: DO WE WANT TO PROGRAMMATICALLY SET COMPLETED LIKE THIS??? I DON'T THINK SO...
-        // this.currentPage.completed = false;
-        // previousPage.completed = false;
-
         if (previousPage) {
             this._movedToPreviousPage.next(true);
             this.setCurrentPage(previousPage);
@@ -217,10 +218,8 @@ export class WizardNavigationService implements OnDestroy {
             // TODO: LEAVE TODOS FOR POTENTIAL ERROR HANDLING...
             return;
         }
+        // SPECME
     }
-
-    // TODO: JUMP TO LAST POSSIBLE
-    // TODO: JUMP TO FIRST POSSIBLE?!
 
     private _cancelWizard = new Subject<any>();
     public get notifyWizardCancel(): Observable<any> {
@@ -244,6 +243,7 @@ export class WizardNavigationService implements OnDestroy {
         } else {
             pageToGoTo = pageToGoToOrId;
         }
+        // SPECME
 
         myPages = this.pageCollection;
         currentPage = this.currentPage;
@@ -253,30 +253,44 @@ export class WizardNavigationService implements OnDestroy {
         } else {
             pagesToCheck = myPages.getPageRangeFromPages(this.currentPage, pageToGoTo);
         }
+        // SPECME
 
         pagesToCheck.forEach((page: NewWizardPage) => {
             if (!okayToMove) {
                 return;
             }
-            // TOFIX: LOGIC HERE IS WRONG. IT SHOULD BE ABLE TO GO BACKWARD BUT IS DYING
-            // BECAUSE CURRENT PAGE IS NOT MARKED AS COMPLETED...
             if (!page.completed && !page.current) {
                 okayToMove = false;
             }
+            // SPECME
         });
 
         if (!okayToMove) {
             return;
         }
-
-        // TOASK: do we want to programmatically set the completed states? I don't think so...
-        // pagesToCheck.forEach((page: NewWizardPage) => page.completed = false);
-        // this.currentPage.completed = false;
-        // pageToGoTo.completed = false;
+        // SPECME
 
         this.setCurrentPage(pageToGoTo);
     }
 
-    // TODO: IF JUMPING FORWARD, MAKE SURE TO CHECK CURRENT PAGE AND ALL PAGES BETWEEN
-    // CURRENT AND PAGE YOU WANT TO GO TO IS COMPLETED OR DISABLED
+    public setLastEnabledPageCurrent(): void {
+        let allPages: NewWizardPage[] = this.pageCollection.pagesAsArray;
+        let lastCurrentPageIndex: number = null;
+
+        allPages.forEach((page: NewWizardPage, index: number) => {
+            if (page.completed) {
+                lastCurrentPageIndex = index;
+            }
+        });
+
+        if (lastCurrentPageIndex === null) {
+            // always is at least the first item...
+            lastCurrentPageIndex = 0;
+        } else if ((lastCurrentPageIndex + 1) < allPages.length) {
+            lastCurrentPageIndex = lastCurrentPageIndex + 1;
+        }
+        // SPECME
+
+        this.setCurrentPage(allPages[lastCurrentPageIndex]);
+    }
 }

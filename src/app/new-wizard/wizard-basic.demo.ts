@@ -3,8 +3,14 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Component, ViewChild} from "@angular/core";
+import {
+    Component,
+    OnInit,
+    ViewChild
+} from "@angular/core";
+
 import {NewWizard} from "../../clarity-angular/new-wizard/wizard";
+import {NewWizardPage} from "../../clarity-angular/new-wizard/wizard-page";
 import {CodeHighlight} from "../../clarity-angular/code/code-highlight";
 
 // TODO: remove "NEW" when finishing up
@@ -14,11 +20,12 @@ import {CodeHighlight} from "../../clarity-angular/code/code-highlight";
     selector: "clr-new-wizard-basic",
     templateUrl: "./wizard-basic.demo.html"
 })
-export class NewWizardBasicDemo {
+export class NewWizardBasicDemo implements OnInit {
     @ViewChild("wizardmd") wizardMedium: NewWizard;
     @ViewChild("wizardlg") wizardLarge: NewWizard;
     @ViewChild("wizardxlg") wizardDefault: NewWizard;
     @ViewChild("stepTwoInput") myInput: any;
+    @ViewChild("myPage") myPage: NewWizardPage;
     @ViewChild(CodeHighlight) codeHighlight: CodeHighlight;
 
     code: string = `
@@ -53,16 +60,26 @@ export class WizardSimple {
 
     public showStepThree: boolean = false;
 
+    public model: any;
+
+    public ngOnInit() {
+        this.model = {
+            forceReset: false,
+            okToClick: false,
+            myNumber: null
+        };
+    }
+
     public handlePrimaryClick(page: any): void {
-        console.log("I am the demo. The blue primary button was clicked!");
+        // SPECME
     }
 
     public handleFinishClick(page: any): void {
-        console.log("I am the demo. The finish button was clicked!");
+        // SPECME
     }
 
     public highVoltage() {
-        console.log("Danger... Danger... High voltage!");
+        // SPECME
     }
 
     public doTestHere(): boolean {
@@ -70,19 +87,7 @@ export class WizardSimple {
     }
 
     public handlePageChange(): void {
-        console.log("I changed my current page.");
-    }
-
-    private _okToClick: string = "false";
-    public get okToClick(): string {
-         return this._okToClick;
-    }
-    public set okToClick(val: string) {
-        this._okToClick = val;
-    }
-
-    public checkOkToClick(): boolean {
-        return this._okToClick === "true";
+        // SPECME: make sure this works
     }
 
     public get stepFourIsReady(): boolean {
@@ -99,11 +104,41 @@ export class WizardSimple {
         }
     }
 
-    public doCustomNext(): void {
-        if (this.checkOkToClick()) {
-            this.wizardMedium.next();
-        } else {
-            console.log("hi, i am the demo. i can't move to the next page...");
+    public doCustomClick(buttonType: string): void {
+        if ("custom-next" === buttonType) {
+            if (this.model.okToClick) {
+                this.wizardMedium.next();
+            } else {
+                console.log("hi, i am the demo. i can't move to the next page...");
+            }
+            // SPECME
         }
+
+        if ("custom-previous" === buttonType) {
+            this.wizardMedium.previous();
+        }
+    }
+
+    public notifyReset(): void {
+        console.log("This is the basic demo. I just did a reset.");
+    }
+
+    public doReset(): void {
+        if (this.model.forceReset) {
+            this.wizardMedium.reset();
+            this.model.okToClick = false;
+            this.model.forceReset = false;
+            this.model.myNumber = null;
+        }
+    }
+
+    public funkyOpen(): void {
+        if (this.myPage.completed) {
+            this.wizardMedium.navService.setCurrentPage(this.myPage);
+        } else {
+            this.wizardMedium.navService.setLastEnabledPageCurrent();
+        }
+        this.wizardMedium.open();
+        // SPECME... THIS TYPE OF CODE JUMPS TO A SPECIFIED PAGE...
     }
 }

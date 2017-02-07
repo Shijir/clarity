@@ -45,11 +45,13 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
                 public buttonService: ButtonHubService) {
 
         this.goNextSubscription = this.navService.movedToNextPage.subscribe(() => {
-            console.log("I, wizard, went to the next page!");
+            // TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
+            // console.log("I, wizard, went to the next page!");
         });
 
         this.goPreviousSubscription = this.navService.movedToPreviousPage.subscribe(() => {
-            console.log("I, wizard, went to the previous page!");
+            // TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
+            // console.log("I, wizard, went to the previous page!");
         });
 
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
@@ -60,6 +62,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
             this.wizardFinished.emit();
             this.close();
+        });
+
+        this.wizardResetSubscription = this.navService.wizardReset.subscribe(() => {
+            this.onReset.emit();
         });
     }
 
@@ -80,6 +86,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     // User can bind his event handler for onCancel of the main content
     @Output("clrWizardOnCancel") onCancel: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
+    @Output("clrWizardOnReset") onReset: EventEmitter<any> =
         new EventEmitter<any>(false);
 
     // TOLERN: use this convention for two-way binding
@@ -112,6 +121,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     private goToSubscription: Subscription;
     private currentPageSubscription: Subscription;
     private wizardFinishedSubscription: Subscription;
+    private wizardResetSubscription: Subscription;
 
     ngOnDestroy() {
         this.goNextSubscription.unsubscribe();
@@ -120,6 +130,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.goToSubscription.unsubscribe();
         this.currentPageSubscription.unsubscribe();
         this.wizardFinishedSubscription.unsubscribe();
+        this.wizardResetSubscription.unsubscribe();
     }
 
     public ngAfterViewInit() {
@@ -200,7 +211,11 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         return;
     }
 
-    // TODO: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED ON THE PAGE, NOT HERE
+    public reset() {
+        this.pageCollection.reset();
+    }
+
+// TOASK: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED ON THE PAGE, NOT HERE
     // selectTab --
     //
     // Base class function overridden to call the onLoad event emitter
@@ -221,7 +236,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         // this.isFirst = 0 === 0;
     // }
 
-    // TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
+// TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // skipTab --
     //
     // Public function to skip a Tab given its uniqueId
@@ -229,7 +244,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     //     this._setTabIsSkipped(tabId, true);
     // }
 
-    // TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
+// TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // unSkipTab --
     //
     // Public function to unSkip a tab given its uniqueId
