@@ -88,26 +88,19 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Output("clrWizardOnCancel") onCancel: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+// done
     @Output("clrWizardOnReset") onReset: EventEmitter<any> =
         new EventEmitter<any>(false);
 
-    // TOLERN: use this convention for two-way binding
-    // @Input("xxx") x: boolean
-    // @Output("xxxChange") change: EventEmitter<boolean>();
-    // [(xxx)]
-    //
-    // THESE ARE EQUIVALENT
-    // [(xxx)]="myModel"
-    // [xxx]="myModel" (xxxChange)="myModel = $event"
-
-    // TODO: need a wizardCurrentPageChanged event... bubbling up from page to service to wizard
-    @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
-        new EventEmitter<any>(false);
-
+// done
     @Output("clrWizardOnFinish") wizardFinished: EventEmitter<any> =
         new EventEmitter<any>(false);
 
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
+
+// done
+    @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
+        new EventEmitter<any>(false);
 
     public ngOnInit(): void {
         this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
@@ -159,9 +152,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // wizard.
     public close(): void {
         this._open = false;
-        this.onCancel.emit(null);
         this._openChanged.emit(false);
     }
+// TODO: MAKE SURE WE ARE PROPERLY NOTIFYING WHEN THE MODAL IS CLOSED (CLOSE-X)
 
     // Convenience function that can be used to programmatically toggle the
     // wizard.
@@ -206,9 +199,12 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.navService.cancel();
     }
 
-    public goTo(pageId: string) {
-        // TODO: get funky with it
-        return;
+    public goTo(pageId: string): void {
+        if (!pageId) {
+            return;
+        }
+
+        this.navService.goTo(pageId);
     }
 
     public reset() {

@@ -93,7 +93,6 @@ export class NewWizardButton {
         // SPECME
     }
 
-    // TODO: MOVE BUTTON TYPES TO AN ENUM...
     private get isDisabled(): boolean {
         // dealing with negatives here. cognitively easier to think of it like this...
         let disabled = true;

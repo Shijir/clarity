@@ -56,7 +56,6 @@ export class WizardNavigationService implements OnDestroy {
         });
 
         this.finishButtonSubscription = this.buttonService.finishBtnClicked.subscribe(() => {
-            // CHECKS CURRENTPAGE TO SEE IF IT IS READY TO GO...
             if (this.currentPage.readyToComplete) {
                 this._wizardFinished.next();
             }
@@ -93,7 +92,7 @@ export class WizardNavigationService implements OnDestroy {
         this.pagesResetSubscription.unsubscribe();
     }
 
-    // TODO: create Observables for currentPageUpdated and pageChanged
+// TODO: create Observables for currentPageUpdated and pageChanged
 
     // lets other components subscribe to when the current page changes
     private _currentChanged = new Subject<NewWizardPage>();
@@ -156,9 +155,7 @@ export class WizardNavigationService implements OnDestroy {
         }
         // SPECME
 
-// TODO: MOVE TO PAGE?
-        this.commitPage(currentPage);
-
+        this.pageCollection.commitPage(currentPage);
         nextPage = this.pageCollection.getNextPage(currentPage);
 
         // catch errant null or undefineds that creep in
@@ -167,7 +164,7 @@ export class WizardNavigationService implements OnDestroy {
             this.setCurrentPage(nextPage);
             // SPECME
         } else {
-            // THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
+// THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
             return;
         }
         // SPECME
@@ -181,16 +178,8 @@ export class WizardNavigationService implements OnDestroy {
         }
         // SPECME
 
-// TODO: MOVE TO PAGE?
-        this.commitPage(currentPage);
+        this.pageCollection.commitPage(currentPage);
         this._wizardFinished.next();
-    }
-
-    private commitPage(page: NewWizardPage) {
-        page.primaryButtonClicked.emit();
-        page.onCommit.emit(null);
-        page.completed = true;
-        // SPECME
     }
 
     // When called, the wizard will move to the prev page.
@@ -214,8 +203,7 @@ export class WizardNavigationService implements OnDestroy {
             this._movedToPreviousPage.next(true);
             this.setCurrentPage(previousPage);
         } else {
-            // THROW ERROR HERE?! YES
-            // TODO: LEAVE TODOS FOR POTENTIAL ERROR HANDLING...
+// TODO: THROW ERROR HERE
             return;
         }
         // SPECME
@@ -275,22 +263,22 @@ export class WizardNavigationService implements OnDestroy {
 
     public setLastEnabledPageCurrent(): void {
         let allPages: NewWizardPage[] = this.pageCollection.pagesAsArray;
-        let lastCurrentPageIndex: number = null;
+        let lastCompletedPageIndex: number = null;
 
         allPages.forEach((page: NewWizardPage, index: number) => {
             if (page.completed) {
-                lastCurrentPageIndex = index;
+                lastCompletedPageIndex = index;
             }
         });
 
-        if (lastCurrentPageIndex === null) {
+        if (lastCompletedPageIndex === null) {
             // always is at least the first item...
-            lastCurrentPageIndex = 0;
-        } else if ((lastCurrentPageIndex + 1) < allPages.length) {
-            lastCurrentPageIndex = lastCurrentPageIndex + 1;
+            lastCompletedPageIndex = 0;
+        } else if ((lastCompletedPageIndex + 1) < allPages.length) {
+            lastCompletedPageIndex = lastCompletedPageIndex + 1;
         }
         // SPECME
 
-        this.setCurrentPage(allPages[lastCurrentPageIndex]);
+        this.setCurrentPage(allPages[lastCompletedPageIndex]);
     }
 }

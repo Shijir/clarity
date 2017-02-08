@@ -205,6 +205,12 @@ export class PageCollectionService {
         return pageIdParts.reverse().join("-");
     }
 
+    public commitPage(page: NewWizardPage) {
+        page.primaryButtonClicked.emit();
+        page.completed = true;
+        page.onCommit.emit();
+    }
+
     private _pagesReset = new Subject<boolean>();
     public get pagesReset(): Observable<boolean> {
         return this._pagesReset.asObservable();

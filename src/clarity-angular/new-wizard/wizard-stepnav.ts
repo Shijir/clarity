@@ -22,8 +22,6 @@ import { PageCollectionService } from "./providers/page-collection";
     }
 })
 
-// TODO: ITERATE ON PAGESERVICE INSTEAD OF WIZARD
-
 export class NewWizardStepnav {
     constructor(private pageService: PageCollectionService) {
     }

@@ -62,12 +62,12 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     // Error Flag Raised
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
-    // todo... error event??
+// TODO... error event??
 
     @Input("clrWizardPageCustomCancel") public customCancel: any = false;
 
-    // TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
-    // TODO: MOVE TO PAGE COLLECTION SERVICE
+// TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
+// TODO: MOVE TO PAGE COLLECTION SERVICE
     @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
 
     @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
@@ -76,7 +76,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter < any > =
         new EventEmitter<any>(false);
 
-    // IDEALLY THIS IS A TWO WAY BINDING ON page.completed??? EUDES NOT SURE...
+// IDEALLY THIS IS A TWO WAY BINDING ON page.completed??? EUDES NOT SURE...
     // User can bind an event handler for onCommit of the main content
     @Output("clrWizardPageOnCommit") onCommit: EventEmitter < any > =
         new EventEmitter<any>(false);
