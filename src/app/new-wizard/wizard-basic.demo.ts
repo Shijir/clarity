@@ -98,9 +98,15 @@ export class WizardSimple {
         return !isNaN(this.myInput.nativeElement.value);
     }
 
+    public wizardLevelCustomCancel(): void {
+        if (confirm("Do you really, really want to close the wizard?")) {
+            this.wizardMedium.close();
+        }
+    }
+
     public stepThreeCustomCancel(): void {
         if (confirm("Do you want to close the wizard?")) {
-            this.wizardMedium.cancel();
+            this.wizardMedium.close();
         }
     }
 

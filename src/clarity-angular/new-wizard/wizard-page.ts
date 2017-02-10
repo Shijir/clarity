@@ -61,13 +61,11 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Input("clrWizardPagePagePreviousDisabled") public movePreviousDisabled: boolean = false;
 
     // Error Flag Raised
-    @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
 // TODO... error event??
-
-    @Input("clrWizardPageCustomCancel") public customCancel: any = false;
+    @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
 
 // TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
-// TODO: MOVE TO PAGE COLLECTION SERVICE
+// TOASK: MOVE TO PAGE COLLECTION SERVICE? SEEMS LIKE THIS IS HANDLED BY NGIF AND IS NO LONGER NECESSARY
     @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
 
     @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
@@ -88,15 +86,22 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
         new EventEmitter(false);
 
-    // TODO: moving some of this work to button hub
+// TODO: moving some of this work to button hub
     // Emitters button events
     @Output("clrWizardPageNext") nextButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
+// TODO: DO WE EVEN USE THIS?
     @Output("clrWizardPageCancel") cancelButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    @Output("clrWizardCustomCancelAction") customCancelClicked: EventEmitter < any > =
+    // This output subverts the default cancel routine at the page level.
+    // If the wizard is cancelled and this is the current page, then the wizard
+    // will perform this action instead of the default cancel.
+    //
+    // You will need to execute actual cancel at some point, however, because this
+    // is a full replacement of the cancel functionality, not a detour.
+    @Output("clrWizardPageAltCancel") customCancelEvent: EventEmitter < any > =
         new EventEmitter(false);
 
     @Output("clrWizardPageFinish") finishButtonClicked: EventEmitter < any > =
@@ -208,10 +213,21 @@ export class NewWizardPage implements OnInit, OnDestroy {
         this.pageCurrentChanged.emit();
     }
 
+    private _hasAltCancel: boolean = false;
+    public get hasAltCancel(): boolean {
+        return this._hasAltCancel;
+    }
+
     public ngOnInit(): void {
         if (!this.navService.currentPage) {
             this.makeCurrent();
         }
+        // SPECME
+
+// ### LEFTOFF NEED TO DO THIS DOWN HERE AT THE WIZARD LVL AND THEN execute
+// CHANGES TO WIZNAV (OR WIZARD?) TO RUN ALT SCRIPTS INSTEAD OF USUAL cancel
+// ROUTINE!!!
+        this._hasAltCancel = this.customCancelEvent.observers.length > 0;
         // SPECME
     }
 

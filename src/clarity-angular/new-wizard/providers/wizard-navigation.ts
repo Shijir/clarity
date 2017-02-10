@@ -67,12 +67,7 @@ export class WizardNavigationService implements OnDestroy {
         });
 
         this.cancelButtonSubscription = this.buttonService.cancelBtnClicked.subscribe(() => {
-            if (this.currentPage.customCancel) {
-                this.currentPage.customCancelClicked.emit();
-            } else {
-                this._cancelWizard.next();
-            }
-            // SPECME
+            this.cancel();
         });
 
         this.pagesResetSubscription = this.pageCollection.pagesReset.subscribe(() => {
@@ -209,14 +204,30 @@ export class WizardNavigationService implements OnDestroy {
         // SPECME
     }
 
+    private _executeAltCancel = new Subject<any>();
+    public get makeWizardDoAltCancel(): Observable<any> {
+        return this._executeAltCancel.asObservable();
+    }
+
     private _cancelWizard = new Subject<any>();
     public get notifyWizardCancel(): Observable<any> {
         return this._cancelWizard.asObservable();
     }
     public cancel(): void {
-        this.currentPage.cancelButtonClicked.emit();
-        this._cancelWizard.next();
+        let currentPage = this.currentPage;
+
+        if (currentPage.hasAltCancel) {
+            currentPage.customCancelEvent.emit();
+        } else if (this.wizardHasAltCancel) {
+            this._executeAltCancel.next();
+        } else {
+            this.currentPage.cancelButtonClicked.emit();
+            this._cancelWizard.next();
+        }
+        // SPECME
     }
+
+    public wizardHasAltCancel: boolean = false;
 
     public goTo(pageToGoToOrId: any) {
         let pageToGoTo: NewWizardPage;

@@ -18,7 +18,8 @@
     (clrWizardCurrentPageChanged)="handlePageChange()"
     (clrWizardOnFinish)="doReset()"
     (clrWizardOnCancel)="doReset()"
-    (clrWizardOnReset)="notifyReset()">
+    (clrWizardOnReset)="notifyReset()"
+    (clrWizardAltCancel)="wizardLevelCustomCancel()">
     <clr-wizard-title>
         My 5th Level Wizard
     </clr-wizard-title>
@@ -28,9 +29,9 @@
     <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
     <clr-wizard-button [type]="'finish'">Fait Accompli</clr-wizard-button>
 
-    <clr-newwizard-page (clrWizardPageDanger)="handleDangerClick($event)"
+    <clr-newwizard-page 
+        (clrWizardPageDanger)="handleDangerClick($event)"
         (clrWizardPagePrevious)="highVoltage()">
-        <!-- *ngIf probably goes here ^ . it replaces the idea of skipped. -->
 
         <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
         <template pageNavTitle>Title for Page 1</template> <!-- optional -->
@@ -117,8 +118,7 @@
     </clr-newwizard-page>
 
     <clr-newwizard-page #myPage [clrWizardPageNextDisabled]="!stepFourIsReady"
-        [clrWizardPageCustomCancel]="true"
-        (clrWizardCustomCancelAction)="stepThreeCustomCancel()"
+        (clrWizardPageAltCancel)="stepThreeCustomCancel()"
         (clrWizardPageCustomButton)="doCustomClick($event)">
         <template pageTitle>This tests if the page jumping completed thing works</template> <!-- mandatory -->
         <template pageNavTitle>Test Page Jumping</template> <!-- optional -->

@@ -10,7 +10,7 @@ import {
     Output,
     EventEmitter,
     QueryList,
-    HostListener,
+    // HostListener,
     OnInit,
     OnDestroy,
     AfterViewInit
@@ -67,6 +67,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.wizardResetSubscription = this.navService.wizardReset.subscribe(() => {
             this.onReset.emit();
         });
+
+        this.wizardAltCancelSubscription = this.navService.makeWizardDoAltCancel.subscribe(() => {
+            this.customCancelEvent.emit();
+        });
     }
 
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
@@ -102,10 +106,20 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    @Output("clrWizardAltCancel") customCancelEvent: EventEmitter < any > =
+        new EventEmitter(false);
+
+    private _hasAltCancel: boolean = false;
+    public get hasAltCancel(): boolean {
+        return this._hasAltCancel;
+    }
+
     public ngOnInit(): void {
         this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
             this.currentPageChanged.emit();
         });
+
+        this._hasAltCancel = this.customCancelEvent.observers.length > 0;
     }
 
     private goNextSubscription: Subscription;
@@ -115,6 +129,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     private currentPageSubscription: Subscription;
     private wizardFinishedSubscription: Subscription;
     private wizardResetSubscription: Subscription;
+    private wizardAltCancelSubscription: Subscription;
 
     ngOnDestroy() {
         this.goNextSubscription.unsubscribe();
@@ -126,8 +141,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.wizardResetSubscription.unsubscribe();
     }
 
+// TODO: TEST WIZARD AND PAGE ALTCANCEL...
     public ngAfterViewInit() {
         this.pageCollection.pages = this.pages;
+        this.navService.wizardHasAltCancel = this.hasAltCancel;
     }
 
     private _id: string;
@@ -140,7 +157,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         return this.navService.currentPage;
     }
 
-    // TODO: MAKE SURE WIZARD HAS DELEGATES FOR REASONABLE MODAL FNS
+// TODO: MAKE SURE WIZARD HAS DELEGATES FOR REASONABLE MODAL FNS
     // This is a public function that can be used to programmatically open the
     // wizard.
     public open(): void {
@@ -164,18 +181,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         } else {
             this.close();
         }
-    }
-
-    // _close --
-    //
-    // This is a private function that is called on the click of the close / cancel
-    // button and emits the onCancel event of the active tab.
-
-    // any code that exists in modal we can get rid of... TODO: get rid of
-    // listen to what modal is doing...
-    @HostListener("body:keyup.escape")
-    _close(event?: any): void {
-        this.close();
     }
 
     // prev -- DEPRECATED

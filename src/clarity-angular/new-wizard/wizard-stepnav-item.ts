@@ -18,7 +18,7 @@ import { PageCollectionService } from "./providers/page-collection";
     moduleId: module.id,
     selector: "[clr-wizard-stepnav-item]",
     template: `
-        <button type="button" class="btn btn-link nav-link" (click)="doClick()">
+        <button type="button" class="btn btn-link nav-link" (click)="click()">
             <template [ngTemplateOutlet]="page.navTitle"></template>
         </button>
     `,
@@ -57,9 +57,9 @@ export class NewWizardStepnavItem {
         return this.page.completed;
     }
 
-    doClick(): boolean {
+    click(): void {
         if (this.isDisabled || this.isCurrent) {
-            return false;
+            return;
         }
         // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
         this.navService.goTo(this.page);
