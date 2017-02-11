@@ -254,8 +254,7 @@ readDirContent(pathToIcons)
 
                 let iconContent = iconsWithArrayContent[iconName].reduce((accumulator, currentValue)=> {
 
-                    return `${accumulator}
-                            ${currentValue}`;
+                    return accumulator + currentValue;
 
                 });
 
