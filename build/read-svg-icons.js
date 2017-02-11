@@ -42,7 +42,7 @@ let readDirContent = (rawPath) => {
  * @param {string[]} fileNamesParam: all file names
  * @return {string[]} prefixes
  * */
-let getIconNames = (fileNamesParam) => {
+let getIconName = (fileNameParam) => {
 
     let lineSuffix = "_line.svg";
     let lineAlertSuffix = "_line_alert.svg";
@@ -52,41 +52,38 @@ let getIconNames = (fileNamesParam) => {
     let solidAlertSuffix = "_solid_alert.svg";
     let solidBadgeSuffix = "_solid_badge.svg";
 
-    let iconNamesWithDuplicates = fileNamesParam.map((fileName)=> {
 
+    if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(lineSuffix)) {
+        return fileNameParam.replace(lineSuffix, "");
 
-        if (!/[A-Z0-9]/.test(fileName) && fileName.endsWith(lineSuffix)) {
-            return fileName.replace(lineSuffix, "");
+    }
+    else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(lineAlertSuffix)) {
+        return fileNameParam.replace(lineAlertSuffix, "");
 
-        }
-        else if (!/[A-Z0-9]/.test(fileName) && fileName.endsWith(lineAlertSuffix)) {
-            return fileName.replace(lineAlertSuffix, "");
+    }
+    else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(lineBadgeSuffix)) {
+        return fileNameParam.replace(lineBadgeSuffix, "");
 
-        }
-        else if (!/[A-Z0-9]/.test(fileName) && fileName.endsWith(lineBadgeSuffix)) {
-            return fileName.replace(lineBadgeSuffix, "");
+    }
+    else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(solidSuffix)) {
+        return fileNameParam.replace(solidSuffix, "");
 
-        }
-        else if (!/[A-Z0-9]/.test(fileName) && fileName.endsWith(solidSuffix)) {
-            return fileName.replace(solidSuffix, "");
+    }
+    else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(solidAlertSuffix)) {
+        return fileNameParam.replace(solidAlertSuffix, "");
 
-        }
-        else if (!/[A-Z0-9]/.test(fileName) && fileName.endsWith(solidAlertSuffix)) {
-            return fileName.replace(solidAlertSuffix, "");
+    }
+    else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(solidBadgeSuffix)) {
+        return fileNameParam.replace(solidBadgeSuffix, "");
 
-        }
-        else if (!/[A-Z0-9]/.test(fileName) && fileName.endsWith(solidBadgeSuffix)) {
-            return fileName.replace(solidBadgeSuffix, "");
+    }
+    else {
 
-        }
-        else {
-            console.error(`'${fileName}' doesn't qualify as a standard name for icon files.`);
-        }
+        console.error(`'${fileNameParam}' doesn't qualify as a standard name for icon files.`);
+        return "";
 
-    });
+    }
 
-    let iconSet = new Set(iconNamesWithDuplicates);
-    return Array.from(iconSet.values());
 
 };
 
@@ -109,6 +106,36 @@ let readFileContent = (pathToIconsParam, fileNameParam) => {
 
 };
 
+/*
+ * @desc wraps the svg elements with the proper svg element tag and gives it a title
+ * @param {string} shapeTitle: The text to be used inside title tag
+ * @param {string} shapeContent: The svg elements to be used for creating a svg icon.
+ * @return {string} A valid string representation of svg icon.
+ * */
+
+let makeSVG = (shapeTitle, shapeContent) => {
+
+    let openingTag = `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`;
+    let title = `<title>${shapeTitle}</title>`;
+    let closingTag = `</svg>`;
+
+    return `${openingTag}
+                ${title}
+                ${shapeContent}
+            ${closingTag}`;
+
+
+};
+
+let prepareIconContent = (shapeContent) => {
+
+    $ = cheerio.load(shapeContent);
+
+    return $("svg").html();
+
+};
+
+
 readDirContent(pathToIcons)
     .then((fileNames)=> {
         return Promise.all(fileNames.map((fileName)=> {
@@ -118,9 +145,23 @@ readDirContent(pathToIcons)
         }));
 
     })
-    .then((fileContents)=> {
+    .then((iconFileObjs)=> {
 
-        console.log(fileContents);
+        let icons = {};
+
+        iconFileObjs.map((iconFileObj)=> {
+            let iconName = getIconName(iconFileObj["fileName"]);
+
+            if (iconName !== "" && icons[iconName] !== undefined) {
+                //exist
+            } else {
+                icons[iconName] = prepareIconContent(iconFileObj["content"]);
+            }
+
+        });
+
+        console.log(icons);
+
 
     })
     .catch((error)=> {
