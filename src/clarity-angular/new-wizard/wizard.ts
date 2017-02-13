@@ -30,6 +30,7 @@ import { ButtonHubService } from "./providers/button-hub";
     providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ],
     templateUrl: "./wizard.html",
     host: {
+// TODO: REMOVE ID?
         "[id]": "id",
         "[class.clr-wizard]": "true",
         "[class.main-container]": "true", // <= ???
@@ -45,12 +46,12 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
                 public buttonService: ButtonHubService) {
 
         this.goNextSubscription = this.navService.movedToNextPage.subscribe(() => {
-            // TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
+// TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
             // console.log("I, wizard, went to the next page!");
         });
 
         this.goPreviousSubscription = this.navService.movedToPreviousPage.subscribe(() => {
-            // TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
+// TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
             // console.log("I, wizard, went to the previous page!");
         });
 
@@ -64,6 +65,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
             this.close();
         });
 
+// TOREMOVE: WE DON'T NEED AN OUTPUT FOR ON/AFTER RESET
         this.wizardResetSubscription = this.navService.wizardReset.subscribe(() => {
             this.onReset.emit();
         });
@@ -82,6 +84,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Input("clrWizardClosable") closable: boolean = true;
 
     // users can pass in their own ids for the wizard using clrWizardId="whatever"
+// TOVERIFY: DON'T KNOW IF WE USE WIZARD ID ANYMORE...
     @Input("clrWizardId") public userDefinedId: string;
 
     // EventEmitter which is emitted on open/close of the wizard.
@@ -93,6 +96,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         new EventEmitter<any>(false);
 
 // done
+// TOREMOVE: ARE WE GETTING RID OF THIS ONE?
     @Output("clrWizardOnReset") onReset: EventEmitter<any> =
         new EventEmitter<any>(false);
 
@@ -119,6 +123,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
             this.currentPageChanged.emit();
         });
 
+// TOFIX? EventEmitter.observers may not be around. could be removed at any time. do we want to stick with this?
+// only public method on NG team's custom implementation is emit()... 
+// CREATE NEW INPUTS SO USERS CAN SET THEM TO TRUE
         this._hasAltCancel = this.customCancelEvent.observers.length > 0;
     }
 
@@ -147,6 +154,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.navService.wizardHasAltCancel = this.hasAltCancel;
     }
 
+//TOREMOVE: PROBABLY GOING AWAY
     private _id: string;
     public get id(): string {
         return this._id;
@@ -217,6 +225,8 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     }
 
 // TOASK: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED ON THE PAGE, NOT HERE
+// IF USING NG-IFS SHOULD BE FINE?
+
     // selectTab --
     //
     // Base class function overridden to call the onLoad event emitter
@@ -237,7 +247,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         // this.isFirst = 0 === 0;
     // }
 
-// TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
+// TOREMOVE: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // skipTab --
     //
     // Public function to skip a Tab given its uniqueId
@@ -245,7 +255,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     //     this._setTabIsSkipped(tabId, true);
     // }
 
-// TODO: REPLACED BY NGIF -- NOTE BREAKING CHANGE
+// TOREMOVE: REPLACED BY NGIF -- NOTE BREAKING CHANGE
     // unSkipTab --
     //
     // Public function to unSkip a tab given its uniqueId

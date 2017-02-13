@@ -22,6 +22,7 @@ import { ButtonHubService } from "./providers/button-hub";
 import { WizardPageTitleDirective } from "./directives/page-title";
 import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 import { WizardPageButtonsDirective } from "./directives/page-buttons";
+import { WizardPageHeaderActionsDirective } from "./directives/page-header-actions";
 
 import { Subscription } from "rxjs/Subscription";
 
@@ -53,6 +54,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @ContentChild(WizardPageTitleDirective) public pageTitle: WizardPageTitleDirective;
     @ContentChild(WizardPageNavTitleDirective) public pageNavTitle: WizardPageNavTitleDirective;
     @ContentChild(WizardPageButtonsDirective) private _buttons: WizardPageButtonsDirective;
+    @ContentChild(WizardPageHeaderActionsDirective) private _headerActions: WizardPageHeaderActionsDirective;
 
     // Next button disabled
     @Input("clrWizardPageNextDisabled") public nextStepDisabled: boolean;
@@ -61,24 +63,24 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Input("clrWizardPagePagePreviousDisabled") public movePreviousDisabled: boolean = false;
 
     // Error Flag Raised
-// TODO... error event??
+// TODO... error event, maybe;
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
 
-// TODO: HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
-// TOASK: MOVE TO PAGE COLLECTION SERVICE? SEEMS LIKE THIS IS HANDLED BY NGIF AND IS NO LONGER NECESSARY
-    @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
-
-    @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
+// HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
+// TODO: NOTE BREAKING CHANGE, NOW NG-IF
+    // @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
+    // @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
 
     // EventEmitter which is emitted on open/close of the wizard.
     @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter < any > =
         new EventEmitter<any>(false);
 
-// IDEALLY THIS IS A TWO WAY BINDING ON page.completed??? EUDES NOT SURE...
+// TODO: SHOULD USE A CUSTOM BUTTON INSTEAD. NOTE BREAKING CHANGE...
     // User can bind an event handler for onCommit of the main content
     @Output("clrWizardPageOnCommit") onCommit: EventEmitter < any > =
         new EventEmitter<any>(false);
 
+// TODO: USE ONE HOOK OR THE OTHER ('ONLOAD' OR 'NOWCURRENT'). KEEP ONLOAD.
     // User can bind an event handler for onLoad of the main content
     @Output("clrWizardPageOnLoad") onLoad: EventEmitter < any > = new EventEmitter(false);
 
@@ -129,7 +131,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     private previousButtonSubscription: Subscription;
 
-// TODO: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
+// TODO?: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
 // may need to call a pageready event (onLoad) from the page collection service)
 // skippedChange ^ or other event too... deprecate "skipped"
 
@@ -151,7 +153,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     private _complete: boolean = false;
     public get completed(): boolean {
-// ###LEFTOFF: completed needs to be tied to readyToComplete somehow
+// TODO!!!: completed needs to be tied to readyToComplete somehow
 // so that we can track when changes to other pages invalidate them
 // do we show errored? or do we just make invalid??
         return this._complete && this.readyToComplete;
@@ -198,13 +200,19 @@ export class NewWizardPage implements OnInit, OnDestroy {
         return this.pageTitle.pageTitleTemplateRef;
     }
 
+    public get headerActions(): TemplateRef < any > {
+        return this._headerActions.pageHeaderActionsTemplateRef;
+    }
+
+    public get hasHeaderActions(): boolean {
+        return !!this._headerActions;
+    }
+
     public get buttons(): TemplateRef < any > {
         return this._buttons.pageButtonsTemplateRef;
     }
 
     public get hasButtons(): boolean {
-// TOFIX?: this is a very noisy check. uncomment to see it in action.
-        // console.log("OHAYZ! I'm ", this.id, ". I'm in hasButtons! Do I have buttons? ", this._buttons);
         return !!this._buttons;
     }
 
@@ -224,9 +232,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
         }
         // SPECME
 
-// ### LEFTOFF NEED TO DO THIS DOWN HERE AT THE WIZARD LVL AND THEN execute
-// CHANGES TO WIZNAV (OR WIZARD?) TO RUN ALT SCRIPTS INSTEAD OF USUAL cancel
-// ROUTINE!!!
         this._hasAltCancel = this.customCancelEvent.observers.length > 0;
         // SPECME
     }

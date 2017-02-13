@@ -125,6 +125,7 @@ export class WizardNavigationService implements OnDestroy {
         return this._wizardFinished.asObservable();
     }
 
+// TOREMOVE: I THINK THIS IS GOING AWAY...
     private _wizardReset = new Subject<boolean>();
     public get wizardReset(): Observable<boolean> {
         return this._wizardReset.asObservable();
@@ -198,7 +199,7 @@ export class WizardNavigationService implements OnDestroy {
             this._movedToPreviousPage.next(true);
             this.setCurrentPage(previousPage);
         } else {
-// TODO: THROW ERROR HERE
+// TODO: THROW ERROR HERE? IGNORING MAY BE FINE FOR NOW...
             return;
         }
         // SPECME
@@ -292,4 +293,18 @@ export class WizardNavigationService implements OnDestroy {
 
         this.setCurrentPage(allPages[lastCompletedPageIndex]);
     }
+
+    public wizardHasHeaderActions(): boolean {
+// TODO: NEED WIZARD TO LINK HEADER ACTIONS HERE AND FOR THIS TO CHECK
+// LENGTH OF CONTENT-CHILDREN...
+        return false;
+    }
+// ###LEFTOFF: NEED TO CREATE clr-wizard-header-action COMPONENT...
+
+    public currentPageHasHeaderActions(): boolean {
+// TODO: NEED TO WIRE THIS UP... CHECKING CURRENT PAGE HERE
+        return false;
+    }
+// ###LEFTOFF: NEED THIS IN CODE TOO...
+//     <!--<template [ngTemplateOutlet]="navService.currentPage.buttons"></template>-->
 }

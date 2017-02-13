@@ -16,6 +16,12 @@
     <h3 class="modal-title">
        <template [ngTemplateOutlet]="navService.currentPageTitle"></template>
        <!-- FIXME: we will need actions area here... -->
+        <div *ngIf="navService.wizardHasHeaderActions">
+            <!--<ng-content select="clr-wizard-button"></ng-content>-->
+        </div>
+        <div *ngIf="navService.currentPageHasHeaderActions">
+            <!--<template [ngTemplateOutlet]="navService.currentPage.buttons"></template>-->
+        </div>
     </h3>
 
     <div class="modal-body clr-wizard-content">

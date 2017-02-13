@@ -73,7 +73,7 @@ export class PageCollectionService {
 
     public getPageById(id: string): NewWizardPage {
         let foundPages: NewWizardPage[] = this.pages.filter((page: NewWizardPage) => id === page.id);
-        return this.checkResults(foundPages);
+        return this.checkResults(foundPages, id);
         // SPECME
     }
 
@@ -81,9 +81,13 @@ export class PageCollectionService {
         let pageArray: NewWizardPage[] = this.pagesAsArray;
         let pageArrayLastIndex: number = (pageArray && pageArray.length > 1) ? pageArray.length - 1 : 0;
 
-        if (index < 0 || index > pageArrayLastIndex) {
-// TOASK: PAGE NOT FOUND... THROW ERROR? JUST IGNORE IT?
-            return null;
+        if (index < 0) {
+            throw new Error("Cannot retrieve page with index of " + index);
+        }
+        // SPECME
+
+        if (index > pageArrayLastIndex) {
+            throw new Error("Page index is greater than length of pages array.");
         }
         // SPECME
 
@@ -95,8 +99,7 @@ export class PageCollectionService {
         let index = this.pagesAsArray.indexOf(page);
 
         if (index < 0) {
-// TOASK: PAGE NOT FOUND; ERROR? OR SEND -1 LIKE INDEXOF DOES?
-            return null;
+            throw new Error("Requested page cannot be found in collection of pages.");
         }
         // SPECME
 
@@ -104,15 +107,13 @@ export class PageCollectionService {
         // SPECME
     }
 
-    private checkResults(results: NewWizardPage[]) {
+    private checkResults(results: NewWizardPage[], requestedPageId: string) {
         let foundPagesCount: number = results.length || 0;
 
         if (foundPagesCount > 1) {
-// TOASK: TOO MANY FOUND PAGES!!! THROW ERROR
-            return null;
+            throw new Error("More than one page has the requested id " + requestedPageId + ".");
         } else if (foundPagesCount < 1) {
-// TOASK: PAGE NOT FOUND... THROW ERROR
-            return null;
+            throw new Error("No page can be found with the id " + requestedPageId + ".");
         } else {
             return results[0];
         }
@@ -211,6 +212,7 @@ export class PageCollectionService {
         page.onCommit.emit();
     }
 
+// TOLOOKUP: MAYBE NOT NEEDED?
     private _pagesReset = new Subject<boolean>();
     public get pagesReset(): Observable<boolean> {
         return this._pagesReset.asObservable();

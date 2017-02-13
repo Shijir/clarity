@@ -18,8 +18,10 @@
     (clrWizardCurrentPageChanged)="handlePageChange()"
     (clrWizardOnFinish)="doReset()"
     (clrWizardOnCancel)="doReset()"
-    (clrWizardOnReset)="notifyReset()"
-    (clrWizardAltCancel)="wizardLevelCustomCancel()">
+    (clrWizardOnReset)="notifyReset()">
+<!-- TOREMOVE: WE DON'T NEED AN ONRESET/AFTER RESET OUTPUT -->
+    <!-- THROW THE FOLLOWING LINE UP IN THE WIZARD DECLARATION TO TEST WIZARD-LVL ALTCANCEL -->
+    <!-- (clrWizardAltCancel)="wizardLevelCustomCancel()" -->
     <clr-wizard-title>
         My 5th Level Wizard
     </clr-wizard-title>
@@ -31,7 +33,9 @@
 
     <clr-newwizard-page 
         (clrWizardPageDanger)="handleDangerClick($event)"
-        (clrWizardPagePrevious)="highVoltage()">
+        (clrWizardPagePrevious)="highVoltage()"
+        (clrWizardBeforeCancel)="something($event)">
+<!-- TOLOOKINTO: ^^^^ force users to call preventDefault in their handler... possible to support both? -->
 
         <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
         <template pageNavTitle>Title for Page 1</template> <!-- optional -->
