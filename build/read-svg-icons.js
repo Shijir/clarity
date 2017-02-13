@@ -57,22 +57,22 @@ let readDirContent = (rawPath) => {
 let getIconName = (fileNameParam) => {
 
     if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(lineSuffix)) {
-        return fileNameParam.replace(lineSuffix, "");
+        return {"iconName": fileNameParam.replace(lineSuffix, ""), "iconSuffix": lineSuffix}
     }
     else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(lineAlertSuffix)) {
-        return fileNameParam.replace(lineAlertSuffix, "");
+        return {"iconName": fileNameParam.replace(lineAlertSuffix, ""), "iconSuffix": lineAlertSuffix}
     }
     else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(lineBadgeSuffix)) {
-        return fileNameParam.replace(lineBadgeSuffix, "");
+        return {"iconName": fileNameParam.replace(lineBadgeSuffix, ""), "iconSuffix": lineBadgeSuffix}
     }
     else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(solidSuffix)) {
-        return fileNameParam.replace(solidSuffix, "");
+        return {"iconName": fileNameParam.replace(solidSuffix, ""), "iconSuffix": solidSuffix}
     }
     else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(solidAlertSuffix)) {
-        return fileNameParam.replace(solidAlertSuffix, "");
+        return {"iconName": fileNameParam.replace(solidAlertSuffix, ""), "iconSuffix": solidAlertSuffix}
     }
     else if (!/[A-Z0-9]/.test(fileNameParam) && fileNameParam.endsWith(solidBadgeSuffix)) {
-        return fileNameParam.replace(solidBadgeSuffix, "");
+        return {"iconName": fileNameParam.replace(solidBadgeSuffix, ""), "iconSuffix": solidBadgeSuffix}
     }
     else {
         return "";
@@ -106,9 +106,9 @@ let readFileContent = (pathToIconsParam, fileNameParam) => {
  * @return {string} A valid string representation of svg icon.
  * */
 
-let makeSVG = (shapeTitle, shapeContent) => {
+let makeSVG = (shapeTitle, shapeContent, shapeClasses) => {
 
-    let openingTag = `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`;
+    let openingTag = `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="${shapeClasses}">`;
     let title = `<title>${shapeTitle}</title>`;
     let closingTag = `</svg>`;
 
@@ -117,6 +117,51 @@ let makeSVG = (shapeTitle, shapeContent) => {
                 ${shapeContent}
             ${closingTag}`;
 
+
+};
+
+let shapeSVGClasses = {
+
+    currentShape: "",
+    styleClasses: [],
+
+    flush(newIcon) {
+        this.currentShape = newIcon;
+        this.styleClasses = [];
+    },
+
+    checkClasses(name, suffix, iconWithArrayContent) {
+
+        if (name !== this.currentShape && this.styleClasses.length > 0) {
+
+            iconWithArrayContent["shapeClasses"] = this.getClasses();
+            this.flush(name);
+
+        }
+
+        if (suffix === solidSuffix && this.styleClasses.indexOf("has-solid") === -1) {
+
+            this.styleClasses.push("has-solid");
+
+        }
+
+        if (suffix === lineAlertSuffix || suffix === solidAlertSuffix && this.styleClasses.indexOf("can-alert") === -1) {
+
+            this.styleClasses.push("can-alert");
+
+        }
+
+        if (suffix === lineBadgeSuffix || suffix === solidBadgeSuffix && this.styleClasses.indexOf("can-badge") === -1) {
+
+            this.styleClasses.push("can-badge");
+
+        }
+
+    },
+
+    getClasses() {
+        return this.styleClasses.join(" ");
+    }
 
 };
 
@@ -233,13 +278,21 @@ readDirContent(pathToIcons)
 
         iconFileObjs.map((iconFileObj)=> {
 
-            let iconName = getIconName(iconFileObj["fileName"]);
+            let iconName = getIconName(iconFileObj["fileName"])["iconName"];
+            let iconSuffix = getIconName(iconFileObj["fileName"])["iconSuffix"];
 
-            if (iconName !== "" && iconsWithArrayContent[iconName] !== undefined) {
-                iconsWithArrayContent[iconName] = iconsWithArrayContent[iconName].concat(prepareIconContent(iconFileObj["fileName"], iconFileObj["content"]));
+            if (iconName !== "" && iconsWithArrayContent[iconName] !== undefined && iconsWithArrayContent[iconName]["shapeTemplate"] !== undefined) {
+
+                iconsWithArrayContent[iconName]["shapeTemplate"] = iconsWithArrayContent[iconName]["shapeTemplate"].concat(prepareIconContent(iconFileObj["fileName"], iconFileObj["content"]));
+
             } else {
-                iconsWithArrayContent[iconName] = prepareIconContent(iconFileObj["fileName"], iconFileObj["content"]);
+                iconsWithArrayContent[iconName] = {
+                    "shapeTemplate": prepareIconContent(iconFileObj["fileName"], iconFileObj["content"])
+                };
+
             }
+
+            shapeSVGClasses.checkClasses(iconName, iconSuffix, iconsWithArrayContent[iconName]);
 
         });
 
@@ -250,15 +303,15 @@ readDirContent(pathToIcons)
         iconNames.map((iconName)=> {
 
 
-            if (iconName !== "") {
+            if (iconName !== "" && iconsWithArrayContent[iconName] !== undefined && iconsWithArrayContent[iconName]["shapeTemplate"] !== undefined) {
 
-                let iconContent = iconsWithArrayContent[iconName].reduce((accumulator, currentValue)=> {
+                let iconContent = iconsWithArrayContent[iconName]["shapeTemplate"].reduce((accumulator, currentValue)=> {
 
                     return accumulator + currentValue;
 
                 });
 
-                icons[iconName] = makeSVG(iconName, iconContent);
+                icons[iconName] = makeSVG(iconName, iconContent, iconsWithArrayContent[iconName]["shapeClasses"]);
             }
 
         });
