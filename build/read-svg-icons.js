@@ -125,7 +125,12 @@ let readFileContent = (pathToIconsParam, fileNameParam) => {
 
 let makeSVG = (shapeTitle, shapeContent, shapeClasses) => {
 
-    let openingTag = `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="${shapeClasses}">`;
+    let openingTag = `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">`;
+
+    if (shapeClasses.replace(/\s/, "").length !== 0) {
+        openingTag = `<svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="${shapeClasses}">`;
+    }
+
     let title = `<title>${shapeTitle}</title>`;
     let closingTag = `</svg>`;
 
@@ -138,38 +143,49 @@ let shapeSVGClasses = {
 
     currentShape: "",
     styleClasses: [],
+    checkClassesCalled: false,
 
     flush(newIcon) {
         this.currentShape = newIcon;
         this.styleClasses = [];
     },
 
-    checkClasses(name, suffix, iconWithArrayContent) {
+    checkClasses(nameParam, suffixParam, iconsWithArrayContentParam) {
 
-        if (name !== this.currentShape && this.styleClasses.length > 0) {
+        if (!this.checkClassesCalled) {
 
-            iconWithArrayContent["shapeClasses"] = this.getClasses();
-            this.flush(name);
+            this.currentShape = nameParam;
+
+            this.checkClassesCalled = true;
 
         }
 
-        if (suffix === solidSuffix && this.styleClasses.indexOf("has-solid") === -1) {
+        if (nameParam !== this.currentShape) {
+
+            iconsWithArrayContentParam[this.previousShape]["shapeClasses"] = this.getClasses();
+            this.flush(nameParam);
+
+        }
+
+        if (suffixParam === solidSuffix && this.styleClasses.indexOf("has-solid") === -1) {
 
             this.styleClasses.push("has-solid");
 
         }
 
-        if (suffix === lineAlertSuffix || suffix === solidAlertSuffix && this.styleClasses.indexOf("can-alert") === -1) {
+        if (suffixParam === lineAlertSuffix || suffixParam === solidAlertSuffix && this.styleClasses.indexOf("can-alert") === -1) {
 
             this.styleClasses.push("can-alert");
 
         }
 
-        if (suffix === lineBadgeSuffix || suffix === solidBadgeSuffix && this.styleClasses.indexOf("can-badge") === -1) {
+        if (suffixParam === lineBadgeSuffix || suffixParam === solidBadgeSuffix && this.styleClasses.indexOf("can-badge") === -1) {
 
             this.styleClasses.push("can-badge");
 
         }
+
+        this.previousShape = nameParam;
 
     },
 
@@ -316,7 +332,7 @@ readDirContent(pathToIcons)
 
             }
 
-            shapeSVGClasses.checkClasses(iconName, iconSuffix, iconsWithArrayContent[iconName]);
+            shapeSVGClasses.checkClasses(iconName, iconSuffix, iconsWithArrayContent);
 
         });
 
@@ -335,7 +351,9 @@ readDirContent(pathToIcons)
 
                 });
 
-                icons[iconName] = makeSVG(iconName, iconContent, iconsWithArrayContent[iconName]["shapeClasses"]);
+                icons[iconName] = makeSVG(iconName, iconContent, iconsWithArrayContent[iconName]["shapeClasses"] || "");
+
+
             }
 
         });
