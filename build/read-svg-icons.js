@@ -351,7 +351,8 @@ readDirContent(pathToIcons)
 
                 });
 
-                icons[iconName] = makeSVG(iconName, iconContent, iconsWithArrayContent[iconName]["shapeClasses"] || "");
+                icons[iconName] = makeSVG(iconName, iconContent, iconsWithArrayContent[iconName]["shapeClasses"] || shapeSVGClasses.getClasses());
+
 
 
             }
