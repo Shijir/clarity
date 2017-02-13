@@ -276,6 +276,16 @@ let prepareIconContent = (fileNameParam, fileContentParam) => {
 
 };
 
+let makeTSReady = (template)=> {
+    return "let newShapes= \n".concat(JSON.stringify(template)
+        .replace(/"<svg/g, " `\n\t<svg")
+        .replace(/<\/svg>"([\,]?)/g, "\t</svg>`$1\n\n")
+        .replace(/<(title|path|circle|rect|line|polygon|polyline|ellipse)/ig, "\t\t<$1")
+        .replace(/\/>/g, "/>\n")
+        .replace(/\\"/g, "\"")
+        .replace(/<title>/g, "\n\t\t<title>")
+        .replace(/<\/title>/g, "</title>\n\n"));
+};
 
 readDirContent(pathToIcons)
     .then((fileNames)=> {
@@ -331,8 +341,7 @@ readDirContent(pathToIcons)
         });
 
 
-        return writeToFile(path.join(pathToShapesDir, "new-shapes.ts"), JSON.stringify(icons).replace(/"<svg/g, "`<svg").replace(/\/svg>"/g, "/svg>`\n\n"));
-        ///process.stdout.write(JSON.stringify(icons));
+        return writeToFile(path.join(pathToShapesDir, "new-shapes.ts"), makeTSReady(icons));
 
 
     })
