@@ -29,46 +29,23 @@ export class PageCollectionService {
     public get lastPage(): NewWizardPage {
         let pageCount = this.pagesCount;
 
-        if (pageCount > 0) {
-            return this.pagesAsArray[pageCount - 1];
+        if (pageCount < 1) {
+            return;
         }
         // SPECME
 
-// TOASK: what to do if no pages?
-        return;
+        return this.pagesAsArray[pageCount - 1];
         // SPECME
     }
 
     public get firstPage(): NewWizardPage {
-        if (this.pagesCount) {
-            return this.pagesAsArray[0];
-        }
-
-// TOASK: what to do if no pages?
-        return;
-        // SPECME
-    }
-
-    public getPage(pageOrId: any): NewWizardPage {
-        let page: NewWizardPage;
-
-        if (typeof pageOrId === "string") {
-            // assume string is an id
-            page = this.getPageById(pageOrId);
-        } else {
-            page = pageOrId;
-            // assumption is if id is not sent then a page object was...
-// TODO: can we check for this?
+        if (!this.pagesCount) {
+            return;
         }
         // SPECME
 
-        if (!page) {
-// TODO: THROW ERROR
-            return null;
-        }
+        return this.pagesAsArray[0];
         // SPECME
-
-        return page;
     }
 
     public getPageById(id: string): NewWizardPage {
@@ -180,8 +157,8 @@ export class PageCollectionService {
         if (previousPageIndex < 0) {
             return null;
         }
-
         // SPECME
+
         return this.getPageByIndex(previousPageIndex);
     }
 

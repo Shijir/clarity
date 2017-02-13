@@ -83,10 +83,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // Variable that toggles open/close of the wizard component.
     @Input("clrWizardClosable") closable: boolean = true;
 
-    // users can pass in their own ids for the wizard using clrWizardId="whatever"
-// TOVERIFY: DON'T KNOW IF WE USE WIZARD ID ANYMORE...
-    @Input("clrWizardId") public userDefinedId: string;
-
     // EventEmitter which is emitted on open/close of the wizard.
     @Output("clrWizardOpenChanged") _openChanged: EventEmitter<boolean> =
         new EventEmitter<boolean>(false);
@@ -152,12 +148,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit() {
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.hasAltCancel;
-    }
-
-//TOREMOVE: PROBABLY GOING AWAY
-    private _id: string;
-    public get id(): string {
-        return this._id;
     }
 
     // The current page

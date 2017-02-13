@@ -48,15 +48,6 @@
             <a href="#" title="click me for something else">WTF ICON</a>
         </clr-wizard-headerActions>-->
 
-        <!--
-            TODO: PAGE EVENTS (COMMITTED, CANCELED, NEXT, ETC.) 
-            BUTTONS TELL SERVICE PLZ-CANCEL. SERVICE TELLS (CURRENT)PAGE WHAT WAS CLICKED.
-            MOVE BUTTONS OUTSIDE OF PAGE...
-
-            NEXT BTN => SERVICE => SERVICE.NEXT
-            CANCEL BTN => SERVICE => WIZARD.CLOSE
-        -->
-
         <p>Content for step 1</p>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae minima inventore quia, 
@@ -78,7 +69,6 @@
         </template>
     </clr-newwizard-page>
 
-    <!-- TODO: GET RID OF SKIPPED/HIDDEN JUST USE NGIFs -->
     <clr-newwizard-page *ngIf="doTestHere()" (clrWizardPageCustomButton)="doCustomClick($event)">
 
         <template pageTitle>Title for Page {{ 4/2 }}</template> <!-- mandatory -->
