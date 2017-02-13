@@ -112,10 +112,7 @@ let makeSVG = (shapeTitle, shapeContent, shapeClasses) => {
     let title = `<title>${shapeTitle}</title>`;
     let closingTag = `</svg>`;
 
-    return `${openingTag}
-                ${title}
-                ${shapeContent}
-            ${closingTag}`;
+    return openingTag + title + shapeContent + closingTag;
 
 
 };
@@ -316,7 +313,9 @@ readDirContent(pathToIcons)
 
         });
 
-        console.log(icons);
+        //console.log(JSON.stringify(icons));
+
+        process.stdout.write(JSON.stringify(icons));
 
 
     })
