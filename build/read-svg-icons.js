@@ -20,10 +20,12 @@ let solidSuffix = separatorCaseChar + "solid" + targetFileType;
 let solidAlertSuffix = separatorCaseChar + "solid_alert" + targetFileType;
 let solidBadgeSuffix = separatorCaseChar + "solid_badge" + targetFileType;
 
+
 let alertPathValue = "M26.85,1.14,21.13,11A1.28,1.28,0,0,0,22.23,13H33.68A1.28,1.28,0,0,0,34.78,11L29.06,1.14A1.28,1.28,0,0,0,26.85,1.14Z";
 
 
 const pathToIcons = process.argv[2];
+const pathToShapesDir = path.join(__dirname, "../src/clarity-icons/shapes");
 
 /*
  * @desk read directory content and return list of files names
@@ -47,6 +49,21 @@ let readDirContent = (rawPath) => {
 
     });
 
+};
+
+let writeToFile = (fiePath, content) => {
+
+    return new Promise((resolve, reject) => {
+
+        fs.writeFile(fiePath, content, (err) => {
+
+            if (err) reject(err);
+
+            resolve(fiePath);
+
+        });
+
+    });
 };
 
 /*
@@ -313,9 +330,9 @@ readDirContent(pathToIcons)
 
         });
 
-        //console.log(JSON.stringify(icons));
 
-        process.stdout.write(JSON.stringify(icons));
+        return writeToFile(path.join(pathToShapesDir, "new-shapes.ts"), JSON.stringify(icons).replace(/"<svg/g, "`<svg").replace(/\/svg>"/g, "/svg>`\n\n"));
+        ///process.stdout.write(JSON.stringify(icons));
 
 
     })
