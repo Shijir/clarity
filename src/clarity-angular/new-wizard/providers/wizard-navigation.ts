@@ -1,13 +1,16 @@
 import {
     Injectable,
     OnDestroy,
-    TemplateRef
+    TemplateRef,
+    QueryList
 } from "@angular/core";
 
 import { Subject, Observable } from "rxjs";
 import { Subscription } from "rxjs/Subscription";
 
 import { NewWizardPage } from "../wizard-page";
+import { NewWizardHeaderAction } from "../wizard-header-action";
+
 import { PageCollectionService } from "./page-collection";
 import { ButtonHubService } from "./button-hub";
 
@@ -295,17 +298,21 @@ export class WizardNavigationService implements OnDestroy {
         this.setCurrentPage(allPages[lastCompletedPageIndex]);
     }
 
-    public wizardHasHeaderActions(): boolean {
-// TODO: NEED WIZARD TO LINK HEADER ACTIONS HERE AND FOR THIS TO CHECK
-// LENGTH OF CONTENT-CHILDREN...
-        return false;
-    }
-// ###LEFTOFF: NEED TO CREATE clr-wizard-header-action COMPONENT...
+    public wizardHeaderActions: QueryList<NewWizardHeaderAction>;
 
-    public currentPageHasHeaderActions(): boolean {
-// TODO: NEED TO WIRE THIS UP... CHECKING CURRENT PAGE HERE
-        return false;
+    public get wizardHasHeaderActions(): boolean {
+        let wizardHdrActions = this.wizardHeaderActions;
+        if (!wizardHdrActions) {
+            return false;
+        }
+        return wizardHdrActions.toArray().length > 0;
     }
-// ###LEFTOFF: NEED THIS IN CODE TOO...
-//     <!--<template [ngTemplateOutlet]="navService.currentPage.buttons"></template>-->
+
+    public get currentPageHasHeaderActions(): boolean {
+        return this.currentPage.hasHeaderActions;
+    }
+
+    public get displayHeaderActionsWrapper(): boolean {
+        return this.currentPageHasHeaderActions || this.wizardHasHeaderActions;
+    }
 }

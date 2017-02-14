@@ -14,14 +14,28 @@
     (clrModalOpenChange)="cancel()">
 
     <h3 class="modal-title">
-       <template [ngTemplateOutlet]="navService.currentPageTitle"></template>
-       <!-- FIXME: we will need actions area here... -->
+        <template [ngTemplateOutlet]="navService.currentPageTitle"></template>
+
         <div *ngIf="navService.wizardHasHeaderActions">
-            <!--<ng-content select="clr-wizard-button"></ng-content>-->
+            <ng-content select="clr-wizard-header-actions"></ng-content>
         </div>
         <div *ngIf="navService.currentPageHasHeaderActions">
-            <!--<template [ngTemplateOutlet]="navService.currentPage.buttons"></template>-->
+            <template [ngTemplateOutlet]="navService.currentPage.headerActions"></template>
         </div>
+<!--
+    public get wizardHasHeaderActions(): boolean {
+        return this.wizardHeaderActions.toArray().length > 0;
+    }
+
+    public get currentPageHasHeaderActions(): boolean {
+        return this.currentPage.hasHeaderActions;
+    }
+
+    public get displayHeaderActionsWrapper(): boolean {
+        return this.currentPageHasHeaderActions || this.wizardHasHeaderActions;
+    }
+-->
+
     </h3>
 
     <div class="modal-body clr-wizard-content">
@@ -39,7 +53,6 @@
     </div>
     <div class="modal-footer clr-wizard-footer">
         <!-- TODO: FIGURE OUT HOW TO NOT HAVE THE WRAPPER AROUND BUTTONS... V2/CLEANUP -->
-        <!-- TODO: USE SAME ARCH FOR HEADER ACTIONS VVVVV -->
         <div *ngIf="!navService.currentPage.hasButtons">
             <ng-content select="clr-wizard-button"></ng-content>
         </div>

@@ -147,4 +147,8 @@ export class WizardSimple {
         this.wizardMedium.open();
         // SPECME... THIS TYPE OF CODE JUMPS TO A SPECIFIED PAGE...
     }
+
+    public headerActionClicked(): void {
+        console.log("Thanks for clicking the header action!");
+    }
 }

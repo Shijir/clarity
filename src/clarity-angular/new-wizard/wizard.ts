@@ -13,10 +13,12 @@ import {
     // HostListener,
     OnInit,
     OnDestroy,
-    AfterViewInit
+    AfterViewInit,
+    AfterContentInit
 } from "@angular/core";
 import { Subscription } from "rxjs/Subscription";
 import { NewWizardPage } from "./wizard-page";
+import { NewWizardHeaderAction } from "./wizard-header-action";
 
 // providers
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -39,7 +41,7 @@ import { ButtonHubService } from "./providers/button-hub";
         "[class.wizard-xl]": "size == 'xl'"
     }
 })
-export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
+export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
 
     constructor(public navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
@@ -101,6 +103,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         new EventEmitter<any>(false);
 
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
+    @ContentChildren(NewWizardHeaderAction) public headerActions: QueryList<NewWizardHeaderAction>;
 
 // done
     @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
@@ -148,6 +151,14 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit() {
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.hasAltCancel;
+
+        this.navService.wizardHeaderActions = this.headerActions;
+
+        console.log("I have this many header actions!", this.headerActions.toArray().length);
+    }
+
+    public ngAfterContentInit() {
+        console.log("Now, I have this many header actions!", this.headerActions.toArray().length);
     }
 
     // The current page

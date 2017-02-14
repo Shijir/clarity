@@ -11,7 +11,6 @@ import {
     EventEmitter
 } from "@angular/core";
 
-import { NewWizardPage } from "./wizard-page";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { ButtonHubService } from "./providers/button-hub";
 
@@ -43,11 +42,11 @@ import { ButtonHubService } from "./providers/button-hub";
     styles: ['[aria-hidden="true"] { display: none; }']
 })
 export class NewWizardButton {
-    @Input("type") private type: string = "";
+    @Input("type") public type: string = "";
 
-    @Input("clrWizardButtonDisabled") private disabled: boolean = false;
+    @Input("clrWizardButtonDisabled") public disabled: boolean = false;
 
-    @Input("clrWizardButtonHidden") private hidden: boolean = false;
+    @Input("clrWizardButtonHidden") public hidden: boolean = false;
 
     @Input("clrWizardButtonOkToClick") public testBeforeClick: boolean = true;
 
@@ -56,11 +55,6 @@ export class NewWizardButton {
         new EventEmitter<boolean>(false);
 
     constructor(private navService: WizardNavigationService, private buttonService: ButtonHubService) {
-    }
-
-    private get page(): NewWizardPage {
-        // buttons only ever care about the current page
-        return this.navService.currentPage;
     }
 
     private get isCancel(): boolean {
@@ -96,8 +90,8 @@ export class NewWizardButton {
     private get isDisabled(): boolean {
         // dealing with negatives here. cognitively easier to think of it like this...
         let disabled = true;
-        let page = this.page;
         let nav = this.navService;
+        let page = this.navService.currentPage;
 
         if (this.disabled) {
             return true;
@@ -108,9 +102,9 @@ export class NewWizardButton {
             return !disabled;
         }
 
-        if (this.isPrevious && nav.currentPageIsFirst) {
-            return disabled;
-        }
+        // if (this.isPrevious && nav.currentPageIsFirst) {
+        //     return disabled;
+        // }
 
         if (this.isDanger && !page.readyToComplete) {
             return disabled;

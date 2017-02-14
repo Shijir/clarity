@@ -31,6 +31,10 @@
     <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
     <clr-wizard-button [type]="'finish'">Fait Accompli</clr-wizard-button>
 
+    <clr-wizard-header-action (click)="headerActionClicked($event)">
+        <clr-icon shape="cloud" class="is-solid"></clr-icon>
+    </clr-wizard-header-action>
+
     <clr-newwizard-page 
         (clrWizardPageDanger)="handleDangerClick($event)"
         (clrWizardPagePrevious)="highVoltage()"
@@ -39,14 +43,6 @@
 
         <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
         <template pageNavTitle>Title for Page 1</template> <!-- optional -->
-
-        <!-- TODO: TREAT HEADER ACTIONS JUST LIKE THE BUTTONS... FALLBACK... AND THEN SPECIFICS... -->
-        <!--<clr-wizard-headerAction>
-            <a href="#" title="click me for help">HELP ICON</a>
-        </clr-wizard-headerActions>
-        <clr-wizard-headerAction>
-            <a href="#" title="click me for something else">WTF ICON</a>
-        </clr-wizard-headerActions>-->
 
         <p>Content for step 1</p>
         <p>
@@ -60,6 +56,16 @@
                 Force reset on close
             </label>
         </p>
+
+        <!-- CUSTOME HDR ACTIONS GO HERE -->
+        <template pageHeaderActions>
+            <clr-wizard-header-action (click)="headerActionClicked($event)">
+                <clr-icon shape="bell" class="has-badge"></clr-icon>
+            </clr-wizard-header-action>
+            <clr-wizard-header-action (click)="headerActionClicked($event)">
+                <clr-icon shape="warning"></clr-icon>
+            </clr-wizard-header-action>
+        </template>
 
         <!-- CUSTOME BUTTONS GO HERE -->
         <template pageButtons>
