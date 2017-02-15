@@ -18,26 +18,12 @@
 
         <div class="modal-header-actions-wrapper" *ngIf="navService.displayHeaderActionsWrapper">
             <div *ngIf="navService.showWizardHeaderActions">
-                <ng-content select="clr-wizard-header-actions"></ng-content>
+                <ng-content select="clr-wizard-header-action"></ng-content>
             </div>
             <div *ngIf="navService.currentPageHasHeaderActions">
                 <template [ngTemplateOutlet]="navService.currentPage.headerActions"></template>
             </div>
         </div>
-<!--
-    public get wizardHasHeaderActions(): boolean {
-        return this.wizardHeaderActions.toArray().length > 0;
-    }
-
-    public get currentPageHasHeaderActions(): boolean {
-        return this.currentPage.hasHeaderActions;
-    }
-
-    public get displayHeaderActionsWrapper(): boolean {
-        return this.currentPageHasHeaderActions || this.wizardHasHeaderActions;
-    }
--->
-
     </h3>
 
     <div class="modal-body clr-wizard-content">
