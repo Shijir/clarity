@@ -277,10 +277,10 @@ const coreShapes: any = {
             <path d="M11.93,11a3,3,0,1,0-3,3A3,3,0,0,0,11.93,11Zm-4.6,0a1.6,1.6,0,1,1,1.6,1.6A1.6,1.6,0,0,1,7.33,11Z" class="clr-i-outline--badged clr-i-outline-path-1--badged"/>   
             <path d="M17.38,20.77l-4-4a1,1,0,0,0-1.41,0L5.92,22.9v2.83l6.79-6.79L16,22.18l-3.75,3.75H15l8.45-8.45L30,24V21.18l-5.81-5.81a1,1,0,0,0-1.41,0Z" class="clr-i-outline--badged clr-i-outline-path-2--badged"/>   
             <path d="M32,13.22V30H4V6H22.5a7.49,7.49,0,0,1,.28-2H4A2,2,0,0,0,2,6V30a2,2,0,0,0,2,2H32a2,2,0,0,0,2-2V12.34A7.45,7.45,0,0,1,32,13.22Z" class="clr-i-outline--badged clr-i-outline-path-3--badged"/>    
-            <circle cx="30" cy="6" r="5" fill="#e62700" class="clr-i-outline--badged clr-i-outline-path-4--badged"/>
+            <circle cx="30" cy="6" r="5" class="clr-i-outline--badged clr-i-outline-path-4--badged clr-i-badge"/>
             <path d="M32,4H4A2,2,0,0,0,2,6V30a2,2,0,0,0,2,2H32a2,2,0,0,0,2-2V6A2,2,0,0,0,32,4ZM8.92,8a3,3,0,1,1-3,3A3,3,0,0,1,8.92,8ZM6,27V22.9l6-6.08a1,1,0,0,1,1.41,0L16,19.35,8.32,27Zm24,0H11.15l6.23-6.23,5.4-5.4a1,1,0,0,1,1.41,0L30,21.18Z" class="clr-i-solid clr-i-solid-path-1"/>
             <path d="M30,13.5A7.48,7.48,0,0,1,22.78,4H4A2,2,0,0,0,2,6V30a2,2,0,0,0,2,2H32a2,2,0,0,0,2-2V12.34A7.46,7.46,0,0,1,30,13.5ZM8.92,8a3,3,0,1,1-3,3A3,3,0,0,1,8.92,8ZM6,27V22.9l6-6.08a1,1,0,0,1,1.41,0L16,19.35,8.32,27Zm24,0H11.15l6.23-6.23,5.4-5.4a1,1,0,0,1,1.41,0L30,21.18Z" class="clr-i-solid--badged clr-i-solid-path-1--badged"/>    
-            <circle cx="30" cy="6" r="5" fill="#e62700" class="clr-i-solid--badged clr-i-solid-path-2--badged"/>
+            <circle cx="30" cy="6" r="5" class="clr-i-solid--badged clr-i-solid-path-2--badged clr-i-badge"/>
         </svg>`,
 
 
@@ -304,6 +304,38 @@ const coreShapes: any = {
 
                 <path class="clr-i-solid--alerted clr-i-solid-path-1--alerted" d="M29,16.66a10.15,10.15,0,0,0,.2-1.26h-7A3.68,3.68,0,0,1,19,9.89l3-5.21A10.19,10.19,0,0,0,8.91,13.36,10,10,0,0,0,1,23.1C1,28.19,5.62,33,10.57,33H27.09C31.28,33,35,29.1,35,24.65A8.29,8.29,0,0,0,29,16.66Z"/>
                 <path class="clr-i-solid--alerted clr-i-solid-path-2--alerted clr-i-alert" d="M26.85,1.14,21.13,11A1.28,1.28,0,0,0,22.23,13H33.68A1.28,1.28,0,0,0,34.78,11L29.06,1.14A1.28,1.28,0,0,0,26.85,1.14Z"/>
+            </svg>
+        `,
+    "ellipses-vertical": `
+            <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" class="can-badge"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>ellipses-vertical</title>
+
+                <circle cx="18" cy="8.18" r="2.18" class="clr-i-outline clr-i-outline-path-1"/>
+                <circle cx="18" cy="18" r="2.18" class="clr-i-outline clr-i-outline-path-2"/>
+                <circle cx="18" cy="27.82" r="2.18" class="clr-i-outline clr-i-outline-path-3"/>
+                
+                <circle cx="18" cy="8.18" r="2.18" class="clr-i-outline--badged clr-i-outline-path-1--badged"/>
+                <circle cx="18" cy="18" r="2.18" class="clr-i-outline--badged clr-i-outline-path-2--badged"/>
+                <circle cx="18" cy="27.82" r="2.18" class="clr-i-outline--badged clr-i-outline-path-3--badged"/>
+                <circle cx="30" cy="6" r="5" class="clr-i-outline--badged clr-i-outline-path-4--badged clr-i-badge"/>
+
+            </svg>
+        `,
+    "ellipses-horizontal": `
+            <svg version="1.1" viewBox="0 0 36 36" preserveAspectRatio="xMidYMid meet" class="can-badge"
+                xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <title>ellipses-horizontal</title>
+
+                <circle cx="27.82" cy="22.18" r="2.18" class="clr-i-outline clr-i-outline-path-1"/>
+                <circle cx="18" cy="22.18" r="2.18" class="clr-i-outline clr-i-outline-path-2"/>
+                <circle cx="8.18" cy="22.18" r="2.18" class="clr-i-outline clr-i-outline-path-3"/>
+                
+                <circle cx="27.82" cy="22.18" r="2.18" class="clr-i-outline--badged clr-i-outline-path-1--badged"/>
+                <circle cx="18" cy="22.18" r="2.18" class="clr-i-outline--badged clr-i-outline-path-2--badged"/>
+                <circle cx="8.18" cy="22.18" r="2.18" class="clr-i-outline--badged clr-i-outline-path-3--badged"/>
+                <circle cx="30" cy="6" r="5" class="clr-i-outline--badged clr-i-outline-path-4--badged clr-i-badge"/>
+
             </svg>
         `,
 

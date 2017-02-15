@@ -25,6 +25,49 @@ let technologyShapes = Object.keys(TechnologyShapes);
 })
 export class IconSelectionDemo {
 
+    commonPath = "clarity-icons/shapes/svg-source/";
+    coreSetLink = this.commonPath + "core-shapes.zip";
+    essentialSetLink = this.commonPath + "essential-shapes.zip";
+    socialSetLink = this.commonPath + "social-shapes.zip";
+    technologySetLink = this.commonPath + "technology-shapes.zip";
+    allSetsLink = this.commonPath + "all-shapes.zip";
+
+
+    previewClasses: any = {
+        "is-solid": false,
+        "has-alert": false,
+        "has-badge": false
+    };
+
+
+    onChangeSolid(event: any): void {
+
+        this.previewClasses[ "is-solid" ] = event.target.checked;
+    }
+
+    onChangeStatus(event: any): void {
+
+        let radioId = event.target.getAttribute("id");
+
+        if (radioId === "alertRadio") {
+
+            this.previewClasses[ "has-badge" ] = false;
+            this.previewClasses[ "has-alert" ] = true;
+
+        } else if ((radioId === "badgeRadio")) {
+
+            this.previewClasses[ "has-alert" ] = false;
+            this.previewClasses[ "has-badge" ] = true;
+
+        } else {
+
+            this.previewClasses[ "has-alert" ] = false;
+            this.previewClasses[ "has-badge" ] = false;
+
+        }
+    }
+
+
     hideShapesFromCore: string[] = [ "vm-bug" ];
 
     coreShapes: string[] = coreShapes.filter((shape) => {
