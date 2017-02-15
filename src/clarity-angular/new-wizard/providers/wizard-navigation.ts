@@ -312,6 +312,10 @@ export class WizardNavigationService implements OnDestroy {
         return this.currentPage.hasHeaderActions;
     }
 
+    public get showWizardHeaderActions(): boolean {
+        return !this.currentPageHasHeaderActions && this.wizardHasHeaderActions;
+    }
+
     public get displayHeaderActionsWrapper(): boolean {
         return this.currentPageHasHeaderActions || this.wizardHasHeaderActions;
     }

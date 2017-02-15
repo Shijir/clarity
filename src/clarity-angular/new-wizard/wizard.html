@@ -16,11 +16,13 @@
     <h3 class="modal-title">
         <template [ngTemplateOutlet]="navService.currentPageTitle"></template>
 
-        <div *ngIf="navService.wizardHasHeaderActions">
-            <ng-content select="clr-wizard-header-actions"></ng-content>
-        </div>
-        <div *ngIf="navService.currentPageHasHeaderActions">
-            <template [ngTemplateOutlet]="navService.currentPage.headerActions"></template>
+        <div class="modal-header-actions-wrapper" *ngIf="navService.displayHeaderActionsWrapper">
+            <div *ngIf="navService.showWizardHeaderActions">
+                <ng-content select="clr-wizard-header-actions"></ng-content>
+            </div>
+            <div *ngIf="navService.currentPageHasHeaderActions">
+                <template [ngTemplateOutlet]="navService.currentPage.headerActions"></template>
+            </div>
         </div>
 <!--
     public get wizardHasHeaderActions(): boolean {
