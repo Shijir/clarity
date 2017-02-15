@@ -66,21 +66,15 @@ export class NewWizardPage implements OnInit, OnDestroy {
 // TODO... error event, maybe;
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
 
-// HIDDEN AND SKIPPED ARE THE SAME THING; GET RID OF THIS
-// TODO: NOTE BREAKING CHANGE, NOW NG-IF
+// TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
     // @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
     // @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
-
-    // EventEmitter which is emitted on open/close of the wizard.
-    @Output("clrWizardPageNowCurrent") pageCurrentChanged: EventEmitter < any > =
-        new EventEmitter<any>(false);
 
 // TODO: SHOULD USE A CUSTOM BUTTON INSTEAD. NOTE BREAKING CHANGE...
     // User can bind an event handler for onCommit of the main content
     @Output("clrWizardPageOnCommit") onCommit: EventEmitter < any > =
         new EventEmitter<any>(false);
 
-// TODO: USE ONE HOOK OR THE OTHER ('ONLOAD' OR 'NOWCURRENT'). KEEP ONLOAD.
     // User can bind an event handler for onLoad of the main content
     @Output("clrWizardPageOnLoad") onLoad: EventEmitter < any > = new EventEmitter(false);
 
@@ -218,7 +212,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     public makeCurrent(): void {
         this.navService.setCurrentPage(this);
-        this.pageCurrentChanged.emit();
+        this.onLoad.emit();
     }
 
     private _hasAltCancel: boolean = false;

@@ -35,7 +35,6 @@ import { ButtonHubService } from "./providers/button-hub";
             <ng-content></ng-content>
         </button>
     `,
-    // IS HIDDEN <= class that does display:none [aria-hidden="true"]...?
     host: {
         "class": "clr-wizard-btn-wrapper"
     },

@@ -13,8 +13,7 @@ import {
     // HostListener,
     OnInit,
     OnDestroy,
-    AfterViewInit,
-    AfterContentInit
+    AfterViewInit
 } from "@angular/core";
 import { Subscription } from "rxjs/Subscription";
 import { NewWizardPage } from "./wizard-page";
@@ -24,12 +23,13 @@ import { NewWizardHeaderAction } from "./wizard-header-action";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { PageCollectionService } from "./providers/page-collection";
 import { ButtonHubService } from "./providers/button-hub";
+import { HeaderActionService } from "./providers/header-actions";
 
 // TODO: remove "NEW" when finishing up
 
 @Component({
     selector: "clr-newwizard",
-    providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ],
+    providers: [ WizardNavigationService, PageCollectionService, ButtonHubService, HeaderActionService ],
     templateUrl: "./wizard.html",
     host: {
 // TODO: REMOVE ID?
@@ -41,20 +41,19 @@ import { ButtonHubService } from "./providers/button-hub";
         "[class.wizard-xl]": "size == 'xl'"
     }
 })
-export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
+export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(public navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
-                public buttonService: ButtonHubService) {
+                public buttonService: ButtonHubService,
+                public headerActionService: HeaderActionService) {
 
         this.goNextSubscription = this.navService.movedToNextPage.subscribe(() => {
-// TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
-            // console.log("I, wizard, went to the next page!");
+            this.onMoveNext.emit();
         });
 
         this.goPreviousSubscription = this.navService.movedToPreviousPage.subscribe(() => {
-// TODO: HOOK HERE DIRECTLY FOR WIZARD-LEVEL OBSERVER
-            // console.log("I, wizard, went to the previous page!");
+            this.onMovePrevious.emit();
         });
 
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
@@ -65,11 +64,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContent
         this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
             this.wizardFinished.emit();
             this.close();
-        });
-
-// TOREMOVE: WE DON'T NEED AN OUTPUT FOR ON/AFTER RESET
-        this.wizardResetSubscription = this.navService.wizardReset.subscribe(() => {
-            this.onReset.emit();
         });
 
         this.wizardAltCancelSubscription = this.navService.makeWizardDoAltCancel.subscribe(() => {
@@ -94,11 +88,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContent
         new EventEmitter<any>(false);
 
 // done
-// TOREMOVE: ARE WE GETTING RID OF THIS ONE?
-    @Output("clrWizardOnReset") onReset: EventEmitter<any> =
-        new EventEmitter<any>(false);
-
-// done
     @Output("clrWizardOnFinish") wizardFinished: EventEmitter<any> =
         new EventEmitter<any>(false);
 
@@ -107,6 +96,12 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContent
 
 // done
     @Output("clrWizardCurrentPageChanged") currentPageChanged: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
+    @Output("clrWizardOnNext") onMoveNext: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
+    @Output("clrWizardOnPrevious") onMovePrevious: EventEmitter<any> =
         new EventEmitter<any>(false);
 
     @Output("clrWizardAltCancel") customCancelEvent: EventEmitter < any > =
@@ -152,13 +147,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContent
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.hasAltCancel;
 
-        this.navService.wizardHeaderActions = this.headerActions;
-
-        console.log("I have this many header actions!", this.headerActions.toArray().length);
-    }
-
-    public ngAfterContentInit() {
-        console.log("Now, I have this many header actions!", this.headerActions.toArray().length);
+        this.headerActionService.wizardHeaderActions = this.headerActions;
     }
 
     // The current page
@@ -225,9 +214,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContent
         this.pageCollection.reset();
     }
 
-// TOASK: CAN KEEP PAGE ONLOAD BUT IT SHOULD BE CALLED ON THE PAGE, NOT HERE
-// IF USING NG-IFS SHOULD BE FINE?
-
+// TOREMOVE: NOTE REMOVAL. SHOULDN'T BE A BREAKING CHANGE
+    // this is a straggler from the old tabs dependency which accepted a stepnav
+    // item and made its corresponding page the current page.
     // selectTab --
     //
     // Base class function overridden to call the onLoad event emitter

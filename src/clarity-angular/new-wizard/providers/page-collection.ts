@@ -189,7 +189,8 @@ export class PageCollectionService {
         page.onCommit.emit();
     }
 
-// TOLOOKUP: MAYBE NOT NEEDED?
+    // used by the navService to navigate back to first possible step after 
+    // pages are reset
     private _pagesReset = new Subject<boolean>();
     public get pagesReset(): Observable<boolean> {
         return this._pagesReset.asObservable();
@@ -199,6 +200,5 @@ export class PageCollectionService {
         this.pagesAsArray.forEach((page: NewWizardPage) => {
             page.completed = false;
         });
-        this._pagesReset.next();
     }
 }

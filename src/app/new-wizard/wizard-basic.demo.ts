@@ -148,7 +148,8 @@ export class WizardSimple {
         // SPECME... THIS TYPE OF CODE JUMPS TO A SPECIFIED PAGE...
     }
 
-    public headerActionClicked(): void {
+    public headerActionClicked(headerActionId: string): void {
+        console.log("What did we get?", headerActionId);
         console.log("Thanks for clicking the header action!");
     }
 }

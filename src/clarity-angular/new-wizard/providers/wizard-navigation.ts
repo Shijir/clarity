@@ -1,15 +1,13 @@
 import {
     Injectable,
     OnDestroy,
-    TemplateRef,
-    QueryList
+    TemplateRef
 } from "@angular/core";
 
 import { Subject, Observable } from "rxjs";
 import { Subscription } from "rxjs/Subscription";
 
 import { NewWizardPage } from "../wizard-page";
-import { NewWizardHeaderAction } from "../wizard-header-action";
 
 import { PageCollectionService } from "./page-collection";
 import { ButtonHubService } from "./button-hub";
@@ -75,7 +73,6 @@ export class WizardNavigationService implements OnDestroy {
 
         this.pagesResetSubscription = this.pageCollection.pagesReset.subscribe(() => {
             this.setLastEnabledPageCurrent();
-            this._wizardReset.next();
             // SPECME
         });
     }
@@ -128,12 +125,6 @@ export class WizardNavigationService implements OnDestroy {
         return this._wizardFinished.asObservable();
     }
 
-// TOREMOVE: I THINK THIS IS GOING AWAY...
-    private _wizardReset = new Subject<boolean>();
-    public get wizardReset(): Observable<boolean> {
-        return this._wizardReset.asObservable();
-    }
-
     // next --
     //
     // When called, after successful validation, the wizard will move to the
@@ -159,12 +150,11 @@ export class WizardNavigationService implements OnDestroy {
 
         // catch errant null or undefineds that creep in
         if (nextPage) {
-            this._movedToNextPage.next(true);
             this.setCurrentPage(nextPage);
+            this._movedToNextPage.next(true);
             // SPECME
         } else {
-// THROW ERROR HERE?! NEXT SHOULD NOT HAVE WORKED...
-            return;
+            throw new Error("The wizard has no next page to go to.");
         }
         // SPECME
     }
@@ -296,27 +286,5 @@ export class WizardNavigationService implements OnDestroy {
         // SPECME
 
         this.setCurrentPage(allPages[lastCompletedPageIndex]);
-    }
-
-    public wizardHeaderActions: QueryList<NewWizardHeaderAction>;
-
-    public get wizardHasHeaderActions(): boolean {
-        let wizardHdrActions = this.wizardHeaderActions;
-        if (!wizardHdrActions) {
-            return false;
-        }
-        return wizardHdrActions.toArray().length > 0;
-    }
-
-    public get currentPageHasHeaderActions(): boolean {
-        return this.currentPage.hasHeaderActions;
-    }
-
-    public get showWizardHeaderActions(): boolean {
-        return !this.currentPageHasHeaderActions && this.wizardHasHeaderActions;
-    }
-
-    public get displayHeaderActionsWrapper(): boolean {
-        return this.currentPageHasHeaderActions || this.wizardHasHeaderActions;
     }
 }

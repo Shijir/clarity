@@ -31,7 +31,7 @@
     <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
     <clr-wizard-button [type]="'finish'">Fait Accompli</clr-wizard-button>
 
-    <clr-wizard-header-action (click)="headerActionClicked($event)">
+    <clr-wizard-header-action (actionClicked)="headerActionClicked($event)">
         <clr-icon shape="cloud" class="is-solid"></clr-icon>
     </clr-wizard-header-action>
 
@@ -59,10 +59,10 @@
 
         <!-- CUSTOME HDR ACTIONS GO HERE -->
         <template pageHeaderActions>
-            <clr-wizard-header-action (click)="headerActionClicked($event)">
+            <clr-wizard-header-action (actionClicked)="headerActionClicked($event)" id="bell">
                 <clr-icon shape="bell" class="has-badge"></clr-icon>
             </clr-wizard-header-action>
-            <clr-wizard-header-action (click)="headerActionClicked($event)">
+            <clr-wizard-header-action (actionClicked)="headerActionClicked($event)" id="warning">
                 <clr-icon shape="warning"></clr-icon>
             </clr-wizard-header-action>
         </template>
