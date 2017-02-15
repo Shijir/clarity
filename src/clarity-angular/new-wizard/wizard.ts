@@ -293,19 +293,19 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContent
     // Base class function overridden to call the onLoad event emitter
     // selectTab(wizardNav: WizardStep): void {
     // selectTab(wizardNav: any): void {
-        // super.selectTab(wizardNav);
+    // super.selectTab(wizardNav);
 
-        // let page: WizardPage = this.currentTabContent as WizardPage;
-        // let page: any = {};
-        // this.currentPage = page;
-        // page.onLoad.emit(false);
+    // let page: WizardPage = this.currentTabContent as WizardPage;
+    // let page: any = {};
+    // this.currentPage = page;
+    // page.onLoad.emit(false);
 
-        // // Toggles next and finish button
-        // let totalSteps: number = this.tabLinks.length - 1;
-        // // this.isLast = this.currentTabIndex === totalSteps;
-        // // this.isFirst = this.currentTabIndex === 0;
-        // this.isLast = 1 === totalSteps;
-        // this.isFirst = 0 === 0;
+    // // Toggles next and finish button
+    // let totalSteps: number = this.tabLinks.length - 1;
+    // // this.isLast = this.currentTabIndex === totalSteps;
+    // // this.isFirst = this.currentTabIndex === 0;
+    // this.isLast = 1 === totalSteps;
+    // this.isFirst = 0 === 0;
     // }
 
 // TOREMOVE: REPLACED BY NGIF -- NOTE BREAKING CHANGE

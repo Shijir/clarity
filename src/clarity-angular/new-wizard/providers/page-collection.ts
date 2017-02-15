@@ -52,17 +52,20 @@ export class PageCollectionService {
         }
         // SPECME
 
-        return this.pagesAsArray[pageCount - 1];
+        return this.pagesAsArray[ pageCount - 1 ];
         // SPECME
     }
 
     public get firstPage(): NewWizardPage {
+
+        /*@shijir: it looks inconsistent with the way the pageCount is checked in lastPage()?
+         * */
         if (!this.pagesCount) {
             return;
         }
         // SPECME
 
-        return this.pagesAsArray[0];
+        return this.pagesAsArray[ 0 ];
         // SPECME
     }
 
@@ -77,7 +80,7 @@ export class PageCollectionService {
         let pageArrayLastIndex: number = (pageArray && pageArray.length > 1) ? pageArray.length - 1 : 0;
 
         if (index < 0) {
-            throw new Error("Cannot retrieve page with index of " + index);
+            throw new Error("Cannot retrieve page with index of " + index + ".");
         }
         // SPECME
 
@@ -86,7 +89,7 @@ export class PageCollectionService {
         }
         // SPECME
 
-        return this.pagesAsArray[index];
+        return this.pagesAsArray[ index ];
         // SPECME
     }
 
@@ -110,44 +113,44 @@ export class PageCollectionService {
         } else if (foundPagesCount < 1) {
             throw new Error("No page can be found with the id " + requestedPageId + ".");
         } else {
-            return results[0];
+            return results[ 0 ];
         }
         // SPECME
     }
 
     public pageRange(start: number, end: number): NewWizardPage[] {
-        let pages: NewWizardPage[] = [];
 
-        // make sure to test that this catches negative numbers
-        if (!start) {
+        //check if it equals falsy, but not zero
+        if (start !== 0 && !start) {
+
             return [];
         }
-        // SPECME
 
-        pages = this.pagesAsArray;
+        //check if it equals falsy, but not zero
+        if (end !== 0 && !end) {
 
-        if (!end) {
-            end = pages.length;
+            return [];
         }
-        // SPECME
 
-        if (start === end) {
-            // just return the one page they want
-            pages.push(this.getPageByIndex(start));
-            return pages;
+        // if at least one of the arguments are negative, return empty array.
+        if (start < 0 || end < 0) {
+
+            return [];
         }
-        // SPECME
 
-        // slice end does not include item referenced by end index, which is weird for users
-        // incrementing end index here to correct that so users and other methods
-        // don't have to think about it
-        end = end + 1;
-        // SPECME
+        // if the start index is greater than the ending index, return empty array.
+        if (start > end) {
 
-        // slice does not return the last one in the range but it does include the first one
-        // does not modify original array
-        return pages.slice(start, end);
-        // SPECME
+            return [];
+        }
+
+        // pass only if there is at least one wizard page
+        if (this.pagesCount === 0) {
+
+            return [];
+        }
+
+        return this.pagesAsArray.slice(start, end + 1);
     }
 
     public getPageRangeFromPages(page: NewWizardPage, otherPage: NewWizardPage): NewWizardPage[] {
@@ -197,7 +200,7 @@ export class PageCollectionService {
         let pageIdParts = pageId.split("-").reverse();
         // SPECME^ (especially with userdefined page ids with dashes in them)
 
-        pageIdParts[1] = "step";
+        pageIdParts[ 1 ] = "step";
         return pageIdParts.reverse().join("-");
     }
 
