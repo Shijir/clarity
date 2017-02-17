@@ -32,8 +32,6 @@ import { HeaderActionService } from "./providers/header-actions";
     providers: [ WizardNavigationService, PageCollectionService, ButtonHubService, HeaderActionService ],
     templateUrl: "./wizard.html",
     host: {
-// TODO: REMOVE ID?
-        "[id]": "id",
         "[class.clr-wizard]": "true",
         "[class.main-container]": "true", // <= ???
         "[class.wizard-md]": "size == 'md'",
@@ -104,23 +102,19 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Output("clrWizardOnPrevious") onMovePrevious: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    @Input("clrWizardPreventDefaultCancel") stopCancel: boolean = false;
+
     @Output("clrWizardAltCancel") customCancelEvent: EventEmitter < any > =
         new EventEmitter(false);
 
-    private _hasAltCancel: boolean = false;
     public get hasAltCancel(): boolean {
-        return this._hasAltCancel;
+        return this.stopCancel;
     }
 
     public ngOnInit(): void {
         this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
             this.currentPageChanged.emit();
         });
-
-// TOFIX? EventEmitter.observers may not be around. could be removed at any time. do we want to stick with this?
-// only public method on NG team's custom implementation is emit()... 
-// CREATE NEW INPUTS SO USERS CAN SET THEM TO TRUE
-        this._hasAltCancel = this.customCancelEvent.observers.length > 0;
     }
 
     private goNextSubscription: Subscription;
@@ -142,7 +136,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.wizardResetSubscription.unsubscribe();
     }
 
-// TODO: TEST WIZARD AND PAGE ALTCANCEL...
     public ngAfterViewInit() {
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.hasAltCancel;

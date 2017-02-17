@@ -82,15 +82,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
         new EventEmitter(false);
 
-// TODO: moving some of this work to button hub
-    // Emitters button events
-    @Output("clrWizardPageNext") nextButtonClicked: EventEmitter < any > =
-        new EventEmitter(false);
-
-// TODO: DO WE EVEN USE THIS?
-    @Output("clrWizardPageCancel") cancelButtonClicked: EventEmitter < any > =
-        new EventEmitter(false);
-
     // This output subverts the default cancel routine at the page level.
     // If the wizard is cancelled and this is the current page, then the wizard
     // will perform this action instead of the default cancel.
@@ -115,19 +106,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageCustomButton") customButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
-    // @Input("clrWizardPagePreventDefault")
-    // TOBREAK: this input was removed. use ngIf instead. note breaking change.
-
-    // private doSkippedChange(value: boolean) {
-    //     this._preventDefault = this._pageInactive = value;
-    //     this.skippedChange.emit(value);
-    // }
-
     private previousButtonSubscription: Subscription;
-
-// TODO?: UPDATE PAGE WITH EVENT THAT NOTES WHEN PAGE BECOMES AVAILABLE (ONLOAD - with using ngIf 
-// may need to call a pageready event (onLoad) from the page collection service)
-// skippedChange ^ or other event too... deprecate "skipped"
 
     // If our host has an ID attribute, we use this instead of our index.
     @Input("id")
@@ -215,22 +194,29 @@ export class NewWizardPage implements OnInit, OnDestroy {
         this.onLoad.emit();
     }
 
-    private _hasAltCancel: boolean = false;
+    @Input("clrWizardPagePreventDefaultCancel") stopCancel: boolean = false;
+
     public get hasAltCancel(): boolean {
-        return this._hasAltCancel;
+        return this.stopCancel;
     }
+
 
     public ngOnInit(): void {
         if (!this.navService.currentPage) {
             this.makeCurrent();
         }
         // SPECME
-
-        this._hasAltCancel = this.customCancelEvent.observers.length > 0;
-        // SPECME
     }
 
     public ngOnDestroy(): void {
         this.previousButtonSubscription.unsubscribe();
     }
+
+    // @Input("clrWizardPagePreventDefault")
+    // TOBREAK: this input was removed. use ngIf instead. note breaking change.
+
+    // private doSkippedChange(value: boolean) {
+    //     this._preventDefault = this._pageInactive = value;
+    //     this.skippedChange.emit(value);
+    // }
 }

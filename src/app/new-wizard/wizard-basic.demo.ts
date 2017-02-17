@@ -105,7 +105,7 @@ export class WizardSimple {
     }
 
     public stepThreeCustomCancel(): void {
-        if (confirm("Do you want to close the wizard?")) {
+        if (confirm("Do you want to close the wizard from this page?")) {
             this.wizardMedium.close();
         }
     }

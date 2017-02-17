@@ -207,7 +207,7 @@ export class WizardNavigationService implements OnDestroy {
     public get notifyWizardCancel(): Observable<any> {
         return this._cancelWizard.asObservable();
     }
-// TODO: THIS MAY BE CHANGING BASED ON NG2 ALT-CANCEL CHANGES
+
     public cancel(): void {
         let currentPage = this.currentPage;
 
@@ -216,7 +216,6 @@ export class WizardNavigationService implements OnDestroy {
         } else if (this.wizardHasAltCancel) {
             this._executeAltCancel.next();
         } else {
-            this.currentPage.cancelButtonClicked.emit();
             this._cancelWizard.next();
         }
         // SPECME
