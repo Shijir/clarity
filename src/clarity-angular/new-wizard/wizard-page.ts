@@ -59,16 +59,17 @@ export class NewWizardPage implements OnInit, OnDestroy {
     // Next button disabled
     @Input("clrWizardPageNextDisabled") public nextStepDisabled: boolean;
 
+    // Emitter for Next button and readyToComplete state changes. 
+    // Need to manually call it. Not automagically called.
+    @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
+        new EventEmitter(false);
+
     // Previous button disabled
     @Input("clrWizardPagePagePreviousDisabled") public movePreviousDisabled: boolean = false;
 
-    // Error Flag Raised
-// TODO... error event, maybe; keep dormant and undocumented for now.
-    @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
-
-// TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
-    // @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
-    // @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
+    // overrides cancel from the page level, so you can use an alternate function for 
+    // validation or data-munging with clrWizardPageOnCancel
+    @Input("clrWizardPagePreventDefaultCancel") stopCancel: boolean = false;
 
 // TODO: SHOULD USE A CUSTOM BUTTON INSTEAD. NOTE BREAKING CHANGE...
     // User can bind an event handler for onCommit of the main content
@@ -77,10 +78,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     // User can bind an event handler for onLoad of the main content
     @Output("clrWizardPageOnLoad") onLoad: EventEmitter < any > = new EventEmitter(false);
-
-    // Emitter for Next button state changes
-    @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
-        new EventEmitter(false);
 
     // This output can subvert the default cancel routine at the page level, if
     // used with clrWizardPagePreventDefaultCancel.
@@ -104,6 +101,9 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageCustomButton") customButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
+    @Output("clrWizardPageOnReadyChange") onReadyChange: EventEmitter < any > =
+        new EventEmitter(false);
+
     private previousButtonSubscription: Subscription;
 
     // If our host has an ID attribute, we use this instead of our index.
@@ -119,22 +119,16 @@ export class NewWizardPage implements OnInit, OnDestroy {
         return !this.nextStepDisabled;
     }
 
-// TODO!!! need an errored event for when ready to complete changes
-// do we already have one?
-
     private _complete: boolean = false;
     public get completed(): boolean {
-// TODO!!!: completed needs to be tied to readyToComplete somehow
-// so that we can track when changes to other pages invalidate them
-// do we show errored? or do we just make invalid??
         return this._complete && this.readyToComplete;
-
-// TODEBATE: if i am supposed to show errors then if complete and valid are not the same, show an error
-// EUDES THINKS WE SHOULD UNWIND ERRORS SUCH THAT ERRORS IS ITS OWN INPUT
-// PER EUDES IF A STEP IS INCOMPLETE AND ERRORED, ERRORED WILL NOT show
-// FIRST: AM I GREY OR COLORED?
-// SECOND: AM I GREEN OR RED?
         // SPECME
+
+        // FOR V2: UNWIND COMPLETED, READYTOCOMPLETE, AND ERRORS 
+        // SUCH THAT ERRORS IS ITS OWN INPUT. IF A STEP IS 
+        // INCOMPLETE AND ERRORED, ERRORED WILL NOT SHOW.
+        // FIRST QUESTION: AM I GREY OR COLORED?
+        // SECOND QUESTION: AM I GREEN OR RED?
     }
     public set completed(value: boolean) {
         this._complete = value;
@@ -198,13 +192,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
         this.onLoad.emit();
     }
 
-    @Input("clrWizardPagePreventDefaultCancel") stopCancel: boolean = false;
-
-    public get hasAltCancel(): boolean {
-        return this.stopCancel;
-    }
-
-
     public ngOnInit(): void {
         if (!this.navService.currentPage) {
             this.makeCurrent();
@@ -217,10 +204,19 @@ export class NewWizardPage implements OnInit, OnDestroy {
     }
 
     // @Input("clrWizardPagePreventDefault")
-    // TOBREAK: this input was removed. use ngIf instead. note breaking change.
+// TOBREAK: this input was removed. use ngIf instead. note breaking change.
 
+// TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
     // private doSkippedChange(value: boolean) {
     //     this._preventDefault = this._pageInactive = value;
     //     this.skippedChange.emit(value);
     // }
+
+    // Error Flag Raised
+// TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF. THIS IS JUST AN NGIF. IT ADDS NO FUNCTIONALITY TO THE CODEBASE
+    // @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
+
+// TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
+    // @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
+    // @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
 }

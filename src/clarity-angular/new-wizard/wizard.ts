@@ -105,10 +105,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     @Input("clrWizardPreventDefaultCancel") stopCancel: boolean = false;
 
-    public get hasAltCancel(): boolean {
-        return this.stopCancel;
-    }
-
     public ngOnInit(): void {
         this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
             this.currentPageChanged.emit();
@@ -135,7 +131,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     public ngAfterViewInit() {
         this.pageCollection.pages = this.pages;
-        this.navService.wizardHasAltCancel = this.hasAltCancel;
+        this.navService.wizardHasAltCancel = this.stopCancel;
         this.headerActionService.wizardHeaderActions = this.headerActions;
     }
 
