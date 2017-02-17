@@ -56,11 +56,12 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
             let currentPage = this.navService.currentPage;
 
+            currentPage.pageOnCancel.emit();
+            this.onCancel.emit();
+
             if (!this.stopCancel && !currentPage.stopCancel) {
                 this.close();
             }
-            this.navService.currentPage.pageOnCancel.emit();
-            this.onCancel.emit();
         });
 
         this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
