@@ -63,7 +63,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Input("clrWizardPagePagePreviousDisabled") public movePreviousDisabled: boolean = false;
 
     // Error Flag Raised
-// TODO... error event, maybe;
+// TODO... error event, maybe; keep dormant and undocumented for now.
     @Input("clrWizardPageErrorFlag") public errorFlag: boolean;
 
 // TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
@@ -82,13 +82,11 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
         new EventEmitter(false);
 
-    // This output subverts the default cancel routine at the page level.
-    // If the wizard is cancelled and this is the current page, then the wizard
-    // will perform this action instead of the default cancel.
-    //
-    // You will need to execute actual cancel at some point, however, because this
-    // is a full replacement of the cancel functionality, not a detour.
-    @Output("clrWizardPageAltCancel") customCancelEvent: EventEmitter < any > =
+    // This output can subvert the default cancel routine at the page level, if
+    // used with clrWizardPagePreventDefaultCancel.
+    // You will need to execute actual cancel from your event handler at some point
+    // because this is a full replacement of the cancel functionality, not a detour.
+    @Output("clrWizardPageOnCancel") pageOnCancel: EventEmitter < any > =
         new EventEmitter(false);
 
     @Output("clrWizardPageFinish") finishButtonClicked: EventEmitter < any > =
@@ -130,6 +128,12 @@ export class NewWizardPage implements OnInit, OnDestroy {
 // so that we can track when changes to other pages invalidate them
 // do we show errored? or do we just make invalid??
         return this._complete && this.readyToComplete;
+
+// TODEBATE: if i am supposed to show errors then if complete and valid are not the same, show an error
+// EUDES THINKS WE SHOULD UNWIND ERRORS SUCH THAT ERRORS IS ITS OWN INPUT
+// PER EUDES IF A STEP IS INCOMPLETE AND ERRORED, ERRORED WILL NOT show
+// FIRST: AM I GREY OR COLORED?
+// SECOND: AM I GREEN OR RED?
         // SPECME
     }
     public set completed(value: boolean) {

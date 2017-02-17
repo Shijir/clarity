@@ -20,7 +20,7 @@
     (clrWizardOnCancel)="doReset()"
     (clrWizardOnReset)="notifyReset()"
     [clrWizardPreventDefaultCancel]="true"
-    (clrWizardAltCancel)="wizardLevelCustomCancel()"
+    (clrWizardOnCancel)="wizardLevelCustomCancel()"
     >
 <!-- TOREMOVE: WE DON'T NEED AN ONRESET/AFTER RESET OUTPUT -->
     <!-- THROW THE FOLLOWING LINE UP IN THE WIZARD DECLARATION TO TEST WIZARD-LVL ALTCANCEL -->
@@ -41,8 +41,6 @@
     <clr-newwizard-page 
         (clrWizardPageDanger)="handleDangerClick($event)"
         (clrWizardPagePrevious)="highVoltage()">
-        <!-- (clrWizardBeforeCancel)="something($event)" -->
-<!-- TOLOOKINTO: ^^^^ force users to call preventDefault in their handler... possible to support both? -->
 
         <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
         <template pageNavTitle>Title for Page 1</template> <!-- optional -->
@@ -122,7 +120,7 @@
 
     <clr-newwizard-page #myPage [clrWizardPageNextDisabled]="!stepFourIsReady"
         [clrWizardPagePreventDefaultCancel]="true"
-        (clrWizardPageAltCancel)="stepThreeCustomCancel()"
+        (clrWizardPageOnCancel)="stepThreeCustomCancel()"
         (clrWizardPageCustomButton)="doCustomClick($event)">
         <template pageTitle>This tests if the page jumping completed thing works</template> <!-- mandatory -->
         <template pageNavTitle>Test Page Jumping</template> <!-- optional -->

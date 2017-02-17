@@ -87,8 +87,7 @@ export class WizardNavigationService implements OnDestroy {
         this.pagesResetSubscription.unsubscribe();
     }
 
-// TODO: create Observables for currentPageUpdated and pageChanged
-
+// TODO: MAKE SURE EXTERNAL OUTPUTS SAY 'CHANGE' NOT 'CHANGED'
     // lets other components subscribe to when the current page changes
     private _currentChanged = new Subject<NewWizardPage>();
     public get currentPageChanged(): Observable<NewWizardPage> {
@@ -198,26 +197,13 @@ export class WizardNavigationService implements OnDestroy {
         // SPECME
     }
 
-    private _executeAltCancel = new Subject<any>();
-    public get makeWizardDoAltCancel(): Observable<any> {
-        return this._executeAltCancel.asObservable();
-    }
-
     private _cancelWizard = new Subject<any>();
     public get notifyWizardCancel(): Observable<any> {
         return this._cancelWizard.asObservable();
     }
 
     public cancel(): void {
-        let currentPage = this.currentPage;
-
-        if (currentPage.hasAltCancel) {
-            currentPage.customCancelEvent.emit();
-        } else if (this.wizardHasAltCancel) {
-            this._executeAltCancel.next();
-        } else {
-            this._cancelWizard.next();
-        }
+        this._cancelWizard.next();
         // SPECME
     }
 

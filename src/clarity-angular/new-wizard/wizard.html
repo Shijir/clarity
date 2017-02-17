@@ -16,7 +16,9 @@
     <h3 class="modal-title">
         <template [ngTemplateOutlet]="navService.currentPageTitle"></template>
 
+<!-- TODO: MAYBE USE NG-CONTAINER OR A TEMPLATE ELEMENT SO WE DON'T HAVE THIS WRAPPER? -->
         <div class="modal-header-actions-wrapper" *ngIf="navService.displayHeaderActionsWrapper">
+<!-- TODO: MAYBE TRY TO USE NG-IF ON NG-CONTENT OR TEMPLATE (?) HERE TO SIMPLIFY DOM -->
             <div *ngIf="navService.showWizardHeaderActions">
                 <ng-content select="clr-wizard-header-action"></ng-content>
             </div>

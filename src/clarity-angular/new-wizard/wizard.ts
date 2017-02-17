@@ -10,7 +10,6 @@ import {
     Output,
     EventEmitter,
     QueryList,
-    // HostListener,
     OnInit,
     OnDestroy,
     AfterViewInit
@@ -55,17 +54,18 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.cancelSubscription = this.navService.notifyWizardCancel.subscribe(() => {
+            let currentPage = this.navService.currentPage;
+
+            if (!this.stopCancel && !currentPage.stopCancel) {
+                this.close();
+            }
+            this.navService.currentPage.pageOnCancel.emit();
             this.onCancel.emit();
-            this.close();
         });
 
         this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
             this.wizardFinished.emit();
             this.close();
-        });
-
-        this.wizardAltCancelSubscription = this.navService.makeWizardDoAltCancel.subscribe(() => {
-            this.customCancelEvent.emit();
         });
     }
 
@@ -104,9 +104,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     @Input("clrWizardPreventDefaultCancel") stopCancel: boolean = false;
 
-    @Output("clrWizardAltCancel") customCancelEvent: EventEmitter < any > =
-        new EventEmitter(false);
-
     public get hasAltCancel(): boolean {
         return this.stopCancel;
     }
@@ -124,7 +121,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     private currentPageSubscription: Subscription;
     private wizardFinishedSubscription: Subscription;
     private wizardResetSubscription: Subscription;
-    private wizardAltCancelSubscription: Subscription;
 
     ngOnDestroy() {
         this.goNextSubscription.unsubscribe();
@@ -139,7 +135,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit() {
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.hasAltCancel;
-
         this.headerActionService.wizardHeaderActions = this.headerActions;
     }
 
