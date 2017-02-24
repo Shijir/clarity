@@ -89,7 +89,12 @@ $clr-modal-xl-width: baselineRem(48) !default;
             overflow-y: auto;
             overflow-x: hidden;
 
-            @extend %clr-container;
+            & > :first-child {
+                margin-top: 0;
+            }
+            & > :last-child {
+                margin-bottom: 0;
+            }
         }
 
         .modal-footer {
@@ -129,4 +134,13 @@ $clr-modal-xl-width: baselineRem(48) !default;
     background-color: clr-getColor(darkest);
     opacity: $clr-backdrop-opacity;
     z-index: map-get($clr-layers, modal-bg);
+}
+
+// modal-nav is only used in wizards
+.modal .modal-nav {
+    display: none;
+}
+
+.modal-ghost-wrapper {
+    display: none;
 }

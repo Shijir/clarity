@@ -1,3 +1,271 @@
-// .clr-wizard-placeholder {
-//     display: none;
-// }
+// Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+// This software is released under MIT license.
+// The full license information can be found in LICENSE in the root directory of this project.
+
+@import "../utils/variables.clarity";
+@import "../utils/mixins.clarity";
+@import "../utils/helpers.clarity";
+@import "../color/color.clarity";
+@import "../utils/layers.clarity";
+@import "../typography/typography.clarity";
+
+// Backgrounds
+$clr-wizard-main-bgcolor: clr-getColor(1);
+$clr-wizard-sidenav-bgcolor: clr-getColor(2);
+$clr-wizard-default-space: $clr_baselineRem_1;
+$clr-wizard-main-textColor: clr-getTextColor($clr-wizard-main-bgcolor);
+$clr-wizard-sidenav-text: clr-getTextColor($clr-wizard-sidenav-bgcolor, text);
+$clr-wizard-sidenav-text--active: clr-getTextColor($clr-wizard-sidenav-bgcolor, darkest);
+$clr-wizard-title-text: clr-getTextColor($clr-wizard-sidenav-bgcolor, darkest);
+$clr-wizard-stepnav-border-size: 4px;
+$clr-wizard-stepnav-border-color: clr-getColor(3);
+$clr-wizard-stepnav-border-color--active: $clr-green;
+$clr-wizard-footer-height: 84px;
+$clr-wizard-stepnav-active-bgcolor: #D9E4EA;
+$clr-wizard-header-action-color: clr-getTextColor($clr-wizard-main-bgcolor, hoverable);;
+$clr-wizard-header-action-color--hovered: clr-getTextColor($clr-wizard-sidenav-bgcolor, darkest);
+
+.clr-new-wizard {
+
+    .modal-dialog {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
+        height: 50%;
+        max-height: 100%;
+        min-height: 420px;
+
+        .modal-content {
+            border-radius: 0 3px 3px 0;
+            box-shadow: none;
+            padding: 0;
+            flex: 2 2 auto;
+            width: 66%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+    // TODO: TOO MUCH NESTING CARRIED OVER FROM MODAL STYLES...
+    .modal-content {
+        .modal-header {
+            padding: 0;
+            flex: 0 0 auto;
+            width: 100%;
+            // right padding nudged a bit to better align icons
+            padding: $clr-wizard-default-space ($clr-wizard-default-space - 5) 0 $clr-wizard-default-space;
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+
+        .modal-title {
+            color: $clr-wizard-title-text;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .modal-body {
+            flex: 1 1 auto;
+            color: $clr-wizard-main-textColor;
+        }
+
+        .modal-footer {
+            padding: 0;
+            display: block;
+            padding-top: $clr-wizard-default-space;
+            height: $clr-wizard-footer-height;
+            min-height: $clr-wizard-footer-height;
+            max-height: $clr-wizard-footer-height;
+            width: 100%;
+        }
+    }
+
+    .modal-title-text {
+        display: inline-block;
+        flex: 0 1 auto;
+        width: 100%;
+    }
+
+    .modal-header-actions-wrapper {
+        flex: 1 0 auto;
+        padding-left: 12px;
+        padding-right: 4px;
+    }
+
+    .clr-wizard-header-action {
+        width: $clr-wizard-default-space;
+        height: $clr-wizard-default-space;
+        padding: 0;
+        margin: 0;
+        min-width: $clr-wizard-default-space;
+        line-height: $clr-wizard-default-space;
+        font-size: $clr-wizard-default-space + 2;
+        color: $clr-wizard-header-action-color;
+        transition: color linear 0.2s;
+
+        &:hover, &:active, &:focus {
+            color: $clr-wizard-header-action-color--hovered;
+        }
+
+        clr-icon {
+            $clr-wizard-header-action-icon-dim: ($clr-wizard-default-space - 2);
+            height: $clr-wizard-header-action-icon-dim;
+            width: $clr-wizard-header-action-icon-dim;
+        }
+    }
+
+    .clr-wizard-stepnav-wrapper {
+        flex: 1 1 auto;
+        width: 34%;
+        max-width: 34%;
+        display: block;
+        order: -1;
+        // TODO: test with many, many stepnav items!
+        overflow: hidden;
+        overflow-y: auto;
+        padding-bottom: $clr-wizard-default-space;
+        line-height: $clr-wizard-default-space;
+        border-right: 1px solid #e4e4e4;
+        height: 100%;
+        background-color: $clr-wizard-sidenav-bgcolor;
+        border-radius: 3px 0 0 3px;
+
+        // ??? from .clr-wizard.wizard-md .nav-panel
+        min-width: 216px;
+        max-width: 240px;
+    }
+
+    .clr-wizard-stepnav {
+        padding-left: $clr-wizard-default-space;
+        display: block; 
+        font-size: 14px;
+        color: $clr-wizard-sidenav-text;
+        // TODO: ??? - THIS IS THE CURRENT WHITESPACE
+        // padding-top: 36px;
+        width: 100%;
+    }
+
+    // TODO: PUT IN STYLES FOR NAV-LINKS, THEN REMOVE DEPENDENCY ON NAV STYLES
+    .clr-wizard-stepnav-list {
+        display: block;
+        box-shadow: none;
+        counter-reset: a;
+        white-space: nowrap;
+        height: auto;
+        list-style-type: none;
+        margin: 0;
+        width: 100%;
+    }
+
+    .clr-wizard-stepnav-item {
+        display: block;
+        box-shadow: $clr-wizard-stepnav-border-size 0 0 $clr-wizard-stepnav-border-color inset;
+        margin: 0 0 -1px 0;
+        padding: 6px 0;
+        padding-left: 8px;
+        color: $clr-wizard-sidenav-text;
+        font-weight: 400;
+
+        &.active {
+            color: $clr-wizard-sidenav-text--active;
+            font-weight: 500;
+
+            .clr-wizard-stepnav-link {
+                background-color: $clr-wizard-stepnav-active-bgcolor;
+                border-radius: 3px 0 0 3px;
+            }
+        }
+
+        &.complete {
+            box-shadow: $clr-wizard-stepnav-border-size 0 0 $clr-wizard-stepnav-border-color--active inset;
+            transition: box-shadow 0.2s ease-in;
+        }
+    }
+
+    .clr-wizard-stepnav-link {
+        width: 100%;
+        display: inline-block;
+        color: inherit;
+        line-height: 16px;
+        padding: 10px 3px 10px 10px;
+        font-size: 14px;
+        font-weight: inherit;
+        letter-spacing: normal;
+        text-align: left;
+        text-transform: initial;
+        margin: 0;
+
+        &::before {
+            content: counter(a);
+            counter-increment: a;
+            padding-right: 7px;
+            min-width: 15px;
+        }
+    }
+
+    .clr-wizard-title {
+        color: $clr-wizard-title-text;
+        margin-top: 0;
+        padding-top: $clr-wizard-default-space;
+        padding-left: $clr-wizard-default-space;
+        padding-right: $clr-wizard-default-space * 0.5;
+        padding-bottom: $clr-wizard-default-space;
+    }
+
+    // normal modal ignores this. wizard needs it so the nav and content
+    // will take up the full height of the modal...
+    .modal-content-wrapper {
+        display: flex;
+        flex-direction: row;
+        flex: 1 1 100%;
+        width: 100%;
+    }
+
+    .clr-wizard-footer-buttons {
+        text-align: right;
+        padding-right: $clr-wizard-default-space;
+        margin: 0;
+    }
+
+    .clr-wizard-footer-buttons-wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+    }
+
+    .clr-wizard-btn-wrapper[aria-hidden="true"] {
+        display: none;
+    }
+
+    .clr-wizard-content {
+        display: block;
+    }
+
+    .clr-wizard-page:not([aria-hidden="true"]) {
+        padding: $clr-wizard-default-space;
+        padding-left: $clr-wizard-default-space;
+        display: block;
+    }
+
+    // ghosties!
+    .modal-ghost-wrapper {
+        flex: 0 0 48px;
+        background: red;
+    }
+}
+
+.clr-wizard-page > *:first-child {
+    margin-top: 0;
+}

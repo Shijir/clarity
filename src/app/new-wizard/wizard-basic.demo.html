@@ -17,10 +17,8 @@
     [clrWizardSize]="'md'"
     (clrWizardCurrentPageChanged)="handlePageChange()"
     (clrWizardOnFinish)="doReset()"
-    (clrWizardOnCancel)="doReset()"
+    (clrWizardOnCancel)="doCancel()"
     (clrWizardOnReset)="notifyReset()"
-    [clrWizardPreventDefaultCancel]="true"
-    (clrWizardOnCancel)="wizardLevelCustomCancel()"
     >
 <!-- TOREMOVE: WE DON'T NEED AN ONRESET/AFTER RESET OUTPUT -->
     <!-- THROW THE FOLLOWING LINE UP IN THE WIZARD DECLARATION TO TEST WIZARD-LVL ALTCANCEL -->
@@ -42,7 +40,7 @@
         (clrWizardPageDanger)="handleDangerClick($event)"
         (clrWizardPagePrevious)="highVoltage()">
 
-        <template pageTitle>Longer Title for Page {{ 3 - 2 }}</template> <!-- mandatory -->
+        <template pageTitle>Longer Title for Page {{ 3 - 2 }} Longer Title for Page {{ 3 - 2 }} Longer Title for Page</template> <!-- mandatory -->
         <template pageNavTitle>Title for Page 1</template> <!-- optional -->
 
         <p>Content for step 1</p>
@@ -99,8 +97,8 @@
 
         <!-- CUSTOME BUTTONS GO HERE -->
         <template pageButtons>
-            <clr-wizard-button [type]="'cancel'">Soy un perdidor</clr-wizard-button>
-            <clr-wizard-button [type]="'previous'">Fait Interruptid</clr-wizard-button>
+            <clr-wizard-button [type]="'cancel'">Soy un perdidor Soy un perdidor</clr-wizard-button>
+            <clr-wizard-button [type]="'previous'">Fait InterruptidInterruptid</clr-wizard-button>
             <clr-wizard-button [type]="'custom-next'">LOLZ</clr-wizard-button>
         </template>
 

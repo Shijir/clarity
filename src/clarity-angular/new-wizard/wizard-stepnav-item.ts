@@ -18,7 +18,7 @@ import { PageCollectionService } from "./providers/page-collection";
     moduleId: module.id,
     selector: "[clr-wizard-stepnav-item]",
     template: `
-        <button type="button" class="btn btn-link nav-link" (click)="click()">
+        <button type="button" class="btn btn-link clr-wizard-stepnav-link" (click)="click()">
             <template [ngTemplateOutlet]="page.navTitle"></template>
         </button>
     `,

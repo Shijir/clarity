@@ -30,13 +30,13 @@ import { ButtonHubService } from "./providers/button-hub";
             [class.btn-success]="isFinish"
             [class.btn-danger]="isDanger"
             [class.disabled]="isDisabled"
-            [attr.aria-hidden]="isHidden"
             (click)="click()">
             <ng-content></ng-content>
         </button>
     `,
     host: {
-        "class": "clr-wizard-btn-wrapper"
+        "class": "clr-wizard-btn-wrapper",
+        "[attr.aria-hidden]": "isHidden"
     },
     styles: ['[aria-hidden="true"] { display: none; }']
 })

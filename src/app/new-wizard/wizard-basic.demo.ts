@@ -129,6 +129,11 @@ export class WizardSimple {
         console.log("This is the basic demo. I just did a reset.");
     }
 
+    public doCancel(): void {
+        console.log("This is the demo. I'm telling you I got a cancel.");
+        this.doReset();
+    }
+
     public doReset(): void {
         if (this.model.forceReset) {
             this.wizardMedium.reset();

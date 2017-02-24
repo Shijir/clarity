@@ -272,4 +272,9 @@ export class WizardNavigationService implements OnDestroy {
 
         this.setCurrentPage(allPages[lastCompletedPageIndex]);
     }
+
+    // used to reset to the first page
+    public setFirstPageCurrent(): void {
+        this.setCurrentPage(this.pageCollection.pagesAsArray[0]);
+    }
 }

@@ -31,11 +31,11 @@ import { HeaderActionService } from "./providers/header-actions";
     providers: [ WizardNavigationService, PageCollectionService, ButtonHubService, HeaderActionService ],
     templateUrl: "./wizard.html",
     host: {
-        "[class.clr-wizard]": "true",
-        "[class.main-container]": "true", // <= ???
+        "[class.clr-new-wizard]": "true",
         "[class.wizard-md]": "size == 'md'",
         "[class.wizard-lg]": "size == 'lg'",
-        "[class.wizard-xl]": "size == 'xl'"
+        "[class.wizard-xl]": "size == 'xl'",
+        "[class.lastPage]": "navService.currentPageIsLast"
     }
 })
 export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
@@ -145,6 +145,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // wizard.
     public open(): void {
         this._open = true;
+        if (!this.currentPage) {
+            this.navService.setFirstPageCurrent();
+        }
         this._openChanged.emit(true);
     }
 
@@ -197,6 +200,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     public reset() {
         this.pageCollection.reset();
+        this.navService.setFirstPageCurrent();
     }
 
 // TOREMOVE: NOTE REMOVAL. SHOULDN'T BE A BREAKING CHANGE
