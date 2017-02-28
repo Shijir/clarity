@@ -16,7 +16,7 @@ import {StringFilter} from "./interfaces/string-filter";
 import {TestBed} from "@angular/core/testing";
 import {DatagridStringFilter} from "./built-in/filters/datagrid-string-filter";
 
-export default function(): void {
+export function DatagridColumnSpecs(): void {
     describe("DatagridColumn component", function() {
         describe("Typescript API", function() {
             let sortService: Sort;

@@ -5,7 +5,7 @@
  */
 import {DatagridPropertyStringFilter} from "./datagrid-property-string-filter";
 
-export default function(): void {
+export function DatagridPropertyStringFilterSpecs(): void {
     describe("DatagridPropertyStringFilter", function() {
         it("checks if a string contains the search text", function() {
             this.filter = new DatagridPropertyStringFilter("a");

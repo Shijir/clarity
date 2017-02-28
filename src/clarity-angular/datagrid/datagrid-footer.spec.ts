@@ -7,7 +7,7 @@ import {Component} from "@angular/core";
 import {TestContext} from "./helpers.spec";
 import {DatagridFooter} from "./datagrid-footer";
 
-export default function(): void {
+export function DatagridFooterSpecs(): void {
     describe("DatagridFooter component", function() {
         let context: TestContext<DatagridFooter, SimpleTest>;
 

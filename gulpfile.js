@@ -63,6 +63,22 @@ gulp.task("test", function (callback) {
 });
 
 /**
+ * Builds the application in aot mode and runs all tests on it.
+ */
+
+gulp.task("test:aot", function (callback) {
+    env.set({NODE_ENV: "prod"}); // We only run tests in production mode for now
+    return runSequence(
+        'clean',
+        'sass',
+        'bundle:zip',
+        'aot:test:prep',
+        'karma:aot:verbose',
+        callback
+    );
+});
+
+/**
  * Builds the application in production mode, runs all tests on it,
  * then watches for file changes to re-run tests.
  */

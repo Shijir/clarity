@@ -7,7 +7,7 @@ import {Subject} from "rxjs/Subject";
 import {Filters} from "./filters";
 import {Filter} from "../interfaces/filter";
 
-export default function(): void {
+export function FiltersProviderSpecs(): void {
     describe("Filters provider", function() {
         beforeEach(function() {
             this.filtersInstance = new Filters();

@@ -8,7 +8,7 @@ import {Page} from "./providers/page";
 import {DatagridPagination} from "./datagrid-pagination";
 import {TestContext} from "./helpers.spec";
 
-export default function(): void {
+export function DatagridPaginationSpecs(): void {
     describe("DatagridPagination component", function() {
         describe("Typescript API", function() {
             let pageService: Page;

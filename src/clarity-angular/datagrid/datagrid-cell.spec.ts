@@ -7,7 +7,7 @@ import {Component} from "@angular/core";
 import {TestContext} from "./helpers.spec";
 import {DatagridCell} from "./datagrid-cell";
 
-export default function(): void {
+export function DatagridCellSpecs(): void {
     describe("DatagridCell component", function() {
         let context: TestContext<DatagridCell, SimpleTest>;
 

@@ -12,7 +12,7 @@ import {Sort} from "./providers/sort";
 import {Page} from "./providers/page";
 import {ClarityModule} from "../clarity.module";
 
-export default function(): void {
+export function DatagridItemsSpecs(): void {
     describe("DatagridItems directive", function() {
         beforeEach(function () {
             /*

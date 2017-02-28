@@ -6,7 +6,7 @@
 import {Sort} from "./sort";
 import {Comparator} from "../interfaces/comparator";
 
-export default function(): void {
+export function SortProviderSpecs(): void {
     describe("Sort provider", function() {
         beforeEach(function() {
             this.sortInstance = new Sort();

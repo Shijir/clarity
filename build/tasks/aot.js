@@ -4,13 +4,22 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
+var path = require("path");
 var gulp = require("gulp");
 var inlineNg2Template = require("gulp-inline-ng2-template");
 var runSequence = require('run-sequence');
 var del = require("del");
 var os = require('os');
 
-gulp.task("aot:copy", function() {
+gulp.task("aot:copy:specs", function () {
+    var clarityTestSources = [
+        'src/clarity-angular/**/*.spec.ts'
+    ];
+    return gulp.src(clarityTestSources)
+        .pipe(gulp.dest("tmp"));
+});
+
+gulp.task("aot:copy", function () {
     var claritySources = [
         'src/clarity-angular/**/*.ts',
         'src/clarity-angular/**/*.html',
@@ -18,7 +27,7 @@ gulp.task("aot:copy", function() {
         '!src/clarity-angular/**/*.mock.ts'
     ];
 
-    gulp.src(claritySources)
+    return gulp.src(claritySources)
         .pipe(inlineNg2Template({
             base: '/src/clarity-angular/',
             useRelativePaths: true
@@ -42,7 +51,39 @@ gulp.task('aot:build', function (cb) {
     });
 });
 
-gulp.task("aot:umd", function(cb){
+gulp.task('aot:build:pretest', function (cb) {
+    var exec = require('child_process').exec;
+
+    var cmd = os.platform() === 'win32' ?
+        'node_modules\\.bin\\ngc' : './node_modules/.bin/ngc';
+
+    cmd += ' -p tsconfig.pretest.json'; // use config for aot to compile
+
+    exec(cmd, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+
+});
+
+gulp.task('aot:build:components-with-specs', function (cb) {
+    var exec = require('child_process').exec;
+
+    var cmd = os.platform() === 'win32' ?
+        'node_modules\\.bin\\ngc' : './node_modules/.bin/ngc';
+
+    cmd += ' -p tsconfig.test.json'; // use config for aot to compile
+
+    exec(cmd, function (err, stdout, stderr) {
+        console.log(stdout);
+        console.log(stderr);
+        cb(err);
+    });
+
+});
+
+gulp.task("aot:umd", function (cb) {
     var exec = require('child_process').exec;
 
     var cmd = os.platform() === 'win32' ?
@@ -57,7 +98,17 @@ gulp.task("aot:umd", function(cb){
     });
 });
 
-gulp.task("aot", function(callback){
+gulp.task("aot:test:prep", function (callback) {
+    return runSequence(
+        'aot:copy',
+        'aot:copy:specs',
+        'aot:build:components-with-specs',
+        'aot:build:pretest',
+        callback
+    );
+});
+
+gulp.task("aot", function (callback) {
     return runSequence(
         'aot:copy',
         'aot:build',

@@ -14,7 +14,7 @@ import {Sort} from "./providers/sort";
 import {Page} from "./providers/page";
 import {RowActionService} from "./providers/row-action-service";
 
-export default function(): void {
+export function DatagridRowSpecs(): void {
     describe("DatagridRow component", function() {
         // Until we can properly type "this"
         let context: TestContext<DatagridRow, FullTest>;

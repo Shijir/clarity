@@ -41,6 +41,7 @@ System.config({
     baseURL: '/base',
     map: {
         'tests': 'dist/tests',
+        'clarity-angular': 'dist/clarity-angular',
         'clarity-icons': 'dist/clarity-icons',
         'rxjs': 'node_modules/rxjs',
         '@angular/core': 'node_modules/@angular/core/bundles/core.umd.js',

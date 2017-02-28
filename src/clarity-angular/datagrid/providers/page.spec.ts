@@ -5,7 +5,7 @@
  */
 import {Page} from "./page";
 
-export default function(): void {
+export function PageProviderSpecs(): void {
     describe("Page provider", function() {
         beforeEach(function() {
             this.pageInstance = new Page();

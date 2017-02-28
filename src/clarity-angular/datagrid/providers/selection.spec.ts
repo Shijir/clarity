@@ -12,7 +12,7 @@ import {Page} from "./page";
 
 const numberSort = (a: number, b: number) => a - b;
 
-export default function(): void {
+export function SelectionProviderSpecs(): void {
     describe("Selection provider", function() {
         beforeEach(function() {
             TestBed.configureTestingModule({

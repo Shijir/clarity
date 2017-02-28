@@ -13,7 +13,7 @@ import {Filters} from "./providers/filters";
 import {Sort} from "./providers/sort";
 import {Page} from "./providers/page";
 
-export default function(): void {
+export function DatagridActionBarSpecs(): void {
     describe("DatagridActionBar component", function() {
         let context: TestContext<DatagridActionBar, SimpleTest>;
         let selectionProvider: Selection;

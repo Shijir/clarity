@@ -9,6 +9,7 @@ var path = require("path");
 var Server = require('karma').Server;
 
 var configFile = path.resolve('build/karma.conf.js');
+var aotConfigFile = path.resolve('build/karma.conf.js');
 
 /**
  * Run tests once and exit
@@ -48,5 +49,28 @@ gulp.task('karma:watch', function (done) {
 	}, function() {
 		// Ignore possible errors, the log should be enough when using :watch
 		done();
+	}).start();
+});
+
+/**
+ * Run aot tests once and exit
+ */
+gulp.task('karma:aot', function (done) {
+	new Server({
+		configFile: aotConfigFile
+	}, function(exitStatus) {
+		done(exitStatus ? new Error("There are failing unit tests") : undefined);
+	}).start();
+});
+
+/**
+ * Run aot tests once and exit, with verbose output
+ */
+gulp.task('karma:aot:verbose', function (done) {
+	new Server({
+		configFile: aotConfigFile,
+		reporters: ['mocha']
+	}, function(exitStatus) {
+		done(exitStatus ? new Error("There are failing unit tests") : undefined);
 	}).start();
 });
