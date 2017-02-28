@@ -70,7 +70,6 @@ gulp.task("test:aot", function (callback) {
     env.set({NODE_ENV: "prod"}); // We only run tests in production mode for now
     return runSequence(
         'clean',
-        'sass',
         'bundle:zip',
         'aot:test:prep',
         'karma:aot:verbose',

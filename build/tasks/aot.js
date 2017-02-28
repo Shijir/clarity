@@ -67,7 +67,7 @@ gulp.task('aot:build:pretest', function (cb) {
 
 });
 
-gulp.task('aot:build:components-with-specs', function (cb) {
+gulp.task('aot:build:components-and-specs', function (cb) {
     var exec = require('child_process').exec;
 
     var cmd = os.platform() === 'win32' ?
@@ -102,7 +102,7 @@ gulp.task("aot:test:prep", function (callback) {
     return runSequence(
         'aot:copy',
         'aot:copy:specs',
-        'aot:build:components-with-specs',
+        'aot:build:components-and-specs',
         'aot:build:pretest',
         callback
     );

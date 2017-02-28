@@ -9,7 +9,7 @@ var path = require("path");
 var Server = require('karma').Server;
 
 var configFile = path.resolve('build/karma.conf.js');
-var aotConfigFile = path.resolve('build/karma.conf.js');
+var aotConfigFile = path.resolve('build/karma.aot.conf.js');
 
 /**
  * Run tests once and exit
