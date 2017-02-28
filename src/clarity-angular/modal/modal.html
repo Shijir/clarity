@@ -13,24 +13,26 @@
          [class.modal-xl]="size == 'xl'"
          role="dialog" aria-hidden="true">
 
-        <div class="modal-content-wrapper">
-            <!-- only used in wizards -->
-            <ng-content select=".modal-nav"></ng-content>
+        <div class="modal-outer-wrapper">
+            <div class="modal-content-wrapper">
+                <!-- only used in wizards -->
+                <ng-content select=".modal-nav"></ng-content>
 
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" aria-label="Close"
-                            *ngIf="closable" (click)="close()">
-                        <clr-icon aria-hidden="true" shape="close"></clr-icon>
-                    </button>
-                    <ng-content select=".modal-title"></ng-content>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-label="Close"
+                                *ngIf="closable" (click)="close()">
+                            <clr-icon aria-hidden="true" shape="close"></clr-icon>
+                        </button>
+                        <ng-content select=".modal-title"></ng-content>
+                    </div>
+                    <ng-content select=".modal-body"></ng-content>
+                    <ng-content select=".modal-footer"></ng-content>
                 </div>
-                <ng-content select=".modal-body"></ng-content>
-                <ng-content select=".modal-footer"></ng-content>
             </div>
             <div class="modal-ghost-wrapper">
-                <div class="modal-ghost modal-ghost-1"></div>
-                <div class="modal-ghost modal-ghost-2"></div>
+                <div [@ghostPageOneState]="ghostPageState" class="modal-ghost modal-ghost-1"></div>
+                <div [@ghostPageTwoState]="ghostPageState" class="modal-ghost modal-ghost-2"></div>
             </div>
         </div>
     </div>

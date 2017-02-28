@@ -35,10 +35,13 @@ import { HeaderActionService } from "./providers/header-actions";
         "[class.wizard-md]": "size == 'md'",
         "[class.wizard-lg]": "size == 'lg'",
         "[class.wizard-xl]": "size == 'xl'",
-        "[class.lastPage]": "navService.currentPageIsLast"
+        "[class.lastPage]": "navService.currentPageIsLast",
+        "[class.clr-wizard--ghosted]": "showGhostPages"
     }
 })
 export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
+
+// TODO: COMMENT ON ALL LEGACY INPUT/OUTPUTS TO KNOW WHICH ONES WE KEEP B/C OF LEGACY
 
     constructor(public navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
@@ -65,6 +68,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
+            console.log("Ohhhhhh... kay.....");
+            if (this.showGhostPages) {
+                this.navService.wizardGhostPageState = "inactive";
+            }
             this.wizardFinished.emit();
             this.close();
         });
@@ -72,14 +79,24 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
-    // Variable that toggles open/close of the wizard component.
-    @Input("clrWizardOpen") _open: boolean = false;
+    // can activate showing or hiding the ghost page effect
+    // defaults to true
+// TODO: SHOULD WE DEFAULT TO FALSE?
+    @Input("clrWizardShowGhostPages") showGhostPages: boolean = true;
 
     // Variable that toggles open/close of the wizard component.
     @Input("clrWizardClosable") closable: boolean = true;
 
+    // Variable that toggles open/close of the wizard component.
+    @Input("clrWizardOpen") _open: boolean = false;
+
+// TODOCUMENT: HERE IS HOW THE TWO-WAY BINDING HAPPENS...
+// <clr-wizard [(clrWizardOpen)]="something"...?
+// <clr-wizard [clrWizardOpen]="something" (clrWizardOpenChange)="doSomehtign($event)" ...?
+
+// TOBREAK: THIS WAS CHANGED FROM "OPENCHANGED" TO "OPENCHANGE"
     // EventEmitter which is emitted on open/close of the wizard.
-    @Output("clrWizardOpenChanged") _openChanged: EventEmitter<boolean> =
+    @Output("clrWizardOpenChange") _openChanged: EventEmitter<boolean> =
         new EventEmitter<boolean>(false);
 
     // User can bind his event handler for onCancel of the main content
@@ -106,7 +123,16 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Input("clrWizardPreventDefaultCancel") stopCancel: boolean = false;
 
     public ngOnInit(): void {
-        this.currentPageSubscription = this.navService.currentPageChanged.subscribe((page: NewWizardPage) => {
+        let navService = this.navService;
+
+        this.currentPageSubscription = navService.currentPageChanged.subscribe((page: NewWizardPage) => {
+            if (this.showGhostPages) {
+                if (navService.currentPageIsLast) {
+                    navService.wizardGhostPageState = "lastGhost";
+                } else {
+                    navService.wizardGhostPageState = "ready";
+                }
+            }
             this.currentPageChanged.emit();
         });
     }
@@ -133,6 +159,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.stopCancel;
         this.headerActionService.wizardHeaderActions = this.headerActions;
+        if (this.showGhostPages) {
+            this.navService.hideWizardGhostPages = false;
+            this.navService.wizardGhostPageState = "inactive";
+        }
     }
 
     // The current page
@@ -144,9 +174,19 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // This is a public function that can be used to programmatically open the
     // wizard.
     public open(): void {
+        let navService = this.navService;
+
         this._open = true;
         if (!this.currentPage) {
-            this.navService.setFirstPageCurrent();
+            navService.setFirstPageCurrent();
+        }
+
+        if (this.showGhostPages) {
+            if (navService.currentPageIsLast) {
+                navService.wizardGhostPageState = "lastGhost";
+            } else {
+                navService.wizardGhostPageState = "ready";
+            }
         }
         this._openChanged.emit(true);
     }
@@ -155,9 +195,12 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // wizard.
     public close(): void {
         this._open = false;
+
+        if (this.showGhostPages) {
+            this.navService.wizardGhostPageState = "inactive";
+        }
         this._openChanged.emit(false);
     }
-// TODO: MAKE SURE WE ARE PROPERLY NOTIFYING WHEN THE MODAL IS CLOSED (CLOSE-X)
 
     // Convenience function that can be used to programmatically toggle the
     // wizard.
@@ -201,6 +244,10 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     public reset() {
         this.pageCollection.reset();
         this.navService.setFirstPageCurrent();
+    }
+
+    public get ghostPageState(): string {
+        return this.navService.wizardGhostPageState;
     }
 
 // TOREMOVE: NOTE REMOVAL. SHOULDN'T BE A BREAKING CHANGE

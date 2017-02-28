@@ -141,6 +141,11 @@ $clr-modal-xl-width: baselineRem(48) !default;
     display: none;
 }
 
+.modal-outer-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
 .modal-ghost-wrapper {
     display: none;
 }

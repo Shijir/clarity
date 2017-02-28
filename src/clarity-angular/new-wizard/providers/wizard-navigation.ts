@@ -274,7 +274,32 @@ export class WizardNavigationService implements OnDestroy {
     }
 
     // used to reset to the first page
+// SPECME: TEST FOR IF ARRAY OF PAGES CHANGE AFTER RESET HAPPENS
+// ID...
+//  ??: EASIEST WAY TO SOLVE IS TO HAVE A GENERIC INPUT TO RESET TO A SPECIFIC ID
     public setFirstPageCurrent(): void {
         this.setCurrentPage(this.pageCollection.pagesAsArray[0]);
     }
+
+    private _wizardGhostPageState: string = "hidden";
+    public get wizardGhostPageState(): string {
+        return this._wizardGhostPageState;
+    }
+
+    public set wizardGhostPageState(value: string) {
+        if (this.hideWizardGhostPages) {
+            this._wizardGhostPageState = "hidden";
+        } else {
+            this._wizardGhostPageState = value;
+        }
+    }
+
+    private _hideWizardGhostPages: boolean = true;
+    public get hideWizardGhostPages(): boolean {
+        return this._hideWizardGhostPages;
+    }
+    public set hideWizardGhostPages(value: boolean) {
+        this._hideWizardGhostPages = value;
+    }
+
 }
