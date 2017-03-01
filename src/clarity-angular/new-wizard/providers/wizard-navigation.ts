@@ -104,6 +104,10 @@ export class WizardNavigationService implements OnDestroy {
         return this.pageCollection.firstPage === this.currentPage;
     }
 
+    public get currentPageIsNextToLast(): boolean {
+        return this.pageCollection.penultimatePage === this.currentPage;
+    }
+
     public get currentPageIsLast(): boolean {
         return this.pageCollection.lastPage === this.currentPage;
     }
@@ -292,6 +296,7 @@ export class WizardNavigationService implements OnDestroy {
         } else {
             this._wizardGhostPageState = value;
         }
+        // SPECME
     }
 
     private _hideWizardGhostPages: boolean = true;

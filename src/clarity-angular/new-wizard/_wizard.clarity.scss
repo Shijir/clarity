@@ -36,7 +36,6 @@ $clr-wizard-header-action-color--hovered: clr-getTextColor($clr-wizard-sidenav-b
         box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
         height: 50%;
         max-height: 100%;
-        min-height: 420px;
 
         .modal-content {
             border-radius: 0 3px 3px 0;
@@ -147,10 +146,6 @@ $clr-wizard-header-action-color--hovered: clr-getTextColor($clr-wizard-sidenav-b
         height: 100%;
         background-color: $clr-wizard-sidenav-bgcolor;
         border-radius: 3px 0 0 3px;
-
-        // ??? from .clr-wizard.wizard-md .nav-panel
-        min-width: 216px;
-        max-width: 240px;
     }
 
     .clr-wizard-stepnav {
@@ -280,64 +275,174 @@ $clr-wizard-header-action-color--hovered: clr-getTextColor($clr-wizard-sidenav-b
     }
 }
 
+.clr-new-wizard {
+
+    $clr-wizard-all-dialog-min-width: baselineRem(10);
+    $clr-wizard-all-dialog-min-height: baselineRem(17.5);
+
+    $clr-wizard-md-nav-min-width: baselineRem(9);
+    $clr-wizard-md-nav-max-width: baselineRem(10);
+    $clr-wizard-md-dialog-max-height: baselineRem(21);
+
+    $clr-wizard-lg-nav-min-width: $clr-wizard-all-dialog-min-width;
+    $clr-wizard-lg-nav-max-width: baselineRem(12);
+    $clr-wizard-lg-dialog-max-height: baselineRem(30);
+
+    $clr-wizard-xl-nav-min-width: $clr-wizard-all-dialog-min-width;
+    $clr-wizard-xl-nav-max-width: baselineRem(13);
+    $clr-wizard-xl-dialog-max-height: 90vh;
+
+    &.wizard-md {
+        .modal-dialog {
+            min-height: $clr-wizard-all-dialog-min-height;
+        }
+
+        .modal-content, .clr-wizard-stepnav-wrapper {
+            max-height: $clr-wizard-md-dialog-max-height;
+        }
+
+        .clr-wizard-stepnav-wrapper {
+            min-width: $clr-wizard-md-nav-min-width;
+            max-width: $clr-wizard-md-nav-max-width;
+        }
+    }
+
+    &.wizard-lg {
+        .modal-dialog {
+            min-height: $clr-wizard-all-dialog-min-height;
+        }
+
+        .modal-content, .clr-wizard-stepnav-wrapper {
+            max-height: $clr-wizard-lg-dialog-max-height;
+        }
+
+        .nav-panel, .clr-wizard-stepnav-wrapper {
+            min-width: $clr-wizard-lg-nav-min-width;
+            max-width: $clr-wizard-lg-nav-max-width;
+        }
+    }
+
+    &.wizard-xl {
+        .modal-content, .clr-wizard-stepnav-wrapper {
+            max-height: $clr-wizard-xl-dialog-max-height;
+        }
+
+        .nav-panel, .clr-wizard-stepnav-wrapper {
+            min-width: $clr-wizard-xl-nav-min-width;
+            max-width: $clr-wizard-xl-nav-max-width;
+        }
+    }
+}
+
 .clr-wizard-page > *:first-child {
     margin-top: 0;
 }
 
 .clr-wizard--ghosted {
+    $clr-wizard-ghost-wrapper-width: baselineRem(2);
+    $clr-wizard-ghost-panel-width: baselineRem(1);
+    $clr-wizard-ghost-wrapper-padding: baselineRem(1);
+    $clr-wizard-ghost-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
+
     .modal-dialog {
         display: block;
 // TODO: WHEN SETTING SIZES HAVE TO SET WIDTHS HERE!!!
-        width: 600px;
+// width: 600px;
         box-shadow: none;
     }
 
+// STEPS
+// width: 600 on .modal-outer-wrapper and .modal-dialog
+// flex: 0 1 auto on .modal-content-wrapper
+// width: 100% on .clr-wizard-footer-buttons
+// width: 100% on .clr-wizard-footer-buttons-wrapper
+// NOTE THAT THE MIN-WIDTH OF THE BUTTONS WILL PUSH OUT THE DIALOG IF 
+// SET UP IMPROPERLY. THIS IS A KNOWN ISSUE AND USERS SHOULD USE THEIR 
+// BEST JUDGMENT WITH BUTTONS IN THE WIZARD. NO MORE THAN THREE...
+// IT'S AN ISSUE WITH THE NUMBER OF BUTTONS, NOT THE LENGTH OF THE TEXT
+// INSIDE THE BUTTONS
+
+// TODO: CLEAN UP COLORS AND WIDTHS
     .modal-outer-wrapper {
         position: static;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 50%;
+        width: 100%;
+        height: 100%;
         max-height: 100%;
-        min-height: 420px;
-        flex: 1 1 100%;
+        flex: 1 1 auto;
         box-shadow: none;
         flex-direction: row;
-        height: 100%;
     }
 
     .modal-content-wrapper {
-        box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: $clr-wizard-ghost-shadow;
 // TODO: WHEN SETTING SIZES HAVE TO SET WIDTHS HERE!!!
-        width: 552px;
     }
 
     // ghosties!
     .modal-ghost-wrapper {
         display: block;
-        flex: 0 0 48px;
+        flex: 0 0 $clr-wizard-ghost-wrapper-width;
         height: 100%;
         position: relative;
     }
 
     .modal-ghost {
         position: absolute;
-        top: 24px;
-        bottom: 24px;
+        top: $clr-wizard-ghost-wrapper-padding;
+        bottom: $clr-wizard-ghost-wrapper-padding;
         background: #bbb;
-        width: 24px;
+        width: $clr-wizard-ghost-panel-width;
         border-radius: 0 3px 3px 0;
-        left: 0;
-        box-shadow: 2px 1px 2px 1px rgba(0, 0, 0, 0.2);
+        left: (-1 * $clr-wizard-ghost-panel-width);
+        box-shadow: $clr-wizard-ghost-shadow;
         z-index: -1;
     }
 
     .modal-ghost-2 {
-        left: 24px;
-        top: 48px;
-        bottom: 48px;
+        top: (2 * $clr-wizard-ghost-wrapper-padding);
+        bottom: (2 * $clr-wizard-ghost-wrapper-padding);
         background: #9a9a9a;
         z-index: -2;
+    }
+
+    $clr-wizard-ghost-dialog-default-width: $clr-modal-md-width + $clr-wizard-ghost-wrapper-width;
+
+    .modal-dialog {
+        width: $clr-wizard-ghost-dialog-default-width;
+    }
+
+    // sizing edits from ghosts
+    &.wizard-md {
+        .modal-dialog {
+            width: $clr-wizard-ghost-dialog-default-width;
+        }
+
+        .modal-outer-wrapper {
+            min-height: $clr-wizard-all-dialog-min-height;
+        }
+    }
+
+    &.wizard-lg {
+        .modal-dialog {
+            width: $clr-modal-lg-width + $clr-wizard-ghost-wrapper-width;
+        }
+
+        .modal-outer-wrapper {
+            min-height: $clr-wizard-all-dialog-min-height;
+        }
+    }
+
+    &.wizard-xl {
+        .modal-dialog {
+            width: $clr-modal-xl-width + $clr-wizard-ghost-wrapper-width;
+        }
+
+        .modal-outer-wrapper {
+            max-height: $clr-wizard-xl-dialog-max-height;
+        }
     }
 }
 

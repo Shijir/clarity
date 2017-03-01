@@ -26,6 +26,18 @@ export class PageCollectionService {
         // SPECME
     }
 
+    public get penultimatePage(): NewWizardPage {
+        let pageCount = this.pagesCount;
+
+        if (pageCount < 2) {
+            return;
+        }
+        // SPECME
+
+        return this.pagesAsArray[pageCount - 2];
+        // SPECME
+    }
+
     public get lastPage(): NewWizardPage {
         let pageCount = this.pagesCount;
 

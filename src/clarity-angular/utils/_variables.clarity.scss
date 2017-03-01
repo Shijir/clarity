@@ -478,3 +478,10 @@ $clr-dropdown-caret-left-margin: 2px;
 //BS4 overrides
 $enable-flex: true;
 $grid-gutter-width: $clr_baselineRem_1;
+
+// Wizard and modal sizings
+$clr-modal-sm-width: baselineRem(12) !default;
+$clr-modal-md-width: baselineRem(24) !default;
+$clr-modal-lg-width: baselineRem(36) !default;
+$clr-modal-xl-width: baselineRem(48) !default;
+

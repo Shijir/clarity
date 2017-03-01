@@ -67,34 +67,40 @@ import {ScrollingService} from "../main/scrolling-service";
             state("ready", style({
                 left: "0"
             })),
+            state("penultimateGhost", style({
+                left: "-24px"
+            })),
             state("lastGhost", style({
                 left: "-24px"
             })),
-            transition("inactive => ready", animate("100ms ease-out")),
-            transition("ready => inactive", animate("100ms ease-in")),
-            transition("ready => lastGhost", animate("100ms ease-in")),
-            transition("lastGhost => ready", animate("100ms ease-out")),
-            transition("lastGhost => inactive", animate("100ms ease-in"))
+            transition("inactive => *", animate("100ms ease-out")),
+            transition("ready => *", animate("100ms ease-in")),
+            transition("lastGhost => *", animate("100ms ease-out")),
+            transition("penultimateGhost => *", animate("100ms ease-in"))
         ]),
         trigger("ghostPageTwoState", [
             state("inactive", style({
-                left: "-48px",
+                left: "-24px",
                 top: "24px",
                 bottom: "24px"
             })),
             state("ready", style({
                 left: "24px"
             })),
-            state("lastGhost", style({
+            state("penultimateGhost", style({
                 left: "0px",
                 top: "24px",
                 bottom: "24px"
             })),
-            transition("inactive => ready", animate("100ms 75ms ease-out")),
-            transition("ready => inactive", animate("100ms 75ms ease-in")),
-            transition("ready => lastGhost", animate("100ms ease-in")),
-            transition("lastGhost => ready", animate("100ms 75ms ease-out")),
-            transition("lastGhost => inactive", animate("100ms ease-out"))
+            state("lastGhost", style({
+                left: "-24px",
+                top: "24px",
+                bottom: "24px"
+            })),
+            transition("inactive => *", animate("100ms ease-out")),
+            transition("ready => *", animate("100ms ease-in")),
+            transition("lastGhost => *", animate("100ms ease-out")),
+            transition("penultimateGhost => *", animate("100ms ease-in"))
         ])
     ]
 

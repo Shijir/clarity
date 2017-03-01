@@ -65,13 +65,11 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
             if (!this.stopCancel && !currentPage.stopCancel) {
                 this.close();
             }
+            // SPECME
         });
 
         this.wizardFinishedSubscription = this.navService.wizardFinished.subscribe(() => {
-            console.log("Ohhhhhh... kay.....");
-            if (this.showGhostPages) {
-                this.navService.wizardGhostPageState = "inactive";
-            }
+            this.deactivateGhostPages();
             this.wizardFinished.emit();
             this.close();
         });
@@ -81,8 +79,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     // can activate showing or hiding the ghost page effect
     // defaults to true
-// TODO: SHOULD WE DEFAULT TO FALSE?
-    @Input("clrWizardShowGhostPages") showGhostPages: boolean = true;
+    @Input("clrWizardShowGhostPages") showGhostPages: boolean = false;
 
     // Variable that toggles open/close of the wizard component.
     @Input("clrWizardClosable") closable: boolean = true;
@@ -126,13 +123,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         let navService = this.navService;
 
         this.currentPageSubscription = navService.currentPageChanged.subscribe((page: NewWizardPage) => {
-            if (this.showGhostPages) {
-                if (navService.currentPageIsLast) {
-                    navService.wizardGhostPageState = "lastGhost";
-                } else {
-                    navService.wizardGhostPageState = "ready";
-                }
-            }
+            this.setGhostPages();
             this.currentPageChanged.emit();
         });
     }
@@ -161,8 +152,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.headerActionService.wizardHeaderActions = this.headerActions;
         if (this.showGhostPages) {
             this.navService.hideWizardGhostPages = false;
-            this.navService.wizardGhostPageState = "inactive";
+            this.deactivateGhostPages();
         }
+        // SPECME
     }
 
     // The current page
@@ -180,14 +172,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         if (!this.currentPage) {
             navService.setFirstPageCurrent();
         }
+        // SPECME
 
-        if (this.showGhostPages) {
-            if (navService.currentPageIsLast) {
-                navService.wizardGhostPageState = "lastGhost";
-            } else {
-                navService.wizardGhostPageState = "ready";
-            }
-        }
+        this.setGhostPages();
         this._openChanged.emit(true);
     }
 
@@ -195,10 +182,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // wizard.
     public close(): void {
         this._open = false;
-
-        if (this.showGhostPages) {
-            this.navService.wizardGhostPageState = "inactive";
-        }
+        this.deactivateGhostPages();
         this._openChanged.emit(false);
     }
 
@@ -248,6 +232,27 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     public get ghostPageState(): string {
         return this.navService.wizardGhostPageState;
+    }
+
+    public deactivateGhostPages(): void {
+        this.setGhostPages("deactivate");
+    }
+
+    public setGhostPages(deactivateOrNot: string = ""): void {
+        let navService = this.navService;
+
+        if (this.showGhostPages) {
+            if (deactivateOrNot === "deactivate") {
+                navService.wizardGhostPageState = "inactive";
+            } else if (navService.currentPageIsLast) {
+                navService.wizardGhostPageState = "lastGhost";
+            } else if (navService.currentPageIsNextToLast) {
+                navService.wizardGhostPageState = "penultimateGhost";
+            } else {
+                navService.wizardGhostPageState = "ready";
+            }
+        }
+        // SPECME
     }
 
 // TOREMOVE: NOTE REMOVAL. SHOULDN'T BE A BREAKING CHANGE
