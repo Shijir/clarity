@@ -12,7 +12,7 @@ import {Page} from "./providers/page";
 import {Sort} from "./providers/sort";
 import {Filters} from "./providers/filters";
 
-export default function(): void {
+export function DatagridPlaceholderSpecs(): void {
     describe("DatagridPlaceholder component", function() {
         describe("Typescript API", function() {
             beforeEach(function() {

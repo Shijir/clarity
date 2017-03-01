@@ -5,7 +5,7 @@
  */
 import {DatagridPropertyComparator} from "./datagrid-property-comparator";
 
-export default function(): void {
+export function DatagridPropertyComparatorSpecs(): void {
     describe("DatagridPropertyComparator", function() {
         it("compares strings", function() {
             this.comparator = new DatagridPropertyComparator("a");

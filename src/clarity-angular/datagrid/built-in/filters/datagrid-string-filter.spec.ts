@@ -11,7 +11,7 @@ import {Filters} from "../../providers/filters";
 import {CustomFilter} from "../../providers/custom-filter";
 import {StringFilter} from "../../interfaces/string-filter";
 
-export default function(): void {
+export function DatagridStringFilterSpecs(): void {
     describe("DatagridStringFilter component", function() {
         // Until we can properly type "this"
         let context: TestContext<DatagridStringFilter, FullTest>;

@@ -20,7 +20,7 @@ import {ClarityModule} from "../clarity.module";
 class TestComponent {
 }
 
-export default function(): void {
+export function StackHeaderSpecs(): void {
     "use strict";
     describe("StackHeader", () => {
         let fixture: ComponentFixture<any>;

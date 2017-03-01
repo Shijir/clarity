@@ -5,7 +5,7 @@
  */
 import {NestedProperty} from "./nested-property";
 
-export default function(): void {
+export function NestedPropertySpec(): void {
     describe("NestedProperty (internal)", function() {
         it("accesses root properties", function() {
             this.property = new NestedProperty("a");

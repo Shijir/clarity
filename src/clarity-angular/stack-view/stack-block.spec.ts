@@ -56,7 +56,7 @@ class DynamicBlock {
     expanded: boolean = false;
 }
 
-export default function(): void {
+export function StackBlockSpecs(): void {
     "use strict";
     describe("StackBlock", () => {
         let fixture: ComponentFixture<any>;

@@ -1,8 +1,12 @@
-
+/*
+ * Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+ * This software is released under MIT license.
+ * The full license information can be found in LICENSE in the root directory of this project.
+ */
 
 import {AbstractTreeSelection} from "./abstract-tree-selection";
 import {TreeSelectionService} from "./providers/treeSelection.service";
-export default function(): void {
+export function AbstractTreeSelectionSpecs(): void {
     describe("Abstract Tree Selection", () => {
         let root: TestTreeSelection;
 

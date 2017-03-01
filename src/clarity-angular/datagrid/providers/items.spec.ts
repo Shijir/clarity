@@ -13,7 +13,7 @@ import {Page} from "./page";
 
 const ALL_ITEMS = [9, 3, 5, 8, 2, 6, 10, 7, 4, 1];
 
-export default function(): void {
+export function ItemsProviderSpecs(): void {
     describe("Items provider", function() {
         function setSmartItems(itemsInstance: Items) {
             itemsInstance.smartenUp();

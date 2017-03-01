@@ -9,7 +9,7 @@ import {DatagridActionOverflow} from "./datagrid-action-overflow";
 import {RowActionService} from "./providers/row-action-service";
 import {TestBed} from "@angular/core/testing";
 
-export default function(): void {
+export function DatagridActionOverflowSpecs(): void {
     describe("DatagridActionOverflow component", function() {
         let context: TestContext<DatagridActionOverflow, SimpleTest>;
         let rowActionServiceProvider: RowActionService;

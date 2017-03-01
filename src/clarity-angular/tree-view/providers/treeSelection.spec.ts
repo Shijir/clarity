@@ -1,8 +1,12 @@
-
+/*
+ * Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+ * This software is released under MIT license.
+ * The full license information can be found in LICENSE in the root directory of this project.
+ */
 
 import {TreeSelectionService} from "./treeSelection.service";
 
-export default function(): void {
+export function TreeSelectionSpecs(): void {
     describe("Tree Selection Service", () => {
         let selectionService: TreeSelectionService;
 

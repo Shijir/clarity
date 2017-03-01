@@ -30,7 +30,7 @@ import {TreeNode} from "./tree-node";
         </clr-tree>
     `
 })
-export class PrePopulateTreeTestComponent {
+class PrePopulateTreeTestComponent {
     selection: any[] = [
         {
             model: "A1",
@@ -88,7 +88,7 @@ export class PrePopulateTreeTestComponent {
         </clr-tree>
     `
 })
-export class TreeSelectionTestComponent {
+class TreeSelectionTestComponent {
     selection: any[] = [];
 
     @ViewChild("a1Node") a1Node: TreeNode;
@@ -102,7 +102,7 @@ export class TreeSelectionTestComponent {
 
 
 
-export default function(): void {
+export function TreeViewSpecs(): void {
     "use strict";
     describe("Tree View", () => {
         let fixture: ComponentFixture<any>;

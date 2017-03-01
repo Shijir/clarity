@@ -11,7 +11,7 @@ import {Filters} from "./providers/filters";
 import {CustomFilter} from "./providers/custom-filter";
 import {Filter} from "./interfaces/filter";
 
-export default function(): void {
+export function DatagridFilterSpecs(): void {
     describe("DatagridFilter component", function() {
         describe("Typescript API", function() {
             let filterService: Filters;

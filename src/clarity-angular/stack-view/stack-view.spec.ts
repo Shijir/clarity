@@ -3,6 +3,7 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
+
 import {ComponentFixture, TestBed} from "@angular/core/testing";
 import {Component} from "@angular/core";
 import {FormsModule} from "@angular/forms";
@@ -22,7 +23,7 @@ import {ClarityModule} from "../clarity.module";
 class TestComponent {
 }
 
-export default function(): void {
+export function StackViewSpecs(): void {
     "use strict";
     describe("StackView", () => {
         let fixture: ComponentFixture<any>;

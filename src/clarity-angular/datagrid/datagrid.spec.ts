@@ -16,7 +16,7 @@ import {Items} from "./providers/items";
 import {Comparator} from "./interfaces/comparator";
 import {Filter} from "./interfaces/filter";
 
-export default function(): void {
+export function DatagridSpecs(): void {
     describe("Datagrid component", function() {
         describe("Typescript API", function() {
             let context: TestContext<Datagrid, FullTest>;

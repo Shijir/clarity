@@ -10,7 +10,203 @@ import {ClarityModule} from "../clarity.module";
 import {TreeNode} from "./tree-node";
 import {TreeView} from "./tree-view";
 
-export default function(): void {
+
+@Component({
+    template: `
+        <clr-tree #treeView 
+            [clrTreeSelected]="treeSelection">
+            <clr-tree-node #a1Node [clrTreeModel]="'A1'" (clrTreeNodeSelectedChange)="a1NodeChanged($event)">
+                A1
+                <clr-tree-node #b1Node (clrTreeNodeSelectedChange)="b1NodeChanged($event)">
+                    B1
+                    <clr-tree-node #c1Node (clrTreeNodeSelectedChange)="c1NodeChanged($event)">
+                        C1
+                    </clr-tree-node>
+                    <clr-tree-node #c2Node>
+                        C2
+                    </clr-tree-node>
+                    <clr-tree-node #c3Node>
+                        C3
+                    </clr-tree-node>
+                </clr-tree-node>
+                <clr-tree-node #b2Node>
+                    B2
+                </clr-tree-node>
+            </clr-tree-node>
+        </clr-tree>
+    `
+})
+class ParentChildTreeNodeSelectionTestComponent {
+    treeSelection: any[] = [];
+
+    @ViewChild("treeView") tree: TreeView;
+    @ViewChild("a1Node") a1Node: TreeNode;
+    @ViewChild("b1Node") b1Node: TreeNode;
+    @ViewChild("c1Node") c1Node: TreeNode;
+    @ViewChild("c2Node") c2Node: TreeNode;
+    @ViewChild("c3Node") c3Node: TreeNode;
+    @ViewChild("b2Node") b2Node: TreeNode;
+
+    a1NodeChangeValue: boolean;
+    b1NodeChangeValue: boolean;
+    c1NodeChangeValue: boolean;
+
+    a1NodeChanged(val: boolean): void {
+        this.a1NodeChangeValue = val;
+    }
+
+    b1NodeChanged(val: boolean): void {
+        this.b1NodeChangeValue = val;
+    }
+
+    c1NodeChanged(val: boolean): void {
+        this.c1NodeChangeValue = val;
+    }
+}
+
+@Component({
+    template: `
+        <clr-tree #treeView [clrTreeSelected]="treeSelection">
+            <clr-tree-node #a1Node
+                [clrTreeModel]="'A1'"
+                [clrTreeNodeSelected]="a1NodeSelection"
+                (clrTreeNodeSelectedChange)="a1NodeSelectionChange($event)">A1</clr-tree-node>
+            <clr-tree-node #a2Node
+                [clrTreeModel]="'A2'"
+                [clrTreeNodeSelected]="a2NodeSelection"
+                (clrTreeNodeSelectedChange)="a2NodeSelectionChange($event)">A2</clr-tree-node>    
+        </clr-tree>
+    `
+})
+class BasicTreeNodeSelectionTestComponent {
+    treeSelection: any[] = [];
+
+    @ViewChild("treeView") tree: TreeView;
+    @ViewChild("a1Node") a1Node: TreeNode;
+    @ViewChild("a2Node") a2Node: TreeNode;
+
+    a1NodeSelection: boolean = true;
+    a2NodeSelection: boolean = false;
+
+    a1NodeSelectionChangeValue: boolean;
+    a2NodeSelectionChangeValue: boolean;
+
+    a1NodeSelectionChange(value: boolean): void {
+        this.a1NodeSelectionChangeValue = value;
+    }
+
+    a2NodeSelectionChange(value: boolean): void {
+        this.a2NodeSelectionChangeValue = value;
+    }
+}
+
+@Component({
+    template: `
+        <clr-tree-node #parentTreeNode>
+            A1
+            <clr-tree-node #childTreeNode>
+                B1
+            </clr-tree-node>
+
+            <clr-tree-node>
+                B2
+            </clr-tree-node>
+
+            <clr-tree-node>
+                B3
+            </clr-tree-node>
+        </clr-tree-node>
+    `
+})
+class BasicTreeNodeTestComponent {
+    @ViewChild("parentTreeNode") parentTreeNode: TreeNode;
+    @ViewChild("childTreeNode") childTreeNode: TreeNode;
+}
+
+@Component({
+    template: `
+        <clr-tree-node *ngFor="let node of nodes">
+            {{node.name}}
+        </clr-tree-node>
+    `
+})
+class DynamicTreeNodeTestComponent {
+    nodes: any = [
+        {
+            name: "A1"
+        },
+        {
+            name: "A2"
+        },
+        {
+            name: "A3"
+        },
+        {
+            name: "A4"
+        }
+    ];
+}
+
+@Component({
+    template: `
+        <clr-tree-node #parentTreeNode 
+            [clrTreeNodeExpanded]="expanded" 
+            (clrTreeNodeExpandedChange)="onExpandedChange($event)">
+            A1
+            <clr-tree-node>
+                B1
+            </clr-tree-node>
+        </clr-tree-node>
+    `
+})
+class TreeNodeExpandTestComponent {
+    @ViewChild("parentTreeNode") parentTreeNode: TreeNode;
+
+    expanded: boolean = false;
+
+    outputExpanded: boolean;
+
+    onExpandedChange(value: boolean): void {
+        this.outputExpanded = value;
+    }
+}
+
+@Component({
+    template: `
+        <clr-tree-node #parentTreeNode 
+            [clrTreeNodeExpandable]="expandable"
+            [clrTreeNodeLoading]="loading">
+            A1
+        </clr-tree-node>
+    `
+})
+class TreeNodeExpandableTestComponent {
+    @ViewChild("parentTreeNode") parentTreeNode: TreeNode;
+
+    expandable: boolean = false;
+    loading: boolean = false;
+}
+
+@Component({
+    template: `
+        <clr-tree [clrTreeSelected]="treeSelection">
+            <clr-tree-node [(clrTreeNodeSelected)]="parent">
+                A1
+                <clr-tree-node [(clrTreeNodeSelected)]="child">
+                    B1
+                </clr-tree-node>
+            </clr-tree-node>
+        </clr-tree>
+    `
+})
+class TreeNodeSelectTestComponent {
+    treeSelection: any[] = [];
+
+    parent: boolean = false;
+    child: boolean = false;
+}
+
+export function TreeNodeSpecs(): void {
     "use strict";
     describe("Tree Node", () => {
         let fixture: ComponentFixture<any>;
@@ -481,198 +677,3 @@ export default function(): void {
         });
     });
 };
-
-@Component({
-    template: `
-        <clr-tree #treeView 
-            [clrTreeSelected]="treeSelection">
-            <clr-tree-node #a1Node [clrTreeModel]="'A1'" (clrTreeNodeSelectedChange)="a1NodeChanged($event)">
-                A1
-                <clr-tree-node #b1Node (clrTreeNodeSelectedChange)="b1NodeChanged($event)">
-                    B1
-                    <clr-tree-node #c1Node (clrTreeNodeSelectedChange)="c1NodeChanged($event)">
-                        C1
-                    </clr-tree-node>
-                    <clr-tree-node #c2Node>
-                        C2
-                    </clr-tree-node>
-                    <clr-tree-node #c3Node>
-                        C3
-                    </clr-tree-node>
-                </clr-tree-node>
-                <clr-tree-node #b2Node>
-                    B2
-                </clr-tree-node>
-            </clr-tree-node>
-        </clr-tree>
-    `
-})
-export class ParentChildTreeNodeSelectionTestComponent {
-    treeSelection: any[] = [];
-
-    @ViewChild("treeView") tree: TreeView;
-    @ViewChild("a1Node") a1Node: TreeNode;
-    @ViewChild("b1Node") b1Node: TreeNode;
-    @ViewChild("c1Node") c1Node: TreeNode;
-    @ViewChild("c2Node") c2Node: TreeNode;
-    @ViewChild("c3Node") c3Node: TreeNode;
-    @ViewChild("b2Node") b2Node: TreeNode;
-
-    a1NodeChangeValue: boolean;
-    b1NodeChangeValue: boolean;
-    c1NodeChangeValue: boolean;
-
-    a1NodeChanged(val: boolean): void {
-        this.a1NodeChangeValue = val;
-    }
-
-    b1NodeChanged(val: boolean): void {
-        this.b1NodeChangeValue = val;
-    }
-
-    c1NodeChanged(val: boolean): void {
-        this.c1NodeChangeValue = val;
-    }
-}
-
-@Component({
-    template: `
-        <clr-tree #treeView [clrTreeSelected]="treeSelection">
-            <clr-tree-node #a1Node
-                [clrTreeModel]="'A1'"
-                [clrTreeNodeSelected]="a1NodeSelection"
-                (clrTreeNodeSelectedChange)="a1NodeSelectionChange($event)">A1</clr-tree-node>
-            <clr-tree-node #a2Node
-                [clrTreeModel]="'A2'"
-                [clrTreeNodeSelected]="a2NodeSelection"
-                (clrTreeNodeSelectedChange)="a2NodeSelectionChange($event)">A2</clr-tree-node>    
-        </clr-tree>
-    `
-})
-export class BasicTreeNodeSelectionTestComponent {
-    treeSelection: any[] = [];
-
-    @ViewChild("treeView") tree: TreeView;
-    @ViewChild("a1Node") a1Node: TreeNode;
-    @ViewChild("a2Node") a2Node: TreeNode;
-
-    a1NodeSelection: boolean = true;
-    a2NodeSelection: boolean = false;
-
-    a1NodeSelectionChangeValue: boolean;
-    a2NodeSelectionChangeValue: boolean;
-
-    a1NodeSelectionChange(value: boolean): void {
-        this.a1NodeSelectionChangeValue = value;
-    }
-
-    a2NodeSelectionChange(value: boolean): void {
-        this.a2NodeSelectionChangeValue = value;
-    }
-}
-
-@Component({
-    template: `
-        <clr-tree-node #parentTreeNode>
-            A1
-            <clr-tree-node #childTreeNode>
-                B1
-            </clr-tree-node>
-
-            <clr-tree-node>
-                B2
-            </clr-tree-node>
-
-            <clr-tree-node>
-                B3
-            </clr-tree-node>
-        </clr-tree-node>
-    `
-})
-export class BasicTreeNodeTestComponent {
-    @ViewChild("parentTreeNode") parentTreeNode: TreeNode;
-    @ViewChild("childTreeNode") childTreeNode: TreeNode;
-}
-
-@Component({
-    template: `
-        <clr-tree-node *ngFor="let node of nodes">
-            {{node.name}}
-        </clr-tree-node>
-    `
-})
-export class DynamicTreeNodeTestComponent {
-    nodes: any = [
-        {
-            name: "A1"
-        },
-        {
-            name: "A2"
-        },
-        {
-            name: "A3"
-        },
-        {
-            name: "A4"
-        }
-    ];
-}
-
-@Component({
-    template: `
-        <clr-tree-node #parentTreeNode 
-            [clrTreeNodeExpanded]="expanded" 
-            (clrTreeNodeExpandedChange)="onExpandedChange($event)">
-            A1
-            <clr-tree-node>
-                B1
-            </clr-tree-node>
-        </clr-tree-node>
-    `
-})
-export class TreeNodeExpandTestComponent {
-    @ViewChild("parentTreeNode") parentTreeNode: TreeNode;
-
-    expanded: boolean = false;
-
-    outputExpanded: boolean;
-
-    onExpandedChange(value: boolean): void {
-        this.outputExpanded = value;
-    }
-}
-
-@Component({
-    template: `
-        <clr-tree-node #parentTreeNode 
-            [clrTreeNodeExpandable]="expandable"
-            [clrTreeNodeLoading]="loading">
-            A1
-        </clr-tree-node>
-    `
-})
-export class TreeNodeExpandableTestComponent {
-    @ViewChild("parentTreeNode") parentTreeNode: TreeNode;
-
-    expandable: boolean = false;
-    loading: boolean = false;
-}
-
-@Component({
-    template: `
-        <clr-tree [clrTreeSelected]="treeSelection">
-            <clr-tree-node [(clrTreeNodeSelected)]="parent">
-                A1
-                <clr-tree-node [(clrTreeNodeSelected)]="child">
-                    B1
-                </clr-tree-node>
-            </clr-tree-node>
-        </clr-tree>
-    `
-})
-export class TreeNodeSelectTestComponent {
-    treeSelection: any[] = [];
-
-    parent: boolean = false;
-    child: boolean = false;
-}
