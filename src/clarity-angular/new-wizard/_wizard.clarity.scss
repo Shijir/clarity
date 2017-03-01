@@ -43,65 +43,61 @@ $clr-wizard-box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
         box-shadow: $clr-wizard-box-shadow;
         height: 50%;
         max-height: 100%;
-
-        .modal-content {
-            border-radius: 0 $clr-default-borderradius $clr-default-borderradius 0;
-            box-shadow: none;
-            padding: 0;
-            flex: 2 2 auto;
-            width: 66%;
-            height: 100%;
-            overflow: hidden;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-direction: column;
-        }
     }
 
-    // TODO: TOO MUCH NESTING CARRIED OVER FROM MODAL STYLES...
     .modal-content {
-        .modal-header {
-            padding: 0;
-            flex: 0 0 auto;
-            width: 100%;
-            // right padding nudged a bit to better align icons
-            padding: $clr-wizard-default-space ($clr-wizard-default-space - 5) 0 $clr-wizard-default-space;
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: space-between;
-            align-items: flex-start;
-            overflow: hidden;
-        }
+        border-radius: 0 $clr-default-borderradius $clr-default-borderradius 0;
+        box-shadow: none;
+        padding: 0;
+        flex: 2 2 auto;
+        width: 66%;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-direction: column;
+    }
 
-        .modal-title {
-            color: $clr-wizard-title-text;
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-        }
+    .modal-header {
+        padding: 0;
+        flex: 0 0 auto;
+        width: 100%;
+        // right padding nudged a bit to better align icons
+        padding: $clr-wizard-default-space ($clr-wizard-default-space - 5) 0 $clr-wizard-default-space;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: flex-start;
+        overflow: hidden;
+    }
 
-        .modal-body {
-            flex: 1 1 auto;
-            color: $clr-wizard-main-textColor;
-        }
+    .modal-title {
+        color: $clr-wizard-title-text;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
 
-        .modal-footer {
-            padding: 0;
-            display: block;
-            padding-top: $clr-wizard-default-space;
-            height: $clr-wizard-footer-height;
-            min-height: $clr-wizard-footer-height;
-            max-height: $clr-wizard-footer-height;
-            width: 100%;
+    .modal-body {
+        flex: 1 1 auto;
+        color: $clr-wizard-main-textColor;
+    }
 
-            // TODO: INSANE NESTING FROM MODAL SCSS. NEED TO CLEANUP MODAL CSS
-            .btn {
-                margin: 0;
-                max-width: 100%;
-                display: block;
-            }
-        }
+    .modal-footer {
+        padding: 0;
+        display: block;
+        padding-top: $clr-wizard-default-space;
+        height: $clr-wizard-footer-height;
+        min-height: $clr-wizard-footer-height;
+        max-height: $clr-wizard-footer-height;
+        width: 100%;
+    }
+
+    .clr-wizard-btn {
+        margin: 0;
+        max-width: 100%;
+        display: block;
     }
 
     .modal-title-text {
@@ -282,22 +278,22 @@ $clr-wizard-box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
     }
 }
 
+$clr-wizard-all-dialog-min-width: baselineRem(10);
+$clr-wizard-all-dialog-min-height: baselineRem(17.5);
+
+$clr-wizard-md-nav-min-width: baselineRem(9);
+$clr-wizard-md-nav-max-width: baselineRem(10);
+$clr-wizard-md-dialog-max-height: baselineRem(21);
+
+$clr-wizard-lg-nav-min-width: $clr-wizard-all-dialog-min-width;
+$clr-wizard-lg-nav-max-width: baselineRem(12);
+$clr-wizard-lg-dialog-max-height: baselineRem(30);
+
+$clr-wizard-xl-nav-min-width: $clr-wizard-all-dialog-min-width;
+$clr-wizard-xl-nav-max-width: baselineRem(13);
+$clr-wizard-xl-dialog-max-height: 90vh;
+
 .clr-new-wizard {
-
-    $clr-wizard-all-dialog-min-width: baselineRem(10);
-    $clr-wizard-all-dialog-min-height: baselineRem(17.5);
-
-    $clr-wizard-md-nav-min-width: baselineRem(9);
-    $clr-wizard-md-nav-max-width: baselineRem(10);
-    $clr-wizard-md-dialog-max-height: baselineRem(21);
-
-    $clr-wizard-lg-nav-min-width: $clr-wizard-all-dialog-min-width;
-    $clr-wizard-lg-nav-max-width: baselineRem(12);
-    $clr-wizard-lg-dialog-max-height: baselineRem(30);
-
-    $clr-wizard-xl-nav-min-width: $clr-wizard-all-dialog-min-width;
-    $clr-wizard-xl-nav-max-width: baselineRem(13);
-    $clr-wizard-xl-dialog-max-height: 90vh;
 
     &.wizard-md {
         .modal-dialog {
