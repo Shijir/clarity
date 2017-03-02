@@ -184,5 +184,39 @@ fdescribe("Wizard Navigation Service", () => {
 
     });
 
+    it(".next() should set the current page to the next page.", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        wizardNavigationService.currentPageChanged.subscribe((page: NewWizardPageMock) => {
+
+            expect(page.title).toMatch(/clr-wizard-page-2-title/);
+
+        });
+
+        wizardNavigationService.next();
+
+        expect(wizardNavigationService.currentPageTitle).toMatch(/clr-wizard-page-2-title/);
+
+
+    });
+
+    it(".next() should return undefined if the next page is disabled", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(2);
+
+        testPage.readyToComplete = false;
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        expect(wizardNavigationService.next()).toBeUndefined();
+
+
+    });
+
+
+
 
 });
