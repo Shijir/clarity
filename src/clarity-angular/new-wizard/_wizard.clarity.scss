@@ -92,6 +92,7 @@ $clr-wizard-box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.2);
         min-height: $clr-wizard-footer-height;
         max-height: $clr-wizard-footer-height;
         width: 100%;
+        flex: 0 0 $clr-wizard-footer-height;
     }
 
     .clr-wizard-btn {
@@ -431,5 +432,93 @@ $clr-wizard-xl-dialog-max-height: 90vh;
         .modal-outer-wrapper {
             max-height: $clr-wizard-xl-dialog-max-height;
         }
+    }
+}
+
+.clr-wizard--inline {
+    display: block;
+    width: 100%;
+    // you will want to set a fixed width and height for these static wizards
+    // otherwise, you'll get some minor jumping along the right edge when it is
+    // closed...
+
+    clr-modal {
+        width: 100%;
+        display: block;
+    }
+
+    .modal {
+        padding: 0;
+        position: static;
+
+        .content-container {
+            height: 100%;
+
+            .nav-panel {
+                width: 99%;
+                height: 99%; 
+            }
+        }
+
+        .modal-outer-wrapper {
+            align-items: stretch;
+        }
+
+        .modal-content {
+            // height: auto;
+            box-shadow: none; 
+        }
+
+        .modal-dialog {
+            width: 100%;
+            z-index: auto; 
+        }
+    }
+
+    .modal-body {
+        height: 100%; 
+    }
+
+    .modal-header .close {
+        display: none;
+    }
+
+    .nav.navList {
+        padding-top: 0; 
+    }
+
+    .modal-dialog .modal-content .modal-body .content-area {
+        overflow-y: auto; 
+    }
+
+    .modal-backdrop {
+        height: 0;
+        width: 0;
+        display: none;
+    }
+
+    .modal-content-wrapper {
+        align-items: stretch;
+        height: auto;
+    }
+
+    .modal-ghost-wrapper {
+        display: none;
+    }
+}
+
+.clr-wizard--no-shadow {
+    .modal-content-wrapper {
+        box-shadow: none;
+    }
+}
+
+.clr-wizard--no-title {
+    .clr-wizard-title {
+        display: none;
+    }
+
+    .clr-wizard-stepnav {
+        padding-top: baselineRem(1);
     }
 }

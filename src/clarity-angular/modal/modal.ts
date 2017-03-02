@@ -29,14 +29,14 @@ import {ScrollingService} from "../main/scrolling-service";
     `],
     animations: [
         trigger("fadeDown", [
-            transition("void => *", [
+            transition("void => false", [
                 style({
                     opacity: 0,
                     transform: "translate(0, -25%)"
                 }),
                 animate("0.2s ease-in-out")]
             ),
-            transition("* => void", [
+            transition("false => void", [
                 animate("0.2s ease-in-out", style({
                     opacity: 0,
                     transform: "translate(0, -25%)"
@@ -114,6 +114,7 @@ export class Modal implements OnChanges, OnDestroy {
     @Input("clrModalClosable") closable: boolean = true;
     @Input("clrModalSize") size: string;
     @Input("clrModalStaticBackdrop") staticBackdrop: boolean = false;
+    @Input("clrModalSkipAnimation") skipAnimation: boolean = false;
 
     // presently this is only used by wizards
     @Input("clrModalGhostPageState") ghostPageState: string = "hidden";
