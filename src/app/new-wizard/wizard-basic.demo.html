@@ -14,14 +14,17 @@
 
 <clr-newwizard #wizardmd 
     [(clrWizardOpen)]="open"
-    [clrWizardSize]="'md'"
+    [clrWizardSize]="'lg'"
     (clrWizardCurrentPageChanged)="handlePageChange()"
     (clrWizardOnFinish)="doReset()"
     (clrWizardOnCancel)="doCancel()"
     (clrWizardOnReset)="notifyReset()"
-    [clrWizardShowGhostPages]="true"
+    [clrWizardShowGhostPages]="false"
+    class="clr-wizard--inline clr-wizard--no-shadow clr-wizard--inline" 
     >
-    <!-- class="clr-wizard--inline clr-wizard--no-shadow clr-wizard--no-title" -->
+<!--
+    [clrWizardPreventModalAnimation]="true"
+-->
 <!-- TOREMOVE: WE DON'T NEED AN ONRESET/AFTER RESET OUTPUT -->
     <!-- THROW THE FOLLOWING LINE UP IN THE WIZARD DECLARATION TO TEST WIZARD-LVL ALTCANCEL -->
     <!-- (clrWizardAltCancel)="wizardLevelCustomCancel()" -->

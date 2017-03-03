@@ -78,7 +78,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
     // can activate showing or hiding the ghost page effect
-    // defaults to true
+    // defaults to false
     @Input("clrWizardShowGhostPages") showGhostPages: boolean = false;
 
     // Variable that toggles open/close of the wizard component.
@@ -118,6 +118,14 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         new EventEmitter<any>(false);
 
     @Input("clrWizardPreventDefaultCancel") stopCancel: boolean = false;
+
+    @Input("clrWizardPreventModalAnimation") _stopModalAnimations: boolean = false;
+    public get stopModalAnimations(): string {
+        if (this._stopModalAnimations) {
+            return "true";
+        }
+        return "false";
+    }
 
     public ngOnInit(): void {
         let navService = this.navService;
@@ -237,6 +245,8 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     public deactivateGhostPages(): void {
         this.setGhostPages("deactivate");
     }
+
+// TODO: USE ENUMS/CONSTANTS INSTEAD OF STRINGS ACROSS COMPONENTS!
 
     public setGhostPages(deactivateOrNot: string = ""): void {
         let navService = this.navService;

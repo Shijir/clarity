@@ -29,14 +29,14 @@ import {ScrollingService} from "../main/scrolling-service";
     `],
     animations: [
         trigger("fadeDown", [
-            transition("void => false", [
+            transition("* => false", [
                 style({
                     opacity: 0,
                     transform: "translate(0, -25%)"
                 }),
                 animate("0.2s ease-in-out")]
             ),
-            transition("false => void", [
+            transition("false => *", [
                 animate("0.2s ease-in-out", style({
                     opacity: 0,
                     transform: "translate(0, -25%)"
@@ -78,6 +78,7 @@ import {ScrollingService} from "../main/scrolling-service";
             transition("lastGhost => *", animate("100ms ease-out")),
             transition("penultimateGhost => *", animate("100ms ease-in"))
         ]),
+// TODO: ANIMATE THE COLOR
         trigger("ghostPageTwoState", [
             state("inactive", style({
                 left: "-24px",
