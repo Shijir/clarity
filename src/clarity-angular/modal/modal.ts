@@ -18,7 +18,10 @@ import {
     trigger,
     state
 } from "@angular/core";
+
 import {ScrollingService} from "../main/scrolling-service";
+import { GHOST_PAGE_ANIMATION } from "./utils/ghost-page-animations";
+import { MODAL_SIZES } from "./utils/modal-sizes";
 
 @Component({
     selector: "clr-modal",
@@ -61,50 +64,52 @@ import {ScrollingService} from "../main/scrolling-service";
             )
         ]),
         trigger("ghostPageOneState", [
-            state("inactive", style({
+            state(GHOST_PAGE_ANIMATION.STATES.NO_PAGES, style({
                 left: "-24px"
             })),
-            state("ready", style({
+            state(GHOST_PAGE_ANIMATION.STATES.ALL_PAGES, style({
                 left: "0"
             })),
-            state("penultimateGhost", style({
+            state(GHOST_PAGE_ANIMATION.STATES.NEXT_TO_LAST_PAGE, style({
                 left: "-24px"
             })),
-            state("lastGhost", style({
+            state(GHOST_PAGE_ANIMATION.STATES.LAST_PAGE, style({
                 left: "-24px"
             })),
-            transition("inactive => *", animate("100ms ease-out")),
-            transition("ready => *", animate("100ms ease-in")),
-            transition("lastGhost => *", animate("100ms ease-out")),
-            transition("penultimateGhost => *", animate("100ms ease-in"))
+            transition(GHOST_PAGE_ANIMATION.STATES.NO_PAGES + " => *", animate(GHOST_PAGE_ANIMATION.TRANSITIONS.IN)),
+            transition(GHOST_PAGE_ANIMATION.STATES.ALL_PAGES + " => *", animate(GHOST_PAGE_ANIMATION.TRANSITIONS.OUT)),
+            transition(GHOST_PAGE_ANIMATION.STATES.LAST_PAGE + " => *", animate(GHOST_PAGE_ANIMATION.TRANSITIONS.IN)),
+            transition(GHOST_PAGE_ANIMATION.STATES.NEXT_TO_LAST_PAGE + " => *",
+                animate(GHOST_PAGE_ANIMATION.TRANSITIONS.OUT))
         ]),
-// TODO: ANIMATE THE COLOR
+// TODO: USE TRANSFORM, NOT LEFT...
         trigger("ghostPageTwoState", [
-            state("inactive", style({
+            state(GHOST_PAGE_ANIMATION.STATES.NO_PAGES, style({
                 left: "-24px",
                 top: "24px",
                 bottom: "24px"
             })),
-            state("ready", style({
+            state(GHOST_PAGE_ANIMATION.STATES.ALL_PAGES, style({
                 left: "24px"
             })),
-            state("penultimateGhost", style({
+            state(GHOST_PAGE_ANIMATION.STATES.NEXT_TO_LAST_PAGE, style({
                 left: "0px",
                 top: "24px",
-                bottom: "24px"
+                bottom: "24px",
+                background: "#bbb"
             })),
-            state("lastGhost", style({
+            state(GHOST_PAGE_ANIMATION.STATES.LAST_PAGE, style({
                 left: "-24px",
                 top: "24px",
                 bottom: "24px"
             })),
-            transition("inactive => *", animate("100ms ease-out")),
-            transition("ready => *", animate("100ms ease-in")),
-            transition("lastGhost => *", animate("100ms ease-out")),
-            transition("penultimateGhost => *", animate("100ms ease-in"))
+            transition(GHOST_PAGE_ANIMATION.STATES.NO_PAGES + " => *", animate(GHOST_PAGE_ANIMATION.TRANSITIONS.IN)),
+            transition(GHOST_PAGE_ANIMATION.STATES.ALL_PAGES + " => *", animate(GHOST_PAGE_ANIMATION.TRANSITIONS.OUT)),
+            transition(GHOST_PAGE_ANIMATION.STATES.LAST_PAGE + " => *", animate(GHOST_PAGE_ANIMATION.TRANSITIONS.IN)),
+            transition(GHOST_PAGE_ANIMATION.STATES.NEXT_TO_LAST_PAGE + " => *",
+                animate(GHOST_PAGE_ANIMATION.TRANSITIONS.OUT))
         ])
     ]
-
 })
 export class Modal implements OnChanges, OnDestroy {
     // We grab animated children from the view, to wait for them to finish animating out

@@ -18,6 +18,8 @@ import { Subscription } from "rxjs/Subscription";
 import { NewWizardPage } from "./wizard-page";
 import { NewWizardHeaderAction } from "./wizard-header-action";
 
+import { GHOST_PAGE_ANIMATION } from "../modal/utils/ghost-page-animations";
+
 // providers
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { PageCollectionService } from "./providers/page-collection";
@@ -246,20 +248,19 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.setGhostPages("deactivate");
     }
 
-// TODO: USE ENUMS/CONSTANTS INSTEAD OF STRINGS ACROSS COMPONENTS!
-
     public setGhostPages(deactivateOrNot: string = ""): void {
         let navService = this.navService;
+        let ghostpageStates = GHOST_PAGE_ANIMATION.STATES;
 
         if (this.showGhostPages) {
             if (deactivateOrNot === "deactivate") {
-                navService.wizardGhostPageState = "inactive";
+                navService.wizardGhostPageState = ghostpageStates.NO_PAGES;
             } else if (navService.currentPageIsLast) {
-                navService.wizardGhostPageState = "lastGhost";
+                navService.wizardGhostPageState = ghostpageStates.LAST_PAGE;
             } else if (navService.currentPageIsNextToLast) {
-                navService.wizardGhostPageState = "penultimateGhost";
+                navService.wizardGhostPageState = ghostpageStates.NEXT_TO_LAST_PAGE;
             } else {
-                navService.wizardGhostPageState = "ready";
+                navService.wizardGhostPageState = ghostpageStates.ALL_PAGES;
             }
         }
         // SPECME

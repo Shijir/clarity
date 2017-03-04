@@ -12,6 +12,8 @@ import { NewWizardPage } from "../wizard-page";
 import { PageCollectionService } from "./page-collection";
 import { ButtonHubService } from "./button-hub";
 
+import { GHOST_PAGE_ANIMATION } from "../../modal/utils/ghost-page-animations"
+
 @Injectable()
 export class WizardNavigationService implements OnDestroy {
 
@@ -280,19 +282,19 @@ export class WizardNavigationService implements OnDestroy {
     // used to reset to the first page
 // SPECME: TEST FOR IF ARRAY OF PAGES CHANGE AFTER RESET HAPPENS
 // ID...
-//  ??: EASIEST WAY TO SOLVE IS TO HAVE A GENERIC INPUT TO RESET TO A SPECIFIC ID
+// TODO?: EASIEST WAY TO SOLVE IS TO HAVE A GENERIC INPUT TO RESET TO A SPECIFIC ID
     public setFirstPageCurrent(): void {
         this.setCurrentPage(this.pageCollection.pagesAsArray[0]);
     }
 
-    private _wizardGhostPageState: string = "hidden";
+    private _wizardGhostPageState: string = GHOST_PAGE_ANIMATION.STATES.NO_PAGES;
     public get wizardGhostPageState(): string {
         return this._wizardGhostPageState;
     }
 
     public set wizardGhostPageState(value: string) {
         if (this.hideWizardGhostPages) {
-            this._wizardGhostPageState = "hidden";
+            this._wizardGhostPageState = GHOST_PAGE_ANIMATION.STATES.NO_PAGES;
         } else {
             this._wizardGhostPageState = value;
         }
