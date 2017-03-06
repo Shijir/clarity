@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -7,7 +7,7 @@ import {ComponentFixture, TestBed} from "@angular/core/testing";
 import {Component, ViewChild} from "@angular/core";
 import {ScrollingService} from "../main/scrolling-service";
 import {ClarityModule} from "../clarity.module";
-import {Wizard} from "./wizard";
+import { NewWizard } from "./wizard";
 
 @Component({
     template: `

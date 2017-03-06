@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -64,4 +64,10 @@ export class NewWizardStepnavItem {
         // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
         this.navService.goTo(this.page);
     }
+
+// TOBREAK: this.title has been removed because it is no longer needed
+
+// TOBREAK: clrWizardStepId input has been removed. this.id still works to retrieve id of stepnav-item
+
+// TOBREAK: this.onClick() has been changed to just this.click()
 }

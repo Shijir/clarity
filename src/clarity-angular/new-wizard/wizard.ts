@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -43,8 +43,6 @@ import { HeaderActionService } from "./providers/header-actions";
 })
 export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
-// TODO: COMMENT ON ALL LEGACY INPUT/OUTPUTS TO KNOW WHICH ONES WE KEEP B/C OF LEGACY
-
     constructor(public navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
                 public buttonService: ButtonHubService,
@@ -77,6 +75,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    // LEGACY: Naming convention matches old wizard
     @Input("clrWizardSize") size: string = "xl"; // xl is the default size
 
     // can activate showing or hiding the ghost page effect
@@ -84,9 +83,11 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Input("clrWizardShowGhostPages") showGhostPages: boolean = false;
 
     // Variable that toggles open/close of the wizard component.
+    // LEGACY: Naming convention matches old wizard
     @Input("clrWizardClosable") closable: boolean = true;
 
     // Variable that toggles open/close of the wizard component.
+    // LEGACY: Naming convention matches old wizard
     @Input("clrWizardOpen") _open: boolean = false;
 
 // TODOCUMENT: HERE IS HOW THE TWO-WAY BINDING HAPPENS...
@@ -99,6 +100,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         new EventEmitter<boolean>(false);
 
     // User can bind his event handler for onCancel of the main content
+    // LEGACY: Naming convention matches old wizard
     @Output("clrWizardOnCancel") onCancel: EventEmitter<any> =
         new EventEmitter<any>(false);
 
@@ -172,9 +174,19 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         return this.navService.currentPage;
     }
 
-// TODO: MAKE SURE WIZARD HAS DELEGATES FOR REASONABLE MODAL FNS
+    // LEGACY: convenience function to match legacy API
+    public get isLast(): boolean {
+        return this.navService.currentPageIsLast;
+    }
+
+    // LEGACY: convenience function to match legacy API
+    public get isFirst(): boolean {
+        return this.navService.currentPageIsFirst;
+    }
+
     // This is a public function that can be used to programmatically open the
     // wizard.
+    // LEGACY: Naming convention matches old wizard
     public open(): void {
         let navService = this.navService;
 
@@ -190,6 +202,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     // This is a public function that can be used to programmatically close the
     // wizard.
+    // LEGACY: Naming convention matches old wizard
     public close(): void {
         this._open = false;
         this.deactivateGhostPages();
@@ -208,6 +221,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 
     // prev -- DEPRECATED
     // calls previous(); kept here to avoid breaking change where unnecessary
+    // LEGACY: Naming convention matches old wizard
     public prev(): void {
         this.navService.previous();
     }
@@ -219,6 +233,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
         this.navService.previous();
     }
 
+    // LEGACY: Naming convention matches old wizard
     public next(): void {
         this.navService.next();
     }
@@ -304,4 +319,15 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // unSkipTab(tabId: string): void {
     //     this._setTabIsSkipped(tabId, false);
     // }
+
+// TOBREAK: old this.wizardStepChildren is no longer a thing.
+// Shouldn't need it because we don't need to use it to do skipping, highlighting, and stuff.
+// Set page state via the navService or pageCollection service and stepItems will follow suit.
+
+// TOBREAK: old this.wizardPageChildren is now just this.pages
+
+// TOBREAK: no longer has this.id
+
+// TOBREAK: this.isLast no longer exists. use this.navService.currentPageIsLast instead
+// TOBREAK: this.isFirst no longer exists. use this.navService.currentPageIsLast instead
 }

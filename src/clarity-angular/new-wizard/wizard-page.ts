@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -57,10 +57,13 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @ContentChild(WizardPageHeaderActionsDirective) private _headerActions: WizardPageHeaderActionsDirective;
 
     // Next button disabled
+    // LEGACY: Naming convention of input matches old wizard; this.nextDisabled has been
+    // changed to this.nextStepDisabled
     @Input("clrWizardPageNextDisabled") public nextStepDisabled: boolean;
 
     // Emitter for Next button and readyToComplete state changes. 
     // Need to manually call it. Not automagically called.
+    // LEGACY: Naming convention matches old wizard
     @Output("clrWizardPageNextDisabledChanged") nextDisabledChanged: EventEmitter < any > =
         new EventEmitter(false);
 
@@ -73,10 +76,12 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
 // TODO: SHOULD USE A CUSTOM BUTTON INSTEAD. NOTE BREAKING CHANGE...
     // User can bind an event handler for onCommit of the main content
+    // LEGACY: Naming convention matches old wizard
     @Output("clrWizardPageOnCommit") onCommit: EventEmitter < any > =
         new EventEmitter<any>(false);
 
     // User can bind an event handler for onLoad of the main content
+    // LEGACY: Naming convention matches old wizard
     @Output("clrWizardPageOnLoad") onLoad: EventEmitter < any > = new EventEmitter(false);
 
     // This output can subvert the default cancel routine at the page level, if
@@ -159,6 +164,7 @@ export class NewWizardPage implements OnInit, OnDestroy {
         return previousPage.completed;
     }
 
+// TOBREAK: this is now a templateRef and no longer a string
     public get title(): TemplateRef < any > {
         return this.pageTitle.pageTitleTemplateRef;
     }
@@ -203,8 +209,8 @@ export class NewWizardPage implements OnInit, OnDestroy {
         this.previousButtonSubscription.unsubscribe();
     }
 
-    // @Input("clrWizardPagePreventDefault")
 // TOBREAK: this input was removed. use ngIf instead. note breaking change.
+// @Input("clrWizardPagePreventDefault")
 
 // TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
     // private doSkippedChange(value: boolean) {
@@ -219,4 +225,8 @@ export class NewWizardPage implements OnInit, OnDestroy {
 // TOREMOVE: NOTE BREAKING CHANGE, NOW NG-IF
     // @Output("clrWizardPageHiddenChange") hiddenChanged = new EventEmitter<boolean>(false);
     // @Output("clrWizardPageSkippedChange") skippedChange = new EventEmitter<boolean>(false);
+
+// TOBREAK: this.hasProjectedTitleContent has been removed b/c it was no longer needed.
+
+// TOBREAK: clrWizardPageIsSkipped input has been removed; use ngIf instead
 }

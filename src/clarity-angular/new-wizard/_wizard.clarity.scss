@@ -1,4 +1,4 @@
-// Copyright (c) 2016 VMware, Inc. All Rights Reserved.
+// Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
 // This software is released under MIT license.
 // The full license information can be found in LICENSE in the root directory of this project.
 
@@ -516,7 +516,6 @@ $clr-wizard-xl-dialog-max-height: 90vh;
 
     .modal-content-wrapper {
         align-items: stretch;
-        // height: auto;
         height: 100%;
     }
 
@@ -524,12 +523,10 @@ $clr-wizard-xl-dialog-max-height: 90vh;
         display: none;
     }
 
-    .clr-wizard-stepnav-wrapper, .modal-content {
+    .clr-wizard-stepnav-wrapper, &.clr-new-wizard .modal-content {
         min-height: 100%;
-        // height: 100%;
         height: auto;
-// TODO: GET RID OF !IMPORTANT; WE CAN DO BETTER.
-        max-height: 100% !important; 
+        max-height: 100%; 
     }
 }
 

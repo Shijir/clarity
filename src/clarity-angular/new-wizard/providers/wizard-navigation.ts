@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
+ * This software is released under MIT license.
+ * The full license information can be found in LICENSE in the root directory of this project.
+ */
+
 import {
     Injectable,
     OnDestroy,
@@ -12,7 +18,7 @@ import { NewWizardPage } from "../wizard-page";
 import { PageCollectionService } from "./page-collection";
 import { ButtonHubService } from "./button-hub";
 
-import { GHOST_PAGE_ANIMATION } from "../../modal/utils/ghost-page-animations"
+import { GHOST_PAGE_ANIMATION } from "../../modal/utils/ghost-page-animations";
 
 @Injectable()
 export class WizardNavigationService implements OnDestroy {
