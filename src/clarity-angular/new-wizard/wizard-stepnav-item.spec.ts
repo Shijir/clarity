@@ -3,421 +3,176 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-// import {ComponentFixture, TestBed} from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 // import {Component, ViewChild} from "@angular/core";
 // import {ScrollingService} from "../main/scrolling-service";
-// import {ClarityModule} from "../clarity.module";
-// import { NewWizard } from "./wizard";
+// import { ClarityModule } from "../clarity.module";
+import { NewWizardStepnavItem } from "./wizard-stepnav-item";
+import { WizardNavigationService } from "./providers/wizard-navigation";
+import { PageCollectionService } from "./providers/page-collection";
+import { ButtonHubService } from "./providers/button-hub";
+import { NewWizardPage } from "./wizard-page";
 
-describe("New Wizard", () => {
+
+// we are going to spy on navService and pageCollection
+// try to stub the wizard page
+
+// stub wizard page
+// class NewWizardPage {
+//     public disabled: boolean = false;
+//     public current: boolean = false;
+//     public completed: boolean = false;
+// }
+
+describe("New Wizard Stepnav Item", () => {
     describe("Typescript API", () => {
-        describe("Ghost pages", () => {
-        // Make sure that ghost pages start out as deactivated
-            it("true is true", () => {
-                expect(true).toBe(true);
+        let fixture: ComponentFixture<any>;
+        let testItemComponent: NewWizardStepnavItem;
+        let debugEl: any;
+        let getProvider: any;
+        // let compiled: any;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                // imports: [ClarityModule.forRoot()],
+                declarations: [ NewWizardStepnavItem, NewWizardPage ],
+                providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ]
             });
-        // Make sure we opt out if showGhostPages is false
-            it("true is true", () => {
-                expect(true).toBe(true);
+
+            fixture = TestBed.createComponent(NewWizardStepnavItem);
+            debugEl = fixture.debugElement;
+            getProvider = debugEl.injector.get;
+            testItemComponent = fixture.componentInstance;
+            testItemComponent.page = new NewWizardPage(
+                getProvider(WizardNavigationService),
+                getProvider(PageCollectionService),
+                getProvider(ButtonHubService)
+            );
+            testItemComponent.page._id = "this-is-my-page-id-0";
+        });
+
+        describe("id", () => {
+        // What happens if this.page is blank?
+            it("should call page collection service for step item id", () => {
+                const pageCollectionSpy = spyOn(getProvider(PageCollectionService), "getStepItemIdForPage");
+                fixture.detectChanges();
+                expect(pageCollectionSpy).toHaveBeenCalledWith(testItemComponent.page);
             });
-        // Make sure we set proper state when sent deactivate
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        // Make sure we set proper state when on last page
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        // Make sure we set proper state when on next to last page
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        // Make sure we fall through to proper state
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        // Make sure we set expected state when first page is last page
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        // Make sure we set expected state when first page is next to last page
-            it("true is true", () => {
-                expect(true).toBe(true);
+
+            it("should properly inject 'step' in the step item id", () => {
+                const expectedId = "this-is-my-page-id-step-0";
+                fixture.detectChanges();
+                expect(testItemComponent.id).toBe(expectedId);
             });
         });
-        describe("Opening and closing", () => {
-            describe("open", () => {
-                // Make sure it calls the navService of currentPage is falsy or not set
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // Make sure it calls setGhostPages
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // Make sure it properly sets this._open
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("close", () => {
-                // Make sure it calls deactivateGhostPages
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // Make sure it properly sets this._open
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("toggle", () => {
-                // Make sure that passing it true calls open
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // Make sure that passing it false calls close
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-        });
-        describe("Convenience functions", () => {
-            describe("currentPage", () => {
-                // Make sure that currentPage calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("isLast", () => {
-                // Make sure that isLast calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("isFirst", () => {
-                // Make sure that isFirst calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("prev", () => {
-                // Make sure that it calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("previous", () => {
-                // Make sure that it calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("next", () => {
-                // Make sure that it calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("goTo", () => {
-                // Make sure that it calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // Make sure that it early returns if not given a page id
-                // WTF??? DO WE HAVE PAGE IDS? VERIFY...
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("reset", () => {
-                // Make sure that it calls the pageCollection
-                // Make sure that it calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("ghostPageState", () => {
-                // Make sure that it calls the navService
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("deactivateGhostPages", () => {
-                // Make sure that it calls the navService with "deactivate" as the value
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
+        describe("click", () => {
+        // Make sure early returns if this.isDisabled or this.isCurrent
+        // Make sure it calls navService otherwise
+        // What happens if this.page is blank?
+            it("true is true", () => {
+                expect(true).toBe(true);
             });
         });
     });
 
     // Inputs, Outputs, and initialization of component based on content-children
     describe("Template API", () => {
-        describe("Overriding modal animation", () => {
-        // Make sure that stopModalAnimations returns false when 
-        // clrWizardPreventModalAnimation input is set 
-        // validate default is false as well
+        describe("isDisabled", () => {
+        // Make sure this.isDisabled maps to this.page and updates too
+        // What happens if this.page is blank?
             it("true is true", () => {
                 expect(true).toBe(true);
             });
         });
-        describe("Current page onchange", () => {
-        // Make sure that ghost pages get set
-        // Make sure current page observable is emitted
+        describe("isCurrent", () => {
+        // Make sure this.isCurrent maps to this.page and updates too
+        // What happens if this.page is blank?
             it("true is true", () => {
                 expect(true).toBe(true);
             });
         });
-
-        // validate that the clrWizardCurrentPageChanged output is fired
-        // validate that the clrWizardOnNext output is fired
-        // validate that the clrWizardOnPrevious output is fired
-
-
-        describe("Projection", () => {
-            // validate wizard title is projected
+        describe("isComplete", () => {
+        // Make sure this.isComplete maps to this.page and updates too
+        // What happens if this.page is blank?
             it("true is true", () => {
                 expect(true).toBe(true);
-            });
-            // validate that the stepnav is present
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // validate that the content title reflects current page and changes with it
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-
-            describe("Content", () => {
-                // validate that the content shows up
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the content changes
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the content can lazy load if needed
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that pages can be added via an ngFor
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the content can be changed dynamically
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // what should it do if no pages are in the template?
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // what should it do if all pages are hidden in the ngIf?
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-
-            describe("Buttons", () => {
-                // validate that the buttons show up
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the previous button is hidden on first page
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the previous button is visible on every page except the last page
-                // validate that the finish button is hidden on every page except the last one
-                // validate that the next button is hidden on last page
-                // validate that the finish button is visible on last page
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the button text is projected as expected
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that the page buttons superceded default wizard buttons
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that it falls back to wizard buttons
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // what should it do if no buttons are in the template?
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-
-            describe("Wizard Header Actions", () => {
-                // validate that header actions show up
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that header actions don't show up when they aren't there
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that page header actions take precedence
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that clicking on a header action does something
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that wizard falls through to wizard header actions
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-                // validate that wizard doesn't show header action when page with header actions
-                // changes to a page w/o header actions and the wizard doesn't have them
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
             });
         });
-
-        describe("Misc Observables", () => {
-            // validate that the clrWizardOnCancel output is fired
+        describe("Projects", () => {
+        // Make sure that it projects the page.title templateRef
             it("true is true", () => {
                 expect(true).toBe(true);
             });
-            // validate that the clrWizardOnFinish output is fired
+        });
+        describe("Inputs", () => {
+        // Make sure this.page is as expected
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+        // What happens if there is no page?
             it("true is true", () => {
                 expect(true).toBe(true);
             });
         });
     });
 
-// TODO: ADD TO WIZARD TESTS... PART OF TEMPLATE API^^^
-// On setup make sure pageCollection.pages is set, make sure it gets updated when wizard.pages is
-// On setup make sure navService.wizardHasAltCancel is set to wizard.stopCancel -- test dynamically too
-// On setup make sure headerActionService.wizardHeaderActions is set to wizard.headerActions -- 
-// test it also gets updated
-// On setup test that navService.hideWizardGhostPages gets set as expected
-
     describe("View and Behavior", () => {
-// TODO: SPLIT THESE TESTS. 
-// IF USER GIVES ME AN INPUT, DOES MY CONTROLLER HAVE THE RIGHT VALUE? <= TEMPLATE API
-// THEN SEPARATE TEST TO MAKE SURE THAT THE RESULT IN VIEW IS AS EXPECTED <= VIEW TESTS
-        describe("Sizing", () => {
-            // test that passing a size into the input updates the size
-            // doesn't matter if sizing updates dynamically
+        describe("Renders as expected", () => {
+            // test that component is applied where expected [clr-wizard-stepnav-item]
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // make sure component has the titles we expect
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // make sure component has id
+            // make sure component's aria controls match id
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // make sure component has role presentation
+            // make sure component has clr-nav-link, nav-item text
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // make sure component aria-selected and active class are tied to isCurrent
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // make sure component disabled class is tied to isDisabled
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // make sure component disabled class is tied to isComplete
             it("true is true", () => {
                 expect(true).toBe(true);
             });
         });
-
-        describe("Ghost Pages", () => {
-            // test that passing a boolean to the input hides/shows ghosts
-            // doesn't matter if it updates dynamically
+        describe("Behavior", () => {
+            // if i click on a disabled item, nothing happens
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // if i click on a current item, nothing happens
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // otherwise, something happens
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // if i click on a current item, nothing happens. then make it not current, i click something happens. 
+            // then again.
+            it("true is true", () => {
+                expect(true).toBe(true);
+            });
+            // if i click on a disabled item, nothing happens. then make it not disabled, i click something happens. 
+            // then again. <= make sure to make something else current
             it("true is true", () => {
                 expect(true).toBe(true);
             });
         });
-
-        describe("Close X", () => {
-            // test that passing a boolean to the input hides/shows close X
-            // TODO: JUST TEST THAT MODAL HAS CORRECT VALUE; DON'T TEST STYLES IN MODAL
-            // doesn't matter if it updates dynamically
-            // TODO: MORE CASES WILL PROBABLY SHOW UP HERE
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-
-        describe("Opening", () => {
-// TODO: SPLIT INTO TWO SECTIONS (TEMPLATE API & VIEW TESTS)
-// MAY BE ABLE TO SKIP THE "DOES IT SHOW UP?" TEST
-            // test that passing a boolean to the clrWizardOpen input hides/shows wizard dynamically
-            // validate that the clrWizardOpenChange output is fired <= TEMPLATE API
-            // make sure first page is set to current if currentPage is set to falsy/null
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-
-        describe("Closing", () => {
-// TODO: SPLIT INTO TWO SECTIONS (TEMPLATE API & VIEW TESTS)
-// MAY BE ABLE TO SKIP THE "DOES IT GO AWAY?" TEST
-            // test across Cancel button and Close X
-            // validate that the clrWizardOpenChange output is fired
-            // make sure that ghost pages are deactivated
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-
-        describe("Backdrop is static", () => {
-            // validate that clrModalStaticBackdrop is set to true
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-
-        describe("Navigation", () => {
-            // happy path through to finish
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // closes and opens on last open page
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // closes and opens on last possible page
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // what happens when current page is removed from the list of pages?
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // todo: MAY NOT NEED THESE IF WE TEST STEPNAV AND NAVIGATION SERVICE...
-        });
-
-        // MIGHT BE TWO TESTS... DO I HAVE THE INPUT? DOES OUTPUT WORK? <= IN TEMPLATE API
-        // THEN TEST IF IT CLICKS THROUGH HERE
-        describe("Custom Navigation", () => {
-            describe("Alt Cancel Override", () => {
-                // validate that the clrWizardPreventDefaultCancel input keeps wizard from getting cancelled
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-
-            // TODO: CUSTOM BUTTONS???
-        });
-
-        describe("Delegates to modal", () => {
-            // validate that clrModalSize is set as expected
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // validate that clrModalClosable is set as expected
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // validate that clrModalOpenChange event calls wizard.cancel
-            // both dynamically and through clicking
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // validate that clrModalSkipAnimation is set as expected
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // validate that clrModalGhostPageState is set as expected
-            // and is updated as expected
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-
     });
 });
 

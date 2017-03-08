@@ -223,7 +223,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     // calls previous(); kept here to avoid breaking change where unnecessary
     // LEGACY: Naming convention matches old wizard
     public prev(): void {
-        this.navService.previous();
+        this.previous();
     }
 
     // the following are convenience functions that are carried over from an older
@@ -327,7 +327,4 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
 // TOBREAK: old this.wizardPageChildren is now just this.pages
 
 // TOBREAK: no longer has this.id
-
-// TOBREAK: this.isLast no longer exists. use this.navService.currentPageIsLast instead
-// TOBREAK: this.isFirst no longer exists. use this.navService.currentPageIsLast instead
 }
