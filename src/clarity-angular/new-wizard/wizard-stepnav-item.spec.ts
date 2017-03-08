@@ -6,7 +6,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 // import {Component, ViewChild} from "@angular/core";
 // import {ScrollingService} from "../main/scrolling-service";
-// import { ClarityModule } from "../clarity.module";
+import { ClarityModule } from "../clarity.module";
 import { NewWizardStepnavItem } from "./wizard-stepnav-item";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { PageCollectionService } from "./providers/page-collection";
@@ -14,167 +14,180 @@ import { ButtonHubService } from "./providers/button-hub";
 import { NewWizardPage } from "./wizard-page";
 
 
-// we are going to spy on navService and pageCollection
-// try to stub the wizard page
+export default function(): void {
 
-// stub wizard page
-// class NewWizardPage {
-//     public disabled: boolean = false;
-//     public current: boolean = false;
-//     public completed: boolean = false;
-// }
+    // we are going to spy on navService and pageCollection
+    // try to stub the wizard page
 
-describe("New Wizard Stepnav Item", () => {
-    describe("Typescript API", () => {
-        let fixture: ComponentFixture<any>;
-        let testItemComponent: NewWizardStepnavItem;
-        let debugEl: any;
-        let getProvider: any;
-        // let compiled: any;
+    // stub wizard page
+    // class NewWizardPage {
+    //     public disabled: boolean = false;
+    //     public current: boolean = false;
+    //     public completed: boolean = false;
+    // }
 
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                // imports: [ClarityModule.forRoot()],
-                declarations: [ NewWizardStepnavItem, NewWizardPage ],
-                providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ]
+    describe("New Wizard Stepnav Item", () => {
+        describe("Typescript API", () => {
+            let fixture: ComponentFixture<any>;
+            let testItemComponent: NewWizardStepnavItem;
+            let debugEl: any;
+            let getProvider: any;
+            // let compiled: any;
+
+            beforeEach(() => {
+                TestBed.configureTestingModule({
+                    imports: [ClarityModule.forRoot()],
+                    declarations: [ NewWizardStepnavItem ],
+                    providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ]
+                });
+
+                fixture = TestBed.createComponent(NewWizardStepnavItem);
+                debugEl = fixture.debugElement;
+                getProvider = debugEl.injector.get;
+                testItemComponent = fixture.componentInstance;
+                testItemComponent.page = new NewWizardPage(
+                    getProvider(WizardNavigationService),
+                    getProvider(PageCollectionService),
+                    getProvider(ButtonHubService)
+                );
+                testItemComponent.page._id = "this-is-my-page-id-0";
             });
 
-            fixture = TestBed.createComponent(NewWizardStepnavItem);
-            debugEl = fixture.debugElement;
-            getProvider = debugEl.injector.get;
-            testItemComponent = fixture.componentInstance;
-            testItemComponent.page = new NewWizardPage(
-                getProvider(WizardNavigationService),
-                getProvider(PageCollectionService),
-                getProvider(ButtonHubService)
-            );
-            testItemComponent.page._id = "this-is-my-page-id-0";
+            afterEach(() => {
+                fixture.destroy();
+            });
+
+            describe("id", () => {
+                it("should call page collection service for step item id", () => {
+                    const pageCollectionSpy = spyOn(getProvider(PageCollectionService), "getStepItemIdForPage");
+                    console.log("Ohai! I'm running now...");
+                    fixture.detectChanges();
+                    expect(pageCollectionSpy).toHaveBeenCalledWith(testItemComponent.page);
+                });
+
+                it("should receive expected id from page collection", () => {
+                    const expectedId = "this-is-my-page-id-step-0";
+                    fixture.detectChanges();
+                    expect(testItemComponent.id).toBe(expectedId);
+                });
+
+                it("should throw an error if page is not present", () => {
+                    testItemComponent.page = null;
+                    expect(() => { fixture.detectChanges(); }).toThrow();
+                });
+            });
+            describe("click", () => {
+            // Make sure early returns if this.isDisabled or this.isCurrent
+            // Make sure it calls navService otherwise
+            // What happens if this.page is blank?
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+            });
         });
 
-        describe("id", () => {
-        // What happens if this.page is blank?
-            it("should call page collection service for step item id", () => {
-                const pageCollectionSpy = spyOn(getProvider(PageCollectionService), "getStepItemIdForPage");
-                fixture.detectChanges();
-                expect(pageCollectionSpy).toHaveBeenCalledWith(testItemComponent.page);
+        // Inputs, Outputs, and initialization of component based on content-children
+        describe("Template API", () => {
+            describe("isDisabled", () => {
+            // Make sure this.isDisabled maps to this.page and updates too
+            // What happens if this.page is blank?
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
             });
-
-            it("should properly inject 'step' in the step item id", () => {
-                const expectedId = "this-is-my-page-id-step-0";
-                fixture.detectChanges();
-                expect(testItemComponent.id).toBe(expectedId);
+            describe("isCurrent", () => {
+            // Make sure this.isCurrent maps to this.page and updates too
+            // What happens if this.page is blank?
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+            });
+            describe("isComplete", () => {
+            // Make sure this.isComplete maps to this.page and updates too
+            // What happens if this.page is blank?
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+            });
+            describe("Projects", () => {
+            // Make sure that it projects the page.title templateRef
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+            });
+            describe("Inputs", () => {
+            // Make sure this.page is as expected
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+            // What happens if there is no page?
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
             });
         });
-        describe("click", () => {
-        // Make sure early returns if this.isDisabled or this.isCurrent
-        // Make sure it calls navService otherwise
-        // What happens if this.page is blank?
-            it("true is true", () => {
-                expect(true).toBe(true);
+
+        describe("View and Behavior", () => {
+            describe("Renders as expected", () => {
+                // test that component is applied where expected [clr-wizard-stepnav-item]
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component has the titles we expect
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component has id
+                // make sure component's aria controls match id
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component has role presentation
+                // make sure component has clr-nav-link, nav-item text
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component aria-selected and active class are tied to isCurrent
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component disabled class is tied to isDisabled
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component disabled class is tied to isComplete
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+            });
+            describe("Behavior", () => {
+                // if i click on a disabled item, nothing happens
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // if i click on a current item, nothing happens
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // otherwise, something happens
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // if i click on a current item, nothing happens. then make it not current, 
+                // i click something happens. 
+                // then again.
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // if i click on a disabled item, nothing happens. then make it not disabled, 
+                // i click something happens. 
+                // then again. <= make sure to make something else current
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
             });
         });
     });
-
-    // Inputs, Outputs, and initialization of component based on content-children
-    describe("Template API", () => {
-        describe("isDisabled", () => {
-        // Make sure this.isDisabled maps to this.page and updates too
-        // What happens if this.page is blank?
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-        describe("isCurrent", () => {
-        // Make sure this.isCurrent maps to this.page and updates too
-        // What happens if this.page is blank?
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-        describe("isComplete", () => {
-        // Make sure this.isComplete maps to this.page and updates too
-        // What happens if this.page is blank?
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-        describe("Projects", () => {
-        // Make sure that it projects the page.title templateRef
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-        describe("Inputs", () => {
-        // Make sure this.page is as expected
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        // What happens if there is no page?
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-    });
-
-    describe("View and Behavior", () => {
-        describe("Renders as expected", () => {
-            // test that component is applied where expected [clr-wizard-stepnav-item]
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // make sure component has the titles we expect
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // make sure component has id
-            // make sure component's aria controls match id
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // make sure component has role presentation
-            // make sure component has clr-nav-link, nav-item text
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // make sure component aria-selected and active class are tied to isCurrent
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // make sure component disabled class is tied to isDisabled
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // make sure component disabled class is tied to isComplete
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-        describe("Behavior", () => {
-            // if i click on a disabled item, nothing happens
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // if i click on a current item, nothing happens
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // otherwise, something happens
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // if i click on a current item, nothing happens. then make it not current, i click something happens. 
-            // then again.
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-            // if i click on a disabled item, nothing happens. then make it not disabled, i click something happens. 
-            // then again. <= make sure to make something else current
-            it("true is true", () => {
-                expect(true).toBe(true);
-            });
-        });
-    });
-});
 
 // @Component({
 //     template: `
@@ -678,3 +691,5 @@ describe("New Wizard Stepnav Item", () => {
 //         });
 //     });
 // });
+
+}

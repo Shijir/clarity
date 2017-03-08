@@ -42,6 +42,11 @@ export class NewWizardStepnavItem {
     }
 
     public get id(): string {
+        let myPage = this.page;
+
+        if (!myPage) {
+            throw new Error("Wizard stepnav item is not associated with a wizard page.");
+        }
         return this.pageCollection.getStepItemIdForPage(this.page);
     }
 
