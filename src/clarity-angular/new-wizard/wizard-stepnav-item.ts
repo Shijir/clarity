@@ -63,11 +63,18 @@ export class NewWizardStepnavItem {
     }
 
     click(): void {
+        let myPage = this.page;
+
+        if (!myPage) {
+            throw new Error("Wizard stepnav item is not associated with a wizard page.");
+        }
+
         if (this.isDisabled || this.isCurrent) {
             return;
         }
+
         // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
-        this.navService.goTo(this.page);
+        this.navService.goTo(myPage);
     }
 
 // TOBREAK: this.title has been removed because it is no longer needed

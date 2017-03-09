@@ -4,27 +4,48 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-// import {Component, ViewChild} from "@angular/core";
+import { Component, ViewChild } from "@angular/core";
 // import {ScrollingService} from "../main/scrolling-service";
 import { ClarityModule } from "../clarity.module";
 import { NewWizardStepnavItem } from "./wizard-stepnav-item";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { PageCollectionService } from "./providers/page-collection";
 import { ButtonHubService } from "./providers/button-hub";
-import { NewWizardPage } from "./wizard-page";
+// import { NewWizardPage } from "./wizard-page";
+
+class MockPage {
+    disabled = false;
+    current = false;
+    completed = false;
+    id = "this-is-my-page-id-0";
+    reset(): void {
+        this.disabled = false;
+        this.current = false;
+        this.completed = false;
+    }
+}
+
+let fakeOutPage = new MockPage();
+
+@Component({
+    template: `
+        <div clr-wizard-stepnav-item [page]="page">Step Nav Text</div>
+    `
+})
+class TypescriptTestComponent {
+    constructor() {
+        this.page = fakeOutPage;
+    }
+    page: MockPage;
+    @ViewChild(NewWizardStepnavItem) stepNavItem: NewWizardStepnavItem;
+}
+
 
 
 export default function(): void {
 
     // we are going to spy on navService and pageCollection
     // try to stub the wizard page
-
-    // stub wizard page
-    // class NewWizardPage {
-    //     public disabled: boolean = false;
-    //     public current: boolean = false;
-    //     public completed: boolean = false;
-    // }
 
     describe("New Wizard Stepnav Item", () => {
         describe("Typescript API", () => {
@@ -36,37 +57,32 @@ export default function(): void {
 
             beforeEach(() => {
                 TestBed.configureTestingModule({
-                    imports: [ClarityModule.forRoot()],
-                    declarations: [ NewWizardStepnavItem ],
+                    imports: [ ClarityModule.forRoot() ],
+                    declarations: [ TypescriptTestComponent ],
                     providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ]
                 });
-
-                fixture = TestBed.createComponent(NewWizardStepnavItem);
+                fixture = TestBed.createComponent(TypescriptTestComponent);
+                fixture.detectChanges();
                 debugEl = fixture.debugElement;
                 getProvider = debugEl.injector.get;
-                testItemComponent = fixture.componentInstance;
-                testItemComponent.page = new NewWizardPage(
-                    getProvider(WizardNavigationService),
-                    getProvider(PageCollectionService),
-                    getProvider(ButtonHubService)
-                );
-                testItemComponent.page._id = "this-is-my-page-id-0";
+                testItemComponent = fixture.componentInstance.stepNavItem;
             });
 
             afterEach(() => {
+                fakeOutPage.reset();
                 fixture.destroy();
             });
 
             describe("id", () => {
                 it("should call page collection service for step item id", () => {
-                    const pageCollectionSpy = spyOn(getProvider(PageCollectionService), "getStepItemIdForPage");
-                    console.log("Ohai! I'm running now...");
+                    const pageCollectionSpy = spyOn(testItemComponent.pageCollection, "getStepItemIdForPage");
+                    testItemComponent.page._id = "try-a-different-id";
                     fixture.detectChanges();
                     expect(pageCollectionSpy).toHaveBeenCalledWith(testItemComponent.page);
                 });
 
                 it("should receive expected id from page collection", () => {
-                    const expectedId = "this-is-my-page-id-step-0";
+                    const expectedId = "this-is-my-page-step-0";
                     fixture.detectChanges();
                     expect(testItemComponent.id).toBe(expectedId);
                 });
@@ -76,15 +92,42 @@ export default function(): void {
                     expect(() => { fixture.detectChanges(); }).toThrow();
                 });
             });
+
             describe("click", () => {
-            // Make sure early returns if this.isDisabled or this.isCurrent
-            // Make sure it calls navService otherwise
-            // What happens if this.page is blank?
-                it("true is true", () => {
-                    expect(true).toBe(true);
+                let navServiceSpy: any;
+
+                beforeEach(() => {
+                    fakeOutPage.reset();
+                    navServiceSpy = spyOn(testItemComponent.navService, "goTo");
+                });
+
+                it("should not call to navService if disabled", () => {
+                    fakeOutPage.disabled = true;
+                    testItemComponent.click();
+                    expect(navServiceSpy).not.toHaveBeenCalled();
+                });
+
+                it("should not call to navService if current", () => {
+                    fakeOutPage.current = true;
+                    testItemComponent.click();
+                    expect(navServiceSpy).not.toHaveBeenCalled();
+                });
+
+                it("should pass the page to the navService to navigate to the stepnav item's page", () => {
+                    testItemComponent.click();
+                    expect(navServiceSpy).toHaveBeenCalledWith(testItemComponent.page);
+                });
+
+                it("should throw an error if page is not present", () => {
+                    testItemComponent.page = null;
+                    expect(() => { testItemComponent.click(); }).toThrow();
                 });
             });
         });
+
+
+// ###LEFTOFF HERE: TO VERIFY THIS I ACTUALLY DO NEED TO MAKE A VERY BASIC THREE-PAGE WIZARD...
+// NO OTHER WAY TO VERIFY THAT THE COMPONENT CORRECTLY COMMUNICATES WITH PAGES 
 
         // Inputs, Outputs, and initialization of component based on content-children
         describe("Template API", () => {
@@ -156,6 +199,10 @@ export default function(): void {
                     expect(true).toBe(true);
                 });
                 // make sure component disabled class is tied to isComplete
+                it("true is true", () => {
+                    expect(true).toBe(true);
+                });
+                // make sure component highlights properly when isComplete is true
                 it("true is true", () => {
                     expect(true).toBe(true);
                 });
