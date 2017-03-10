@@ -11,8 +11,7 @@ import {
     EventEmitter,
     ContentChild,
     TemplateRef,
-    OnInit,
-    OnDestroy
+    OnInit
 } from "@angular/core";
 
 import { WizardNavigationService } from "./providers/wizard-navigation";
@@ -23,8 +22,6 @@ import { WizardPageTitleDirective } from "./directives/page-title";
 import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 import { WizardPageButtonsDirective } from "./directives/page-buttons";
 import { WizardPageHeaderActionsDirective } from "./directives/page-header-actions";
-
-import { Subscription } from "rxjs/Subscription";
 
 let wizardPageIndex = 0;
 
@@ -44,7 +41,7 @@ let wizardPageIndex = 0;
         "[class.clr-wizard-page]": "true"
     }
 })
-export class NewWizardPage implements OnInit, OnDestroy {
+export class NewWizardPage implements OnInit {
 
     constructor(private navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
@@ -91,6 +88,8 @@ export class NewWizardPage implements OnInit, OnDestroy {
     @Output("clrWizardPageOnCancel") pageOnCancel: EventEmitter < any > =
         new EventEmitter(false);
 
+// TOCHECK: I DON'T THINK THESE OUTPUTS ARE EVER FIRED?
+
     @Output("clrWizardPageFinish") finishButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
 
@@ -108,8 +107,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
 
     @Output("clrWizardPageOnReadyChange") onReadyChange: EventEmitter < any > =
         new EventEmitter(false);
-
-    private previousButtonSubscription: Subscription;
 
     // If our host has an ID attribute, we use this instead of our index.
     @Input("id")
@@ -203,10 +200,6 @@ export class NewWizardPage implements OnInit, OnDestroy {
             this.makeCurrent();
         }
         // SPECME
-    }
-
-    public ngOnDestroy(): void {
-        this.previousButtonSubscription.unsubscribe();
     }
 
 // TOBREAK: this input was removed. use ngIf instead. note breaking change.

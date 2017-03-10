@@ -41,40 +41,41 @@ export class NewWizardStepnavItem {
     constructor(public navService: WizardNavigationService, public pageCollection: PageCollectionService) {
     }
 
-    public get id(): string {
-        let myPage = this.page;
-
-        if (!myPage) {
+    private pageGuard(): void {
+        if (!this.page) {
             throw new Error("Wizard stepnav item is not associated with a wizard page.");
         }
+    }
+
+    public get id(): string {
+        this.pageGuard();
         return this.pageCollection.getStepItemIdForPage(this.page);
     }
 
     public get isDisabled(): boolean {
+        this.pageGuard();
         return this.page.disabled;
     }
 
     public get isCurrent(): boolean {
+        this.pageGuard();
         return this.page.current;
     }
 
     public get isComplete(): boolean {
+        this.pageGuard();
         return this.page.completed;
     }
 
     click(): void {
-        let myPage = this.page;
-
-        if (!myPage) {
-            throw new Error("Wizard stepnav item is not associated with a wizard page.");
-        }
+        this.pageGuard();
 
         if (this.isDisabled || this.isCurrent) {
             return;
         }
 
         // SPECME: if we click on our own stepnav or a disabled stepnav, we don't want to do anything
-        this.navService.goTo(myPage);
+        this.navService.goTo(this.page);
     }
 
 // TOBREAK: this.title has been removed because it is no longer needed

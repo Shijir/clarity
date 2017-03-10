@@ -3,15 +3,22 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
+import {
+    Component,
+    ViewChild,
+    DebugElement,
+    TemplateRef,
+    AfterContentInit
+} from "@angular/core";
+
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { Component, ViewChild } from "@angular/core";
-// import {ScrollingService} from "../main/scrolling-service";
+import { By } from "@angular/platform-browser";
 import { ClarityModule } from "../clarity.module";
 import { NewWizardStepnavItem } from "./wizard-stepnav-item";
 import { WizardNavigationService } from "./providers/wizard-navigation";
 import { PageCollectionService } from "./providers/page-collection";
 import { ButtonHubService } from "./providers/button-hub";
-// import { NewWizardPage } from "./wizard-page";
+import { WizardPageNavTitleDirective } from "./directives/page-navtitle";
 
 class MockPage {
     disabled = false;
@@ -23,55 +30,54 @@ class MockPage {
         this.current = false;
         this.completed = false;
     }
+    navTitle: TemplateRef<any>;
 }
 
 let fakeOutPage = new MockPage();
 
 @Component({
     template: `
-        <div clr-wizard-stepnav-item [page]="page">Step Nav Text</div>
+        <div clr-wizard-stepnav-item [page]="page"></div>
+        <template pageNavTitle>This is my {{ projector }}</template>
     `
 })
-class TypescriptTestComponent {
+class TestComponent implements AfterContentInit {
     constructor() {
         this.page = fakeOutPage;
     }
     page: MockPage;
+    projector: string = "foo";
+
     @ViewChild(NewWizardStepnavItem) stepNavItem: NewWizardStepnavItem;
+    @ViewChild(WizardPageNavTitleDirective) navTitleRef: WizardPageNavTitleDirective;
+
+    public ngAfterContentInit(): void {
+        this.page.navTitle = this.navTitleRef.pageNavTitleTemplateRef;
+    }
 }
 
-
-
 export default function(): void {
-
-    // we are going to spy on navService and pageCollection
-    // try to stub the wizard page
-
     describe("New Wizard Stepnav Item", () => {
+        let fixture: ComponentFixture<any>;
+        let testItemComponent: NewWizardStepnavItem;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [ ClarityModule.forRoot() ],
+                declarations: [ TestComponent ],
+                providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ]
+            });
+            fixture = TestBed.createComponent(TestComponent);
+            fixture.detectChanges();
+            testItemComponent = fixture.componentInstance.stepNavItem;
+        });
+
+        afterEach(() => {
+            fakeOutPage.reset();
+            fixture.destroy();
+        });
+
         describe("Typescript API", () => {
-            let fixture: ComponentFixture<any>;
-            let testItemComponent: NewWizardStepnavItem;
-            let debugEl: any;
-            let getProvider: any;
-            // let compiled: any;
-
-            beforeEach(() => {
-                TestBed.configureTestingModule({
-                    imports: [ ClarityModule.forRoot() ],
-                    declarations: [ TypescriptTestComponent ],
-                    providers: [ WizardNavigationService, PageCollectionService, ButtonHubService ]
-                });
-                fixture = TestBed.createComponent(TypescriptTestComponent);
-                fixture.detectChanges();
-                debugEl = fixture.debugElement;
-                getProvider = debugEl.injector.get;
-                testItemComponent = fixture.componentInstance.stepNavItem;
-            });
-
-            afterEach(() => {
-                fakeOutPage.reset();
-                fixture.destroy();
-            });
 
             describe("id", () => {
                 it("should call page collection service for step item id", () => {
@@ -123,91 +129,142 @@ export default function(): void {
                     expect(() => { testItemComponent.click(); }).toThrow();
                 });
             });
+
+            describe("isDisabled", () => {
+                it("should update false/true when page is updated", () => {
+                    // mock inits/resets with all false
+                    expect(testItemComponent.isDisabled).toBe(false, "inits as false");
+                    fakeOutPage.disabled = true;
+                    fixture.detectChanges();
+                    expect(testItemComponent.isDisabled).toBe(true, "updates when page is updated");
+                    fakeOutPage.reset();
+                    fixture.detectChanges();
+                    expect(testItemComponent.isDisabled).toBe(false, "resets when page is reset");
+                });
+
+                it("should throw an error if page is not present", () => {
+                    testItemComponent.page = null;
+                    expect(() => { testItemComponent.click(); }).toThrow();
+                });
+            });
+
+            describe("isCurrent", () => {
+                it("should update false/true when page is updated", () => {
+                    // mock inits/resets with all false
+                    expect(testItemComponent.isCurrent).toBe(false, "inits as false");
+                    fakeOutPage.current = true;
+                    fixture.detectChanges();
+                    expect(testItemComponent.isCurrent).toBe(true, "updates when page is updated");
+                    fakeOutPage.reset();
+                    fixture.detectChanges();
+                    expect(testItemComponent.isCurrent).toBe(false, "resets when page is reset");
+                });
+
+                it("should throw an error if page is not present", () => {
+                    testItemComponent.page = null;
+                    expect(() => { testItemComponent.click(); }).toThrow();
+                });
+            });
+
+            describe("isComplete", () => {
+                it("should update false/true when page is updated", () => {
+                    // mock inits/resets with all false
+                    expect(testItemComponent.isComplete).toBe(false, "inits as false");
+                    fakeOutPage.completed = true;
+                    fixture.detectChanges();
+                    expect(testItemComponent.isComplete).toBe(true, "updates when page is updated");
+                    fakeOutPage.reset();
+                    fixture.detectChanges();
+                    expect(testItemComponent.isComplete).toBe(false, "resets when page is reset");
+                });
+
+                it("should throw an error if page is not present", () => {
+                    testItemComponent.page = null;
+                    expect(() => { testItemComponent.click(); }).toThrow();
+                });
+            });
         });
-
-
-// ###LEFTOFF HERE: TO VERIFY THIS I ACTUALLY DO NEED TO MAKE A VERY BASIC THREE-PAGE WIZARD...
-// NO OTHER WAY TO VERIFY THAT THE COMPONENT CORRECTLY COMMUNICATES WITH PAGES 
 
         // Inputs, Outputs, and initialization of component based on content-children
         describe("Template API", () => {
-            describe("isDisabled", () => {
-            // Make sure this.isDisabled maps to this.page and updates too
-            // What happens if this.page is blank?
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("isCurrent", () => {
-            // Make sure this.isCurrent maps to this.page and updates too
-            // What happens if this.page is blank?
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("isComplete", () => {
-            // Make sure this.isComplete maps to this.page and updates too
-            // What happens if this.page is blank?
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("Projects", () => {
-            // Make sure that it projects the page.title templateRef
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            });
-            describe("Inputs", () => {
-            // Make sure this.page is as expected
-                it("true is true", () => {
-                    expect(true).toBe(true);
-                });
-            // What happens if there is no page?
-                it("true is true", () => {
-                    expect(true).toBe(true);
+            describe("nav title", () => {
+                const expectedInitialTitle = "This is my foo";
+                const expectedUpdatedTitle = "This is my bar";
+
+                it("projects page nav title as expected", () => {
+                    let myTitleEl = fixture.debugElement.query(By.css(".clr-wizard-stepnav-link")).nativeElement;
+                    expect(myTitleEl.textContent.trim()).toBe(expectedInitialTitle, "projects initial value");
+                    fixture.componentInstance.projector = "bar";
+                    fixture.detectChanges();
+                    expect(myTitleEl.textContent.trim()).toBe(expectedUpdatedTitle, "projects updated value");
                 });
             });
         });
 
         describe("View and Behavior", () => {
             describe("Renders as expected", () => {
-                // test that component is applied where expected [clr-wizard-stepnav-item]
-                it("true is true", () => {
-                    expect(true).toBe(true);
+                let debugEl: DebugElement;
+                let myStepnavItem: HTMLElement;
+
+                beforeEach(() => {
+                    debugEl = fixture.debugElement;
+                    myStepnavItem = debugEl.query(By.css("[clr-wizard-stepnav-item]")).nativeElement;
                 });
-                // make sure component has the titles we expect
-                it("true is true", () => {
-                    expect(true).toBe(true);
+
+                it("should have id", () => {
+                    let myId: string;
+                    expect(myStepnavItem.hasAttribute("id")).toBeTruthy("stepnav item should have an id");
+                    myId = myStepnavItem.getAttribute("id");
+                    expect(myId).toBe(testItemComponent.id, "stepnav item id should contain id");
                 });
-                // make sure component has id
-                // make sure component's aria controls match id
-                it("true is true", () => {
-                    expect(true).toBe(true);
+
+                it("should have aria-controls attribute", () => {
+                    let myAriaControls: string;
+                    const stepNavItemId = testItemComponent.id;
+
+                    expect(myStepnavItem.hasAttribute("aria-controls")).toBeTruthy(
+                        "stepnav item should have aria-controls attr");
+                    myAriaControls = myStepnavItem.getAttribute("aria-controls");
+                    expect(myAriaControls).toBe(stepNavItemId, "aria-controls should contain id");
                 });
-                // make sure component has role presentation
-                // make sure component has clr-nav-link, nav-item text
-                it("true is true", () => {
-                    expect(true).toBe(true);
+
+                it("should have role of presentation", () => {
+                    let myRole: string;
+
+                    expect(myStepnavItem.hasAttribute("role")).toBeTruthy(
+                        "stepnav item should have role attr");
+                    myRole = myStepnavItem.getAttribute("role");
+                    expect(myRole).toBe("presentation", "aria role should be presentation");
                 });
+
+                it("should have clr-nav-link and nav-item classes", () => {
+                    expect(myStepnavItem.classList.contains("nav-item")).toBe(true, "stepnav item has .nav-item class");
+                    expect(myStepnavItem.classList.contains("clr-nav-link")).toBe(true, 
+                        "stepnav item has .clr-nav-link class");
+                });
+
                 // make sure component aria-selected and active class are tied to isCurrent
-                it("true is true", () => {
+                it("aria-selected and active class should be tied to isCurrent", () => {
                     expect(true).toBe(true);
                 });
+
                 // make sure component disabled class is tied to isDisabled
-                it("true is true", () => {
+                it("disabled class should be tied to isDisabled", () => {
                     expect(true).toBe(true);
                 });
                 // make sure component disabled class is tied to isComplete
-                it("true is true", () => {
+                it("complete class should be tied to isComplete", () => {
                     expect(true).toBe(true);
                 });
+                // ??? REALLY
                 // make sure component highlights properly when isComplete is true
                 it("true is true", () => {
                     expect(true).toBe(true);
                 });
             });
             describe("Behavior", () => {
+                // NEEDS SPY ON NAVSERVICE HERE!!!
+
                 // if i click on a disabled item, nothing happens
                 it("true is true", () => {
                     expect(true).toBe(true);

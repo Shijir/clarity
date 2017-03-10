@@ -12,7 +12,8 @@ import {
     QueryList,
     OnInit,
     OnDestroy,
-    AfterViewInit
+    AfterViewInit,
+    AfterContentInit
 } from "@angular/core";
 import { Subscription } from "rxjs/Subscription";
 import { NewWizardPage } from "./wizard-page";
@@ -41,7 +42,7 @@ import { HeaderActionService } from "./providers/header-actions";
         "[class.clr-wizard--ghosted]": "showGhostPages"
     }
 })
-export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
+export class NewWizard implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
 
     constructor(public navService: WizardNavigationService,
                 public pageCollection: PageCollectionService,
@@ -108,6 +109,9 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     @Output("clrWizardOnFinish") wizardFinished: EventEmitter<any> =
         new EventEmitter<any>(false);
 
+    @Output("clrWizardOnReset") onReset: EventEmitter<any> =
+        new EventEmitter<any>(false);
+
     @ContentChildren(NewWizardPage) public pages: QueryList<NewWizardPage>;
     @ContentChildren(NewWizardHeaderAction) public headerActions: QueryList<NewWizardHeaderAction>;
 
@@ -143,22 +147,22 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     private goNextSubscription: Subscription;
     private goPreviousSubscription: Subscription;
     private cancelSubscription: Subscription;
-    private goToSubscription: Subscription;
     private currentPageSubscription: Subscription;
     private wizardFinishedSubscription: Subscription;
-    private wizardResetSubscription: Subscription;
 
     ngOnDestroy() {
         this.goNextSubscription.unsubscribe();
         this.goPreviousSubscription.unsubscribe();
         this.cancelSubscription.unsubscribe();
-        this.goToSubscription.unsubscribe();
         this.currentPageSubscription.unsubscribe();
         this.wizardFinishedSubscription.unsubscribe();
-        this.wizardResetSubscription.unsubscribe();
     }
 
     public ngAfterViewInit() {
+        // SPECME
+    }
+
+    public ngAfterContentInit() {
         this.pageCollection.pages = this.pages;
         this.navService.wizardHasAltCancel = this.stopCancel;
         this.headerActionService.wizardHeaderActions = this.headerActions;
@@ -166,7 +170,6 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
             this.navService.hideWizardGhostPages = false;
             this.deactivateGhostPages();
         }
-        // SPECME
     }
 
     // The current page
@@ -253,6 +256,7 @@ export class NewWizard implements OnInit, OnDestroy, AfterViewInit {
     public reset() {
         this.pageCollection.reset();
         this.navService.setFirstPageCurrent();
+        this.onReset.next();
     }
 
     public get ghostPageState(): string {
