@@ -21,6 +21,10 @@ class NewWizardPageMock {
 
     _id: string = (wizardPageIndex++).toString();
 
+    public get id() {
+        return `clr-wizard-page-${this._id}`;
+    }
+
     public get title() {
         return `clr-wizard-page-${this._id}-title`;
     }
@@ -161,6 +165,10 @@ fdescribe("Wizard Navigation Service", () => {
 
     });
 
+    /*
+    * TODO: as next() calls finish(), it seems that there are repetion in the following tests.
+    * We should investigate possibilities of stripping down some of these tests on finish() and next() */
+
     it(".finish() should commit the current page and emit the event", () => {
 
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
@@ -225,16 +233,6 @@ fdescribe("Wizard Navigation Service", () => {
 
     });
 
-    it(".previous() should return undefined if the current page is the first page", () => {
-
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(0);
-
-        wizardNavigationService.setCurrentPage(testPage);
-
-        expect(wizardNavigationService.previous()).toBeUndefined();
-
-    });
-
     it(".previous() should set the current page to the previous page", () => {
 
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
@@ -249,5 +247,16 @@ fdescribe("Wizard Navigation Service", () => {
     });
 
 
+    it(".goTo() should return undefined if the given page is equal to the current page", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
+        let goToPage = wizardNavigationService.pageCollection.getPageByIndex(1);
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        expect(wizardNavigationService.goTo(goToPage)).toBeUndefined();
+        expect(wizardNavigationService.goTo(goToPage.id)).toBeUndefined();
+
+    });
 
 });
