@@ -100,60 +100,6 @@ fdescribe("Wizard Navigation Service", () => {
 
     });
 
-    it(".finish() should commit the current page and emit the event", () => {
-
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
-
-        spyOn(testPage.primaryButtonClicked, "emit");
-        spyOn(testPage.onCommit, "emit");
-        spyOn(fixture.componentInstance.wizardFinished, "emit");
-
-        wizardNavigationService.wizardFinished.subscribe(() => {
-
-            fixture.componentInstance.wizardFinished.emit();
-
-        });
-
-        wizardNavigationService.setCurrentPage(testPage);
-
-        wizardNavigationService.finish();
-
-        expect(testPage.primaryButtonClicked.emit).toHaveBeenCalled();
-        expect(testPage.onCommit.emit).toHaveBeenCalled();
-
-        expect(testPage.completed).toBe(true);
-        expect(fixture.componentInstance.wizardFinished.emit).toHaveBeenCalled();
-
-    });
-
-    it(".finish() should not commit the current page and emit events if next is disabled", () => {
-
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
-
-        testPage.readyToComplete = false;
-
-        spyOn(testPage.primaryButtonClicked, "emit");
-        spyOn(testPage.onCommit, "emit");
-        spyOn(fixture.componentInstance.wizardFinished, "emit");
-
-        wizardNavigationService.wizardFinished.subscribe(() => {
-
-            fixture.componentInstance.wizardFinished.emit();
-
-        });
-
-        wizardNavigationService.setCurrentPage(testPage);
-
-        wizardNavigationService.finish();
-
-        expect(testPage.primaryButtonClicked.emit).not.toHaveBeenCalled();
-        expect(testPage.onCommit.emit).not.toHaveBeenCalled();
-
-        expect(testPage.completed).toBe(false);
-        expect(fixture.componentInstance.wizardFinished.emit).not.toHaveBeenCalled();
-
-    });
-
     it(".next() should call finish() and throw an error if the current page is the last page.", () => {
 
         let testPage = wizardNavigationService.pageCollection.lastPage;
@@ -213,9 +159,94 @@ fdescribe("Wizard Navigation Service", () => {
 
         expect(wizardNavigationService.next()).toBeUndefined();
 
+    });
+
+    it(".finish() should commit the current page and emit the event", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+
+        spyOn(testPage.primaryButtonClicked, "emit");
+        spyOn(testPage.onCommit, "emit");
+        spyOn(fixture.componentInstance.wizardFinished, "emit");
+
+        wizardNavigationService.wizardFinished.subscribe(() => {
+
+            fixture.componentInstance.wizardFinished.emit();
+
+        });
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        wizardNavigationService.finish();
+
+        expect(testPage.primaryButtonClicked.emit).toHaveBeenCalled();
+        expect(testPage.onCommit.emit).toHaveBeenCalled();
+
+        expect(testPage.completed).toBe(true);
+        expect(fixture.componentInstance.wizardFinished.emit).toHaveBeenCalled();
 
     });
 
+    it(".finish() should not commit the current page and emit events if next is disabled", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+
+        testPage.readyToComplete = false;
+
+        spyOn(testPage.primaryButtonClicked, "emit");
+        spyOn(testPage.onCommit, "emit");
+        spyOn(fixture.componentInstance.wizardFinished, "emit");
+
+        wizardNavigationService.wizardFinished.subscribe(() => {
+
+            fixture.componentInstance.wizardFinished.emit();
+
+        });
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        wizardNavigationService.finish();
+
+        expect(testPage.primaryButtonClicked.emit).not.toHaveBeenCalled();
+        expect(testPage.onCommit.emit).not.toHaveBeenCalled();
+
+        expect(testPage.completed).toBe(false);
+        expect(fixture.componentInstance.wizardFinished.emit).not.toHaveBeenCalled();
+
+    });
+
+    it(".previous() should return undefined if the current page is the first page", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(0);
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        expect(wizardNavigationService.previous()).toBeUndefined();
+
+    });
+
+    it(".previous() should return undefined if the current page is the first page", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(0);
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        expect(wizardNavigationService.previous()).toBeUndefined();
+
+    });
+
+    it(".previous() should set the current page to the previous page", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+        let previousPage = wizardNavigationService.pageCollection.getPageByIndex(2);
+
+        wizardNavigationService.setCurrentPage(testPage);
+
+        wizardNavigationService.previous();
+
+        expect(wizardNavigationService.currentPage).toEqual(previousPage);
+
+    });
 
 
 
