@@ -4,12 +4,12 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import { WizardNavigationService } from "./wizard-navigation";
-import { PageCollectionService } from "./page-collection";
-import { ButtonHubService } from "./button-hub";
-import { Component, QueryList, ViewChildren, Output, EventEmitter } from "@angular/core";
-import { TestBed, ComponentFixture } from "@angular/core/testing";
-import { ClarityModule } from "../../clarity.module";
+import {WizardNavigationService} from "./wizard-navigation";
+import {PageCollectionService} from "./page-collection";
+import {ButtonHubService} from "./button-hub";
+import {Component, QueryList, ViewChildren, Output, EventEmitter} from "@angular/core";
+import {TestBed, ComponentFixture} from "@angular/core/testing";
+import {ClarityModule} from "../../clarity.module";
 
 let wizardPageIndex = 0;
 
@@ -70,8 +70,8 @@ fdescribe("Wizard Navigation Service", () => {
     beforeEach(() => {
 
         TestBed.configureTestingModule({
-            imports: [ ClarityModule.forRoot() ],
-            declarations: [ NewWizardMock, NewWizardPageMock ]
+            imports: [ClarityModule.forRoot()],
+            declarations: [NewWizardMock, NewWizardPageMock]
         });
 
         fixture = TestBed.createComponent(NewWizardMock);
@@ -167,8 +167,8 @@ fdescribe("Wizard Navigation Service", () => {
     });
 
     /*
-    * TODO: as next() calls finish(), it seems that there are repetion in the following tests.
-    * We should investigate possibilities of stripping down some of these tests on finish() and next() */
+     * TODO: as next() calls finish(), it seems that there are repetion in the following tests.
+     * We should investigate possibilities of stripping down some of these tests on finish() and next() */
 
     it(".finish() should commit the current page and emit the event", () => {
 
@@ -267,5 +267,19 @@ fdescribe("Wizard Navigation Service", () => {
         expect(wizardNavigationService.currentPage).toEqual(goToPage);
 
     });
+
+    it(".setFirstPageCurrent() should set the first page as the current page", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+        let firstPage = wizardNavigationService.pageCollection.getPageByIndex(0);
+        let pageCollectionBeforeReset = wizardNavigationService.pageCollection;
+        wizardNavigationService.setCurrentPage(testPage);
+        wizardNavigationService.setFirstPageCurrent();
+        let pageCollectionAfterReset = wizardNavigationService.pageCollection;
+        expect(wizardNavigationService.currentPage).toEqual(firstPage);
+        expect(pageCollectionBeforeReset).toEqual(pageCollectionAfterReset);
+
+    });
+
 
 });
