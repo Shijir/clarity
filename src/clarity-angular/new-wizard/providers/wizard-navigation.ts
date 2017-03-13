@@ -223,8 +223,8 @@ export class WizardNavigationService implements OnDestroy {
 
     public goTo(pageToGoToOrId: any) {
         let pageToGoTo: NewWizardPage;
-        let currentPage: NewWizardPage;
-        let myPages: PageCollectionService;
+        let currentPage: NewWizardPage = this.currentPage;
+        let myPages: PageCollectionService = this.pageCollection;
         let pagesToCheck: NewWizardPage[];
         let okayToMove: boolean = true;
 
@@ -234,10 +234,6 @@ export class WizardNavigationService implements OnDestroy {
         } else {
             pageToGoTo = pageToGoToOrId;
         }
-        // SPECME
-
-        myPages = this.pageCollection;
-        currentPage = this.currentPage;
 
         if (pageToGoTo === currentPage) {
             return;

@@ -31,6 +31,7 @@ class NewWizardPageMock {
 
     readyToComplete: boolean = true;
     completed: boolean = false;
+    current: boolean = false;
 
     @Output("clrWizardPagePrimary") primaryButtonClicked: EventEmitter < any > =
         new EventEmitter(false);
@@ -251,11 +252,19 @@ fdescribe("Wizard Navigation Service", () => {
 
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
         let goToPage = wizardNavigationService.pageCollection.getPageByIndex(1);
-
         wizardNavigationService.setCurrentPage(testPage);
-
         expect(wizardNavigationService.goTo(goToPage)).toBeUndefined();
         expect(wizardNavigationService.goTo(goToPage.id)).toBeUndefined();
+
+    });
+
+    it(".goTo() should set the current page as the given page", () => {
+
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
+        let goToPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+        wizardNavigationService.setCurrentPage(testPage);
+        wizardNavigationService.setCurrentPage(goToPage);
+        expect(wizardNavigationService.currentPage).toEqual(goToPage);
 
     });
 
