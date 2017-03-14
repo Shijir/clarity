@@ -6,271 +6,148 @@
 
 import {WizardNavigationService} from "./wizard-navigation";
 import {PageCollectionService} from "./page-collection";
-import {ButtonHubService} from "./button-hub";
-import {Component, QueryList, ViewChildren, Output, EventEmitter} from "@angular/core";
-import {TestBed, ComponentFixture} from "@angular/core/testing";
-import {ClarityModule} from "../../clarity.module";
+import {Component} from "@angular/core";
+import {NewWizard} from "../wizard";
+import {TestContext, addHelpers} from "../helpers.spec";
 
-let wizardPageIndex = 0;
+fdescribe("Wizard Navigation Service", function() {
 
-@Component({
-    selector: "clr-newwizard-page-mock",
-    template: `<div>I am actually a mock wizard page</div>`
-})
-class NewWizardPageMock {
+    addHelpers();
 
-    _id: string = (wizardPageIndex++).toString();
+    let context: TestContext<NewWizard, NewWizardNavigationTest>;
+    let wizardNavigationService: WizardNavigationService;
+    let pageCollectionService: PageCollectionService;
 
-    public get id() {
-        return `clr-wizard-page-${this._id}`;
-    }
-
-    public get title() {
-        return `clr-wizard-page-${this._id}-title`;
-    }
-
-    readyToComplete: boolean = true;
-    completed: boolean = false;
-    current: boolean = false;
-
-    @Output("clrWizardPagePrimary") primaryButtonClicked: EventEmitter < any > =
-        new EventEmitter(false);
-
-    @Output("clrWizardPageOnCommit") onCommit: EventEmitter < any > =
-        new EventEmitter<any>(false);
-
-}
-
-@Component({
-    selector: "clr-newwizard-mock",
-    template: `
-            <clr-newwizard-page-mock></clr-newwizard-page-mock>
-            <clr-newwizard-page-mock></clr-newwizard-page-mock>
-            <clr-newwizard-page-mock></clr-newwizard-page-mock>
-            <clr-newwizard-page-mock></clr-newwizard-page-mock>
-            <clr-newwizard-page-mock></clr-newwizard-page-mock>
-    `
-})
-class NewWizardMock {
-
-    @ViewChildren(NewWizardPageMock) wizardPageChildren: QueryList<NewWizardPageMock>;
-
-    @Output("clrWizardOnFinish") wizardFinished: EventEmitter<any> =
-        new EventEmitter<any>(false);
-
-}
-
-fdescribe("Wizard Navigation Service", () => {
-
-    let fixture: ComponentFixture<any>;
-    let wizardNavigationService: any;
-    let pageCollection: PageCollectionService;
-    let buttonHub: ButtonHubService;
-
-    beforeEach(() => {
-
-        TestBed.configureTestingModule({
-            imports: [ClarityModule.forRoot()],
-            declarations: [NewWizardMock, NewWizardPageMock]
-        });
-
-        fixture = TestBed.createComponent(NewWizardMock);
-        fixture.detectChanges();
-
-        pageCollection = new PageCollectionService();
-        pageCollection.pages = fixture.componentInstance.wizardPageChildren;
-
-        buttonHub = new ButtonHubService();
-
-        wizardNavigationService = new WizardNavigationService(pageCollection, buttonHub);
-
+    beforeEach(function() {
+        context = this.create(NewWizard, NewWizardNavigationTest);
+        wizardNavigationService = context.getClarityProvider(WizardNavigationService);
+        pageCollectionService = context.getClarityProvider(PageCollectionService);
+        context.detectChanges();
     });
 
-    afterEach(() => {
-        fixture.destroy();
-        wizardPageIndex = 0;
+    it(".setCurrentPage() should set the current page and emit the event", function() {
+
+        wizardNavigationService.setCurrentPage(pageCollectionService.getPageByIndex(1));
+        expect(wizardNavigationService.currentPage).toEqual(pageCollectionService.getPageByIndex(1));
+        wizardNavigationService.setCurrentPage(pageCollectionService.lastPage);
+        expect(wizardNavigationService.currentPage).toEqual(pageCollectionService.lastPage);
     });
 
-    it(".setCurrentPage() should set the current page and emit the event", () => {
-
-        wizardNavigationService.currentPageChanged.subscribe((page: NewWizardPageMock) => {
-
-            expect(page.title).toMatch(/clr-wizard-page-0-title/);
-
-        });
-
-        wizardNavigationService.setCurrentPage(pageCollection.firstPage);
-
-        expect(wizardNavigationService.currentPageTitle).toMatch(/clr-wizard-page-0-title/);
-
-    });
-
-    it(".next() should call finish() and throw an error if the current page is the last page.", () => {
+    it(".next() should call finish() and throw an error if the current page is the last page.", function() {
 
         let testPage = wizardNavigationService.pageCollection.lastPage;
-
         wizardNavigationService.setCurrentPage(testPage);
-
         spyOn(testPage.primaryButtonClicked, "emit");
         spyOn(testPage.onCommit, "emit");
-        spyOn(fixture.componentInstance.wizardFinished, "emit");
-
-        wizardNavigationService.wizardFinished.subscribe(() => {
-
-            fixture.componentInstance.wizardFinished.emit();
-
+        spyOn(context.clarityDirective.wizardFinished, "emit");
+        wizardNavigationService.wizardFinished.subscribe(function() {
+            context.clarityDirective.wizardFinished.emit();
         });
-
-        expect(() => {
-
+        expect(function() {
             wizardNavigationService.next();
-
         }).toThrowError("The wizard has no next page to go to.");
-
         expect(testPage.primaryButtonClicked.emit).toHaveBeenCalled();
         expect(testPage.onCommit.emit).toHaveBeenCalled();
-
         expect(testPage.completed).toBe(true);
-        expect(fixture.componentInstance.wizardFinished.emit).toHaveBeenCalled();
+        expect(context.clarityDirective.wizardFinished.emit).toHaveBeenCalled();
 
     });
 
-    it(".next() should set the current page to the next page.", () => {
+    it(".next() should set the current page to the next page.", function() {
 
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
-
-        wizardNavigationService.setCurrentPage(testPage);
-
-        wizardNavigationService.currentPageChanged.subscribe((page: NewWizardPageMock) => {
-
-            expect(page.title).toMatch(/clr-wizard-page-2-title/);
-
-        });
-
+        expect(wizardNavigationService.currentPage).toEqual(wizardNavigationService.pageCollection.getPageByIndex(0));
         wizardNavigationService.next();
-
-        expect(wizardNavigationService.currentPageTitle).toMatch(/clr-wizard-page-2-title/);
-
-
+        expect(wizardNavigationService.currentPage).toEqual(wizardNavigationService.pageCollection.getPageByIndex(1));
     });
 
-    it(".next() should return undefined if the next page is disabled", () => {
+    it(".next() should return undefined if the next page is disabled", function() {
 
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(2);
-
-        testPage.readyToComplete = false;
-
+        testPage.nextStepDisabled = true;
         wizardNavigationService.setCurrentPage(testPage);
-
         expect(wizardNavigationService.next()).toBeUndefined();
-
     });
 
     /*
-     * TODO: as next() calls finish(), it seems that there are repetion in the following tests.
+     * TODO: as next() calls finish(), it seems that there are repetition in the following tests.
      * We should investigate possibilities of stripping down some of these tests on finish() and next() */
 
-    it(".finish() should commit the current page and emit the event", () => {
+    it(".finish() should commit the current page and emit the event", function() {
 
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(2);
 
         spyOn(testPage.primaryButtonClicked, "emit");
         spyOn(testPage.onCommit, "emit");
-        spyOn(fixture.componentInstance.wizardFinished, "emit");
+        spyOn(context.clarityDirective.wizardFinished, "emit");
 
-        wizardNavigationService.wizardFinished.subscribe(() => {
-
-            fixture.componentInstance.wizardFinished.emit();
-
+        wizardNavigationService.wizardFinished.subscribe(function() {
+            context.clarityDirective.wizardFinished.emit();
         });
 
         wizardNavigationService.setCurrentPage(testPage);
-
         wizardNavigationService.finish();
-
         expect(testPage.primaryButtonClicked.emit).toHaveBeenCalled();
         expect(testPage.onCommit.emit).toHaveBeenCalled();
-
         expect(testPage.completed).toBe(true);
-        expect(fixture.componentInstance.wizardFinished.emit).toHaveBeenCalled();
-
+        expect(context.clarityDirective.wizardFinished.emit).toHaveBeenCalled();
     });
 
-    it(".finish() should not commit the current page and emit events if next is disabled", () => {
+    it(".finish() should not commit the current page and emit events if next is disabled", function() {
 
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(2);
 
-        testPage.readyToComplete = false;
+        testPage.nextStepDisabled = true;
 
         spyOn(testPage.primaryButtonClicked, "emit");
         spyOn(testPage.onCommit, "emit");
-        spyOn(fixture.componentInstance.wizardFinished, "emit");
+        spyOn(context.clarityDirective.wizardFinished, "emit");
 
-        wizardNavigationService.wizardFinished.subscribe(() => {
-
-            fixture.componentInstance.wizardFinished.emit();
+        wizardNavigationService.wizardFinished.subscribe(function() {
+            context.clarityDirective.wizardFinished.emit();
 
         });
 
         wizardNavigationService.setCurrentPage(testPage);
-
         wizardNavigationService.finish();
-
         expect(testPage.primaryButtonClicked.emit).not.toHaveBeenCalled();
         expect(testPage.onCommit.emit).not.toHaveBeenCalled();
-
         expect(testPage.completed).toBe(false);
-        expect(fixture.componentInstance.wizardFinished.emit).not.toHaveBeenCalled();
-
+        expect(context.clarityDirective.wizardFinished.emit).not.toHaveBeenCalled();
     });
 
-    it(".previous() should return undefined if the current page is the first page", () => {
-
+    it(".previous() should return undefined if the current page is the first page", function() {
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(0);
-
         wizardNavigationService.setCurrentPage(testPage);
-
         expect(wizardNavigationService.previous()).toBeUndefined();
-
     });
 
-    it(".previous() should set the current page to the previous page", () => {
-
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
-        let previousPage = wizardNavigationService.pageCollection.getPageByIndex(2);
-
+    it(".previous() should set the current page to the previous page", function() {
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(2);
+        let previousPage = wizardNavigationService.pageCollection.getPageByIndex(1);
         wizardNavigationService.setCurrentPage(testPage);
-
         wizardNavigationService.previous();
-
         expect(wizardNavigationService.currentPage).toEqual(previousPage);
 
     });
 
-
-    it(".goTo() should return undefined if the given page is equal to the current page", () => {
-
+    it(".goTo() should return undefined if the given page is equal to the current page", function() {
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
         let goToPage = wizardNavigationService.pageCollection.getPageByIndex(1);
         wizardNavigationService.setCurrentPage(testPage);
         expect(wizardNavigationService.goTo(goToPage)).toBeUndefined();
         expect(wizardNavigationService.goTo(goToPage.id)).toBeUndefined();
-
     });
 
-    it(".goTo() should set the current page as the given page", () => {
-
+    it(".goTo() should set the current page as the given page", function() {
         let testPage = wizardNavigationService.pageCollection.getPageByIndex(1);
-        let goToPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+        let goToPage = wizardNavigationService.pageCollection.getPageByIndex(2);
         wizardNavigationService.setCurrentPage(testPage);
         wizardNavigationService.setCurrentPage(goToPage);
         expect(wizardNavigationService.currentPage).toEqual(goToPage);
-
     });
 
-    it(".setFirstPageCurrent() should set the first page as the current page", () => {
-
-        let testPage = wizardNavigationService.pageCollection.getPageByIndex(3);
+    it(".setFirstPageCurrent() should set the first page as the current page", function() {
+        let testPage = wizardNavigationService.pageCollection.getPageByIndex(2);
         let firstPage = wizardNavigationService.pageCollection.getPageByIndex(0);
         let pageCollectionBeforeReset = wizardNavigationService.pageCollection;
         wizardNavigationService.setCurrentPage(testPage);
@@ -278,8 +155,52 @@ fdescribe("Wizard Navigation Service", () => {
         let pageCollectionAfterReset = wizardNavigationService.pageCollection;
         expect(wizardNavigationService.currentPage).toEqual(firstPage);
         expect(pageCollectionBeforeReset).toEqual(pageCollectionAfterReset);
-
     });
 
 
 });
+
+
+@Component({
+    template: `
+            <clr-newwizard #wizard [(clrWizardOpen)]="open" [clrWizardSize]="'lg'">
+                <clr-wizard-title>My Wizard Title</clr-wizard-title>
+                <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+                <clr-wizard-button [type]="'finish'">Fait Accompli</clr-wizard-button>
+                <clr-wizard-header-action (actionClicked)="headerActionClicked($event)">
+                    <clr-icon shape="cloud" class="is-solid"></clr-icon>
+                </clr-wizard-header-action>
+                <clr-newwizard-page>
+                    <template pageTitle>Longer Title for Page 1</template>
+                    <p>Content for step 1</p>
+                    <!-- CUSTOME HDR ACTIONS GO HERE -->
+                    <template pageHeaderActions>
+                        <clr-wizard-header-action (actionClicked)="headerActionClicked($event)" id="bell">
+                            <clr-icon shape="bell" class="has-badge"></clr-icon>
+                        </clr-wizard-header-action>
+                        <clr-wizard-header-action (actionClicked)="headerActionClicked($event)" id="warning">
+                            <clr-icon shape="warning"></clr-icon>
+                        </clr-wizard-header-action>
+                    </template>
+                </clr-newwizard-page>
+                <clr-newwizard-page>
+                    <template pageTitle>Title for Page 2</template>
+                    <p>Content for step 2</p>
+                </clr-newwizard-page>
+                <clr-newwizard-page>
+                    <template pageTitle>Title for Page 3</template>
+                    <p>Content for step 3</p>
+                </clr-newwizard-page>
+            </clr-newwizard>
+    `
+})
+class NewWizardNavigationTest {
+    open: boolean = true;
+
+    headerActionClicked = function(){
+        console.log("header action clicked!");
+    };
+
+}
