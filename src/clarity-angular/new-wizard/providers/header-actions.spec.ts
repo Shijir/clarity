@@ -26,11 +26,11 @@ export default function(): void {
             context.detectChanges();
         });
 
-        it(".wizardHasHeaderActions should indicate if wizard has header actions", function() {
+        it(".wizardHasHeaderActions indicates if wizard has header actions", function() {
             expect(headerActionService.wizardHasHeaderActions).toBe(true);
         });
 
-        it(".currentPageHasHeaderActions should indicate if the current page has header actions", function() {
+        it(".currentPageHasHeaderActions indicates if the current page has header actions", function() {
 
             let lastPage = wizardNavigationService.pageCollection.lastPage;
 
@@ -39,7 +39,7 @@ export default function(): void {
             expect(headerActionService.currentPageHasHeaderActions).toBe(false);
         });
 
-        it(".showWizardHeaderActions should indicate if other pages have the header actions", function() {
+        it(".showWizardHeaderActions indicates if other pages have the header actions", function() {
 
             let lastPage = wizardNavigationService.pageCollection.lastPage;
             expect(headerActionService.showWizardHeaderActions).toBe(false);
@@ -48,18 +48,9 @@ export default function(): void {
             expect(headerActionService.showWizardHeaderActions).toBe(true);
         });
 
-        it(".displayHeaderActionsWrapper should indicate if a wizard has " +
-            "header actions or current page has header actions", function() {
-
-            let lastPage = wizardNavigationService.pageCollection.lastPage;
-            expect(headerActionService.displayHeaderActionsWrapper).toBe(true);
-
-            wizardNavigationService.setCurrentPage(lastPage);
-            expect(headerActionService.displayHeaderActionsWrapper).toBe(true);
-        });
-
-
-
+        /*
+        * TODO: investigate displayHeaderActionsWrapper is needed as it seems to always return
+         the same value as wizardHasHeaderActions*/
     });
 
 }
