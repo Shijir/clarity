@@ -5,8 +5,10 @@
  */
 
 import {addHelpers} from "../helpers.spec";
+
 import WizardNavigation from "./wizard-navigation.spec";
 import PageCollection from "./page-collection.spec";
+import HeaderActions from "./header-actions.spec";
 
 fdescribe("Providers", function() {
 
@@ -15,5 +17,7 @@ fdescribe("Providers", function() {
     WizardNavigation();
 
     PageCollection();
+
+    HeaderActions();
 
 });
