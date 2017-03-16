@@ -14,12 +14,12 @@ export default function(): void {
 
     describe("Wizard Navigation Service", function() {
 
-        let context: TestContext<NewWizard, NewWizardNavigationTest>;
+        let context: TestContext<NewWizard, NavigationTest>;
         let wizardNavigationService: WizardNavigationService;
         let pageCollectionService: PageCollectionService;
 
         beforeEach(function() {
-            context = this.create(NewWizard, NewWizardNavigationTest);
+            context = this.create(NewWizard, NavigationTest);
             wizardNavigationService = context.getClarityProvider(WizardNavigationService);
             pageCollectionService = context.getClarityProvider(PageCollectionService);
             context.detectChanges();
@@ -201,7 +201,7 @@ export default function(): void {
             </clr-newwizard>
     `
 })
-class NewWizardNavigationTest {
+class NavigationTest {
     open: boolean = true;
 
     headerActionClicked = function(){
