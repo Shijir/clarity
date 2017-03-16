@@ -22,29 +22,21 @@ export default function(): void {
             it(".pagesAsArray should return the array of wizard pages", function() {
 
                 expect(pageCollectionService.pagesAsArray).toEqual(context.clarityDirective.pages.toArray());
-                //expect(pageCollectionWithNoPage.pagesAsArray).toEqual([]);
-
             });
 
             it(".pagesCount should return correct number of pages", function() {
 
                 expect(pageCollectionService.pagesCount).toEqual(5);
-                //expect(pageCollectionWithNoPage.pagesCount).toEqual(0);
-
             });
 
             it(".lastPage should return the last wizard page", function() {
 
                 expect(pageCollectionService.lastPage.id).toEqual(context.clarityDirective.pages.last.id);
-                //expect(pageCollectionWithNoPage.lastPage).toBeUndefined();
-
             });
 
             it(".firstPage should return the first wizard page", function() {
 
                 expect(pageCollectionService.firstPage.id).toEqual(context.clarityDirective.pages.first.id);
-                //expect(pageCollectionWithNoPage.firstPage).toBeUndefined();
-
             });
 
 
@@ -62,10 +54,6 @@ export default function(): void {
                 expect(function() {
                     pageCollectionService.getPageById(nonExistingPageId);
                 }).toThrowError("No page can be found with the id " + nonExistingPageId + ".");
-
-                // expect(function() {
-                //     pageCollectionService.getPageById("clr-wizard-ne-page-0");
-                // }).toThrowError("No page can be found with the id clr-wizard-ne-page-0.");
 
                 //Manually setting this id to make multiple pages have the same id.
                 pageCollectionService.getPageById(lastPageId)._id = firstPageIdNumber;
@@ -93,10 +81,6 @@ export default function(): void {
             });
 
             it(".getPageIndex() should return the index of a wizard page", function() {
-
-                // expect(function() {
-                //     pageCollectionWithNoPage.getPageIndex(pageCollectionService.firstPage);
-                // }).toThrowError("Requested page cannot be found in collection of pages.");
 
                 expect(pageCollectionService.getPageIndex(pageCollectionService.firstPage)).toBe(0);
 
@@ -126,8 +110,6 @@ export default function(): void {
 
                 expect(pageCollectionService.pageRange(null, undefined)).toEqual([]);
 
-                //expect(pageCollectionWithNoPage.pageRange(1, 3)).toEqual([]);
-
             });
 
             it(".getPageRangeFromPages() should return the range of wizard pages", function() {
@@ -156,10 +138,6 @@ export default function(): void {
 
                 expect(pageCollectionService.getPreviousPage(pageCollectionService.firstPage)).toBeNull();
 
-                // expect(function() {
-                //     pageCollectionWithNoPage.getPreviousPage(pageCollectionService.getPageByIndex(2));
-                // }).toThrowError("Requested page cannot be found in collection of pages.");
-
             });
 
             it(".getNextPage() should return the next page of the current page", function() {
@@ -171,10 +149,6 @@ export default function(): void {
                     .toEqual(pageCollectionService.getPageByIndex(3));
 
                 expect(pageCollectionService.getNextPage(pageCollectionService.lastPage)).toBeNull();
-
-                // expect(function() {
-                //     pageCollectionWithNoPage.getNextPage(pageCollectionService.getPageByIndex(2));
-                // }).toThrowError("Requested page cannot be found in collection of pages.");
 
             });
 
@@ -223,9 +197,12 @@ export default function(): void {
         xdescribe("With no pages", function() {
 
             /*
-            * TODO: when no pages are found in the wizard, this.currentPage.title is undefined error occurs
-            * in the wizard-navigation.ts. If we want to test the cases of wizard with no pages,
-            * we need to check at least one page exist in the wizard navigation service. */
+            * TODO:
+            * When no pages are found in the wizard, this.currentPage is undefined error occurs in several places.
+            * If we want to test the cases of wizard with no pages,
+            * we need to check if currentPage is defined it wherever it's used.
+            * Or we can require users to include at least one page to use
+            * */
 
             let context: TestContext<NewWizard, PageCollectionNoPagesTest>;
             let pageCollectionService: PageCollectionService;
