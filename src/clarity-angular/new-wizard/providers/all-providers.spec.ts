@@ -6,6 +6,7 @@
 
 import {addHelpers} from "../helpers.spec";
 
+import ButtonHub from "./button-hub.spec";
 import WizardNavigation from "./wizard-navigation.spec";
 import PageCollection from "./page-collection.spec";
 import HeaderActions from "./header-actions.spec";
@@ -13,6 +14,8 @@ import HeaderActions from "./header-actions.spec";
 fdescribe("Providers", function() {
 
     addHelpers();
+
+    ButtonHub();
 
     WizardNavigation();
 

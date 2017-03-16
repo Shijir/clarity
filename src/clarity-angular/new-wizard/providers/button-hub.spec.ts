@@ -1,155 +1,111 @@
-import { ButtonHubService } from "./button-hub";
+import {Component} from "@angular/core";
+import {NewWizard} from "../wizard";
+import {TestContext} from "../helpers.spec";
+import {ButtonHubService} from "./button-hub";
+import {WizardNavigationService} from "./wizard-navigation";
+import {PageCollectionService} from "./page-collection";
 
+export default function(): void {
 
-describe("Button Hub Provider", () => {
+    describe("Button Hub Service", function() {
 
-    let buttonHubService = new ButtonHubService();
-    let isPreviousBtnClicked: boolean;
-    let isNextBtnClicked: boolean;
-    let isCancelBtnClicked: boolean;
-    let isDangerBtnClicked: boolean;
-    let isFinishBtnClicked: boolean;
-    let isCustomBtnClicked: boolean;
+        let context: TestContext<NewWizard, ButtonHubTest>;
+        let buttonHubService: ButtonHubService;
+        let wizardNavigationService: WizardNavigationService;
+        let pageCollectionService: PageCollectionService;
 
-    let resetButtonStates = () => {
-        isPreviousBtnClicked = false;
-        isNextBtnClicked = false;
-        isCancelBtnClicked = false;
-        isDangerBtnClicked = false;
-        isFinishBtnClicked = false;
-        isCustomBtnClicked = false;
-    };
-
-    describe("Previous Button", () => {
-
-        beforeEach((done) => {
-
-            resetButtonStates();
-
-            buttonHubService.previousBtnClicked.subscribe(() => {
-                isPreviousBtnClicked = true;
-                done();
-            });
-
-            buttonHubService.buttonClicked("previous");
+        beforeEach(function() {
+            context = this.create(NewWizard, ButtonHubTest);
+            buttonHubService = context.getClarityProvider(ButtonHubService);
+            wizardNavigationService = context.getClarityProvider(WizardNavigationService);
+            pageCollectionService = context.getClarityProvider(PageCollectionService);
+            context.detectChanges();
         });
 
-        it("should call the PreviousBtnClicked handler", () => {
+        it("buttonClicked('next') calls wizardNavigationService.next", function() {
 
-            expect(isPreviousBtnClicked).toBe(true);
-
-        });
-
-    });
-
-    describe("Next Button", () => {
-
-        beforeEach((done) => {
-
-            resetButtonStates();
-
-            buttonHubService.nextBtnClicked.subscribe(() => {
-                isNextBtnClicked = true;
-                done();
-            });
-
+            spyOn(wizardNavigationService, "next");
             buttonHubService.buttonClicked("next");
+            expect(wizardNavigationService.next).toHaveBeenCalled();
         });
 
-        it("should call the NextBtnClicked handler", () => {
+        it("buttonClicked('previous') calls wizardNavigationService.previous", function() {
 
-            expect(isNextBtnClicked).toBe(true);
-
+            wizardNavigationService.setCurrentPage(pageCollectionService.lastPage);
+            spyOn(wizardNavigationService, "previous");
+            buttonHubService.buttonClicked("previous");
+            expect(wizardNavigationService.previous).toHaveBeenCalled();
         });
 
-    });
+        it("buttonClicked('danger') calls wizardNavigationService.next or wizardNavigationService.finish", function() {
 
-    describe("Danger Button", () => {
-
-        beforeEach((done) => {
-
-            resetButtonStates();
-
-            buttonHubService.dangerBtnClicked.subscribe(() => {
-                isDangerBtnClicked = true;
-                done();
-            });
-
+            spyOn(wizardNavigationService, "next");
             buttonHubService.buttonClicked("danger");
+            expect(wizardNavigationService.next).toHaveBeenCalled();
+
+            spyOn(wizardNavigationService, "finish");
+            wizardNavigationService.setCurrentPage(wizardNavigationService.pageCollection.lastPage);
+            buttonHubService.buttonClicked("danger");
+            expect(wizardNavigationService.finish).toHaveBeenCalled();
         });
 
-        it("should call the DangerBtnClicked handler", () => {
+        it(".cancel calls wizardNavigationService.cancel", function() {
 
-            expect(isDangerBtnClicked).toBe(true);
-
-        });
-
-    });
-
-    describe("Cancel Button", () => {
-
-        beforeEach((done) => {
-
-            resetButtonStates();
-
-            buttonHubService.cancelBtnClicked.subscribe(() => {
-                isCancelBtnClicked = true;
-                done();
-            });
-
+            spyOn(wizardNavigationService, "cancel");
             buttonHubService.buttonClicked("cancel");
+            expect(wizardNavigationService.cancel).toHaveBeenCalled();
         });
 
-        it("should call the CancelBtnClicked handler", () => {
+        it(".finish calls wizard.deactivateGhostPages, deactivateGhostPages.close and emit wizardFinished", function() {
 
-            expect(isCancelBtnClicked).toBe(true);
-
-        });
-
-    });
-
-    describe("Finish Button", () => {
-
-        beforeEach((done) => {
-
-            resetButtonStates();
-
-            buttonHubService.finishBtnClicked.subscribe(() => {
-                isFinishBtnClicked = true;
-                done();
-            });
-
+            spyOn(context.clarityDirective.wizardFinished, "emit");
+            spyOn(context.clarityDirective, "deactivateGhostPages");
+            spyOn(context.clarityDirective, "close");
             buttonHubService.buttonClicked("finish");
+            expect(context.clarityDirective.deactivateGhostPages).toHaveBeenCalled();
+            expect(context.clarityDirective.wizardFinished.emit).toHaveBeenCalled();
+            expect(context.clarityDirective.close).toHaveBeenCalled();
         });
 
-        it("should call the FinishBtnClicked handler", () => {
-
-            expect(isFinishBtnClicked).toBe(true);
-
-        });
-
-    });
-
-    describe("Custom Button", () => {
-
-        beforeEach((done) => {
-
-            resetButtonStates();
-
-            buttonHubService.customBtnClicked.subscribe(() => {
-                isCustomBtnClicked = true;
-                done();
-            });
-
-            buttonHubService.buttonClicked("random");
-        });
-
-        it("should call the CustomBtnClicked handler", () => {
-
-            expect(isCustomBtnClicked).toBe(true);
-
+        it(".custom calls wizardNavigationService.currentPage.customButtonClicked", function() {
+            spyOn(wizardNavigationService.currentPage.customButtonClicked, "emit");
+            buttonHubService.buttonClicked("custom");
+            expect(wizardNavigationService.currentPage.customButtonClicked.emit).toHaveBeenCalled();
         });
 
     });
 
-});
+}
+
+@Component({
+    template: `
+            <clr-newwizard #wizard [(clrWizardOpen)]="open" [clrWizardSize]="'lg'">
+                <clr-wizard-title>My Wizard Title</clr-wizard-title>
+                <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+                <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+                <clr-wizard-button [type]="'next'">Next</clr-wizard-button>
+                <clr-wizard-button [type]="'finish'">Fait Accompli</clr-wizard-button>
+                <clr-wizard-header-action (actionClicked)="headerActionClicked($event)">
+                    <clr-icon shape="cloud" class="is-solid"></clr-icon>
+                </clr-wizard-header-action>
+                <clr-newwizard-page>
+                    <template pageTitle>Title for Page 1</template>
+                    <p>Content for step 1</p>
+                </clr-newwizard-page>
+                <clr-newwizard-page>
+                    <template pageTitle>Title for Page 2</template>
+                    <p>Content for step 2</p>
+                </clr-newwizard-page>
+                <clr-newwizard-page>
+                    <template pageTitle>Title for Page 3</template>
+                    <p>Content for step 3</p>
+                </clr-newwizard-page>
+            </clr-newwizard>
+    `
+})
+class ButtonHubTest {
+    open: boolean = true;
+    headerActionClicked = function() {
+        console.log("header action clicked!");
+    };
+}
