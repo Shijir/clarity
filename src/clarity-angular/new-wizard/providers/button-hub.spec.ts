@@ -22,14 +22,14 @@ export default function(): void {
             context.detectChanges();
         });
 
-        it("buttonClicked('next') calls wizardNavigationService.next", function() {
+        it("'next' calls wizardNavigationService.next", function() {
 
             spyOn(wizardNavigationService, "next");
             buttonHubService.buttonClicked("next");
             expect(wizardNavigationService.next).toHaveBeenCalled();
         });
 
-        it("buttonClicked('previous') calls wizardNavigationService.previous", function() {
+        it("'previous' calls wizardNavigationService.previous", function() {
 
             wizardNavigationService.setCurrentPage(pageCollectionService.lastPage);
             spyOn(wizardNavigationService, "previous");
@@ -37,7 +37,7 @@ export default function(): void {
             expect(wizardNavigationService.previous).toHaveBeenCalled();
         });
 
-        it("buttonClicked('danger') calls wizardNavigationService.next or wizardNavigationService.finish", function() {
+        it("'danger' calls wizardNavigationService.next or wizardNavigationService.finish", function() {
 
             spyOn(wizardNavigationService, "next");
             buttonHubService.buttonClicked("danger");
@@ -49,14 +49,14 @@ export default function(): void {
             expect(wizardNavigationService.finish).toHaveBeenCalled();
         });
 
-        it(".cancel calls wizardNavigationService.cancel", function() {
+        it("'cancel' calls wizardNavigationService.cancel", function() {
 
             spyOn(wizardNavigationService, "cancel");
             buttonHubService.buttonClicked("cancel");
             expect(wizardNavigationService.cancel).toHaveBeenCalled();
         });
 
-        it(".finish calls wizard.deactivateGhostPages, deactivateGhostPages.close and emit wizardFinished", function() {
+        it("'finish' calls wizard deactivateGhostPages, deactivateGhostPages.close, emit wizardFinished", function() {
 
             spyOn(context.clarityDirective.wizardFinished, "emit");
             spyOn(context.clarityDirective, "deactivateGhostPages");
