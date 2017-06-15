@@ -1,0 +1,13 @@
+<div class="collapse-control" *ngIf="collapsible">
+    <button type="button" class="collapse-control-button"
+            [class.on-collapse]="collapsed"
+            (click)="toggleByButton()">
+        <clr-icon shape="angle-double" class="collapse-control-icon" [attr.dir]="angleDoubleDirection"></clr-icon>
+    </button>
+</div>
+<nav class="nav-vertical clr-nav-vertical"
+     [class.collapsed]="collapsed"
+     [class.has-nested-children]="hasNestedChildren"
+     (click)="collapsed = false">
+    <ng-content></ng-content>
+</nav>

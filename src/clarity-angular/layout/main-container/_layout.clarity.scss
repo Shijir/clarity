@@ -64,6 +64,12 @@
                 order: -1;
                 overflow: hidden; //overflow-y enabled in .sidenav-content
             }
+
+            .vertical-nav {
+                flex: 0 0 auto;
+                order: -1;
+                overflow: hidden; //overflow-y enabled in .sidenav-content
+            }
         }
     }
 

@@ -59,7 +59,8 @@ import {Expand} from "../../utils/expand/providers/expand";
                 "expanded <=> collapsed", animate("0.2s ease-in-out")
             )
         ])
-    ]
+    ],
+    host: {"class": "clr-treenode"}
 
 })
 export class TreeNode

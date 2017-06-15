@@ -1,0 +1,13 @@
+<div class="vertical-nav-item" [class.icon-when-collapsed]="hasIconLabel">
+    <button class="vertical-nav-header direct" type="button" (click)="toggleExpand()">
+        <span class="vertical-nav-label">
+            <ng-content></ng-content>
+        </span>
+        <clr-icon class="vertical-nav-caret" shape="caret" [attr.dir]="caretDirection"></clr-icon>
+    </button>
+    <div class="vertical-nav-children"
+         [@clrExpand]="expandAnimationState"
+         (@clrExpand.done)="expandAnimationDone($event)">
+        <ng-content select="[clrIfExpanded], [clrVerticalNavLink]"></ng-content>
+    </div>
+</div>

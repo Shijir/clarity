@@ -39,19 +39,31 @@
         <main class="content-area">
             <router-outlet></router-outlet>
         </main>
-        <nav class="sidenav" [clr-nav-level]="2">
-            <section class="sidenav-content">
-                <section class="nav-group collapsible">
-                    <input id="tab1" type="checkbox">
-                    <label for="tab1">Clarity Navigation</label>
-                    <ul class="nav-list">
-                        <li *ngFor="let route of routes">
-                            <a *ngIf="route.path != ''" class="nav-link" [routerLink]="[route.path]"
-                               [routerLinkActive]="['active']">{{route.path}}</a>
-                        </li>
-                    </ul>
-                </section>
-            </section>
-        </nav>
+        <!--<nav class="sidenav" [clr-nav-level]="2">-->
+            <!--<section class="sidenav-content">-->
+                <!--<section class="nav-group collapsible">-->
+                    <!--<input id="tab1" type="checkbox">-->
+                    <!--<label for="tab1">Clarity Navigation</label>-->
+                    <!--<ul class="nav-list">-->
+                        <!--<li *ngFor="let route of routes">-->
+                            <!--<a *ngIf="route.path != ''" class="nav-link" [routerLink]="[route.path]"-->
+                               <!--[routerLinkActive]="['active']">{{route.path}}</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</section>-->
+            <!--</section>-->
+        <!--</nav>-->
+
+        <clr-vertical-nav [clrVerticalNavCollapsed]="false" [clr-nav-level]="2">
+            <ng-container *ngFor="let route of routes">
+                <a clrVerticalNavLink *ngIf="route.path != ''" class="nav-link"
+                   [routerLink]="[route.path]"
+                   [routerLinkActive]="['active']">
+                    <span class="vertical-nav-label">
+                        {{route.path}}
+                    </span>
+                </a>
+            </ng-container>
+        </clr-vertical-nav>
     </div>
 </clr-main-container>

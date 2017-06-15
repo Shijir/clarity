@@ -1,0 +1,252 @@
+$vertical-nav-width: 240px;
+$vertical-nav-padding: 18px 0;
+$clr-icon-size: 16px;
+$clr-icon-right-margin: 6px;
+
+.vertical-nav {
+    display: flex;
+    position: relative;
+
+    nav.nav-vertical {
+        overflow-y: auto;
+        background-color: $clr-light-gray;
+        padding: $vertical-nav-padding;
+        width: 240px;
+        min-width: 48px;
+        position: relative;
+        z-index: 0;
+        will-change: width;
+        transition: width 0.2s ease-in-out;
+        transform: translate3d(0, 0, 0);
+    }
+
+    nav.collapsed {
+        width: 48px;
+
+        .vertical-nav-item {
+            transition: display 0.2s ease-in-out;
+
+            &:not(.icon-when-collapsed) {
+
+                display: none;
+            }
+
+        }
+
+        &.clr-nav-vertical {
+
+            // We shouldn't simply use display: none to hide nested children.
+            // They should be completely removed from DOM by Angular.
+
+            .vertical-nav-item {
+                transition: display 0.2s ease-in-out;
+                .vertical-nav-item {
+                    transition: display 0.2s ease-in-out;
+                    display: block;
+                }
+            }
+        }
+
+        .vertical-nav-label {
+            padding: 0;
+            color: rgba($clr-dark-gray, 0);
+            clr-icon {
+                color: rgba($clr-dark-gray, 1);
+            }
+        }
+
+        .vertical-nav-link {
+            padding: 0 16px;
+        }
+
+        .vertical-nav-header {
+            padding: 0 0 0 16px;
+        }
+
+        clr-icon.vertical-nav-caret {
+            width: 10px;
+            height: 10px;
+            margin-right: 6px;
+            margin-left: auto;
+            transform: translateY(calc(1px - 50%));
+        }
+    }
+
+    &.collapsible {
+        padding-top: 36px;
+
+        .collapse-control {
+            display: flex;
+        }
+
+        .collapse-control button.on-collapse {
+            width: 48px;
+        }
+
+        nav.nav-vertical {
+            padding: 0;
+        }
+    }
+
+    // Handle responsiveness here
+
+    .open-overflow-menu &.clr-nav-level-2 {
+        padding-top: 0;
+    }
+
+    .open-overflow-menu &.clr-nav-level-2 .nav-vertical {
+        width: 100%;
+        padding: $vertical-nav-padding;
+    }
+
+    .open-overflow-menu &.clr-nav-level-2 .collapse-control {
+        display: none;
+    }
+
+}
+
+.vertical-nav-header {
+    @extend .clr-treenode-content;
+
+    width: 100%;
+    line-height: $clr_baselineRem_1_5;
+    padding: 0 $clr_baselineRem_1 0 0;
+    font-size: $clr_baselineRem_0_5;
+    text-align: left;
+    color: $clr-dark-gray;
+
+    .collapsed & {
+        text-overflow: unset;
+    }
+}
+
+.vertical-nav-link {
+    @extend .clr-treenode-content;
+
+    display: block;
+    line-height: 36px;
+    padding-left: 0;
+    padding-right: $clr_baselineRem_1;
+    outline-offset: -5px;
+    will-change: color;
+    transform: translate3d(0, 0, 0);
+
+    &:link, &:visited {
+        color: $clr-dark-gray;
+    }
+
+    &:hover {
+        background-color: #fff;
+        text-decoration: none;
+    }
+
+    &.active {
+        background-color: #fff;
+    }
+
+    .collapsed & {
+        text-overflow: unset;
+    }
+
+    .collapsed &:link, &:visited {
+        color: rgba($clr-dark-gray, 0);
+    }
+}
+
+button.vertical-nav-header {
+    @extend .vertical-nav-link;
+
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    padding-left: 0;
+    padding-right: 48px;
+
+    .vertical-nav-caret {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-right: 12px;
+        transition: all 0.2s ease-in-out;
+        will-change: width, transform;
+        transform: translate3d(0, -50%, 0);
+    }
+}
+
+.vertical-nav-label {
+    padding-left: $clr_baselineRem_1;
+    transform: translate3d(0, 0, 0);
+    transition: padding-left 0.2s ease-in-out;
+}
+
+.has-nested-children {
+    .vertical-nav-header.direct .vertical-nav-label {
+        font-weight: 600;
+    }
+    .vertical-nav-link.direct .vertical-nav-label {
+        font-weight: 600;
+    }
+}
+
+.icon-when-collapsed {
+    .vertical-nav-item {
+        .vertical-nav-label {
+            padding-left: $clr_baselineRem_2;
+        }
+    }
+}
+
+// only purpose of it is to show a divider
+.vertical-nav-group {
+    position: relative;
+
+    &:after {
+        content: "";
+        position: relative;
+        display: block;
+        width: 100%;
+        border-top: 1px solid rgba($clr-dark-gray, 0.2);
+        height: 6px;
+        margin-top: 6px;
+    }
+}
+
+.collapse-control {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 36px;
+    display: none;
+    background-color: $clr-light-gray;
+    justify-content: flex-end;
+
+    button.collapse-control-button {
+        position: relative;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        outline-offset: -5px;
+        padding: 0;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        text-align: center;
+
+        clr-icon.collapse-control-icon {
+            align-self: center;
+            margin: 0 auto;
+            transition: all 0.2s ease-in-out;
+
+            &[dir="right"] {
+                transform: translateX(1px);
+            }
+
+            &[dir="left"] {
+                transform: translateX(-1px);
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+/**
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
+ * This software is released under MIT license.
+ * The full license information can be found in LICENSE in the root directory of this project.
+ */
+import { Directive, Optional} from "@angular/core";
+import { VerticalNavGroup } from "./vertical-nav-group";
+
+@Directive({
+    selector: "[clrVerticalNavLink]",
+    host: {
+        "class": "vertical-nav-item vertical-nav-link",
+        "[class.icon-when-collapsed]": "hasIcon",
+        "[class.direct]": "isDirectItem"
+    }
+})
+export class VerticalNavLink {
+
+    isDirectItem: boolean = false;
+    hasIcon: boolean = false;
+
+    constructor(@Optional() private _parent: VerticalNavGroup) {
+        if (!this._parent) {
+            this.isDirectItem = true;
+        }
+    }
+
+}

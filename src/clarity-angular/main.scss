@@ -170,6 +170,9 @@
 //depends on variables.clarity, mixins.clarity, helpers.clarity, forms.clarity
 @import "data/tree-view/tree-view.clarity";
 
+//Sidenav
+@import "layout/vertical-nav/vertical-nav.clarity";
+
 //Datagrid
 //depends on variables.clarity, mixins.clarity, helpers.clarity, layers, icons.clarity, tables.clarity
 @import "data/datagrid/datagrid.clarity";
