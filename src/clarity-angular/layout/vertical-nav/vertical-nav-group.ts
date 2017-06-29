@@ -61,10 +61,10 @@ export class VerticalNavGroup implements AfterContentInit, OnDestroy {
     }
 
     toggleExpand(): void {
-        if (this._verticalNavState.collapsed.getValue() && !this._itemExpand.expanded) {
+        if (!this._itemExpand.expanded) {
             // If a Vertical Nav Group toggle button is clicked while the Vertical Nav is in Collapsed state,
             // the Vertical Nav should be expanded first.
-            this._verticalNavState.collapsed.next(false);
+            this._verticalNavState.setCollapsed(false);
         }
 
         if (this._itemExpand.expanded) {

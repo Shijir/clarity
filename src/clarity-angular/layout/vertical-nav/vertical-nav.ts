@@ -36,7 +36,7 @@ export class VerticalNav implements AfterContentInit, OnDestroy {
             this.collapsible = true;
         }
         this._collapsed = value;
-        this._verticalNavState.collapsed.next(value);
+        this._verticalNavState.setCollapsed(value);
     }
 
     get angleDoubleDirection(): string {

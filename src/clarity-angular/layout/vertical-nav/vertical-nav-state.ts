@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Subject } from "rxjs/Subject";
+import { Observable } from "rxjs/Observable";
 /**
  * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
@@ -8,5 +9,13 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class VerticalNavState {
-    collapsed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    private _collapsed: Subject<boolean> = new Subject<boolean>();
+
+    get collapsed(): Observable<Boolean> {
+        return this._collapsed.asObservable();
+    }
+
+    setCollapsed(value: Boolean): void {
+        this._collapsed.next(value);
+    }
 }
