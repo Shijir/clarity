@@ -38,12 +38,8 @@ $clr-icon-right-margin: 6px;
             // We shouldn't simply use display: none to hide nested children.
             // They should be completely removed from DOM by Angular.
 
-            .vertical-nav-item {
-                transition: display 0.2s ease-in-out;
-                .vertical-nav-item {
-                    transition: display 0.2s ease-in-out;
-                    display: block;
-                }
+            .vertical-nav-item .vertical-nav-item {
+                display: block;
             }
         }
 
