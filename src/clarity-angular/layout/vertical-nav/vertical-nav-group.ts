@@ -30,7 +30,7 @@ const COLLAPSED_STATE = "collapsed";
             })),
             transition("expanded <=> collapsed", animate("0.2s ease-in-out"))
         ])
-    ],
+    ]
 })
 export class VerticalNavGroup implements AfterContentInit, OnDestroy {
 
