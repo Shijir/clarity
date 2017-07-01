@@ -23,81 +23,75 @@ $clr-icon-right-margin: 6px;
     nav.collapsed {
         width: 48px;
 
-        .vertical-nav-item {
-            transition: display 0.2s ease-in-out;
-
-            &:not(.icon-when-collapsed) {
-
-                display: none;
-            }
+        .vertical-nav-item:not(.icon-when-collapsed) {
+            display: none;
 
         }
 
-        &.clr-nav-vertical {
+        &.clr-nav-vertical .vertical-nav-item .vertical-nav-item {
 
             // We shouldn't simply use display: none to hide nested children.
             // They should be completely removed from DOM by Angular.
 
-            .vertical-nav-item .vertical-nav-item {
-                display: block;
-            }
-        }
-
-        .vertical-nav-label {
-            padding: 0;
-            color: rgba($clr-dark-gray, 0);
-            clr-icon {
-                color: rgba($clr-dark-gray, 1);
-            }
-        }
-
-        .vertical-nav-link {
-            padding: 0 16px;
-        }
-
-        .vertical-nav-header {
-            padding: 0 0 0 16px;
-        }
-
-        clr-icon.vertical-nav-caret {
-            width: 10px;
-            height: 10px;
-            margin-right: 6px;
-            margin-left: auto;
-            transform: translateY(calc(1px - 50%));
+            display: block;
         }
     }
 
-    &.collapsible {
-        padding-top: 36px;
-
-        .collapse-control {
-            display: flex;
-        }
-
-        .collapse-control button.on-collapse {
-            width: 48px;
-        }
-
-        nav.nav-vertical {
-            padding: 0;
+    .vertical-nav-label {
+        padding: 0;
+        color: rgba($clr-dark-gray, 0);
+        clr-icon {
+            color: rgba($clr-dark-gray, 1);
         }
     }
 
-    // Handle responsiveness here
-
-    .open-overflow-menu &.clr-nav-level-2 {
-        padding-top: 0;
+    .vertical-nav-link {
+        padding: 0 16px;
     }
 
-    .open-overflow-menu &.clr-nav-level-2 .nav-vertical {
-        width: 100%;
-        padding: $vertical-nav-padding;
+    .vertical-nav-header {
+        padding: 0 0 0 16px;
     }
 
-    .open-overflow-menu &.clr-nav-level-2 .collapse-control {
-        display: none;
+    clr-icon.vertical-nav-caret {
+        width: 10px;
+        height: 10px;
+        margin-right: 6px;
+        margin-left: auto;
+        transform: translateY(calc(1px - 50%));
     }
+}
+
+&.collapsible {
+    padding-top: 36px;
+
+    .collapse-control {
+        display: flex;
+    }
+
+    .collapse-control button.on-collapse {
+        width: 48px;
+    }
+
+    nav.nav-vertical {
+        padding: 0;
+    }
+}
+
+// Handle responsiveness here
+
+.open-overflow-menu &.clr-nav-level-2 {
+    padding-top: 0;
+}
+
+.open-overflow-menu &.clr-nav-level-2 .nav-vertical {
+    width: 100%;
+    padding: $vertical-nav-padding;
+}
+
+.open-overflow-menu &.clr-nav-level-2 .collapse-control {
+    display: none;
+}
 
 }
 
