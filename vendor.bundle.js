@@ -429,7 +429,7 @@ var ButtonGroup = (function () {
 }());
 
 ButtonGroup.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-button-group",
                 template: "\n      <ng-container *ngFor=\"let inlineButton of inlineButtons\">\n          <ng-template [ngTemplateOutlet]=\"inlineButton.templateRef\"></ng-template>\n      </ng-container>\n      <ng-container *ngIf=\"menuButtons.length > 0\">\n          <div\n              class=\"btn-group-overflow open\"\n              [ngClass]=\"menuPosition\"\n              #anchor>\n              <button\n                  class=\"btn dropdown-toggle\"\n                  (click)=\"toggleMenu()\">\n                  <clr-icon shape=\"ellipsis-horizontal\"></clr-icon>\n              </button>\n              <div\n                  class=\"dropdown-menu\"\n                  *clrPopoverOld=\"openMenu; anchor: anchor; anchorPoint: anchorPoint; popoverPoint: popoverPoint;\">\n                  <ng-template [ngTemplateOutlet]=\"ref\"></ng-template>\n              </div>\n          </div>\n      </ng-container>\n      <ng-template #ref>\n          <ng-container *ngFor=\"let menuButton of menuButtons\">\n              <ng-template [ngTemplateOutlet]=\"menuButton.templateRef\"></ng-template>\n          </ng-container>\n      </ng-template>\n    ",
                 providers: [__WEBPACK_IMPORTED_MODULE_3__providers_buttonInGroup_service__["a" /* ButtonInGroupService */]],
@@ -597,7 +597,7 @@ var Button = (function () {
 }());
 
 Button.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-button",
                 template: "\n        <ng-template #buttonProjectedRef>\n            <button \n                [class]=\"classNames\" \n                (click)=\"emitClick()\"\n                [attr.type]=\"type\"\n                [attr.name]=\"name\"\n                [attr.disabled]=\"disabled\">\n                <ng-content></ng-content>\n            </button>\n        </ng-template>\n    "
             },] },
@@ -677,7 +677,7 @@ var LoadingButton = (function () {
 }());
 
 LoadingButton.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "button[clrLoading]",
                 template: "\n        <span class=\"spinner spinner-inline\" *ngIf=\"loading\"></span>\n        <ng-content></ng-content>\n    ",
                 providers: [{ provide: __WEBPACK_IMPORTED_MODULE_1__utils_loading_loading_listener__["a" /* LoadingListener */], useExisting: LoadingButton }]
@@ -1401,7 +1401,7 @@ var DatagridStringFilter = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_5__utils_datagrid_filter_registrar__["a" /* DatagridFilterRegistrar */]));
 
 DatagridStringFilter.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-string-filter",
                 providers: [{ provide: __WEBPACK_IMPORTED_MODULE_2__providers_custom_filter__["a" /* CustomFilter */], useExisting: DatagridStringFilter }],
                 template: "\n        <clr-dg-filter [clrDgFilter]=\"registered\" [(clrDgFilterOpen)]=\"open\">\n            <!--\n                Even though this *ngIf looks useless because the filter container already has one,\n                it prevents NgControlStatus and other directives automatically added by Angular\n                on inputs with NgModel from freaking out because of their host binding changing\n                mid-change detection when the input is destroyed.\n            -->\n            <input #input type=\"text\" name=\"search\" [(ngModel)]=\"value\" *ngIf=\"open\"\n                (keyup.enter)=\"close()\" (keyup.escape)=\"close()\"/>\n        </clr-dg-filter>\n    "
@@ -1646,7 +1646,7 @@ var DatagridActionBar = (function () {
 }());
 
 DatagridActionBar.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-action-bar",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: { "[class.datagrid-action-bar]": "true" }
@@ -1726,7 +1726,7 @@ var DatagridActionOverflow = (function () {
 }());
 
 DatagridActionOverflow.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-action-overflow",
                 template: "\n        <clr-icon #anchor shape=\"ellipsis-vertical\" class=\"datagrid-action-toggle\" (click)=\"toggle($event)\"></clr-icon>\n        <ng-template [(clrPopoverOld)]=\"open\" [clrPopoverOldAnchor]=\"anchor\" [clrPopoverOldAnchorPoint]=\"anchorPoint\"\n                     [clrPopoverOldPopoverPoint]=\"popoverPoint\">\n            <div #menu class=\"datagrid-action-overflow\" (clrOutsideClick)=\"close($event)\" [clrStrict]=\"true\">\n                <ng-content></ng-content>\n            </div>\n        </ng-template>\n    "
             },] },
@@ -1783,7 +1783,7 @@ var DatagridCell = (function () {
 }());
 
 DatagridCell.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-cell",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -1880,7 +1880,7 @@ var DatagridColumnToggle = (function () {
 }());
 
 DatagridColumnToggle.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-column-toggle",
                 template: "\n        <button\n                #anchor\n                (click)=\"toggleUI()\"\n                class=\"btn btn-sm btn-link column-toggle--action\"\n                type=\"button\">\n            <clr-icon shape=\"view-columns\"></clr-icon>\n        </button>\n        <div class=\"column-switch\"\n             *clrPopoverOld=\"open; anchor: anchor; anchorPoint: anchorPoint; popoverPoint: popoverPoint\">\n            <div class=\"switch-header\">\n                Show Columns\n                <button\n                    class=\"btn btn-sm btn-link\"\n                    (click)=\"toggleUI()\"\n                    type=\"button\">\n                    <clr-icon\n                            shape=\"close\"></clr-icon>\n                </button>\n            </div>\n            <ul class=\"switch-content list-unstyled\">\n                <li *ngFor=\"let column of columns\">\n                    <clr-checkbox [clrChecked]=\"!column.hidden\"\n                                  [clrDisabled]=\"column.lastVisibleColumn\"\n                                  (clrCheckedChange)=\"toggleColumn($event, column)\">\n                        <ng-template [ngTemplateOutlet]=\"column.template\"></ng-template>\n                    </clr-checkbox>\n                </li>\n            </ul>\n            <div class=\"switch-footer\">\n                <div>\n                    <button\n                            class=\"btn btn-sm btn-link p6 text-uppercase\"\n                            [disabled]=\"allColumnsVisible\"\n                            (click)=\"selectAll()\"\n                            type=\"button\">Select All\n                    </button>\n                </div>\n                <div class=\"action-right\">\n                    <button\n                            (click)=\"toggleUI()\"\n                            class=\"btn btn-primary\"\n                            type=\"button\">\n                        Ok\n                    </button>\n                </div>\n            </div>\n        </div>\n    ",
                 host: { "[class.column-switch-wrapper]": "true", "[class.column-switch-wrapper--active]": "open" }
@@ -2200,7 +2200,7 @@ var DatagridColumn = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_9__utils_datagrid_filter_registrar__["a" /* DatagridFilterRegistrar */]));
 
 DatagridColumn.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-column",
                 template: "\n        <div class=\"datagrid-column-flex\">\n            <!-- I'm really not happy with that select since it's not very scalable -->\n            <ng-content select=\"clr-dg-filter, clr-dg-string-filter\"></ng-content>\n\n            <clr-dg-string-filter\n                    *ngIf=\"field && !customFilter\"\n                    [clrDgStringFilter]=\"registered\"\n                    [(clrFilterValue)]=\"filterValue\"></clr-dg-string-filter>\n\n            <ng-template #columnTitle><ng-content></ng-content></ng-template>\n\n            <button class=\"datagrid-column-title\" *ngIf=\"sortable\" (click)=\"sort()\" type=\"button\">\n               <ng-container *ngTemplateOutlet=\"columnTitle\"></ng-container>\n            </button>\n\n            <span class=\"datagrid-column-title\" *ngIf=\"!sortable\">\n               <ng-container *ngTemplateOutlet=\"columnTitle\"></ng-container>\n            </span>\n\n            <div class=\"datagrid-column-separator\">\n                <button #columnHandle class=\"datagrid-column-handle\" tabindex=\"-1\" type=\"button\"></button>\n                <div #columnHandleTracker class=\"datagrid-column-handle-tracker\"></div>\n            </div>\n        </div>\n    ",
                 host: { "[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden" }
@@ -2365,7 +2365,7 @@ var DatagridFilter = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_4__utils_datagrid_filter_registrar__["a" /* DatagridFilterRegistrar */]));
 
 DatagridFilter.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-filter",
                 // We register this component as a CustomFilter, for the parent column to detect it.
                 providers: [{ provide: __WEBPACK_IMPORTED_MODULE_2__providers_custom_filter__["a" /* CustomFilter */], useExisting: DatagridFilter }],
@@ -2432,7 +2432,7 @@ var DatagridFooter = (function () {
 }());
 
 DatagridFooter.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-footer",
                 template: "\n        <ng-container\n            *ngIf=\"(selection.selectionType === SELECTION_TYPE.Multi) && (selection.current.length > 0)\">\n            <clr-checkbox [clrDisabled]=\"true\" [clrChecked]=\"true\" class=\"datagrid-foot-select\">\n                {{selection.current.length}}\n            </clr-checkbox>\n        </ng-container>\n        <clr-dg-column-toggle *ngIf=\"activeToggler\"></clr-dg-column-toggle>\n        <div class=\"datagrid-foot-description\">\n            <ng-content></ng-content>\n        </div>\n        <ng-content select=\"clr-dg-pagination\"></ng-content>\n    ",
                 host: {
@@ -2912,7 +2912,7 @@ var DatagridPagination = (function () {
 }());
 
 DatagridPagination.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-pagination",
                 template: "\n        <ul class=\"pagination\" *ngIf=\"page.last > 1\">\n            <li *ngIf=\"page.current > 1\">\n                <button \n                    class=\"pagination-previous\" \n                    (click)=\"page.previous()\"\n                    type=\"button\"></button>\n            </li>\n            <li *ngIf=\"page.current > 2\">\n                <button (click)=\"page.current = 1\" type=\"button\">1</button>\n            </li>\n            <li *ngIf=\"page.current > 3\">...</li>\n            <li *ngFor=\"let pageNum of middlePages\" [class.pagination-current]=\"pageNum === page.current\">\n                <button \n                    *ngIf=\"pageNum !== page.current; else noButton\" \n                    (click)=\"page.current = pageNum\"\n                    type=\"button\">{{pageNum}}</button>\n                <ng-template #noButton>{{pageNum}}</ng-template>\n            </li>\n            <li *ngIf=\"page.current < page.last - 2\">...</li>\n            <li *ngIf=\"page.current < page.last - 1\">\n                <button \n                    (click)=\"page.current = page.last\"\n                    type=\"button\">{{page.last}}</button>\n            </li>\n            <li *ngIf=\"page.current < page.last\">\n                <button \n                    class=\"pagination-next\" \n                    (click)=\"page.next()\"\n                    type=\"button\"></button>\n            </li>\n        </ul>\n    ",
                 // IE10 comes to pollute even our components declaration
@@ -2969,7 +2969,7 @@ var DatagridPlaceholder = (function () {
 }());
 
 DatagridPlaceholder.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-placeholder",
                 template: "\n        <div\n            class=\"datagrid-placeholder\"\n            [class.datagrid-empty]=\"emptyDatagrid\">\n                <div class=\"datagrid-placeholder-image\" *ngIf=\"emptyDatagrid\"></div>\n                <ng-content *ngIf=\"emptyDatagrid\"></ng-content>\n        </div>\n    ",
                 host: { "[class.datagrid-placeholder-container]": "true" }
@@ -3063,7 +3063,7 @@ var DatagridRowDetail = (function () {
 }());
 
 DatagridRowDetail.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-row-detail",
                 template: "\n        <ng-container *ngIf=\"!replace\">\n            <clr-dg-cell class=\"datagrid-fixed-column\"\n                *ngIf=\"selection.selectionType === SELECTION_TYPE.Multi \n                    || selection.selectionType === SELECTION_TYPE.Single\"></clr-dg-cell>\n            <clr-dg-cell *ngIf=\"rowActionService.hasActionableRow\" class=\"datagrid-fixed-column\"></clr-dg-cell>\n            <clr-dg-cell class=\"datagrid-fixed-column\"></clr-dg-cell>\n        </ng-container>\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -3221,7 +3221,7 @@ var DatagridRow = (function () {
 }());
 
 DatagridRow.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-row",
                 template: "\n        <clr-dg-row-master class=\"datagrid-row-flex\">\n            <clr-dg-cell *ngIf=\"selection.selectionType === SELECTION_TYPE.Multi\"\n                         class=\"datagrid-select datagrid-fixed-column\">\n                <clr-checkbox [ngModel]=\"selected\" (ngModelChange)=\"toggle($event)\"></clr-checkbox>\n            </clr-dg-cell>\n            <clr-dg-cell *ngIf=\"selection.selectionType === SELECTION_TYPE.Single\"\n                         class=\"datagrid-select datagrid-fixed-column\">\n                <div class=\"radio\">\n                    <input type=\"radio\" [id]=\"id\" [name]=\"selection.id + '-radio'\" [value]=\"item\"\n                           [(ngModel)]=\"selection.currentSingle\">\n                    <label for=\"{{id}}\"></label>\n                </div>\n            </clr-dg-cell>\n            <clr-dg-cell *ngIf=\"rowActionService.hasActionableRow\"\n                         class=\"datagrid-row-actions datagrid-fixed-column\">\n                <ng-content select=\"clr-dg-action-overflow\"></ng-content>\n            </clr-dg-cell>\n            <clr-dg-cell *ngIf=\"globalExpandable.hasExpandableRow\"\n                         class=\"datagrid-expandable-caret datagrid-fixed-column\">\n                <ng-container *ngIf=\"expand.expandable\">\n                    <button (click)=\"toggleExpand()\" *ngIf=\"!expand.loading\" type=\"button\">\n                        <clr-icon shape=\"caret\" [attr.dir]=\"expand.expanded?'down':'right'\"></clr-icon>\n                    </button>\n                    <div class=\"spinner spinner-sm\" *ngIf=\"expand.loading\"></div>\n                </ng-container>\n            </clr-dg-cell>\n            <ng-content *ngIf=\"!expand.replace || !expand.expanded || expand.loading\"></ng-content>\n\n            <ng-template *ngIf=\"expand.replace && expand.expanded && !expand.loading\"\n                         [ngTemplateOutlet]=\"detail\"></ng-template>\n        </clr-dg-row-master>\n\n        <ng-template *ngIf=\"!expand.replace && expand.expanded && !expand.loading\"\n                     [ngTemplateOutlet]=\"detail\"></ng-template>\n\n        <!-- \n            We need the \"project into template\" hack because we need this in 2 different places\n            depending on whether the details replace the row or not.\n        -->\n        <ng-template #detail>\n            <ng-content select=\"clr-dg-row-detail\"></ng-content>\n        </ng-template>\n    ",
                 host: { "[class.datagrid-row]": "true", "[class.datagrid-selected]": "selected" },
@@ -3475,7 +3475,7 @@ var Datagrid = (function () {
 }());
 
 Datagrid.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-datagrid",
                 template: "\n      <!--\n        ~ Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.\n        ~ This software is released under MIT license.\n        ~ The full license information can be found in LICENSE in the root directory of this project.\n        -->\n\n      <ng-content select=\"clr-dg-action-bar\"></ng-content>\n      <div class=\"datagrid-overlay-wrapper\">\n          <div class=\"datagrid-scroll-wrapper\">\n              <div class=\"datagrid\" #datagrid>\n                  <div clrDgTableWrapper class=\"datagrid-table-wrapper\">\n                      <div clrDgHead class=\"datagrid-head\">\n                          <div class=\"datagrid-row datagrid-row-flex\">\n                              <!-- header for datagrid where you can select multiple rows -->\n                              <div class=\"datagrid-column datagrid-select datagrid-fixed-column\"\n                                   *ngIf=\"selection.selectionType === SELECTION_TYPE.Multi\">\n                              <span class=\"datagrid-column-title\">\n                                  <clr-checkbox [(ngModel)]=\"allSelected\"></clr-checkbox>\n                              </span>\n                                  <div class=\"datagrid-column-separator\"></div>\n                              </div>\n                              <!-- header for datagrid where you can select one row only -->\n                              <div class=\"datagrid-column datagrid-select datagrid-fixed-column\"\n                                   *ngIf=\"selection.selectionType === SELECTION_TYPE.Single\">\n                                  <div class=\"datagrid-column-separator\"></div>\n                              </div>\n                              <!-- header for single row action; only display if we have at least one actionable row in datagrid -->\n                              <div class=\"datagrid-column datagrid-row-actions datagrid-fixed-column\"\n                                   *ngIf=\"rowActionService.hasActionableRow\">\n                                  <div class=\"datagrid-column-separator\"></div>\n                              </div>\n                              <!-- header for carets; only display if we have at least one expandable row in datagrid -->\n                              <div class=\"datagrid-column datagrid-expandable-caret datagrid-fixed-column\"\n                                   *ngIf=\"expandableRows.hasExpandableRow\">\n                                  <div class=\"datagrid-column-separator\"></div>\n                              </div>\n                              <ng-content select=\"clr-dg-column\"></ng-content>\n                          </div>\n                      </div>\n\n                      <div clrDgBody class=\"datagrid-body\">\n                          <ng-template *ngIf=\"iterator\"\n                                       ngFor [ngForOf]=\"items.displayed\" [ngForTrackBy]=\"items.trackBy\"\n                                       [ngForTemplate]=\"iterator.template\"></ng-template>\n                          <ng-content *ngIf=\"!iterator\"></ng-content>\n\n                          <!-- Custom placeholder overrides the default empty one -->\n                          <ng-content select=\"clr-dg-placeholder\"></ng-content>\n                          <clr-dg-placeholder *ngIf=\"!placeholder\"></clr-dg-placeholder>\n                      </div>\n                  </div>\n\n                  <!--\n                      This is not inside the table because there is no good way of having a single column span\n                      everything when using custom elements with display:table-cell.\n                  -->\n                  <ng-content select=\"clr-dg-footer\"></ng-content>\n              </div>\n          </div>\n          <div class=\"datagrid-spinner\" *ngIf=\"loading\">\n              <div class=\"spinner\">Loading...</div>\n          </div>\n      </div>\n    ",
                 providers: [
@@ -5712,7 +5712,7 @@ var DatagridRowMasterRenderer = (function () {
 }());
 
 DatagridRowMasterRenderer.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dg-row-master",
                 template: "\n        <ng-template #projected><ng-content></ng-content></ng-template>\n        <ng-container #inside></ng-container>\n    ",
                 host: { "[class.datagrid-row-master]": "true" }
@@ -5994,7 +5994,7 @@ var StackBlock = (function () {
 }());
 
 StackBlock.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-stack-block",
                 template: "\n        <dt class=\"stack-block-label\" (click)=\"toggleExpand()\">\n            <ng-content select=\"clr-stack-label\"></ng-content>\n        </dt>\n        <dd class=\"stack-block-content\">\n            <ng-content></ng-content>\n        </dd>\n        <!-- FIXME: remove this string concatenation when boolean states are supported -->\n        <div [@collapse]=\"''+!expanded\" class=\"stack-children\">\n            <ng-content select=\"clr-stack-block\"></ng-content>\n        </div>\n    ",
                 // Custom elements are inline by default
@@ -6081,7 +6081,7 @@ var StackHeader = (function () {
 }());
 
 StackHeader.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-stack-header",
                 template: "\n        <h4 class=\"stack-header\">\n            <span class=\"stack-title\"><ng-content></ng-content></span>\n            \n            <span class=\"stack-actions\">\n                <ng-content select=\".stack-action\"></ng-content>\n                <!-- Undocumented experimental feature: inline editing. -->\n                <button *ngIf=\"stackView.editable\" class=\"stack-action btn btn-sm btn-link\" \n                        (click)=\"stackView.editing = !stackView.editing\" type=\"button\">\n                        Edit\n                </button>\n                <!-- End of undocumented experimental feature. -->\n            </span>\n        </h4>\n    ",
                 // Custom elements are inline by default
@@ -6140,7 +6140,7 @@ var StackInput = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_1__stack_control__["a" /* StackControl */]));
 
 StackInput.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-stack-input",
                 inputs: ["model: clrModel", "type"],
                 outputs: ["modelChange: clrModelChange"],
@@ -6197,7 +6197,7 @@ var StackSelect = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_1__stack_control__["a" /* StackControl */]));
 
 StackSelect.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-stack-select",
                 inputs: ["model: clrModel"],
                 outputs: ["modelChange: clrModelChange"],
@@ -6258,7 +6258,7 @@ var StackView = (function () {
  * End of undocumented experimental feature.
  */
 StackView.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-stack-view",
                 template: "\n        <ng-content select=\"clr-stack-header\"></ng-content>\n        <dl class=\"stack-view\"><ng-content></ng-content></dl>\n    ",
                 // Custom elements are inline by default.
@@ -6654,7 +6654,7 @@ var TreeNode = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_4__abstract_tree_selection__["a" /* AbstractTreeSelection */]));
 
 TreeNode.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tree-node",
                 template: "\n      <button\n          type=\"button\"\n          class=\"clr-treenode-caret\"\n          (click)=\"toggleExpand()\"\n          *ngIf=\"nodeExpand.expandable && !nodeExpand.loading\">\n          <clr-icon\n              shape=\"caret\"\n              [attr.dir]=\"caretDirection\"></clr-icon>\n      </button>\n      <span class=\"clr-treenode-spinner spinner\" *ngIf=\"nodeExpand.expandable && nodeExpand.loading\">\n          Loading...\n      </span>\n      <clr-checkbox\n          *ngIf=\"selectable\"\n          [(ngModel)]=\"selected\"\n          [(clrIndeterminate)]=\"indeterminate\"></clr-checkbox>\n      <div class=\"clr-treenode-content\">\n          <ng-content></ng-content>\n      </div>\n      <!-- FIXME: remove this string concatenation when boolean states are supported -->\n      <div\n          class=\"clr-treenode-children\"\n          [@childNodesState]=\"state\">\n          <ng-content select=\"clr-tree-node\"></ng-content>\n          <ng-content select=\"[clrIfExpanded]\"></ng-content>\n      </div>\n    ",
                 providers: [
@@ -6752,7 +6752,7 @@ var AlertItem = (function () {
 }());
 
 AlertItem.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 // the .alert-item selector is deprecated; the :not clause is to allow us to use static
                 // examples in demos on the demo-app and website
                 selector: ".alert-item:not(.static), clr-alert-item",
@@ -6831,7 +6831,7 @@ var Alert = (function () {
 }());
 
 Alert.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{ selector: "clr-alert", providers: [__WEBPACK_IMPORTED_MODULE_1__providers_icon_and_types_service__["a" /* AlertIconAndTypesService */]], template: "\n  <!--\n    ~ Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.\n    ~ This software is released under MIT license.\n    ~ The full license information can be found in LICENSE in the root directory of this project.\n    -->\n\n  <div\n      *ngIf=\"!_closed\"\n      class=\"alert\"\n      [ngClass]=\"alertClass\"\n      [class.alert-sm]=\"isSmall\"\n      [class.alert-app-level]=\"isAppLevel\">\n      <div class=\"alert-items\">\n          <ng-content></ng-content>\n      </div>\n      <button type=\"button\" class=\"close\" aria-label=\"Close\" *ngIf=\"closable\" (click)=\"close()\">\n          <clr-icon aria-hidden=\"true\" shape=\"close\"></clr-icon>\n      </button>\n  </div>\n" },] },
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{ selector: "clr-alert", providers: [__WEBPACK_IMPORTED_MODULE_1__providers_icon_and_types_service__["a" /* AlertIconAndTypesService */]], template: "\n  <!--\n    ~ Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.\n    ~ This software is released under MIT license.\n    ~ The full license information can be found in LICENSE in the root directory of this project.\n    -->\n\n  <div\n      *ngIf=\"!_closed\"\n      class=\"alert\"\n      [ngClass]=\"alertClass\"\n      [class.alert-sm]=\"isSmall\"\n      [class.alert-app-level]=\"isAppLevel\">\n      <div class=\"alert-items\">\n          <ng-content></ng-content>\n      </div>\n      <button type=\"button\" class=\"close\" aria-label=\"Close\" *ngIf=\"closable\" (click)=\"close()\">\n          <clr-icon aria-hidden=\"true\" shape=\"close\"></clr-icon>\n      </button>\n  </div>\n" },] },
 ];
 /** @nocollapse */
 Alert.ctorParameters = function () { return [
@@ -7163,7 +7163,7 @@ var Checkbox = (function () {
 }());
 
 Checkbox.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-checkbox",
                 template: "\n        <!--\n            FIXME: We are not subscribed to the change event but the click event here.\n            The reason for that is because checkboxes behave differently on IE & Edge.\n            https://stackoverflow.com/a/19447939\n            \n            To fix that, we listen to every click event and then toggle the checkbox manually\n            to make it behave the same way across the browsers we support.\n            \n            This works for cases when users toggle the checkbox using the keyboard too:\n            https://stackoverflow.com/questions/27878940/spacebar-triggering-click-event-on-checkbox\n        -->\n        <input type=\"checkbox\" [id]=\"id\" [name]=\"name\" [checked]=\"checked\"\n               [indeterminate]=\"indeterminate\" [disabled]=\"disabled\"\n               (blur)=\"touch()\" (click)=\"checkIndeterminateState()\">\n        <label [attr.for]=\"id\">\n            <ng-content></ng-content>\n        </label>\n    ",
                 host: { "[class.checkbox]": "!inline", "[class.checkbox-inline]": "inline", "[class.disabled]": "disabled" },
@@ -7172,7 +7172,7 @@ Checkbox.decorators = [
                  * which allows us to use [(ngModel)] directly on our component,
                  * with all the automatic features wiring that come with it.
                  */
-                providers: [{ provide: __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* NG_VALUE_ACCESSOR */], useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return Checkbox; }), multi: true }]
+                providers: [{ provide: __WEBPACK_IMPORTED_MODULE_1__angular_forms__["f" /* NG_VALUE_ACCESSOR */], useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return Checkbox; }), multi: true }]
             },] },
 ];
 /** @nocollapse */
@@ -7707,7 +7707,7 @@ var Header = (function () {
 }());
 
 Header.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-header",
                 template: "\n        <button\n            type=\"button\"\n            *ngIf=\"isNavLevel1OnPage\"\n            class=\"header-hamburger-trigger\"\n            (click)=\"toggleNav(responsiveNavCodes.NAV_LEVEL_1)\">\n            <span></span>\n        </button>\n        <ng-content></ng-content>\n        <button\n            type=\"button\"\n            *ngIf=\"isNavLevel2OnPage\"\n            class=\"header-overflow-trigger\"\n            (click)=\"toggleNav(responsiveNavCodes.NAV_LEVEL_2)\">\n            <span></span>\n        </button>\n        <div class=\"header-backdrop\" (click)=\"closeOpenNav()\"></div>\n    ",
                 host: { "[class.header]": "true" }
@@ -8000,7 +8000,7 @@ var TabContent = (function () {
 }());
 
 TabContent.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tab-content",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -8173,7 +8173,7 @@ var TabOverflowContent = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_1__popover_common_abstract_popover__["a" /* AbstractPopover */]));
 
 TabOverflowContent.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tab-overflow-content",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -8233,7 +8233,7 @@ var Tab = (function () {
 }());
 
 Tab.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tab",
                 template: "\n        <ng-content></ng-content>\n    ",
                 providers: [__WEBPACK_IMPORTED_MODULE_1__utils_conditional_if_active_service__["c" /* IF_ACTIVE_ID_PROVIDER */], __WEBPACK_IMPORTED_MODULE_2__aria_service__["a" /* AriaService */]]
@@ -8355,7 +8355,7 @@ var Tabs = (function () {
 }());
 
 Tabs.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tabs",
                 template: "        \n        <ul class=\"nav\" role=\"tablist\">\n            <!--tab links-->\n            <ng-container *ngFor=\"let link of tabLinkDirectives\">\n                <ng-container *ngIf=\"!link.inOverflow\"\n                              [ngTemplateOutlet]=\"link.templateRefContainer.template\">\n                </ng-container>\n            </ng-container>\n            <ng-container *ngIf=\"tabsService.overflowTabs.length > 0\">\n                <div class=\"tabs-overflow bottom-right\" [class.open]=\"ifOpenService.open\" \n                     (click)=\"toggleOverflow($event)\">\n                    <li role=\"presentation\" class=\"nav-item\">\n                        <button class=\"btn btn-link nav-link dropdown-toggle\" [class.active]=\"activeTabInOverflow\">\n                            <clr-icon shape=\"ellipsis-horizontal\" [class.is-info]=\"ifOpenService.open\"></clr-icon>\n                        </button>\n                    </li>\n                    <!--tab links in overflow menu-->\n                    <clr-tab-overflow-content>\n                        <ng-container *ngFor=\"let link of tabLinkDirectives\">\n                            <ng-container *ngIf=\"link.inOverflow\"\n                                          [ngTemplateOutlet]=\"link.templateRefContainer.template\">\n                            </ng-container>\n                        </ng-container>\n                    </clr-tab-overflow-content>\n                </div>\n            </ng-container>\n        </ul>\n        <!--tab content-->\n        <ng-content></ng-content>\n    ",
                 providers: [__WEBPACK_IMPORTED_MODULE_1__utils_conditional_if_active_service__["a" /* IfActiveService */], __WEBPACK_IMPORTED_MODULE_2__utils_conditional_if_open_service__["a" /* IfOpenService */], __WEBPACK_IMPORTED_MODULE_4__tabs_service__["a" /* TabsService */]]
@@ -8624,7 +8624,7 @@ var VerticalNavGroupChildren = (function () {
 }());
 
 VerticalNavGroupChildren.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-vertical-nav-group-children",
                 template: "\n        <ng-content></ng-content>\n    "
             },] },
@@ -8789,7 +8789,7 @@ var VerticalNavGroup = (function () {
 }());
 
 VerticalNavGroup.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-vertical-nav-group",
                 template: "\n      <div class=\"nav-group-content\" (click)=\"onNavContentClick()\">\n          <ng-content select=\"[clrVerticalNavIcon]\"></ng-content>\n          <ng-content select=\"[clrVerticalNavLink]\"></ng-content>\n          <div class=\"nav-group-text\">\n              <ng-content></ng-content>\n          </div>\n          <button\n              class=\"nav-group-trigger\"\n              type=\"button\"\n              (click)=\"toggleExpand()\">\n              <clr-icon shape=\"caret\"\n                        [attr.dir]=\"(this.expanded) ? 'down' : 'right'\"></clr-icon>\n          </button>\n      </div>\n      <!--TODO: This animation needs to be added to the clr-vertical-nav-group-children component-->\n      <div class=\"nav-group-children\"\n           [@clrExpand]=\"expandAnimationState\"\n           (@clrExpand.done)=\"expandAnimationDone($event)\">\n          <ng-content select=\"[clrIfExpanded], clr-vertical-nav-group-children\"></ng-content>\n      </div>\n    ",
                 providers: [__WEBPACK_IMPORTED_MODULE_2__utils_expand_providers_expand__["a" /* Expand */]],
@@ -8871,7 +8871,7 @@ var VerticalNavLink = (function () {
 }());
 
 VerticalNavLink.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "[clrVerticalNavLink]",
                 template: "\n        <ng-content select=\"[clrVerticalNavIcon]\"></ng-content>\n        <span class=\"nav-text\">\n            <ng-content></ng-content>    \n        </span>\n    ",
                 host: { "class": "nav-link" }
@@ -8956,7 +8956,7 @@ var VerticalNav = (function () {
 }());
 
 VerticalNav.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-vertical-nav",
                 template: "\n      <button type=\"button\" class=\"nav-trigger\"\n              [class.on-collapse]=\"collapsed\"\n              (click)=\"toggleByButton()\"\n              *ngIf=\"collapsible\">\n          <clr-icon shape=\"angle-double\" class=\"nav-trigger-icon\" [attr.dir]=\"(this.collapsed) ? 'right' : 'left'\"></clr-icon>\n      </button>\n      <!-- Click handler on .nav-content is bad but required :-( -->\n      <div class=\"nav-content\">\n          <ng-content></ng-content>\n          <button (click)=\"collapsed = false\" class=\"nav-btn\" *ngIf=\"collapsible && collapsed\"></button>\n      </div>\n    ",
                 providers: [__WEBPACK_IMPORTED_MODULE_3__providers_vertical_nav_service__["a" /* VerticalNavService */], __WEBPACK_IMPORTED_MODULE_2__providers_vertical_nav_icon_service__["a" /* VerticalNavIconService */], __WEBPACK_IMPORTED_MODULE_1__providers_vertical_nav_group_service__["a" /* VerticalNavGroupService */]],
@@ -9124,7 +9124,7 @@ var Modal = (function () {
 }());
 
 Modal.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-modal",
                 viewProviders: [__WEBPACK_IMPORTED_MODULE_2__utils_scrolling_scrolling_service__["a" /* ScrollingService */]],
                 template: "\n\n      <!--\n        ~ Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.\n        ~ This software is released under MIT license.\n        ~ The full license information can be found in LICENSE in the root directory of this project.\n        -->\n\n      <div clrFocusTrap class=\"modal\" *ngIf=\"_open\">\n          <!--fixme: revisit when ngClass works with exit animation-->\n          <div [@fadeDown]=\"skipAnimation\" (@fadeDown.done)=\"fadeDone($event)\"\n               class=\"modal-dialog\"\n               [class.modal-sm]=\"size == 'sm'\"\n               [class.modal-lg]=\"size == 'lg'\"\n               [class.modal-xl]=\"size == 'xl'\"\n               role=\"dialog\" aria-hidden=\"true\">\n\n              <div class=\"modal-outer-wrapper\">\n                  <div class=\"modal-content-wrapper\">\n                      <!-- only used in wizards -->\n                      <ng-content select=\".modal-nav\"></ng-content>\n\n                      <div class=\"modal-content\">\n                          <div class=\"modal-header\">\n                              <button type=\"button\" class=\"close\" aria-label=\"Close\"\n                                      *ngIf=\"closable\" (click)=\"close()\">\n                                  <clr-icon aria-hidden=\"true\" shape=\"close\"></clr-icon>\n                              </button>\n                              <ng-content select=\".modal-title\"></ng-content>\n                          </div>\n                          <ng-content select=\".modal-body\"></ng-content>\n                          <ng-content select=\".modal-footer\"></ng-content>\n                      </div>\n                  </div>\n                  <div class=\"modal-ghost-wrapper\">\n                      <div [@ghostPageOneState]=\"ghostPageState\" class=\"modal-ghost modal-ghost-1\"></div>\n                      <div [@ghostPageTwoState]=\"ghostPageState\" class=\"modal-ghost modal-ghost-2\"></div>\n                  </div>\n              </div>\n          </div>\n\n          <div [@fade] class=\"modal-backdrop\"\n               aria-hidden=\"true\"\n               (click)=\"staticBackdrop || close()\"></div>\n      </div>\n    ",
@@ -10018,7 +10018,7 @@ var DropdownMenu = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_1__common_abstract_popover__["a" /* AbstractPopover */]));
 
 DropdownMenu.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dropdown-menu",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -10126,7 +10126,7 @@ var Dropdown = (function () {
 }());
 
 Dropdown.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-dropdown",
                 template: "<ng-content></ng-content>",
                 host: {
@@ -10416,7 +10416,7 @@ var SignpostContent = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_1__common_abstract_popover__["a" /* AbstractPopover */]));
 
 SignpostContent.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-signpost-content",
                 template: "\n        <div class=\"signpost-flex-wrap\">\n            <div class=\"popover-pointer\"></div>\n            <div class=\"signpost-content-header\">\n                <button type=\"button\" class=\"signpost-action close\" aria-label=\"Close\" (click)=\"close()\">\n                    <clr-icon aria-hidden=\"true\" shape=\"close\"></clr-icon>\n                </button>\n            </div>\n            <div class=\"signpost-content-body\">\n                <ng-content></ng-content>\n            </div>\n        </div>\n    ",
                 host: { "[class.signpost-content]": "true" }
@@ -10574,7 +10574,7 @@ var Signpost = (function () {
 }());
 
 Signpost.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-signpost",
                 template: "\n        <ng-container *ngIf=\"!useCustomTrigger\">\n            <button\n                type=\"button\"\n                class=\"signpost-action btn btn-small btn-link\"\n                clrSignpostTrigger>\n                <clr-icon shape=\"info\"></clr-icon>\n            </button>\n        </ng-container>\n        \n        <ng-content></ng-content>\n    ",
                 host: { "[class.signpost]": "true" },
@@ -10764,7 +10764,7 @@ var TooltipContent = (function (_super) {
 }(__WEBPACK_IMPORTED_MODULE_1__common_abstract_popover__["a" /* AbstractPopover */]));
 
 TooltipContent.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tooltip-content",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -10851,7 +10851,7 @@ var Tooltip = (function () {
 }());
 
 Tooltip.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-tooltip",
                 template: "\n        <ng-content></ng-content>\n    ",
                 host: {
@@ -12069,7 +12069,7 @@ var TemplateRefContainer = (function () {
 }());
 
 TemplateRefContainer.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 template: "\n      <ng-template>\n        <ng-content></ng-content>\n      </ng-template>\n    ",
             },] },
 ];
@@ -13885,7 +13885,7 @@ var WizardButton = (function () {
 }());
 
 WizardButton.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-wizard-button",
                 template: "\n        <button\n            type=\"button\"\n            class=\"btn clr-wizard-btn\"\n            [class.btn-link]=\"isCancel\"\n            [class.clr-wizard-btn--tertiary]=\"isCancel\"\n            [class.btn-outline]=\"isPrevious\"\n            [class.clr-wizard-btn--secondary]=\"isPrevious\"\n            [class.btn-primary]=\"isPrimaryAction\"\n            [class.clr-wizard-btn--primary]=\"isPrimaryAction\"\n            [class.btn-success]=\"isFinish\"\n            [class.btn-danger]=\"isDanger\"\n            [class.disabled]=\"isDisabled\"\n            (click)=\"click()\">\n            <ng-content></ng-content>\n        </button>\n    ",
                 host: { "class": "clr-wizard-btn-wrapper", "[attr.aria-hidden]": "isHidden" },
@@ -13979,7 +13979,7 @@ var WizardHeaderAction = (function () {
 }());
 
 WizardHeaderAction.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-wizard-header-action",
                 template: "\n        <button \n            type=\"button\"\n            class=\"btn clr-wizard-header-action btn-link\"\n            [id]=\"id\"\n            [class.disabled]=\"disabled\"\n            (click)=\"click()\"\n            [title]=\"title\">\n            <ng-content></ng-content>\n        </button>\n    ",
                 host: { "class": "clr-wizard-header-action-wrapper" }
@@ -14680,7 +14680,7 @@ var WizardPage = (function () {
 }());
 
 WizardPage.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-wizard-page",
                 template: "<ng-content></ng-content>",
                 host: {
@@ -14805,7 +14805,7 @@ var WizardStepnavItem = (function () {
 }());
 
 WizardStepnavItem.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "[clr-wizard-stepnav-item]",
                 template: "\n        <button type=\"button\" class=\"btn btn-link clr-wizard-stepnav-link\" (click)=\"click()\">\n            <ng-template [ngTemplateOutlet]=\"page.navTitle\"></ng-template>\n        </button>\n    ",
                 host: {
@@ -14856,7 +14856,7 @@ var WizardStepnav = (function () {
 }());
 
 WizardStepnav.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-wizard-stepnav",
                 template: "\n        <ol class=\"clr-wizard-stepnav-list\" role=\"tablist\">\n            <li *ngFor=\"let page of pageService.pages\" clr-wizard-stepnav-item \n            [page]=\"page\" class=\"clr-wizard-stepnav-item\"></li>\n        </ol>\n    ",
                 host: { "class": "clr-wizard-stepnav" }
@@ -15636,7 +15636,7 @@ var Wizard = (function () {
 }());
 
 Wizard.decorators = [
-    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Component */], args: [{
+    { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* Component */], args: [{
                 selector: "clr-wizard",
                 providers: [__WEBPACK_IMPORTED_MODULE_5__providers_wizard_navigation__["a" /* WizardNavigationService */], __WEBPACK_IMPORTED_MODULE_4__providers_page_collection__["a" /* PageCollectionService */], __WEBPACK_IMPORTED_MODULE_2__providers_button_hub__["a" /* ButtonHubService */], __WEBPACK_IMPORTED_MODULE_3__providers_header_actions__["a" /* HeaderActionService */]],
                 template: "\n      <!--\n      ~ Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.\n      ~ This software is released under MIT license.\n      ~ The full license information can be found in LICENSE in the root directory of this project.\n      -->\n\n      <clr-modal \n          [clrModalOpen]=\"_open\"\n          [clrModalSize]=\"size\"\n          [clrModalClosable]=\"closable\"\n          [clrModalStaticBackdrop]=\"true\"\n          [clrModalSkipAnimation]=\"stopModalAnimations\"\n          [clrModalGhostPageState]=\"ghostPageState\"\n          [clrModalOverrideScrollService]=\"isStatic\"\n          [clrModalPreventClose]=\"true\"\n          (clrModalAlternateClose)=\"modalCancel()\">\n\n          <nav class=\"modal-nav clr-wizard-stepnav-wrapper\">\n              <h3 class=\"clr-wizard-title\"><ng-content select=\"clr-wizard-title\"></ng-content></h3>\n              <clr-wizard-stepnav></clr-wizard-stepnav>\n          </nav>\n\n          <h3 class=\"modal-title\">\n              <span class=\"modal-title-text\">\n                  <ng-template [ngTemplateOutlet]=\"navService.currentPageTitle\"></ng-template>\n              </span>\n\n              <div class=\"modal-header-actions-wrapper\" *ngIf=\"headerActionService.displayHeaderActionsWrapper\">\n                  <div *ngIf=\"headerActionService.showWizardHeaderActions\">\n                      <ng-content select=\"clr-wizard-header-action\"></ng-content>\n                  </div>\n                  <div *ngIf=\"headerActionService.currentPageHasHeaderActions\">\n                      <ng-template [ngTemplateOutlet]=\"navService.currentPage.headerActions\"></ng-template>\n                  </div>\n              </div>\n          </h3>\n\n          <div class=\"modal-body\">\n              <main clr-wizard-pages-wrapper class=\"clr-wizard-content\">\n                  <ng-content></ng-content>\n              </main>\n          </div>\n          <div class=\"modal-footer clr-wizard-footer\">\n              <div class=\"clr-wizard-footer-buttons\">\n                  <div *ngIf=\"navService.currentPage && !navService.currentPage.hasButtons\"\n                      class=\"clr-wizard-footer-buttons-wrapper\">\n                      <ng-content select=\"clr-wizard-button\"></ng-content>\n                  </div>\n                  <div *ngIf=\"navService.currentPage && navService.currentPage.hasButtons\"\n                      class=\"clr-wizard-footer-buttons-wrapper\">\n                      <ng-template [ngTemplateOutlet]=\"navService.currentPage.buttons\"></ng-template>\n                  </div>\n              </div>\n          </div>\n      </clr-modal>\n    ",
@@ -42579,7 +42579,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */
 /* unused harmony export Query */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_40", function() { return ViewChild; });
 /* unused harmony export ViewChildren */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_38", function() { return Component; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_35", function() { return Component; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I", function() { return Directive; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "O", function() { return HostBinding; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "N", function() { return HostListener; });
@@ -42592,7 +42592,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_13", function() { return ViewEncapsulation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_3", function() { return Version; });
 /* unused harmony export VERSION */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_35", function() { return forwardRef; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_36", function() { return forwardRef; });
 /* unused harmony export resolveForwardRef */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "X", function() { return Injector; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "S", function() { return ReflectiveInjector; });
@@ -42603,7 +42603,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_0", function() { return Inject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Y", function() { return Optional; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "W", function() { return Injectable; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_37", function() { return Self; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_38", function() { return Self; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Z", function() { return SkipSelf; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_7", function() { return Host; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return NgZone; });
@@ -42660,7 +42660,7 @@ var VERSION = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* Version */
 /* unused harmony export ɵReflectorReader */
 /* unused harmony export ɵRenderDebugInfo */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_10", function() { return _global; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_36", function() { return looseIdentical; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_37", function() { return looseIdentical; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_5", function() { return stringify; });
 /* unused harmony export ɵmakeDecorator */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return isObservable; });
@@ -57258,7 +57258,7 @@ var NG_VALUE_ACCESSOR = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["G" /* I
  */
 var CHECKBOX_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return CheckboxControlValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return CheckboxControlValueAccessor; }),
     multi: true,
 };
 /**
@@ -57331,7 +57331,7 @@ CheckboxControlValueAccessor.ctorParameters = function () { return [
  */
 var DEFAULT_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return DefaultValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return DefaultValueAccessor; }),
     multi: true
 };
 /**
@@ -57487,7 +57487,7 @@ function normalizeAsyncValidator(validator) {
  */
 var NUMBER_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return NumberValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return NumberValueAccessor; }),
     multi: true
 };
 /**
@@ -57633,7 +57633,7 @@ var NgControl = (function (_super) {
  */
 var RADIO_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return RadioControlValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return RadioControlValueAccessor; }),
     multi: true
 };
 /**
@@ -57836,7 +57836,7 @@ RadioControlValueAccessor.propDecorators = {
  */
 var RANGE_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return RangeValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return RangeValueAccessor; }),
     multi: true
 };
 /**
@@ -57914,7 +57914,7 @@ RangeValueAccessor.ctorParameters = function () { return [
  */
 var SELECT_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return SelectControlValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return SelectControlValueAccessor; }),
     multi: true
 };
 /**
@@ -58017,7 +58017,7 @@ var SelectControlValueAccessor = (function () {
         this._idCounter = 0;
         this.onChange = function (_) { };
         this.onTouched = function () { };
-        this._compareWith = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* ɵlooseIdentical */];
+        this._compareWith = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* ɵlooseIdentical */];
     }
     Object.defineProperty(SelectControlValueAccessor.prototype, "compareWith", {
         /**
@@ -58208,7 +58208,7 @@ NgSelectOption.propDecorators = {
  */
 var SELECT_MULTIPLE_VALUE_ACCESSOR = {
     provide: NG_VALUE_ACCESSOR,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return SelectMultipleControlValueAccessor; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return SelectMultipleControlValueAccessor; }),
     multi: true
 };
 /**
@@ -58280,7 +58280,7 @@ var SelectMultipleControlValueAccessor = (function () {
         this._idCounter = 0;
         this.onChange = function (_) { };
         this.onTouched = function () { };
-        this._compareWith = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* ɵlooseIdentical */];
+        this._compareWith = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* ɵlooseIdentical */];
     }
     Object.defineProperty(SelectMultipleControlValueAccessor.prototype, "compareWith", {
         /**
@@ -58646,7 +58646,7 @@ function isPropertyUpdated(changes, viewModel) {
     var /** @type {?} */ change = changes['model'];
     if (change.isFirstChange())
         return true;
-    return !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* ɵlooseIdentical */])(viewModel, change.currentValue);
+    return !__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* ɵlooseIdentical */])(viewModel, change.currentValue);
 }
 var BUILTIN_ACCESSORS = [
     CheckboxControlValueAccessor,
@@ -58884,7 +58884,7 @@ NgControlStatus.decorators = [
  * @nocollapse
  */
 NgControlStatus.ctorParameters = function () { return [
-    { type: NgControl, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] },] },
+    { type: NgControl, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] },] },
 ]; };
 /**
  * Directive automatically applied to Angular form groups that sets CSS classes
@@ -58912,7 +58912,7 @@ NgControlStatusGroup.decorators = [
  * @nocollapse
  */
 NgControlStatusGroup.ctorParameters = function () { return [
-    { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] },] },
+    { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] },] },
 ]; };
 /**
  * @license
@@ -60556,7 +60556,7 @@ var FormArray = (function (_super) {
  */
 var formDirectiveProvider = {
     provide: ControlContainer,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return NgForm; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return NgForm; })
 };
 var resolvedPromise = Promise.resolve(null);
 /**
@@ -60770,8 +60770,8 @@ NgForm.decorators = [
  * @nocollapse
  */
 NgForm.ctorParameters = function () { return [
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
 ]; };
 /**
  * @license
@@ -60832,7 +60832,7 @@ var TemplateDrivenErrors = (function () {
  */
 var modelGroupProvider = {
     provide: ControlContainer,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return NgModelGroup; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return NgModelGroup; })
 };
 /**
  * \@whatItDoes Creates and binds a {\@link FormGroup} instance to a DOM element.
@@ -60892,8 +60892,8 @@ NgModelGroup.decorators = [
  */
 NgModelGroup.ctorParameters = function () { return [
     { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_7" /* Host */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Z" /* SkipSelf */] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
 ]; };
 NgModelGroup.propDecorators = {
     'name': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */], args: ['ngModelGroup',] },],
@@ -60907,7 +60907,7 @@ NgModelGroup.propDecorators = {
  */
 var formControlBinding = {
     provide: NgControl,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return NgModel; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return NgModel; })
 };
 /**
  * `ngModel` forces an additional change detection run when its inputs change:
@@ -61173,9 +61173,9 @@ NgModel.decorators = [
  */
 NgModel.ctorParameters = function () { return [
     { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_7" /* Host */] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALUE_ACCESSOR,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALUE_ACCESSOR,] },] },
 ]; };
 NgModel.propDecorators = {
     'name': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */] },],
@@ -61241,7 +61241,7 @@ var ReactiveErrors = (function () {
  */
 var formControlBinding$1 = {
     provide: NgControl,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return FormControlDirective; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return FormControlDirective; })
 };
 /**
  * \@whatItDoes Syncs a standalone {\@link FormControl} instance to a form control element.
@@ -61384,9 +61384,9 @@ FormControlDirective.decorators = [
  * @nocollapse
  */
 FormControlDirective.ctorParameters = function () { return [
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALUE_ACCESSOR,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALUE_ACCESSOR,] },] },
 ]; };
 FormControlDirective.propDecorators = {
     'form': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */], args: ['formControl',] },],
@@ -61403,7 +61403,7 @@ FormControlDirective.propDecorators = {
  */
 var formDirectiveProvider$1 = {
     provide: ControlContainer,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return FormGroupDirective; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return FormGroupDirective; })
 };
 /**
  * \@whatItDoes Binds an existing {\@link FormGroup} to a DOM element.
@@ -61648,8 +61648,8 @@ FormGroupDirective.decorators = [
  * @nocollapse
  */
 FormGroupDirective.ctorParameters = function () { return [
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
 ]; };
 FormGroupDirective.propDecorators = {
     'form': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */], args: ['formGroup',] },],
@@ -61676,7 +61676,7 @@ function remove(list, el) {
  */
 var formGroupNameProvider = {
     provide: ControlContainer,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return FormGroupName; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return FormGroupName; })
 };
 /**
  * \@whatItDoes Syncs a nested {\@link FormGroup} to a DOM element.
@@ -61755,15 +61755,15 @@ FormGroupName.decorators = [
  */
 FormGroupName.ctorParameters = function () { return [
     { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_7" /* Host */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Z" /* SkipSelf */] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
 ]; };
 FormGroupName.propDecorators = {
     'name': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */], args: ['formGroupName',] },],
 };
 var formArrayNameProvider = {
     provide: ControlContainer,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return FormArrayName; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return FormArrayName; })
 };
 /**
  * \@whatItDoes Syncs a nested {\@link FormArray} to a DOM element.
@@ -61901,8 +61901,8 @@ FormArrayName.decorators = [
  */
 FormArrayName.ctorParameters = function () { return [
     { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_7" /* Host */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Z" /* SkipSelf */] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
 ]; };
 FormArrayName.propDecorators = {
     'name': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */], args: ['formArrayName',] },],
@@ -61924,7 +61924,7 @@ function _hasInvalidParent(parent) {
  */
 var controlNameBinding = {
     provide: NgControl,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return FormControlName; })
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return FormControlName; })
 };
 /**
  * \@whatItDoes Syncs a {\@link FormControl} in an existing {\@link FormGroup} to a form control
@@ -62108,9 +62108,9 @@ FormControlName.decorators = [
  */
 FormControlName.ctorParameters = function () { return [
     { type: ControlContainer, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_7" /* Host */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Z" /* SkipSelf */] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
-    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_37" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALUE_ACCESSOR,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_ASYNC_VALIDATORS,] },] },
+    { type: Array, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* Optional */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_38" /* Self */] }, { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["_0" /* Inject */], args: [NG_VALUE_ACCESSOR,] },] },
 ]; };
 FormControlName.propDecorators = {
     'name': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* Input */], args: ['formControlName',] },],
@@ -62127,12 +62127,12 @@ FormControlName.propDecorators = {
  */
 var REQUIRED_VALIDATOR = {
     provide: NG_VALIDATORS,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return RequiredValidator; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return RequiredValidator; }),
     multi: true
 };
 var CHECKBOX_REQUIRED_VALIDATOR = {
     provide: NG_VALIDATORS,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return CheckboxRequiredValidator; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return CheckboxRequiredValidator; }),
     multi: true
 };
 /**
@@ -62237,7 +62237,7 @@ CheckboxRequiredValidator.ctorParameters = function () { return []; };
  */
 var EMAIL_VALIDATOR = {
     provide: NG_VALIDATORS,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return EmailValidator; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return EmailValidator; }),
     multi: true
 };
 /**
@@ -62306,7 +62306,7 @@ EmailValidator.propDecorators = {
  */
 var MIN_LENGTH_VALIDATOR = {
     provide: NG_VALIDATORS,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return MinLengthValidator; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return MinLengthValidator; }),
     multi: true
 };
 /**
@@ -62372,7 +62372,7 @@ MinLengthValidator.propDecorators = {
  */
 var MAX_LENGTH_VALIDATOR = {
     provide: NG_VALIDATORS,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return MaxLengthValidator; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return MaxLengthValidator; }),
     multi: true
 };
 /**
@@ -62432,7 +62432,7 @@ MaxLengthValidator.propDecorators = {
 };
 var PATTERN_VALIDATOR = {
     provide: NG_VALIDATORS,
-    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_35" /* forwardRef */])(function () { return PatternValidator; }),
+    useExisting: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_36" /* forwardRef */])(function () { return PatternValidator; }),
     multi: true
 };
 /**
