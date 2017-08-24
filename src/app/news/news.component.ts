@@ -1,4 +1,7 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, QueryList, TemplateRef, ViewChildren} from "@angular/core";
+import {
+    AfterContentInit, AfterViewInit, Component, OnDestroy, OnInit, QueryList, TemplateRef,
+    ViewChildren
+} from "@angular/core";
 import {compareReleases, MINORS, PATCHES} from "./release-page/release-organizer";
 import {Release} from "./release/release.directive";
 import {NavigationEnd, Router} from "@angular/router";
@@ -17,7 +20,7 @@ const RELEASES = require("../../releases/release-list.json");
         "[class.content-container]": "true"
     }
 })
-export class NewsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class NewsComponent implements OnInit, OnDestroy, AfterContentInit, AfterViewInit {
     @ViewChildren(Release) releaseTemplates: QueryList<Release>;
     @ViewChildren(BreakingChange) breakingChanges: QueryList<BreakingChange>;
     @ViewChildren(BugFix) bugFixes: QueryList<BugFix>;
@@ -68,7 +71,24 @@ export class NewsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
+    setDefaultCurrentTemplate: boolean = false;
+
     constructor(private router: Router) {
+        this._subscriptions.push(this.router.events.subscribe((change: any) => {
+            if (change instanceof NavigationEnd) {
+                let url: string[] = change.url.split("/");
+                let urlLength: number = url.length;
+                this.resetCounts();
+                if (urlLength > 0 && url[urlLength - 1] !== "news") {
+                    this.setTemplate(url[urlLength - 1]);
+                } else if (url[urlLength - 1] === "news") {
+                    this.setDefaultCurrentTemplate = true;
+                }
+            }
+        }));
+    }
+
+    ngAfterContentInit() {
     }
 
     resetCounts(): void {
@@ -78,18 +98,6 @@ export class NewsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     ngOnInit() {
-        this.router.events.subscribe((change: any) => {
-            if (change instanceof NavigationEnd) {
-                let url: string[] = change.url.split("/");
-                let urlLength: number = url.length;
-                this.resetCounts();
-                if (urlLength > 0 && url[urlLength - 1] !== "news") {
-                    this.setTemplate(url[urlLength - 1]);
-                } else if (url[urlLength - 1] === "news") {
-                    this.setTemplate(this.current);
-                }
-            }
-        });
     }
 
     setTemplate(releaseNo: string): void {
@@ -120,6 +128,11 @@ export class NewsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.nbNewComponents = this.newComponents ? this.newComponents.length : 0;
             }, 0);
         }));
+
+        setTimeout(() => {if (this.setDefaultCurrentTemplate) {
+            this.setTemplate(this.current);
+            this.setDefaultCurrentTemplate = false;
+        }}, 0);
     }
 
     ngOnDestroy() {
