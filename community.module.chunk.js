@@ -314,7 +314,7 @@ var CommunityModule = (function () {
 /***/ "../../../../../src/community/contributors.json":
 /***/ (function(module, exports) {
 
-module.exports = {"contributors":["Rob Patten","Gail Chappell","Etienne Le Sueur","Victor Mejia","Chris Ha","Benjamin RICHARD","Robert Pamfile","Ioan Ungurean","Yu Xin","Roy Ling","Ivan Donchev","Yan Yixing","Clement Cureau","Pratheek Hegde","Cotton Hou","Srinivas Padidapelli","Nivedita Chandra","Alex Mellnik","Gerin Jacob","Seven Lju","Denis Beklarov","Bojan Djurdjevic","Mincho Tonev"]}
+module.exports = {"contributors":["Rob Patten","Gail Chappell","Etienne Le Sueur","Victor Mejia","Chris Ha","Benjamin RICHARD","Robert Pamfile","Ioan Ungurean","Yu Xin","Roy Ling","Ivan Donchev","Yan Yixing","Clement Cureau","Pratheek Hegde","Cotton Hou","Srinivas Padidapelli","Nivedita Chandra","Alex Mellnik","Gerin Jacob","Seven Lju","Denis Beklarov","Bojan Djurdjevic","Mincho Tonev","Frank Sheiness"]}
 
 /***/ }),
 
