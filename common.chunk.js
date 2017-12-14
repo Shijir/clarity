@@ -9,7 +9,7 @@ webpackJsonp(["common"],{
 /* unused harmony export View_CodeSnippet_Host_0 */
 /* unused harmony export CodeSnippetNgFactory */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_clarity_angular__ = __webpack_require__("../../../../clarity-angular/clarity-angular/clarity-angular.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_clarity_angular__ = __webpack_require__("../../../../clarity-angular/clarity-angular.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common__ = __webpack_require__("../../../common/@angular/common.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_utils_code_snippet__ = __webpack_require__("../../../../../src/app/utils/code-snippet.ts");
 /**
@@ -23,12 +23,12 @@ webpackJsonp(["common"],{
 
 
 var styles_CodeSnippet = ['pre[_ngcontent-%COMP%] {\n            background: transparent;\n            padding: 12px;\n        }'];
-var RenderType_CodeSnippet = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_17" /* ɵcrt */]({ encapsulation: 0, styles: styles_CodeSnippet,
+var RenderType_CodeSnippet = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_18" /* ɵcrt */]({ encapsulation: 0, styles: styles_CodeSnippet,
     data: {} });
 function View_CodeSnippet_1(_l) {
-    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_44" /* ɵvid */](0, [(_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 6, null, null, null, null, null, null, null)),
-        (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n            '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 3, 'pre', [], null, null, null, null, null)), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 2, 'code', [], null, null, null, null, null)), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_18" /* ɵdid */](1064960, [[1, 4]], 0, __WEBPACK_IMPORTED_MODULE_1_clarity_angular__["A" /* CodeHighlight */], [__WEBPACK_IMPORTED_MODULE_0__angular_core__["p" /* ElementRef */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Renderer2 */]], { highlight: [0, 'highlight'] }, null), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['', ''])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n        ']))], function (_ck, _v) {
+    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_45" /* ɵvid */](0, [(_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](0, 0, null, null, 6, null, null, null, null, null, null, null)),
+        (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n            '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](2, 0, null, null, 3, 'pre', [], null, null, null, null, null)), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](3, 0, null, null, 2, 'code', [], null, null, null, null, null)), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_19" /* ɵdid */](4, 1064960, [[1, 4]], 0, __WEBPACK_IMPORTED_MODULE_1_clarity_angular__["C" /* CodeHighlight */], [__WEBPACK_IMPORTED_MODULE_0__angular_core__["p" /* ElementRef */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["Q" /* Renderer2 */]], { highlight: [0, 'highlight'] }, null), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](5, null, ['', ''])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n        ']))], function (_ck, _v) {
         var _co = _v.component;
         var currVal_0 = ('language-' + _co.language);
         _ck(_v, 4, 0, currVal_0);
@@ -39,18 +39,18 @@ function View_CodeSnippet_1(_l) {
     });
 }
 function View_CodeSnippet_2(_l) {
-    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_44" /* ɵvid */](0, [(_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 5, null, null, null, null, null, null, null)),
-        (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n            '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 2, 'pre', [], null, null, null, null, null)), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 1, 'code', [['class', 'clr-code']], null, null, null, null, null)), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['', ''])), (_l()(),
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n        ']))], null, function (_ck, _v) {
+    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_45" /* ɵvid */](0, [(_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](0, 0, null, null, 5, null, null, null, null, null, null, null)),
+        (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n            '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](2, 0, null, null, 2, 'pre', [], null, null, null, null, null)), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](3, 0, null, null, 1, 'code', [['class', 'clr-code']], null, null, null, null, null)), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](4, null, ['', ''])),
+        (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n        ']))], null, function (_ck, _v) {
         var _co = _v.component;
         var currVal_0 = _co.code.trim();
         _ck(_v, 4, 0, currVal_0);
     });
 }
 function View_CodeSnippet_0(_l) {
-    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_44" /* ɵvid */](0, [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_40" /* ɵqud */](671088640, 1, { codeHighlight: 0 }), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n        '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ɵand */](16777216, null, null, 1, null, View_CodeSnippet_1)), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_18" /* ɵdid */](16384, null, 0, __WEBPACK_IMPORTED_MODULE_2__angular_common__["k" /* NgIf */], [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_2" /* ViewContainerRef */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* TemplateRef */]], { ngIf: [0, 'ngIf'] }, null), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n        '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_14" /* ɵand */](16777216, null, null, 1, null, View_CodeSnippet_2)), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_18" /* ɵdid */](16384, null, 0, __WEBPACK_IMPORTED_MODULE_2__angular_common__["k" /* NgIf */], [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_2" /* ViewContainerRef */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["Y" /* TemplateRef */]], { ngIf: [0, 'ngIf'] }, null), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_42" /* ɵted */](null, ['\n    ']))], function (_ck, _v) {
+    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_45" /* ɵvid */](0, [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_41" /* ɵqud */](671088640, 1, { codeHighlight: 0 }), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n        '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_15" /* ɵand */](16777216, null, null, 1, null, View_CodeSnippet_1)), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_19" /* ɵdid */](3, 16384, null, 0, __WEBPACK_IMPORTED_MODULE_2__angular_common__["k" /* NgIf */], [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* ViewContainerRef */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["Z" /* TemplateRef */]], { ngIf: [0, 'ngIf'] }, null), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n        '])), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_15" /* ɵand */](16777216, null, null, 1, null, View_CodeSnippet_2)), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_19" /* ɵdid */](6, 16384, null, 0, __WEBPACK_IMPORTED_MODULE_2__angular_common__["k" /* NgIf */], [__WEBPACK_IMPORTED_MODULE_0__angular_core__["_3" /* ViewContainerRef */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["Z" /* TemplateRef */]], { ngIf: [0, 'ngIf'] }, null), (_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_43" /* ɵted */](-1, null, ['\n    ']))], function (_ck, _v) {
         var _co = _v.component;
         var currVal_0 = !_co.disablePrism;
         _ck(_v, 3, 0, currVal_0);
@@ -59,13 +59,13 @@ function View_CodeSnippet_0(_l) {
     }, null);
 }
 function View_CodeSnippet_Host_0(_l) {
-    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_44" /* ɵvid */](0, [(_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_20" /* ɵeld */](0, null, null, 1, 'clr-code-snippet', [], null, null, null, View_CodeSnippet_0, RenderType_CodeSnippet)),
-        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_18" /* ɵdid */](4243456, null, 0, __WEBPACK_IMPORTED_MODULE_3__app_utils_code_snippet__["a" /* CodeSnippet */], [], null, null)], null, null);
+    return __WEBPACK_IMPORTED_MODULE_0__angular_core__["_45" /* ɵvid */](0, [(_l()(), __WEBPACK_IMPORTED_MODULE_0__angular_core__["_21" /* ɵeld */](0, 0, null, null, 1, 'clr-code-snippet', [], null, null, null, View_CodeSnippet_0, RenderType_CodeSnippet)),
+        __WEBPACK_IMPORTED_MODULE_0__angular_core__["_19" /* ɵdid */](1, 4243456, null, 0, __WEBPACK_IMPORTED_MODULE_3__app_utils_code_snippet__["a" /* CodeSnippet */], [], null, null)], null, null);
 }
-var CodeSnippetNgFactory = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_15" /* ɵccf */]('clr-code-snippet', __WEBPACK_IMPORTED_MODULE_3__app_utils_code_snippet__["a" /* CodeSnippet */], View_CodeSnippet_Host_0, { code: 'clrCode', language: 'clrLanguage',
+var CodeSnippetNgFactory = __WEBPACK_IMPORTED_MODULE_0__angular_core__["_16" /* ɵccf */]('clr-code-snippet', __WEBPACK_IMPORTED_MODULE_3__app_utils_code_snippet__["a" /* CodeSnippet */], View_CodeSnippet_Host_0, { code: 'clrCode', language: 'clrLanguage',
     disablePrism: 'clrDisablePrism' }, {}, []);
-//# sourceMappingURL=data:application/json;base64,eyJmaWxlIjoiL1VzZXJzL3N0c29nb28vVk13YXJlL2NsYXJpdHktd2Vic2l0ZS9zcmMvYXBwL3V0aWxzL2NvZGUtc25pcHBldC5uZ2ZhY3RvcnkudHMiLCJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJuZzovLy9Vc2Vycy9zdHNvZ29vL1ZNd2FyZS9jbGFyaXR5LXdlYnNpdGUvc3JjL2FwcC91dGlscy9jb2RlLXNuaXBwZXQudHMiLCJuZzovLy9Vc2Vycy9zdHNvZ29vL1ZNd2FyZS9jbGFyaXR5LXdlYnNpdGUvc3JjL2FwcC91dGlscy9jb2RlLXNuaXBwZXQudHMuQ29kZVNuaXBwZXQuaHRtbCIsIm5nOi8vL1VzZXJzL3N0c29nb28vVk13YXJlL2NsYXJpdHktd2Vic2l0ZS9zcmMvYXBwL3V0aWxzL2NvZGUtc25pcHBldC50cy5Db2RlU25pcHBldF9Ib3N0Lmh0bWwiXSwic291cmNlc0NvbnRlbnQiOlsiICIsIlxuICAgICAgICA8bmctY29udGFpbmVyICpuZ0lmPVwiIWRpc2FibGVQcmlzbVwiPlxuICAgICAgICAgICAgPHByZT48Y29kZSBbY2xyLWNvZGUtaGlnaGxpZ2h0XT1cIidsYW5ndWFnZS0nK2xhbmd1YWdlXCI+e3tjb2RlLnRyaW0oKX19PC9jb2RlPjwvcHJlPlxuICAgICAgICA8L25nLWNvbnRhaW5lcj5cbiAgICAgICAgPG5nLWNvbnRhaW5lciAqbmdJZj1cImRpc2FibGVQcmlzbVwiPlxuICAgICAgICAgICAgPHByZT48Y29kZSBjbGFzcz1cImNsci1jb2RlXCI+e3tjb2RlLnRyaW0oKX19PC9jb2RlPjwvcHJlPlxuICAgICAgICA8L25nLWNvbnRhaW5lcj5cbiAgICAiLCI8Y2xyLWNvZGUtc25pcHBldD48L2Nsci1jb2RlLXNuaXBwZXQ+Il0sIm1hcHBpbmdzIjoiQUFBQTs7Ozs7Ozs7Ozs7Ozs7OztvQkNDUTtNQUFBO01BQW9DLG1EQUNoQztVQUFBO1VBQUEsOEJBQUs7VUFBQTtVQUFBLHVCQUFBO3NCQUFBLDZDQUFrRDtVQUFBLFVBQTRCOztJQUF4RTtJQUFOLFdBQU0sU0FBTjs7O0lBQWtEO0lBQUE7Ozs7b0JBRTNEO01BQUE7TUFBbUMsbURBQy9CO1VBQUE7VUFBQSw4QkFBSztVQUFBO1VBQUEsOEJBQXVCLHdDQUE0QjtpQkFBQTs7SUFBNUI7SUFBQTs7OzsyREFMeEM7TUFBQSxpQkFDUTtNQUFBLDRCQUFBO29CQUFBLG1DQUVlO01BQUEsaUJBQ2Y7TUFBQSw0QkFBQTtvQkFBQSxtQ0FFZTtNQUFBOztJQUxEO0lBQWQsV0FBYyxTQUFkO0lBR2M7SUFBZCxXQUFjLFNBQWQ7Ozs7b0JDSlI7TUFBQTthQUFBOzs7OzsifQ==
-//# sourceMappingURL=/Users/stsogoo/VMware/clarity-website/src/code-snippet.ngfactory.js.map
+//# sourceMappingURL=data:application/json;base64,eyJmaWxlIjoiL1VzZXJzL3N0c29nb28vVk13YXJlL0RFVi93ZWJzaXRlL3NyYy9hcHAvdXRpbHMvY29kZS1zbmlwcGV0Lm5nZmFjdG9yeS50cyIsInZlcnNpb24iOjMsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIm5nOi8vL1VzZXJzL3N0c29nb28vVk13YXJlL0RFVi93ZWJzaXRlL3NyYy9hcHAvdXRpbHMvY29kZS1zbmlwcGV0LnRzIiwibmc6Ly8vVXNlcnMvc3Rzb2dvby9WTXdhcmUvREVWL3dlYnNpdGUvc3JjL2FwcC91dGlscy9jb2RlLXNuaXBwZXQudHMuQ29kZVNuaXBwZXQuaHRtbCIsIm5nOi8vL1VzZXJzL3N0c29nb28vVk13YXJlL0RFVi93ZWJzaXRlL3NyYy9hcHAvdXRpbHMvY29kZS1zbmlwcGV0LnRzLkNvZGVTbmlwcGV0X0hvc3QuaHRtbCJdLCJzb3VyY2VzQ29udGVudCI6WyIgIiwiXG4gICAgICAgIDxuZy1jb250YWluZXIgKm5nSWY9XCIhZGlzYWJsZVByaXNtXCI+XG4gICAgICAgICAgICA8cHJlPjxjb2RlIFtjbHItY29kZS1oaWdobGlnaHRdPVwiJ2xhbmd1YWdlLScrbGFuZ3VhZ2VcIj57e2NvZGUudHJpbSgpfX08L2NvZGU+PC9wcmU+XG4gICAgICAgIDwvbmctY29udGFpbmVyPlxuICAgICAgICA8bmctY29udGFpbmVyICpuZ0lmPVwiZGlzYWJsZVByaXNtXCI+XG4gICAgICAgICAgICA8cHJlPjxjb2RlIGNsYXNzPVwiY2xyLWNvZGVcIj57e2NvZGUudHJpbSgpfX08L2NvZGU+PC9wcmU+XG4gICAgICAgIDwvbmctY29udGFpbmVyPlxuICAgICIsIjxjbHItY29kZS1zbmlwcGV0PjwvY2xyLWNvZGUtc25pcHBldD4iXSwibWFwcGluZ3MiOiJBQUFBOzs7Ozs7Ozs7Ozs7Ozs7O29CQ0NRO01BQUE7TUFBb0Msc0RBQ2hDO1VBQUE7VUFBQSw4QkFBSztVQUFBO1VBQUEsdUJBQUE7c0JBQUEsNkNBQWtEO1VBQUEsd0JBQTRCOzs7UUFBeEU7UUFBTixXQUFNLFNBQU47OztRQUFrRDtRQUFBOzs7O29CQUUzRDtNQUFBO01BQW1DLHNEQUMvQjtVQUFBO1VBQUEsOEJBQUs7VUFBQTtVQUFBLDhCQUF1QjtNQUE0Qjs7SUFBNUI7SUFBQTs7OzsyREFMeEM7TUFBQSxpQkFDUTtNQUFBLDRCQUFBO29CQUFBLG1DQUVlO01BQUEsaUJBQ2Y7TUFBQSw0QkFBQTtvQkFBQSxtQ0FFZTtNQUFBOztJQUxEO0lBQWQsV0FBYyxTQUFkO0lBR2M7SUFBZCxXQUFjLFNBQWQ7Ozs7b0JDSlI7TUFBQTthQUFBO1VBQUE7Ozs7In0=
+//# sourceMappingURL=/Users/stsogoo/VMware/DEV/website/src/code-snippet.ngfactory.js.map
 
 /***/ }),
 
@@ -87,7 +87,7 @@ var CodeSnippet = (function () {
     return CodeSnippet;
 }());
 
-//# sourceMappingURL=/Users/stsogoo/VMware/clarity-website/src/code-snippet.js.map
+//# sourceMappingURL=/Users/stsogoo/VMware/DEV/website/src/code-snippet.js.map
 
 /***/ }),
 
@@ -131,7 +131,7 @@ var HashListener = (function () {
     return HashListener;
 }());
 
-//# sourceMappingURL=/Users/stsogoo/VMware/clarity-website/src/hash-listener.directive.js.map
+//# sourceMappingURL=/Users/stsogoo/VMware/DEV/website/src/hash-listener.directive.js.map
 
 /***/ }),
 
@@ -193,11 +193,11 @@ var ScrollSpy = (function () {
             this.sub.unsubscribe();
         }
     };
-    ScrollSpy.ctorParameters = function () { return [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["O" /* Renderer */] }]; };
+    ScrollSpy.ctorParameters = function () { return [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["P" /* Renderer */] }]; };
     return ScrollSpy;
 }());
 
-//# sourceMappingURL=/Users/stsogoo/VMware/clarity-website/src/scrollspy.directive.js.map
+//# sourceMappingURL=/Users/stsogoo/VMware/DEV/website/src/scrollspy.directive.js.map
 
 /***/ })
 
