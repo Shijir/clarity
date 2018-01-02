@@ -6,4 +6,34 @@
 import {Component} from "@angular/core";
 
 @Component({selector: "clr-card-grid-demo", styleUrls: ["./card.demo.scss"], templateUrl: "./card-grid.html"})
-export class CardGridDemo {}
+export class CardGridDemo {
+    buttons = new Array(1);
+
+    onDragStart() {
+        // console.log("drag started");
+    }
+
+    onDragMove() {
+        // console.log("drag moved");
+    }
+
+    onDragEnd() {
+        // console.log("drag ended");
+    }
+
+    onDragOver() {
+        // console.log("draggable is over");
+    }
+
+    onDragEnter() {
+        // console.log("draggable entered");
+    }
+
+    onDragLeave() {
+        // console.log("draggable left");
+    }
+
+    onDrop() {
+        // console.log("draggable dropped");
+    }
+}

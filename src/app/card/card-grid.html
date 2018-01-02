@@ -8,13 +8,19 @@
     <div class="row">
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
-                <div class="card-block">
-                    <h3 class="card-title">Card 1</h3>
-                    <p class="card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.
+                <div class="card-block" clrDraggable>
+                    <h3 class="card-title">Draggable Card</h3>
+                    <p>
+                        <button class="btn btn-primary"
+                                clrDraggable
+                                [clrDragAndDropGroup]="'test'"
+                                (clrDragStart)="onDragStart()"
+                                (clrDragMove)="onDragMove()"
+                                (clrDragEnd)="onDragEnd()">Draggable Button
+                            <clr-draggable-ghost *clrIfDragged>
+                                <clr-icon shape="image" size="32" class="is-error"></clr-icon>
+                            </clr-draggable-ghost>
+                        </button>
                     </p>
                 </div>
                 <div class="card-footer">
@@ -24,14 +30,9 @@
         </div>
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
-                <div class="card-block">
-                    <h3 class="card-title">Card 2</h3>
-                    <p class="card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.
-                    </p>
+                <div class="card-block" clrDraggable>
+                    <h3 class="card-title">Draggable Card</h3>
+                    <button class="btn btn-primary" clrDraggableHandle>Draggable Card Handle</button>
                 </div>
                 <div class="card-footer">
                     <a href="javascript://" class="btn btn-sm btn-link">Action 2</a>
@@ -40,14 +41,19 @@
         </div>
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
             <div class="card">
-                <div class="card-block">
-                    <h3 class="card-title">Card 3</h3>
-                    <p class="card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                        aliquip ex ea commodo consequat.
-                    </p>
+                <div class="card-block" clrDroppable>
+                    <h3 class="card-title">Drop Area</h3>
+                </div>
+                <div class="card-footer">
+                    <a href="javascript://" class="btn btn-sm btn-link">Action 3</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="card-block" clrDroppable clrDragAndDropGroup="test">
+                    <h3 class="card-title">Drop Area</h3>
                 </div>
                 <div class="card-footer">
                     <a href="javascript://" class="btn btn-sm btn-link">Action 3</a>

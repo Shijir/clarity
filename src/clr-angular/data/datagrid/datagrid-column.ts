@@ -3,8 +3,20 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Component, ContentChild, ElementRef, EventEmitter, HostBinding, Input, Output, ViewChild} from "@angular/core";
+import {
+    Component,
+    ContentChild,
+    ElementRef,
+    EventEmitter,
+    HostBinding,
+    Inject,
+    Input,
+    Output,
+    ViewChild
+} from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
+
+import {DragDispatcher} from "../../utils/drag-and-drop/providers/drag-dispatcher";
 
 import {DatagridPropertyComparator} from "./built-in/comparators/datagrid-property-comparator";
 import {DatagridPropertyStringFilter} from "./built-in/filters/datagrid-property-string-filter";
@@ -13,7 +25,7 @@ import {DatagridHideableColumnModel} from "./datagrid-hideable-column.model";
 import {ClrDatagridComparatorInterface} from "./interfaces/comparator.interface";
 import {ClrDatagridSortOrder} from "./interfaces/sort-order";
 import {CustomFilter} from "./providers/custom-filter";
-import {DragDispatcher} from "./providers/drag-dispatcher";
+import {DRAG_RESIZE_COLUMN} from "./providers/drag-resize-column.provider";
 import {FiltersProvider} from "./providers/filters";
 import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
@@ -53,7 +65,8 @@ let nbCount: number = 0;
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher) {
+    constructor(private _sort: Sort, filters: FiltersProvider,
+                @Inject(DRAG_RESIZE_COLUMN) private _dragDispatcher: DragDispatcher) {
         super(filters);
         this._sortSubscription = _sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -101,12 +114,12 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     @ViewChild("columnHandle")
     set handleElRef(value: ElementRef) {
-        this._dragDispatcher.handleRef = value;
+        this._dragDispatcher.draggable.self = value.nativeElement;
     }
 
     @ViewChild("columnHandleTracker")
     set handleTrackerElRef(value: ElementRef) {
-        this._dragDispatcher.handleTrackerRef = value;
+        this._dragDispatcher.draggable.ghost = value.nativeElement;
     }
 
     /**

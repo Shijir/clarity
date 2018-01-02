@@ -3,12 +3,13 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Component, DebugElement} from "@angular/core";
+import {Component, DebugElement, Renderer2} from "@angular/core";
 import {By} from "@angular/platform-browser";
 
+import {DragDispatcher} from "../../../utils/drag-and-drop/providers/drag-dispatcher";
 import {ClrDatagrid} from "../datagrid";
 import {TestContext} from "../helpers.spec";
-import {DragDispatcher} from "../providers/drag-dispatcher";
+import {DRAG_RESIZE_COLUMN, DRAG_RESIZE_COLUMN_PROVIDER} from "../providers/drag-resize-column.provider";
 
 import {DatagridColumnResizer} from "./column-resizer";
 import {DomAdapter} from "./dom-adapter";
@@ -55,20 +56,20 @@ export default function(): void {
             column3ResizerDirective = column3.injector.get(DatagridColumnResizer);
             column4ResizerDirective = column4.injector.get(DatagridColumnResizer);
 
-            column1DragDispatcher = column1.injector.get(DragDispatcher);
-            column2DragDispatcher = column2.injector.get(DragDispatcher);
-            column3DragDispatcher = column3.injector.get(DragDispatcher);
-            column4DragDispatcher = column4.injector.get(DragDispatcher);
+            column1DragDispatcher = column1.injector.get(DRAG_RESIZE_COLUMN);
+            column2DragDispatcher = column2.injector.get(DRAG_RESIZE_COLUMN);
+            column3DragDispatcher = column3.injector.get(DRAG_RESIZE_COLUMN);
+            column4DragDispatcher = column4.injector.get(DRAG_RESIZE_COLUMN);
         });
         it("accesses separator-dragger and seperator-tracker elements when the drag listener is added in", function() {
-            expect(column1DragDispatcher.handleRef.nativeElement).not.toBeUndefined();
-            expect(column2DragDispatcher.handleRef.nativeElement).not.toBeUndefined();
-            expect(column3DragDispatcher.handleRef.nativeElement).not.toBeUndefined();
-            expect(column4DragDispatcher.handleRef.nativeElement).not.toBeUndefined();
-            expect(column1DragDispatcher.handleTrackerRef.nativeElement).not.toBeUndefined();
-            expect(column2DragDispatcher.handleTrackerRef.nativeElement).not.toBeUndefined();
-            expect(column3DragDispatcher.handleTrackerRef.nativeElement).not.toBeUndefined();
-            expect(column4DragDispatcher.handleTrackerRef.nativeElement).not.toBeUndefined();
+            expect(column1DragDispatcher.draggableEl.nativeElement).not.toBeUndefined();
+            expect(column2DragDispatcher.draggableEl.nativeElement).not.toBeUndefined();
+            expect(column3DragDispatcher.draggableEl.nativeElement).not.toBeUndefined();
+            expect(column4DragDispatcher.draggableEl.nativeElement).not.toBeUndefined();
+            expect(column1DragDispatcher.draggableGhostElRef.nativeElement).not.toBeUndefined();
+            expect(column2DragDispatcher.draggableGhostElRef.nativeElement).not.toBeUndefined();
+            expect(column3DragDispatcher.draggableGhostElRef.nativeElement).not.toBeUndefined();
+            expect(column4DragDispatcher.draggableGhostElRef.nativeElement).not.toBeUndefined();
         });
         it("accesses column minimum width on the first drag attempt", function() {
             column1ResizerDirective.dragStartHandler();
@@ -130,7 +131,7 @@ export default function(): void {
             onMoveEvent = {pageX: pageDragPosX + 50};
             column3ResizerDirective.dragMoveHandler(onMoveEvent);
             expect(column3ResizerDirective.dragDistancePositionX).toBe(50);
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).getPropertyValue("right"))
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).getPropertyValue("right"))
                 .toBe("-50px");
             column3ResizerDirective.dragEndHandler();
             expect(domAdapter.clientRectWidth(column3ResizerDirective.columnEl)).toBe(250);
@@ -142,7 +143,7 @@ export default function(): void {
             column3ResizerDirective.dragMoveHandler(onMoveEvent);
             expect(column3ResizerDirective.dragDistancePositionX).toBe(-50);
             expect(document.body.style.cursor).toBe("col-resize");
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).getPropertyValue("right"))
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).getPropertyValue("right"))
                 .toBe("50px");
             column3ResizerDirective.dragEndHandler();
             expect(domAdapter.clientRectWidth(column3ResizerDirective.columnEl)).toBe(150);
@@ -156,7 +157,7 @@ export default function(): void {
             column3ResizerDirective.dragMoveHandler(onMoveEvent);
             expect(column3ResizerDirective.dragDistancePositionX).toBe(0);
             expect(document.body.style.cursor).toBe("col-resize");
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).getPropertyValue("right"))
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).getPropertyValue("right"))
                 .toBe("0px");
             column3ResizerDirective.dragEndHandler();
             expect(domAdapter.clientRectWidth(column3ResizerDirective.columnEl)).toBe(96);
@@ -170,24 +171,25 @@ export default function(): void {
             column3ResizerDirective.dragMoveHandler(onMoveEvent);
             /* Default minimum width is 96px; thus, 120-96 = 24 so it could be dragged and shrunk by only 24px. */
             expect(column3ResizerDirective.dragDistancePositionX).toBe(-24);
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).getPropertyValue("right"))
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).getPropertyValue("right"))
                 .toBe("24px");
             column3ResizerDirective.dragEndHandler();
             expect(domAdapter.clientRectWidth(column3ResizerDirective.columnEl)).toBe(96);
         });
         it("should render the drag tracker in the appropriate styles", function() {
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).display).toBe("none");
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).display).toBe("none");
             column3ResizerDirective.dragStartHandler();
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).display).toBe("block");
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).display).toBe("block");
             pageDragPosX = column3ResizerDirective.pageStartPositionX;
             onMoveEvent = {pageX: pageDragPosX + 50};
             column3ResizerDirective.dragMoveHandler(onMoveEvent);
             expect(document.body.style.cursor).toBe("col-resize");
             column3ResizerDirective.dragEndHandler();
             expect(document.body.style.cursor).toBe("auto");
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).getPropertyValue("right"))
+            expect(getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).getPropertyValue("right"))
                 .toBe("0px");
-            expect(getComputedStyle(column3DragDispatcher.handleTrackerRef.nativeElement).getPropertyValue("display"))
+            expect(
+                getComputedStyle(column3DragDispatcher.draggableGhostElRef.nativeElement).getPropertyValue("display"))
                 .toBe("none");
         });
         it("emits an event once dragging ends", function() {
