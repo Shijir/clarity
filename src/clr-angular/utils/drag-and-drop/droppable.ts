@@ -9,7 +9,7 @@ import {Subscription} from "rxjs/Subscription";
 import {ClrDragEvent} from "./interfaces/drag-event";
 import {ClrDragAndDropEventBus} from "./providers/drag-and-drop-event-bus";
 
-@Directive({selector: "[clrDraggable]", host: {class: "droppable"}})
+@Directive({selector: "[clrDroppable]", host: {class: "droppable"}})
 export class ClrDroppable<T> implements OnInit, OnDestroy {
     private droppableEl: Node;
 

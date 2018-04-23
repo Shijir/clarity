@@ -10,4 +10,14 @@ import {Component} from "@angular/core";
     styleUrls: ["./drag-and-drop.demo.scss"],
     templateUrl: "./basic-draggable.demo.html"
 })
-export class BasicDraggableDemo {}
+export class BasicDraggableDemo {
+    onDragStart($event: any) {
+        // console.log($event);
+    }
+    onDragMove($event: any) {
+        // console.log($event);
+    }
+    onDragEnd($event: any) {
+        // console.log($event);
+    }
+}

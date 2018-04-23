@@ -1,0 +1,22 @@
+@include exports("drag-and-drop.clarity") {
+    .draggable {
+        cursor: grab;
+    }
+    .draggable-ghost {
+        position: absolute;
+        display: none;
+        z-index: 2147483647;
+        will-change: transform;
+        transform: translate3d(0, 0, -1);
+        &.dragged {
+            display: block;
+        }
+    }
+    .in-drag {
+        cursor: grabbing;
+        user-select: none;
+        * {
+            pointer-events: none;
+        }
+    }
+}

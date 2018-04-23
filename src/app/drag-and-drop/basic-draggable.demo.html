@@ -5,5 +5,7 @@
   -->
 
 <div class="clr-example">
-    <button class="btn btn-primary">draggable</button>
+  <button class="btn btn-primary" clrDraggable (clrDragStart)="onDragStart($event)" (clrDragMove)="onDragMove($event)" (clrDragEnd)="onDragEnd($event)">
+    draggable
+  </button>
 </div>

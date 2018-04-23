@@ -6,14 +6,15 @@
 import {CommonModule} from "@angular/common";
 import {NgModule} from "@angular/core";
 
-import {DRAG_AND_DROP_DIRECTIVES} from "./index";
+import {DRAG_AND_DROP_DIRECTIVES} from ".";
+import {ClrDraggableGhost} from "./draggable-ghost";
 import {ClrDragAndDropEventBus} from "./providers/drag-and-drop-event-bus";
-
 
 @NgModule({
     imports: [CommonModule],
     declarations: [DRAG_AND_DROP_DIRECTIVES],
     providers: [ClrDragAndDropEventBus],
+    entryComponents: [ClrDraggableGhost],
     exports: [DRAG_AND_DROP_DIRECTIVES]
 })
 export class ClrDragAndDropModule {}

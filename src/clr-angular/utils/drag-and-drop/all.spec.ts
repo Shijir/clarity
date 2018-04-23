@@ -6,7 +6,7 @@
 import ClrDragAndDropEventBusSpecs from "./providers/drag-and-drop-event-bus.spec";
 import ClrDragEventListenerSpecs from "./providers/drag-event-listener.spec";
 
-describe("Drag And Drop", function() {
+fdescribe("Drag And Drop", function() {
     describe("Providers", function() {
         ClrDragAndDropEventBusSpecs();
         ClrDragEventListenerSpecs();
