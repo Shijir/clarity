@@ -15,12 +15,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    ViewContainerRef
+    ViewContainerRef,
 } from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 
-import {DomAdapter} from "../../data/datagrid/render/dom-adapter";
-
+import {DomAdapter} from "../dom-adapter/dom-adapter";
 import {ClrDraggableGhost} from "./draggable-ghost";
 import {ClrIfDragged} from "./if-dragged";
 import {ClrDragEvent} from "./interfaces/drag-event";

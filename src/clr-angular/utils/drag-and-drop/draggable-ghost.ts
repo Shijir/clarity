@@ -6,8 +6,6 @@
 import {Component, ElementRef, OnDestroy, Renderer2} from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 
-import {DomAdapter} from "../../data/datagrid/render/dom-adapter";
-
 import {ClrDragEvent} from "./interfaces/drag-event";
 import {ClrDragAndDropEventBus} from "./providers/drag-and-drop-event-bus";
 import {ClrDragEventListener} from "./providers/drag-event-listener";
@@ -32,8 +30,7 @@ export class ClrDraggableGhost<T> implements OnDestroy {
     public draggableClientRect: ClientRect;
 
     constructor(private el: ElementRef, private dragEventListener: ClrDragEventListener<T>,
-                private eventBus: ClrDragAndDropEventBus<T>, private renderer: Renderer2,
-                private domAdapter: DomAdapter) {
+                private eventBus: ClrDragAndDropEventBus<T>, private renderer: Renderer2) {
         this.draggableGhostEl = this.el.nativeElement;
 
         this.subscriptions.push(this.dragEventListener.dragStarted.subscribe((event: ClrDragEvent<T>) => {
