@@ -8,19 +8,26 @@ import {Subscription} from "rxjs/Subscription";
 
 import {ClrDragEvent} from "./interfaces/drag-event";
 import {ClrDragEventListener} from "./providers/drag-event-listener";
+import {ClrDragHandleRegistrar} from "./providers/drag-handle-registrar";
 
-@Directive({selector: "[clrDraggable]", providers: [ClrDragEventListener], host: {class: "draggable"}})
+@Directive(
+    {selector: "[clrDraggable]", providers: [ClrDragEventListener, ClrDragHandleRegistrar], host: {class: "draggable"}})
 export class ClrDraggable<T> implements OnInit, OnDestroy {
     private draggableEl: Node;
 
     private subscriptions: Subscription[] = [];
 
-    constructor(private el: ElementRef, private dragEventListener: ClrDragEventListener<T>) {
+    constructor(private el: ElementRef, private dragEventListener: ClrDragEventListener<T>,
+                private dragHandleRegistrar: ClrDragHandleRegistrar<T>) {
         this.draggableEl = this.el.nativeElement;
     }
 
     ngOnInit() {
-        this.dragEventListener.attachDragListeners(this.draggableEl);
+        if (this.dragHandleRegistrar.handleEl) {
+            this.dragEventListener.attachDragListeners(this.dragHandleRegistrar.handleEl);
+        } else {
+            this.dragEventListener.attachDragListeners(this.draggableEl);
+        }
 
         this.subscriptions.push(
             this.dragEventListener.dragStarted.subscribe((event: ClrDragEvent<T>) => {
