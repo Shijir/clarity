@@ -4,30 +4,48 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import {Injectable} from "@angular/core";
+import {Injectable, Renderer2} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
+import {ClrDragEventListener} from "./drag-event-listener";
 
+// This provider registers the drag handle element.
+// When it registers the custom handle element, it attaches the element to the listeners from ClrDragEventListener.
+// Also, it adds the "drag-handle" css class to the registered element through Renderer.
 @Injectable()
 export class ClrDragHandleRegistrar<T> {
-    private _handleEl: Node;
-    private _handleChanged: Subject<void> = new Subject<void>();
+    private _customHandleEl: Node;
+    private _draggableEl: Node;
 
-    get handleChanged(): Observable<void> {
-        return this._handleChanged.asObservable();
+    set draggableEl(value: Node) {
+        // First, we set clrDraggable element as the default drag handle.
+        this._draggableEl = value;
+        this.makeElementHandle(this._draggableEl);
     }
 
-    get handleEl() {
-        return this._handleEl;
+    constructor(private dragEventListener: ClrDragEventListener<T>, private renderer: Renderer2) {}
+
+    private makeElementHandle(el: Node) {
+        if (el !== this._draggableEl) {
+            // Before making an element the custom handle element,
+            // we should remove the previous drag-handle class from the draggable element.
+            this.renderer.removeClass(this._draggableEl, "drag-handle");
+        }
+        this.dragEventListener.attachDragListeners(el);
+        this.renderer.addClass(el, "drag-handle");
     }
 
-    public registerHandleEl(handleElement: Node) {
-        this._handleEl = handleElement;
-        this._handleChanged.next();
+    get customHandle() {
+        return this._customHandleEl;
     }
 
-    public unregisterHandleEl() {
-        delete this._handleEl;
-        this._handleChanged.next();
+    public registerCustomHandle(handleElement: Node) {
+        this._customHandleEl = handleElement;
+        this.makeElementHandle(this._customHandleEl);
+    }
+
+    public unregisterCustomHandle() {
+        delete this._customHandleEl;
+        this.makeElementHandle(this._draggableEl);
     }
 }

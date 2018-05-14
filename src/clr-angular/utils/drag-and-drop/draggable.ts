@@ -3,7 +3,7 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Directive, ElementRef, OnDestroy, OnInit} from "@angular/core";
+import {Directive, ElementRef, OnDestroy, OnInit, Renderer2} from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 
 import {ClrDragEvent} from "./interfaces/drag-event";
@@ -13,29 +13,14 @@ import {ClrDragHandleRegistrar} from "./providers/drag-handle-registrar";
 @Directive(
     {selector: "[clrDraggable]", providers: [ClrDragEventListener, ClrDragHandleRegistrar], host: {class: "draggable"}})
 export class ClrDraggable<T> implements OnInit, OnDestroy {
-    private draggableEl: Node;
-
     private subscriptions: Subscription[] = [];
 
     constructor(private el: ElementRef, private dragEventListener: ClrDragEventListener<T>,
-                private dragHandleRegistrar: ClrDragHandleRegistrar<T>) {
-        this.draggableEl = this.el.nativeElement;
-    }
-
-    private registerDragListener() {
-        if (this.dragHandleRegistrar.handleEl) {
-            this.dragEventListener.attachDragListeners(this.dragHandleRegistrar.handleEl);
-        } else {
-            this.dragEventListener.attachDragListeners(this.draggableEl);
-        }
+                private dragHandleRegistrar: ClrDragHandleRegistrar<T>, private renderer: Renderer2) {
+        this.dragHandleRegistrar.draggableEl = this.el.nativeElement;
     }
 
     ngOnInit() {
-        this.registerDragListener();
-        this.subscriptions.push(this.dragHandleRegistrar.handleChanged.subscribe(() => {
-            this.registerDragListener();
-        }));
-
         this.subscriptions.push(
             this.dragEventListener.dragStarted.subscribe((event: ClrDragEvent<T>) => {
                                                              // TODO: dragstart handler logic will run here.
