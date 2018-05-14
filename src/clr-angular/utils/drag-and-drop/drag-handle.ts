@@ -4,12 +4,15 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import {Directive, ElementRef, OnDestroy} from "@angular/core";
+import {Directive, ElementRef, OnDestroy, Optional} from "@angular/core";
 import {ClrDragHandleRegistrar} from "./providers/drag-handle-registrar";
 
 @Directive({selector: "[clrDragHandle]", host: {class: "drag-handle"}})
 export class ClrDragHandle<T> implements OnDestroy {
-    constructor(private el: ElementRef, private dragHandleRegistrar: ClrDragHandleRegistrar<T>) {
+    constructor(private el: ElementRef, @Optional() private dragHandleRegistrar: ClrDragHandleRegistrar<T>) {
+        if (!this.dragHandleRegistrar) {
+            throw new Error("The clrDragHandle directive can only be used inside of a clrDraggable directive.");
+        }
         this.dragHandleRegistrar.registerHandleEl(this.el.nativeElement);
     }
 

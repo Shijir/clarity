@@ -15,13 +15,6 @@ export class ClrDragHandleRegistrar<T> {
     }
 
     public registerHandleEl(handleElement: Node) {
-        // this method should be only called in ClrDragHandle
-        if (this._handleEl) {
-            // if there is an existing handle,
-            // don't register new one.
-            return;
-        }
-
         this._handleEl = handleElement;
     }
 
