@@ -6,11 +6,13 @@
 import ClrIfDraggedSpecs from "./if-dragged.spec";
 import ClrDragAndDropEventBusSpecs from "./providers/drag-and-drop-event-bus.spec";
 import ClrDragEventListenerSpecs from "./providers/drag-event-listener.spec";
+import ClrDragHandleRegistrarSpecs from "./providers/drag-handle-registrar.spec";
 
-describe("Drag And Drop", function() {
+fdescribe("Drag And Drop", function() {
     describe("Providers", function() {
         ClrDragAndDropEventBusSpecs();
         ClrDragEventListenerSpecs();
+        ClrDragHandleRegistrarSpecs();
     });
     describe("Components And Directives", function() {
         ClrIfDraggedSpecs();
