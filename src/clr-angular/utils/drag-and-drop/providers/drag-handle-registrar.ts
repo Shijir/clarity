@@ -5,10 +5,17 @@
  */
 
 import {Injectable} from "@angular/core";
+import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class ClrDragHandleRegistrar<T> {
     private _handleEl: Node;
+    private _handleChanged: Subject<void> = new Subject<void>();
+
+    get handleChanged(): Observable<void> {
+        return this._handleChanged.asObservable();
+    }
 
     get handleEl() {
         return this._handleEl;
@@ -16,9 +23,11 @@ export class ClrDragHandleRegistrar<T> {
 
     public registerHandleEl(handleElement: Node) {
         this._handleEl = handleElement;
+        this._handleChanged.next();
     }
 
     public unregisterHandleEl() {
         delete this._handleEl;
+        this._handleChanged.next();
     }
 }

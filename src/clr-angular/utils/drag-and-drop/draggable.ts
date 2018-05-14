@@ -22,12 +22,19 @@ export class ClrDraggable<T> implements OnInit, OnDestroy {
         this.draggableEl = this.el.nativeElement;
     }
 
-    ngOnInit() {
+    private registerDragListener() {
         if (this.dragHandleRegistrar.handleEl) {
             this.dragEventListener.attachDragListeners(this.dragHandleRegistrar.handleEl);
         } else {
             this.dragEventListener.attachDragListeners(this.draggableEl);
         }
+    }
+
+    ngOnInit() {
+        this.registerDragListener();
+        this.subscriptions.push(this.dragHandleRegistrar.handleChanged.subscribe(() => {
+            this.registerDragListener();
+        }));
 
         this.subscriptions.push(
             this.dragEventListener.dragStarted.subscribe((event: ClrDragEvent<T>) => {
