@@ -3,47 +3,71 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {Subscription} from "rxjs/Subscription";
+import {Component} from "@angular/core";
+import {ComponentFixture, TestBed} from "@angular/core/testing";
 
+import {ClrDragAndDropEventBus} from "./drag-and-drop-event-bus";
+import {ClrDragEventListener} from "./drag-event-listener";
+import {MOCK_DRAG_EVENT_LISTENER_PROVIDER} from "./drag-event-listener.mock";
 import {ClrDragHandleRegistrar} from "./drag-handle-registrar";
 
 export default function(): void {
     describe("Drag Handle Registrar", function() {
-        const dragHandleRegistrar = new ClrDragHandleRegistrar();
-        const testElement = document.createElement("button");
+        let fixture: ComponentFixture<any>;
+        let testComponent: DragHandleTestComponent;
 
-        let notified: boolean;
-        let handleChangeSub: Subscription;
+        const draggableEl = document.createElement("div");
+        const customHandleEl = document.createElement("button");
+
+        // Providers
+        let dragHandleRegistrar: any;
+        let dragEventListener: any;
 
         beforeEach(() => {
-            notified = false;
-            handleChangeSub = dragHandleRegistrar.handleChanged.subscribe(() => {
-                notified = true;
-            });
+            TestBed.configureTestingModule(
+                {declarations: [DragHandleTestComponent], providers: [ClrDragAndDropEventBus]});
+            fixture = TestBed.createComponent(DragHandleTestComponent);
+            testComponent = fixture.componentInstance;
+            dragHandleRegistrar = fixture.debugElement.injector.get(ClrDragHandleRegistrar);
+            dragEventListener = fixture.debugElement.injector.get(ClrDragEventListener);
         });
 
         afterEach(() => {
-            handleChangeSub.unsubscribe();
+            fixture.destroy();
         });
 
-        it("should register element and notifies the change", function() {
-            // testing the state before registering
-            expect(dragHandleRegistrar.handleEl).toBeUndefined();
-            expect(notified).toBeFalsy();
-            // register element
-            dragHandleRegistrar.registerHandleEl(testElement);
-            expect(dragHandleRegistrar.handleEl).toBe(testElement);
-            expect(notified).toBeTruthy();
+        it("should be able to register element as default handle", function() {
+            dragHandleRegistrar.draggableEl = draggableEl;
+            expect(dragHandleRegistrar.customHandle).toBeUndefined();
+            expect(draggableEl.classList.contains("drag-handle")).toBeTruthy();
+            expect(dragEventListener.draggableEl).toBe(draggableEl);
         });
 
-        it("should unregister element and notifies the change", function() {
-            // testing the state before unregistering
-            expect(dragHandleRegistrar.handleEl).toBe(testElement);
-            expect(notified).toBeFalsy();
-            // unregister element
-            dragHandleRegistrar.unregisterHandleEl();
-            expect(dragHandleRegistrar.handleEl).toBeUndefined();
-            expect(notified).toBeTruthy();
+        it("should be able to register custom element as drag handle", function() {
+            dragHandleRegistrar.draggableEl = draggableEl;
+            dragHandleRegistrar.registerCustomHandle(customHandleEl);
+            expect(draggableEl.classList.contains("drag-handle")).toBeFalsy();
+            expect(dragHandleRegistrar.customHandle).toBe(customHandleEl);
+            expect(dragEventListener.draggableEl).toBe(customHandleEl);
+        });
+
+        it("should be able to unregister custom element and fallback to default handle", function() {
+            dragHandleRegistrar.draggableEl = draggableEl;
+            dragHandleRegistrar.registerCustomHandle(customHandleEl);
+
+            dragHandleRegistrar.unregisterCustomHandle();
+            expect(dragHandleRegistrar.customHandle).toBeUndefined();
+            expect(draggableEl.classList.contains("drag-handle")).toBeTruthy();
+            expect(dragEventListener.draggableEl).toBe(draggableEl);
         });
     });
 }
+
+@Component({
+    providers: [
+        MOCK_DRAG_EVENT_LISTENER_PROVIDER,
+        ClrDragHandleRegistrar
+    ],  // Should be declared here in a component level, not in the TestBed because Renderer2 wouldn't be present
+    template: "<div>Test</div>"
+})
+class DragHandleTestComponent {}

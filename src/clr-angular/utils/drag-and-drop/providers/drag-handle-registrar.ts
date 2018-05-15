@@ -26,9 +26,9 @@ export class ClrDragHandleRegistrar<T> {
     constructor(private dragEventListener: ClrDragEventListener<T>, private renderer: Renderer2) {}
 
     private makeElementHandle(el: Node) {
-        if (el !== this._draggableEl) {
+        if (this._draggableEl && this._draggableEl !== el) {
             // Before making an element the custom handle element,
-            // we should remove the previous drag-handle class from the draggable element.
+            // we should remove the existing drag-handle class from the draggable element.
             this.renderer.removeClass(this._draggableEl, "drag-handle");
         }
         this.dragEventListener.attachDragListeners(el);
