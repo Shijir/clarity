@@ -11,6 +11,8 @@ import {ClrDragHandleRegistrar} from "./providers/drag-handle-registrar";
 export class ClrDragHandle<T> implements OnDestroy {
     constructor(private el: ElementRef, @Optional() private dragHandleRegistrar: ClrDragHandleRegistrar<T>) {
         if (!this.dragHandleRegistrar) {
+            // ClrDragHandleRegistrar is provided in ClrDraggable so we expect it to be present here
+            // as clrDragHandle is required to be used only inside of a clrDraggable directive.
             throw new Error("The clrDragHandle directive can only be used inside of a clrDraggable directive.");
         }
         this.dragHandleRegistrar.registerCustomHandle(this.el.nativeElement);
