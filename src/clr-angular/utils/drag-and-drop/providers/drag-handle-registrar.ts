@@ -3,11 +3,10 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-
 import {Injectable, Renderer2} from "@angular/core";
-import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
+
 import {ClrDragEventListener} from "./drag-event-listener";
+
 
 // This provider registers the drag handle element.
 // When it registers the custom handle element, it attaches the element to the listeners from ClrDragEventListener.
