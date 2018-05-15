@@ -5,7 +5,6 @@
  */
 import {Component} from "@angular/core";
 import {ComponentFixture, TestBed} from "@angular/core/testing";
-
 import {ClrDragAndDropEventBus} from "./drag-and-drop-event-bus";
 import {ClrDragEventListener} from "./drag-event-listener";
 import {MOCK_DRAG_EVENT_LISTENER_PROVIDER} from "./drag-event-listener.mock";
