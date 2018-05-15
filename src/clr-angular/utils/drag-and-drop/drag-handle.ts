@@ -13,10 +13,10 @@ export class ClrDragHandle<T> implements OnDestroy {
         if (!this.dragHandleRegistrar) {
             throw new Error("The clrDragHandle directive can only be used inside of a clrDraggable directive.");
         }
-        this.dragHandleRegistrar.registerHandleEl(this.el.nativeElement);
+        this.dragHandleRegistrar.registerCustomHandle(this.el.nativeElement);
     }
 
     ngOnDestroy() {
-        this.dragHandleRegistrar.unregisterHandleEl();
+        this.dragHandleRegistrar.unregisterCustomHandle();
     }
 }
