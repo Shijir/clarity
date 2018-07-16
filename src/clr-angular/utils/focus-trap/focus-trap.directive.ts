@@ -20,12 +20,11 @@ import { Renderer2 } from '@angular/core';
 
 @Directive({ selector: '[clrFocusTrap]' })
 export class FocusTrapDirective implements AfterViewInit, OnDestroy {
-  private _previousActiveElement: HTMLElement;
-  /* tslint:disable-next-line:no-unused-variable */
+  private previousActiveElement: any;
   private document: Document;
 
   constructor(
-    public el: ElementRef,
+    private el: ElementRef,
     private injector: Injector,
     private focusTrapsTracker: FocusTrapTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -34,7 +33,7 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
     this.document = this.injector.get(DOCUMENT);
     this.focusTrapsTracker.current = this;
 
-    this.focusTrapBeltEl = el.nativeElement;
+    this.focusTrapBeltEl = this.el.nativeElement;
 
     this.focusReversalEl = this.renderer.createElement('span');
     this.renderer.setAttribute(this.focusReversalEl, 'tabindex', '0');
@@ -76,15 +75,15 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this._previousActiveElement = <HTMLElement>document.activeElement;
+      this.previousActiveElement = <HTMLElement>this.document.activeElement;
       this.focusTrapBeltEl.setAttribute('tabindex', '0');
     }
     this.renderer.appendChild(this.focusTrapBeltEl, this.focusReversalEl);
   }
 
   public setPreviousFocus(): void {
-    if (this._previousActiveElement && this._previousActiveElement.focus) {
-      this._previousActiveElement.focus();
+    if (this.previousActiveElement && this.previousActiveElement.focus) {
+      this.previousActiveElement.focus();
     }
   }
 
