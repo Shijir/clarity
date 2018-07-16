@@ -42,6 +42,7 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
 
   private focusTrapBeltEl: any;
   private focusReversalEl: any;
+  private lastFocusedChildEl: any;
   private isShiftTabRegistered: boolean = false;
 
   @HostListener('document:keydown.shift.tab')
@@ -54,7 +55,10 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
   @HostListener('document:focusin', ['$event'])
   onFocusIn(event: any) {
     if (this.focusTrapsTracker.current === this) {
-      if (this.focusTrapBeltEl.contains(event.target)) {
+      if (event.target && this.focusTrapBeltEl.contains(event.target)) {
+        if (event.target && event.target !== this.focusTrapBeltEl && event.target !== this.focusReversalEl) {
+          this.lastFocusedChildEl = event.target;
+        }
         // this will happen when the focus is already within the trap belt
         if (this.isShiftTabRegistered && event.target === this.focusTrapBeltEl) {
           this.focusReversalEl.focus();
@@ -62,14 +66,15 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
           this.focusTrapBeltEl.focus();
         }
       } else {
-        // this will happen when focus is outside of the trap belt for the first time
         if (this.isShiftTabRegistered) {
-          this.focusReversalEl.focus();
+          this.lastFocusedChildEl ? this.lastFocusedChildEl.focus() : this.focusReversalEl.focus();
         } else {
-          this.focusTrapBeltEl.focus();
+          this.lastFocusedChildEl ? this.lastFocusedChildEl.focus() : this.focusTrapBeltEl.focus();
         }
       }
     }
+
+    // This should be reset to its original value on each focusin event.
     this.isShiftTabRegistered = false;
   }
 
@@ -81,7 +86,7 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
     this.renderer.appendChild(this.focusTrapBeltEl, this.focusReversalEl);
   }
 
-  public setPreviousFocus(): void {
+  private setPreviousFocus(): void {
     if (this.previousActiveElement && this.previousActiveElement.focus) {
       this.previousActiveElement.focus();
     }
