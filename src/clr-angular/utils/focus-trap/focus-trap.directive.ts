@@ -55,14 +55,14 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
   onFocusIn(event: any) {
     if (this.focusTrapsTracker.current === this) {
       if (this.focusTrapBeltEl.contains(event.target)) {
-        // this will happen when focus when the focus was already within the trap belt
+        // this will happen when the focus is already within the trap belt
         if (this.isShiftTabRegistered && event.target === this.focusTrapBeltEl) {
           this.focusReversalEl.focus();
         } else if (!this.isShiftTabRegistered && event.target === this.focusReversalEl) {
           this.focusTrapBeltEl.focus();
         }
       } else {
-        // this will happen when focus was outside of the trap belt for the first time
+        // this will happen when focus is outside of the trap belt for the first time
         if (this.isShiftTabRegistered) {
           this.focusReversalEl.focus();
         } else {
