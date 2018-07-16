@@ -16,6 +16,7 @@ import {
 } from '@angular/core';
 
 import { FocusTrapTracker } from './focus-trap-tracker.service';
+import { Renderer2 } from '@angular/core';
 
 @Directive({ selector: '[clrFocusTrap]' })
 export class FocusTrapDirective implements AfterViewInit, OnDestroy {
@@ -24,30 +25,61 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
   private document: Document;
 
   constructor(
-    public elementRef: ElementRef,
-    injector: Injector,
+    public el: ElementRef,
+    private injector: Injector,
     private focusTrapsTracker: FocusTrapTracker,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private renderer: Renderer2
   ) {
-    this.document = injector.get(DOCUMENT);
+    this.document = this.injector.get(DOCUMENT);
     this.focusTrapsTracker.current = this;
+
+    this.focusTrapBeltEl = el.nativeElement;
+
+    this.focusReversalEl = this.renderer.createElement('span');
+    this.renderer.setAttribute(this.focusReversalEl, 'tabindex', '0');
+    this.renderer.addClass(this.focusReversalEl, 'off-screen');
+  }
+
+  private focusTrapBeltEl: any;
+  private focusReversalEl: any;
+  private isShiftTabRegistered: boolean = false;
+
+  @HostListener('document:keydown.shift.tab')
+  onShiftTab() {
+    if (!this.isShiftTabRegistered) {
+      this.isShiftTabRegistered = true;
+    }
   }
 
   @HostListener('document:focusin', ['$event'])
   onFocusIn(event: any) {
-    const nativeElement: HTMLElement = this.elementRef.nativeElement;
-
-    if (this.focusTrapsTracker.current === this && !nativeElement.contains(event.target)) {
-      nativeElement.focus();
+    if (this.focusTrapsTracker.current === this) {
+      if (this.focusTrapBeltEl.contains(event.target)) {
+        // this will happen when focus when the focus was already within the trap belt
+        if (this.isShiftTabRegistered && event.target === this.focusTrapBeltEl) {
+          this.focusReversalEl.focus();
+        } else if (!this.isShiftTabRegistered && event.target === this.focusReversalEl) {
+          this.focusTrapBeltEl.focus();
+        }
+      } else {
+        // this will happen when focus was outside of the trap belt for the first time
+        if (this.isShiftTabRegistered) {
+          this.focusReversalEl.focus();
+        } else {
+          this.focusTrapBeltEl.focus();
+        }
+      }
     }
+    this.isShiftTabRegistered = false;
   }
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this._previousActiveElement = <HTMLElement>document.activeElement;
-      const nativeElement: HTMLElement = this.elementRef.nativeElement;
-      nativeElement.setAttribute('tabindex', '0');
+      this.focusTrapBeltEl.setAttribute('tabindex', '0');
     }
+    this.renderer.appendChild(this.focusTrapBeltEl, this.focusReversalEl);
   }
 
   public setPreviousFocus(): void {
