@@ -3,7 +3,7 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -16,11 +16,15 @@ import { ClrModalModule } from '../../modal/modal.module';
 import { FocusTrapDirective } from './focus-trap.directive';
 import { ClrFocusTrapModule } from './focus-trap.module';
 
-describe('FocusTrap', () => {
+fdescribe('FocusTrap', () => {
   let fixture: ComponentFixture<any>;
   let compiled: any;
   let component: TestComponent;
-  let directive: FocusTrapDirective;
+
+  let directiveDebugElement: DebugElement;
+  let directiveElement: any;
+  let directiveInstance: FocusTrapDirective;
+
   let lastInput: HTMLElement;
   const tabEvent = { shiftKey: false, keyCode: 9, preventDefault: () => {} };
 
@@ -30,9 +34,13 @@ describe('FocusTrap', () => {
 
       fixture = TestBed.createComponent(TestComponent);
       component = fixture.componentInstance;
-      fixture.detectChanges();
+
       compiled = fixture.nativeElement;
-      directive = fixture.debugElement.query(By.directive(FocusTrapDirective)).injector.get(FocusTrapDirective);
+      directiveDebugElement = fixture.debugElement.query(By.directive(FocusTrapDirective));
+      directiveElement = directiveDebugElement.nativeElement;
+      directiveInstance = directiveDebugElement.injector.get(FocusTrapDirective);
+
+      fixture.detectChanges();
 
       lastInput = compiled.querySelector('#last');
     });
@@ -42,20 +50,17 @@ describe('FocusTrap', () => {
     });
 
     it('should create directive', () => {
-      expect(directive).toBeTruthy();
+      expect(directiveInstance).toBeTruthy();
     });
 
     it('should add tabindex attribute with value zero', () => {
-      directive.ngAfterViewInit();
-      const element: HTMLElement = directive.elementRef.nativeElement;
-      expect(element.getAttribute('tabindex')).toEqual('0');
+      expect(directiveElement.getAttribute('tabindex')).toEqual('0');
     });
 
     it(`should focus on trappable element when tab key is pressed and last input is active`, () => {
-      const element = directive.elementRef.nativeElement;
       lastInput.focus();
-      directive.onFocusIn(tabEvent);
-      expect(document.activeElement).toEqual(element);
+      directiveInstance.onFocusIn(tabEvent);
+      expect(document.activeElement).toEqual(directiveElement);
     });
 
     itIgnore(['firefox'], `should keep focus within nested element with focus trap directive`, () => {
