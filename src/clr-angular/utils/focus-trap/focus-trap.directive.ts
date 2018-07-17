@@ -80,10 +80,13 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
         if (this.previousFocusedEl) {
           if (this.previousFocusedEl === this.focusReversalEl) {
             this.focusTrapBeltEl.focus();
+            this.simulateTab(true);
           } else if (this.previousFocusedEl === this.focusTrapBeltEl) {
             this.focusReversalEl.focus();
+            this.simulateTab(false);
           }
         } else {
+          // when focus is not registered at all
           if (!this.focusTrapBeltEl.contains(this.currentFocusedEl)) {
             this.focusReversalEl.focus();
             return;
@@ -91,6 +94,14 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
           this.focusTrapBeltEl.focus();
         }
       }
+    }
+  }
+
+  simulateTab(isForward: boolean) {
+    if (isForward) {
+      console.log('forward');
+    } else {
+      console.log('backward');
     }
   }
 
