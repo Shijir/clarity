@@ -42,40 +42,38 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
 
   private focusTrapBeltEl: any;
   private focusReversalEl: any;
-  private lastFocusedChildEl: any;
-  private isShiftTabRegistered: boolean = false;
 
-  @HostListener('document:keydown.shift.tab')
-  onShiftTab() {
-    if (!this.isShiftTabRegistered) {
-      this.isShiftTabRegistered = true;
-    }
-  }
+  private previousFocusedEl: any;
+  private currentFocusedEl: any;
 
   @HostListener('document:focusin', ['$event'])
   onFocusIn(event: any) {
+    this.previousFocusedEl = this.currentFocusedEl;
+    this.currentFocusedEl = event.target;
+
     if (this.focusTrapsTracker.current === this) {
-      if (event.target && this.focusTrapBeltEl.contains(event.target)) {
-        if (event.target && event.target !== this.focusTrapBeltEl && event.target !== this.focusReversalEl) {
-          this.lastFocusedChildEl = event.target;
-        }
-        // this will happen when the focus is already within the trap belt
-        if (this.isShiftTabRegistered && event.target === this.focusTrapBeltEl) {
-          this.focusReversalEl.focus();
-        } else if (!this.isShiftTabRegistered && event.target === this.focusReversalEl) {
+      // should only work in the current active focus trapper
+      if (this.focusTrapBeltEl.contains(this.currentFocusedEl)) {
+        if (
+          this.previousFocusedEl &&
+          this.currentFocusedEl === this.focusReversalEl &&
+          this.previousFocusedEl !== this.focusTrapBeltEl
+        ) {
+          // will shift focus to the trap belt element
           this.focusTrapBeltEl.focus();
         }
-      } else {
-        if (this.isShiftTabRegistered) {
-          this.lastFocusedChildEl ? this.lastFocusedChildEl.focus() : this.focusReversalEl.focus();
-        } else {
-          this.lastFocusedChildEl ? this.lastFocusedChildEl.focus() : this.focusTrapBeltEl.focus();
+        if (
+          this.previousFocusedEl &&
+          this.currentFocusedEl === this.focusTrapBeltEl &&
+          this.previousFocusedEl !== this.focusReversalEl
+        ) {
+          // will shift focus to the reversal element
+          this.focusReversalEl.focus();
         }
+      } else {
+        this.focusTrapBeltEl.focus();
       }
     }
-
-    // This should be reset to its original value on each focusin event.
-    this.isShiftTabRegistered = false;
   }
 
   ngAfterViewInit() {

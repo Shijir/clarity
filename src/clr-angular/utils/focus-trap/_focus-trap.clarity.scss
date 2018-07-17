@@ -1,0 +1,25 @@
+/*!
+ * Copyright (c) 2016-2017 VMware, Inc. All Rights Reserved.
+ * This software is released under MIT license.
+ * The full license information can be found in LICENSE in the root directory of this project.
+ *
+ * Clarity v@VERSION | MIT license | https://github.com/vmware/clarity
+ *
+ */
+
+@include exports('focus-trap.clarity') {
+  .tabbable-off-screen {
+    position: fixed;
+    border: none;
+    height: 1px;
+    width: 1px;
+
+    left: 0px;
+    top: -1px;
+
+    overflow: hidden;
+
+    padding: 0;
+    margin: 0 0 -1px 0;
+  }
+}
