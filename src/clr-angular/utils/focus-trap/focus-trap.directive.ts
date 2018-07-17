@@ -40,6 +40,7 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
     this.renderer.addClass(this.focusReversalEl, 'off-screen');
   }
 
+  private firstFocusRegisterd = false;
   private focusTrapBeltEl: any;
   private focusReversalEl: any;
 
@@ -51,13 +52,17 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
     this.previousFocusedEl = this.currentFocusedEl;
     this.currentFocusedEl = event.target;
 
+    console.log('previous', this.previousFocusedEl);
+    console.log('current', this.currentFocusedEl);
+
     if (this.focusTrapsTracker.current === this) {
       // should only work in the current active focus trapper
       if (this.focusTrapBeltEl.contains(this.currentFocusedEl)) {
         if (
           this.previousFocusedEl &&
           this.currentFocusedEl === this.focusReversalEl &&
-          this.previousFocusedEl !== this.focusTrapBeltEl
+          this.previousFocusedEl !== this.focusTrapBeltEl &&
+          this.focusTrapBeltEl.contains(this.previousFocusedEl)
         ) {
           // will shift focus to the trap belt element
           this.focusTrapBeltEl.focus();
@@ -65,13 +70,26 @@ export class FocusTrapDirective implements AfterViewInit, OnDestroy {
         if (
           this.previousFocusedEl &&
           this.currentFocusedEl === this.focusTrapBeltEl &&
-          this.previousFocusedEl !== this.focusReversalEl
+          this.previousFocusedEl !== this.focusReversalEl &&
+          this.focusTrapBeltEl.contains(this.previousFocusedEl)
         ) {
           // will shift focus to the reversal element
           this.focusReversalEl.focus();
         }
       } else {
-        this.focusTrapBeltEl.focus();
+        if (this.previousFocusedEl) {
+          if (this.previousFocusedEl === this.focusReversalEl) {
+            this.focusTrapBeltEl.focus();
+          } else if (this.previousFocusedEl === this.focusTrapBeltEl) {
+            this.focusReversalEl.focus();
+          }
+        } else {
+          if (!this.focusTrapBeltEl.contains(this.currentFocusedEl)) {
+            this.focusReversalEl.focus();
+            return;
+          }
+          this.focusTrapBeltEl.focus();
+        }
       }
     }
   }
