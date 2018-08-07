@@ -61,8 +61,14 @@ export class ClrDragEventListener<T> {
     private customDragEvent(element: Node, startOnEvent: string, moveOnEvent: string, endOnEvent: string): () => void {
         let moveListener: () => void;
         let endListener: () => void;
+        let selecStartListener: () => void;
 
         return this.renderer.listen(element, startOnEvent, () => {
+            // This is needed to disable selection during dragging in IE11.
+            selecStartListener = this.renderer.listen("document", "selectstart", (selectEvent: Event) => {
+                selectEvent.preventDefault();
+            });
+
             moveListener = this.ngZone.runOutsideAngular(() => {
                 return this.renderer.listen("document", moveOnEvent, (moveEvent: MouseEvent|TouchEvent) => {
                     moveEvent.preventDefault();
@@ -86,8 +92,9 @@ export class ClrDragEventListener<T> {
             });
 
             endListener = this.renderer.listen("document", endOnEvent, (endEvent: MouseEvent|TouchEvent) => {
-                moveListener();  // Unregister from mouseMove or touchMove
-                endListener();   // Unregister from mouseUp or touchEnd
+                moveListener();        // Unregister from mouseMove or touchMove
+                endListener();         // Unregister from mouseUp or touchEnd
+                selecStartListener();  // Unregister from selectStart
 
                 if (this.hasDragStarted) {
                     // Fire "dragend" only if dragstart is registered
