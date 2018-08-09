@@ -50,6 +50,7 @@ import {DatagridHeaderRenderer} from "./render/header-renderer";
 import {DatagridMainRenderer} from "./render/main-renderer";
 import {DatagridRowRenderer} from "./render/row-renderer";
 import {DatagridTableRenderer} from "./render/table-renderer";
+import {ClrDragAndDropModule} from "../../utils/drag-and-drop/drag-and-drop.module";
 
 export const CLR_DATAGRID_DIRECTIVES: Type<any>[] = [
     // Core
@@ -75,7 +76,7 @@ export const CLR_DATAGRID_DIRECTIVES: Type<any>[] = [
 @NgModule({
     imports: [
         CommonModule, ClrIconModule, ClrFormsModule, FormsModule, ClrCommonPopoverModule, ClrLoadingModule,
-        ClrOutsideClickModule
+        ClrOutsideClickModule, ClrDragAndDropModule
     ],
     declarations: [
         CLR_DATAGRID_DIRECTIVES,
