@@ -14,10 +14,11 @@ import {DatagridRenderOrganizer} from "./render-organizer";
 
 @Directive({selector: "clr-dg-column"})
 export class DatagridHeaderRenderer implements OnDestroy {
-    constructor(private el: ElementRef, private renderer: Renderer2, organizer: DatagridRenderOrganizer,
+    constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer,
                 private domAdapter: DomAdapter, private columnResizer: DatagridColumnResizer) {
         this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
         this.subscriptions.push(organizer.detectStrictWidths.subscribe(() => this.detectStrictWidth()));
+        this.subscriptions.push(organizer.positionOrders.subscribe(() => this.setPositionOrder()));
     }
 
     private subscriptions: Subscription[] = [];
@@ -25,6 +26,8 @@ export class DatagridHeaderRenderer implements OnDestroy {
     /**
      * Indicates if the column has a strict width, so it doesn't shrink or expand based on the content.
      */
+    private domPositionOrder: number;
+
     public strictWidth: number;
     private widthSet: boolean = false;
 
@@ -72,7 +75,14 @@ export class DatagridHeaderRenderer implements OnDestroy {
         this.widthSet = true;
     }
 
-    public setOrder(order: number) {
-        this.renderer.setStyle(this.el.nativeElement, "order", order);
+    public setDomOrder(domOrder: number) {
+        // This method will be called by the main-renderer
+        this.domPositionOrder = domOrder;
+    }
+
+    public setPositionOrder() {
+        if(typeof this.domPositionOrder !== "undefined") {
+            this.renderer.setStyle(this.el.nativeElement, "order", this.organizer.orders[this.domPositionOrder]);
+        }
     }
 }
