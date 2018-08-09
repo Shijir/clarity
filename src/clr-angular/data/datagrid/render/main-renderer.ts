@@ -137,6 +137,12 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
         this.headers.forEach((header, index) => header.setWidth(this.organizer.widths[index].px));
     }
 
+    private setHeaderOrder(): void {
+        this.headers.forEach((header, index) => {
+            header.setOrder(index);
+        });
+    }
+
     /**
      * Indicates if we want to re-compute columns width. This should only happen:
      * 1) When headers change, with columns being added or removed
@@ -178,5 +184,8 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             this.organizer.resize();
             this.columnsSizesStable = true;
         }
+
+        // set initial order of the columns
+        this.setHeaderOrder();
     }
 }

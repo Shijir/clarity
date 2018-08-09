@@ -71,4 +71,8 @@ export class DatagridHeaderRenderer implements OnDestroy {
         this.renderer.setStyle(this.el.nativeElement, "width", width + "px");
         this.widthSet = true;
     }
+
+    public setOrder(order: number) {
+        this.renderer.setStyle(this.el.nativeElement, "order", order);
+    }
 }
