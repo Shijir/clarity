@@ -11,15 +11,29 @@ import {DatagridRenderOrganizer} from "./render-organizer";
 
 @Directive({selector: "clr-dg-cell"})
 export class DatagridCellRenderer implements OnDestroy {
-    constructor(private el: ElementRef, private renderer: Renderer2, organizer: DatagridRenderOrganizer) {
-        this.subscription = organizer.clearWidths.subscribe(() => this.clearWidth());
+    private subscriptions: Subscription[] = [];
+
+    constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer) {
+        this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
+        this.subscriptions.push(organizer.positionOrders.subscribe(() => this.setPositionOrder()));
     }
 
     private domPositionOrder: number;
 
-    private subscription: Subscription;
+    public setDomOrder(domOrder: number) {
+        // This method will be called by the row-renderer
+        this.domPositionOrder = domOrder;
+    }
+
+    public setPositionOrder() {
+        if(typeof this.domPositionOrder !== "undefined") {
+            this.renderer.setStyle(this.el.nativeElement, "order", this.organizer.orders[this.domPositionOrder]);
+        }
+    }
+
+
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     private clearWidth() {

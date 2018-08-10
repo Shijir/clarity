@@ -59,6 +59,9 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             this.columnsSizesStable = false;
             this.stabilizeColumns();
         }));
+
+        // set initial order of the header
+        this.setHeaderOrder();
     }
 
     ngAfterViewChecked() {
@@ -186,8 +189,6 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             this.columnsSizesStable = true;
         }
 
-        // set initial order of the columns
-        this.setHeaderOrder();
         this.organizer.positionOrders.next();
     }
 }
