@@ -17,6 +17,7 @@ import {DragDispatcher} from "./providers/drag-dispatcher";
 import {FiltersProvider} from "./providers/filters";
 import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
+import {DatagridHeaderRenderer} from "./render/header-renderer";
 
 let nbCount: number = 0;
 
@@ -24,7 +25,7 @@ let nbCount: number = 0;
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-flex" clrDraggable clrDroppable>
+        <div class="datagrid-column-flex" [clrDraggable]="domIndex" clrDroppable (clrDrop)="onDrop($event)">
             <!-- I'm really not happy with that select since it's not very scalable -->
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
@@ -53,7 +54,7 @@ let nbCount: number = 0;
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private headerRenderer: DatagridHeaderRenderer) {
         super(filters);
         this._sortSubscription = _sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -72,6 +73,15 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         this.columnId = "dg-col-" + nbCount.toString();  // Approximate a GUID
         nbCount++;
         // put index here
+    }
+
+
+    get domIndex() {
+        return this.headerRenderer.domPositionOrder;
+    }
+
+    onDrop(event) {
+        console.log(event.dragDataTransfer, this.domIndex);
     }
 
     /**

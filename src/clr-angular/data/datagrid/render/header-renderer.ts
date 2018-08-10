@@ -30,7 +30,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
     public strictWidth: number;
     private widthSet: boolean = false;
 
-    private domPositionOrder: number;
+    public domPositionOrder: number;
 
 
     ngOnDestroy() {
