@@ -11,11 +11,12 @@ import {DomAdapter} from "../../../utils/dom-adapter/dom-adapter";
 import {DatagridColumnResizer} from "./column-resizer";
 import {STRICT_WIDTH_CLASS} from "./constants";
 import {DatagridRenderOrganizer} from "./render-organizer";
+import {ColumnOrder} from "../providers/column-order";
 
 @Directive({selector: "clr-dg-column"})
 export class DatagridHeaderRenderer implements OnDestroy {
     constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer,
-                private domAdapter: DomAdapter, private columnResizer: DatagridColumnResizer) {
+                private domAdapter: DomAdapter, private columnResizer: DatagridColumnResizer, private columnOrder: ColumnOrder) {
         this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
         this.subscriptions.push(organizer.detectStrictWidths.subscribe(() => this.detectStrictWidth()));
         this.subscriptions.push(organizer.positionOrders.subscribe(() => this.setPositionOrder()));
@@ -30,7 +31,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
     public strictWidth: number;
     private widthSet: boolean = false;
 
-    public domPositionOrder: number;
+
 
 
     ngOnDestroy() {
@@ -76,14 +77,14 @@ export class DatagridHeaderRenderer implements OnDestroy {
         this.widthSet = true;
     }
 
-    public setDomOrder(domOrder: number) {
+    public setDomOrder(domIndex: number) {
         // This method will be called by the main-renderer
-        this.domPositionOrder = domOrder;
+        this.columnOrder.domIndex = domIndex;
     }
 
     public setPositionOrder() {
-        if(typeof this.domPositionOrder !== "undefined") {
-            this.renderer.setStyle(this.el.nativeElement, "order", this.organizer.orders[this.domPositionOrder]);
+        if(typeof this.columnOrder.domIndex !== "undefined") {
+            this.renderer.setStyle(this.el.nativeElement, "order", this.organizer.orders[this.columnOrder.domIndex]);
         }
     }
 }

@@ -142,7 +142,10 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
 
     private setHeaderOrder(): void {
         this.headers.forEach((header, index) => {
+
             header.setDomOrder(index);
+
+            // this is where we initially set the original column positions.
             this.organizer.orders.push(index);
         });
     }

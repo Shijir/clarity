@@ -18,6 +18,7 @@ import {FiltersProvider} from "./providers/filters";
 import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
 import {DatagridHeaderRenderer} from "./render/header-renderer";
+import {ColumnOrder} from "./providers/column-order";
 
 let nbCount: number = 0;
 
@@ -50,11 +51,12 @@ let nbCount: number = 0;
             </div>
         </div>
     `,
-    host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"}
+    host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},
+    providers: [ColumnOrder]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private headerRenderer: DatagridHeaderRenderer) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder) {
         super(filters);
         this._sortSubscription = _sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -77,11 +79,11 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
 
     get domIndex() {
-        return this.headerRenderer.domPositionOrder;
+        return this.columnOrder.domIndex;
     }
 
     onDrop(event) {
-        console.log(event.dragDataTransfer, this.domIndex);
+        this.columnOrder.swapWith(event.dragDataTransfer);
     }
 
     /**
