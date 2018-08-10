@@ -26,10 +26,11 @@ export class DatagridHeaderRenderer implements OnDestroy {
     /**
      * Indicates if the column has a strict width, so it doesn't shrink or expand based on the content.
      */
-    private domPositionOrder: number;
 
     public strictWidth: number;
     private widthSet: boolean = false;
+
+    private domPositionOrder: number;
 
 
     ngOnDestroy() {

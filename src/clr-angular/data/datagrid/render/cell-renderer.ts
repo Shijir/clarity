@@ -15,6 +15,8 @@ export class DatagridCellRenderer implements OnDestroy {
         this.subscription = organizer.clearWidths.subscribe(() => this.clearWidth());
     }
 
+    private domPositionOrder: number;
+
     private subscription: Subscription;
     ngOnDestroy() {
         this.subscription.unsubscribe();
