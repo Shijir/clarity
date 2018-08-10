@@ -24,7 +24,7 @@ let nbCount: number = 0;
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-flex" clrDraggable>
+        <div class="datagrid-column-flex" clrDraggable clrDroppable>
             <!-- I'm really not happy with that select since it's not very scalable -->
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
