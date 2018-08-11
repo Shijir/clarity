@@ -35,7 +35,7 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     private setCellOrder(): void {
         // assigns each cells their order numbers
         this.cells.forEach((cell, index) => {
-            cell.setDomOrder(index);
+            cell.domIndex = index;
         });
     }
 
