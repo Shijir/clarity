@@ -10,24 +10,13 @@ import {DatagridRenderOrganizer} from "../render/render-organizer";
 
 @Injectable()
 export class ColumnOrder {
-    _domIndex: number;
+    readonly domIndex: number;
     flexOrder: number;
-
-    set domIndex(value: number) {
-        if(!this._domIndex) {
-            this._domIndex = value;
-            this.flexOrder = value;
-        }
-    }
-
-    get domIndex() {
-        return this._domIndex;
-    }
 
     constructor(private organizer: DatagridRenderOrganizer) {}
 
     swapWith(indexDraggedFrom: number) {
-        const indexDraggedTo: number = this._domIndex;
+        const indexDraggedTo: number = this.domIndex;
 
         if(indexDraggedTo>indexDraggedFrom) {
             console.log("forward move");
