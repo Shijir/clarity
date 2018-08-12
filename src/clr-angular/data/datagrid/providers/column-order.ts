@@ -7,23 +7,39 @@
 
 import {Injectable} from "@angular/core";
 import {DatagridRenderOrganizer} from "../render/render-organizer";
+import index from "@angular/cli/lib/cli";
 
 @Injectable()
 export class ColumnOrder {
     readonly domIndex: number;
-    flexOrder: number;
 
-    constructor(private organizer: DatagridRenderOrganizer) {}
+    constructor(private organizer: DatagridRenderOrganizer) {
+    }
+
+    orderBeforeArrangement:number[];
+
+    visualOrder(domIndex: number) {
+        return this.orderBeforeArrangement[domIndex];
+    }
 
     swapWith(indexDraggedFrom: number) {
-        const indexDraggedTo: number = this.domIndex;
 
-        if(indexDraggedTo>indexDraggedFrom) {
-            console.log("forward move");
-        }else{
-            console.log("backward move");
+        this.orderBeforeArrangement = this.organizer.orders.slice(); // copy unaltered array first
+
+        if (this.visualOrder(this.domIndex) - this.visualOrder(indexDraggedFrom) > 0) {
+
+            for (let i = this.visualOrder(indexDraggedFrom) + 1; i <= this.visualOrder(this.domIndex); i++) {
+                const domIndex = this.orderBeforeArrangement.indexOf(i);
+                this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] - 1;
+
+            }
+
+            this.organizer.orders[indexDraggedFrom] = this.visualOrder(this.domIndex);
+
         }
 
-        //this.organizer.positionOrders.next();
+        console.log(this.organizer.orders);
+
+        this.organizer.positionOrders.next();
     }
 }
