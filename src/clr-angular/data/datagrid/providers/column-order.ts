@@ -7,7 +7,6 @@
 
 import {Injectable} from "@angular/core";
 import {DatagridRenderOrganizer} from "../render/render-organizer";
-import index from "@angular/cli/lib/cli";
 
 @Injectable()
 export class ColumnOrder {
@@ -31,14 +30,14 @@ export class ColumnOrder {
             for (let i = this.visualOrder(indexDraggedFrom) + 1; i <= this.visualOrder(this.domIndex); i++) {
                 const domIndex = this.orderBeforeArrangement.indexOf(i);
                 this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] - 1;
-
+                console.log(i);
             }
 
             this.organizer.orders[indexDraggedFrom] = this.visualOrder(this.domIndex);
 
         }
 
-        console.log(this.organizer.orders);
+        //console.log(this.organizer.orders);
 
         this.organizer.positionOrders.next();
     }
