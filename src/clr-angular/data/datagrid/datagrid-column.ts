@@ -87,7 +87,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
 
-        this.columnOrder.swapWith(event.dragDataTransfer);
+        this.columnOrder.receivedDropFrom(event.dragDataTransfer);
     }
 
     /**

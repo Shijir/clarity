@@ -21,7 +21,7 @@ export class ColumnOrder {
         return this.orderBeforeArrangement[domIndex];
     }
 
-    swapWith(indexDraggedFrom: number) {
+    receivedDropFrom(indexDraggedFrom: number) {
 
         this.orderBeforeArrangement = this.organizer.orders.slice(); // copy unaltered array first
 
