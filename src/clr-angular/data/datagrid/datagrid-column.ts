@@ -26,7 +26,7 @@ let nbCount: number = 0;
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-flex" [clrDraggable]="domIndex" clrDroppable (clrDrop)="onDrop($event)">
+        <div class="datagrid-column-flex" [clrDraggable]="flexOrder" clrDroppable (clrDrop)="onDrop($event)">
             <!-- I'm really not happy with that select since it's not very scalable -->
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
@@ -78,15 +78,14 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
 
-    get domIndex() {
-        return this.columnOrder.domIndex;
+
+    get flexOrder() {
+        return this.columnOrder.flexOrder;
     }
 
     onDrop(event) {
-
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
-
         this.columnOrder.receivedDropFrom(event.dragDataTransfer);
     }
 

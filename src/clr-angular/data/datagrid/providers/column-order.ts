@@ -10,45 +10,51 @@ import {DatagridRenderOrganizer} from "../render/render-organizer";
 
 @Injectable()
 export class ColumnOrder {
-    public domIndex: number;
+    private _domIndex: number; //domIndex is the identity of the column
+
+    get domIndex(): number {
+        return this._domIndex;
+    }
+
+    set domIndex(value: number) {
+        if (!this._domIndex) {
+            this._domIndex = value;
+        }
+    }
+
+    get flexOrder() {
+        return this.organizer.orders.indexOf(this._domIndex);
+    }
 
     constructor(private organizer: DatagridRenderOrganizer) {
     }
 
-    private orderBeforeArrangement: number[];
 
-    private flexOrderAt(domIndex: number): number {
-        return this.orderBeforeArrangement[domIndex];
-    }
+    receivedDropFrom(flexOrderDraggedFrom: number) {
 
-    private domOrderOf(flexOrder: number): number {
-        return this.orderBeforeArrangement.indexOf(flexOrder);
-    }
-
-    receivedDropFrom(indexDraggedFrom: number) {
-
-        this.orderBeforeArrangement = this.organizer.orders.slice(); // copy unaltered array first
-
-        const flexOrderDraggedTo = this.flexOrderAt(this.domIndex);
-        const flexOrderDraggedFrom = this.flexOrderAt(indexDraggedFrom);
-
+        const flexOrderDraggedTo = this.flexOrder;
         const flexOrderDistance = flexOrderDraggedTo - flexOrderDraggedFrom;
-        // If the flex order distance is positive, it means a user dragged a column to the right direction.
-        // If the flex order distance is negative, it means a user dragged a column to the left direction.
+
+        if (flexOrderDistance === 0) {
+            return;
+        }
+
+        const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
 
         if (flexOrderDistance > 0) {
-            for (let i = flexOrderDraggedFrom + 1; i <= flexOrderDraggedTo; i++) {
-                const domIndex = this.domOrderOf(i);
-                this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] - 1;
+            for (let i = flexOrderDraggedFrom; i < flexOrderDraggedTo; i++) {
+                this.organizer.orders[i] = this.organizer.orders[i + 1];
             }
+
         } else if (flexOrderDistance < 0) {
-            for (let i = flexOrderDraggedFrom - 1; i >= flexOrderDraggedTo; i--) {
-                const domIndex = this.domOrderOf(i);
-                this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] + 1;
+            for (let i = flexOrderDraggedFrom; i > flexOrderDraggedTo; i--) {
+                this.organizer.orders[i] = this.organizer.orders[i - 1];
             }
         }
 
-        this.organizer.orders[indexDraggedFrom] = flexOrderDraggedTo;
+        this.organizer.orders[flexOrderDraggedTo] = domIndexDragged;
+
+        console.log(this.organizer.orders);
 
         this.organizer.positionOrders.next();
     }
