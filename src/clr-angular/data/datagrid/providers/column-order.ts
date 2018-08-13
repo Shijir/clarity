@@ -15,7 +15,7 @@ export class ColumnOrder {
     constructor(private organizer: DatagridRenderOrganizer) {
     }
 
-    private orderBeforeArrangement:number[];
+    private orderBeforeArrangement: number[];
 
     private flexOrderAt(domIndex: number): number {
         return this.orderBeforeArrangement[domIndex];
@@ -30,18 +30,18 @@ export class ColumnOrder {
         this.orderBeforeArrangement = this.organizer.orders.slice(); // copy unaltered array first
 
         const flexOrderDraggedTo = this.flexOrderAt(this.domIndex);
-        const flexOrderDraggedFrom  = this.flexOrderAt(indexDraggedFrom);
+        const flexOrderDraggedFrom = this.flexOrderAt(indexDraggedFrom);
 
         const flexOrderDistance = flexOrderDraggedTo - flexOrderDraggedFrom;
-        // if the flex order distance is positive, that means user dragged a column in the right direction.
-        // if it's negative, that means user dragged a column in the left direction.
+        // If the flex order distance is positive, it means a user dragged a column to the right direction.
+        // If the flex order distance is negative, it means a user dragged a column to the left direction.
 
         if (flexOrderDistance > 0) {
             for (let i = flexOrderDraggedFrom + 1; i <= flexOrderDraggedTo; i++) {
                 const domIndex = this.domOrderOf(i);
                 this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] - 1;
             }
-        }else if(flexOrderDistance < 0) {
+        } else if (flexOrderDistance < 0) {
             for (let i = flexOrderDraggedFrom - 1; i >= flexOrderDraggedTo; i--) {
                 const domIndex = this.domOrderOf(i);
                 this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] + 1;
