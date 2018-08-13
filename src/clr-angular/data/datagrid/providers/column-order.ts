@@ -41,8 +41,14 @@ export class ColumnOrder {
                 const domIndex = this.domOrderOf(i);
                 this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] - 1;
             }
-            this.organizer.orders[indexDraggedFrom] = flexOrderDraggedTo;
+        }else if(flexOrderDistance < 0) {
+            for (let i = flexOrderDraggedFrom - 1; i >= flexOrderDraggedTo; i--) {
+                const domIndex = this.domOrderOf(i);
+                this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] + 1;
+            }
         }
+
+        this.organizer.orders[indexDraggedFrom] = flexOrderDraggedTo;
 
         this.organizer.positionOrders.next();
     }
