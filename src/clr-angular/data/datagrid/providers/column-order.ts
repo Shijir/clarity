@@ -10,7 +10,7 @@ import {DatagridRenderOrganizer} from "../render/render-organizer";
 
 @Injectable()
 export class ColumnOrder {
-    readonly domIndex: number;
+    public domIndex: number;
 
     constructor(private organizer: DatagridRenderOrganizer) {
     }
