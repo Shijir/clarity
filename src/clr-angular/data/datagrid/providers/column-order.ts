@@ -31,31 +31,14 @@ export class ColumnOrder {
 
 
     receivedDropFrom(flexOrderDraggedFrom: number) {
-
         const flexOrderDraggedTo = this.flexOrder;
-        const flexOrderDistance = flexOrderDraggedTo - flexOrderDraggedFrom;
-
-        if (flexOrderDistance === 0) {
-            return;
-        }
-
         const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
+        this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, flexOrderDraggedTo);
+    }
 
-        if (flexOrderDistance > 0) {
-            for (let i = flexOrderDraggedFrom; i < flexOrderDraggedTo; i++) {
-                this.organizer.orders[i] = this.organizer.orders[i + 1];
-            }
-
-        } else if (flexOrderDistance < 0) {
-            for (let i = flexOrderDraggedFrom; i > flexOrderDraggedTo; i--) {
-                this.organizer.orders[i] = this.organizer.orders[i - 1];
-            }
-        }
-
-        this.organizer.orders[flexOrderDraggedTo] = domIndexDragged;
-
-        console.log(this.organizer.orders);
-
+    private shiftColumn(domIndex: number, from: number, to: number) {
+        this.organizer.orders.splice(from, 1);
+        this.organizer.orders.splice(to, 0, domIndex);
         this.organizer.positionOrders.next();
     }
 }
