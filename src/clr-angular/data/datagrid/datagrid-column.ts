@@ -78,6 +78,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
 
+    get isAtLast() {
+        return this.columnOrder.isAtLast;
+    }
+
 
     get flexOrder() {
         return this.columnOrder.flexOrder;

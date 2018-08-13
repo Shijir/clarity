@@ -26,6 +26,11 @@ export class ColumnOrder {
         return this.organizer.orders.indexOf(this._domIndex);
     }
 
+    get isAtLast() {
+        console.log(this.organizer.orders.length, this.flexOrder + 1);
+        return this.organizer.orders.length === this.flexOrder + 1;
+    }
+
     constructor(private organizer: DatagridRenderOrganizer) {
     }
 
