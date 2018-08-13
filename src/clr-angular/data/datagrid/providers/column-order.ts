@@ -17,7 +17,7 @@ export class ColumnOrder {
 
     orderBeforeArrangement:number[];
 
-    visualOrder(domIndex: number) {
+    flexOrder(domIndex: number) {
         return this.orderBeforeArrangement[domIndex];
     }
 
@@ -25,19 +25,20 @@ export class ColumnOrder {
 
         this.orderBeforeArrangement = this.organizer.orders.slice(); // copy unaltered array first
 
-        if (this.visualOrder(this.domIndex) - this.visualOrder(indexDraggedFrom) > 0) {
+        const flexOrderDraggedTo = this.flexOrder(this.domIndex);
+        const flexOrderDraggedFrom  = this.flexOrder(indexDraggedFrom);
 
-            for (let i = this.visualOrder(indexDraggedFrom) + 1; i <= this.visualOrder(this.domIndex); i++) {
+        const flexOrderDistance = flexOrderDraggedTo - flexOrderDraggedFrom;
+        // if the flex order distance is positive, that means user dragged a column in the right direction.
+        // if it's negative, that means user dragged a column in the left direction.
+
+        if (flexOrderDistance > 0) {
+            for (let i = flexOrderDraggedFrom + 1; i <= flexOrderDraggedTo; i++) {
                 const domIndex = this.orderBeforeArrangement.indexOf(i);
                 this.organizer.orders[domIndex] = this.orderBeforeArrangement[domIndex] - 1;
-                console.log(i);
             }
-
-            this.organizer.orders[indexDraggedFrom] = this.visualOrder(this.domIndex);
-
+            this.organizer.orders[indexDraggedFrom] = flexOrderDraggedTo;
         }
-
-        //console.log(this.organizer.orders);
 
         this.organizer.positionOrders.next();
     }
