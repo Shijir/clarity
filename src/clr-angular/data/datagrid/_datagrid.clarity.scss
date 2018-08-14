@@ -208,6 +208,23 @@
                 cursor: pointer;
             }
 
+            .datagrid-drop-line {
+                //Display
+                flex: 0 0 auto;
+
+                //Position
+                position: relative;
+                top: -$clr-datagrid-column-separator-expandby;
+                left: -0.5rem;
+
+                //Dims
+                width: 3px;
+                height: calc(100% + #{2*$clr-datagrid-column-separator-expandby});
+
+                //Others
+                background: red;
+            }
+
             .datagrid-column-separator {
                 $dg-padding-less-border: 0.5rem - $clr-rem-1px;
                 position: relative;

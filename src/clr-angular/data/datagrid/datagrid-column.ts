@@ -17,7 +17,6 @@ import {DragDispatcher} from "./providers/drag-dispatcher";
 import {FiltersProvider} from "./providers/filters";
 import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
-import {DatagridHeaderRenderer} from "./render/header-renderer";
 import {ColumnOrder} from "./providers/column-order";
 
 let nbCount: number = 0;
@@ -27,6 +26,7 @@ let nbCount: number = 0;
     selector: "clr-dg-column",
     template: `
         <div class="datagrid-column-flex" [clrDraggable]="flexOrder" clrDroppable (clrDrop)="onDrop($event)">
+            <div class="datagrid-drop-line"></div>
             <!-- I'm really not happy with that select since it's not very scalable -->
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
