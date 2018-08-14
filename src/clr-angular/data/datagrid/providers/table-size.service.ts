@@ -1,11 +1,10 @@
-
 /*
  * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import {isPlatformBrowser} from "@angular/common";
-import {ElementRef, Inject, Injectable, PLATFORM_ID} from "@angular/core";
+import {ElementRef, Injectable} from "@angular/core";
+import {DomAdapter} from "../../../utils/dom-adapter/dom-adapter";
 
 /**
  * @description
@@ -13,17 +12,16 @@ import {ElementRef, Inject, Injectable, PLATFORM_ID} from "@angular/core";
  */
 @Injectable()
 export class TableSizeService {
-    private tableRef: Element;
+    private tableEl: any;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+    constructor(private domAdapter: DomAdapter) {}
+
     public set table(table: ElementRef) {
-        if (isPlatformBrowser(this.platformId) && table.nativeElement) {
-            this.tableRef = table.nativeElement.querySelector(".datagrid-table");
-        }
+        this.tableEl = table.nativeElement;
     }
 
     // Used when resizing columns to show the column border being dragged.
     getColumnDragHeight(): string {
-        return `${this.tableRef.clientHeight}px`;
+        return `${this.domAdapter.clientRect(this.tableEl).height}px`;
     }
 }

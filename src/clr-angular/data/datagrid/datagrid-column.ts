@@ -18,6 +18,7 @@ import {FiltersProvider} from "./providers/filters";
 import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
 import {ColumnOrder} from "./providers/column-order";
+import {TableSizeService} from "./providers/table-size.service";
 
 let nbCount: number = 0;
 
@@ -25,8 +26,10 @@ let nbCount: number = 0;
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-flex" [clrDraggable]="flexOrder" clrDroppable (clrDrop)="onDrop($event)">
-            <div class="datagrid-drop-line"></div>
+        <div class="datagrid-column-flex" [clrDraggable]="flexOrder">
+            <div class="datagrid-header-droppable" clrDroppable (clrDragEnter)="displayDragEnterLine()" (clrDrop)="onDrop($event)" clrDropTolerance="0 50">
+                <div class="datagrid-dragenter-line"></div>
+            </div>
             <!-- I'm really not happy with that select since it's not very scalable -->
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
@@ -56,7 +59,7 @@ let nbCount: number = 0;
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService) {
         super(filters);
         this._sortSubscription = _sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -75,6 +78,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         this.columnId = "dg-col-" + nbCount.toString();  // Approximate a GUID
         nbCount++;
         // put index here
+    }
+
+    displayDragEnterLine() {
+        console.log(this.tableSizeService.getColumnDragHeight());
     }
 
 

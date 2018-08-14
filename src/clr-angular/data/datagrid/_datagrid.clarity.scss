@@ -208,7 +208,7 @@
                 cursor: pointer;
             }
 
-            .datagrid-drop-line {
+            .datagrid-header-droppable {
                 //Display
                 flex: 0 0 auto;
 
@@ -218,11 +218,22 @@
                 left: -0.5rem;
 
                 //Dims
-                width: 3px;
+                width: 1px;
                 height: calc(100% + #{2*$clr-datagrid-column-separator-expandby});
 
-                //Others
-                background: red;
+                .datagrid-dragenter-line{
+                    //Position
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+
+                    //Dims
+                    width: 3px;
+                    height: 100%;
+
+                    //Others
+                    background: red;
+                }
             }
 
             .datagrid-column-separator {

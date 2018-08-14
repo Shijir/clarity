@@ -34,6 +34,7 @@ import {Sort} from "./providers/sort";
 import {StateDebouncer} from "./providers/state-debouncer.provider";
 import {StateProvider} from "./providers/state.provider";
 import {DatagridRenderOrganizer} from "./render/render-organizer";
+import {TableSizeService} from "./providers/table-size.service";
 
 @Component({
     selector: "clr-datagrid",
@@ -51,6 +52,7 @@ import {DatagridRenderOrganizer} from "./render/render-organizer";
         StateDebouncer,
         StateProvider,
         ColumnToggleButtonsService,
+        TableSizeService
     ],
     host: {"[class.datagrid-host]": "true"}
 })

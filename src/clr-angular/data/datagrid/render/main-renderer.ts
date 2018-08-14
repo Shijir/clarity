@@ -13,7 +13,7 @@ import {
     OnDestroy,
     PLATFORM_ID,
     QueryList,
-    Renderer2,
+    Renderer2
 } from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
 
@@ -24,6 +24,7 @@ import {Page} from "../providers/page";
 import {DatagridHeaderRenderer} from "./header-renderer";
 import {NoopDomAdapter} from "./noop-dom-adapter";
 import {DatagridRenderOrganizer} from "./render-organizer";
+import {TableSizeService} from "../providers/table-size.service";
 
 // Fixes build error
 // @dynamic (https://github.com/angular/angular/issues/19698#issuecomment-338340211)
