@@ -52,8 +52,8 @@ let nbCount: number = 0;
                 <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
                 <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
             </div>
-            <div class="datagrid-header-droppable" clrDroppable (clrDragEnter)="showDragEnterLine()" (clrDragLeave)="hideDragEnterLine()" (clrDrop)="onDrop($event)" clrDropTolerance="0 50">
-                <div class="datagrid-dragenter-line" #dragEnterLine></div>
+            <div class="datagrid-header-droppable" clrDroppable (clrDragEnter)="showDragEnterLine()" (clrDragLeave)="hideDragEnterLine()" (clrDrop)="notifyDropped($event)" clrDropTolerance="0 50">
+                <div class="datagrid-drop-line" #dragEnterLine></div>
             </div>
         </div>
     `,
@@ -103,7 +103,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         return this.columnOrder.flexOrder;
     }
 
-    onDrop(event) {
+    notifyDropped(event) {
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
         this.hideDragEnterLine();
