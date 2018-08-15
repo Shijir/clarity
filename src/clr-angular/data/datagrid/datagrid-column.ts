@@ -67,7 +67,7 @@ const DROP_TOLERANCE = "0 50";
                  (clrDragEnter)="showDragEnterLine()"
                  (clrDragLeave)="hideDragEnterLine()"
                  (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
-                <div class="datagrid-drop-line" #dragEnterLine></div>
+                <div class="datagrid-drop-line" #dropLine></div>
             </div>
         </div>
     `,
@@ -97,7 +97,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         // put index here
     }
 
-    @ViewChild("dragEnterLine") dragEnterLine: ElementRef;
+    @ViewChild("dropLine") dropLine: ElementRef;
 
     dropTolerance: any;
 
@@ -112,11 +112,11 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     showDragEnterLine() {
-        this.renderer.setStyle(this.dragEnterLine.nativeElement, "height", `${this.tableSizeService.getColumnDragHeight()}px`);
+        this.renderer.setStyle(this.dropLine.nativeElement, "height", `${this.tableSizeService.getColumnDragHeight()}px`);
     }
 
     hideDragEnterLine() {
-        this.renderer.setStyle(this.dragEnterLine.nativeElement, "height", `0px`);
+        this.renderer.setStyle(this.dropLine.nativeElement, "height", `0px`);
     }
 
 
