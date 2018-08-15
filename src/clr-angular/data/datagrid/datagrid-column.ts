@@ -4,7 +4,14 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import {
-    Component, ContentChild, ElementRef, EventEmitter, HostBinding, Input, Output, Renderer2,
+    Component,
+    ContentChild,
+    ElementRef,
+    EventEmitter,
+    HostBinding,
+    Input,
+    Output,
+    Renderer2,
     ViewChild
 } from "@angular/core";
 import {Subscription} from "rxjs/Subscription";
@@ -25,6 +32,7 @@ import {TableSizeService} from "./providers/table-size.service";
 
 let nbCount: number = 0;
 
+const DROP_TOLERANCE = "0 50";
 
 @Component({
     selector: "clr-dg-column",
@@ -34,14 +42,16 @@ let nbCount: number = 0;
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
             <clr-dg-string-filter
-                    *ngIf="field && !customFilter"
-                    [clrDgStringFilter]="registered"
-                    [(clrFilterValue)]="filterValue"></clr-dg-string-filter>
+                *ngIf="field && !customFilter"
+                [clrDgStringFilter]="registered"
+                [(clrFilterValue)]="filterValue"></clr-dg-string-filter>
 
-            <ng-template #columnTitle><ng-content></ng-content></ng-template>
+            <ng-template #columnTitle>
+                <ng-content></ng-content>
+            </ng-template>
 
             <button class="datagrid-column-title" *ngIf="sortable" (click)="sort()" type="button">
-               <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
+                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
             </button>
 
             <span class="datagrid-column-title" *ngIf="!sortable">
@@ -52,7 +62,11 @@ let nbCount: number = 0;
                 <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
                 <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
             </div>
-            <div class="datagrid-header-droppable" clrDroppable (clrDragEnter)="showDragEnterLine()" (clrDragLeave)="hideDragEnterLine()" (clrDrop)="notifyDropped($event)" clrDropTolerance="0 50">
+            <div class="datagrid-header-droppable" clrDroppable
+                 (clrDragStart)="determineNeighbor($event)"
+                 (clrDragEnter)="showDragEnterLine()"
+                 (clrDragLeave)="hideDragEnterLine()"
+                 (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
                 <div class="datagrid-drop-line" #dragEnterLine></div>
             </div>
         </div>
@@ -84,6 +98,18 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     @ViewChild("dragEnterLine") dragEnterLine: ElementRef;
+
+    dropTolerance: any;
+
+    determineNeighbor(event) {
+        const draggedFlexOrder = event.dragDataTransfer;
+
+        if (this.flexOrder === draggedFlexOrder || this.flexOrder === draggedFlexOrder - 1) {
+            this.dropTolerance = -1;
+        } else {
+            this.dropTolerance = DROP_TOLERANCE;
+        }
+    }
 
     showDragEnterLine() {
         this.renderer.setStyle(this.dragEnterLine.nativeElement, "height", `${this.tableSizeService.getColumnDragHeight()}px`);
@@ -187,7 +213,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     @Input("clrDgSortBy")
-    public set sortBy(comparator: ClrDatagridComparatorInterface<any>|string) {
+    public set sortBy(comparator: ClrDatagridComparatorInterface<any> | string) {
         if (typeof comparator === "string") {
             this._sortBy = new DatagridPropertyComparator(comparator);
         } else {
