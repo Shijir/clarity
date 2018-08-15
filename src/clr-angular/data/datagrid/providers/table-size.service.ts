@@ -21,7 +21,7 @@ export class TableSizeService {
     }
 
     // Used when resizing columns to show the column border being dragged.
-    getColumnDragHeight(): string {
-        return `${this.domAdapter.clientRect(this.tableEl).height}px`;
+    getColumnDragHeight(): number {
+        return this.domAdapter.clientRect(this.tableEl).height;
     }
 }

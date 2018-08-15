@@ -215,10 +215,14 @@
                 //Position
                 position: relative;
                 top: -$clr-datagrid-column-separator-expandby;
-                left: -0.5rem;
+                right: -0.5rem;
 
                 //Dims
-                width: 1px;
+
+                // This droppable area shouldn't be visible.
+                // Although it has no width, having the full spanning height of the column is important
+                // to have an ample space of droppable area. For the width, we will use dropTolerance.
+                width: 0;
                 height: calc(100% + #{2*$clr-datagrid-column-separator-expandby});
 
                 .datagrid-dragenter-line{
@@ -229,7 +233,7 @@
 
                     //Dims
                     width: 3px;
-                    height: 100%;
+                    height: 0;
 
                     //Others
                     background: red;
