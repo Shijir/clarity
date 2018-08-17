@@ -78,7 +78,7 @@ const DROP_TOLERANCE = "0 50";
         "reorderAnimation",
         [transition(
             "* => active",
-            [style({transform: "translateX(-100px)"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
+            [style({transform: "translateX({{translateX}})"}), animate("3s ease-in-out", style({transform: "translateX(0px)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
@@ -109,8 +109,12 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
             if (droppedData && this.columnOrder.domIndex !== droppedData.domIndex) {
 
                 // Columns that are between the drag range should be animated
-                if ((this.flexOrder >= droppedData.from && this.flexOrder <= droppedData.to) || (this.flexOrder <= droppedData.from && this.flexOrder >= droppedData.to)){
-                    this.reorderAnimation = "active";
+                if (this.flexOrder >= droppedData.from && this.flexOrder <= droppedData.to) {
+                    //this.reorderAnimation = "active";
+                    this.reorderAnimation =  {value: "active", params: {translateX: "300px"}};
+                } else if (this.flexOrder <= droppedData.from && this.flexOrder >= droppedData.to) {
+                    //this.reorderAnimation = "active";
+                    this.reorderAnimation =  {value: "active", params: {translateX: "-300px"}};
                 }
             }
         }));
@@ -120,11 +124,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     @ViewChild("dropLine") dropLine: ElementRef;
 
-    //@HostBinding("@reorder") leaveAnimConfig = {value: 0, params: {top: "0px", left: "0px"}};
     @HostBinding("@reorderAnimation") reorderAnimation;
 
     @HostListener("@reorderAnimation.done")
-    endreorderAnimation() {
+    resetReorderAnimation() {
         delete this.reorderAnimation;
     }
 
