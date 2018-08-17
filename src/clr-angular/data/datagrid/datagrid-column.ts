@@ -104,7 +104,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
         this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((domIndex: number) => {
             console.log(domIndex);
-            if(domIndex && this.columnOrder.domIndex !== domIndex) {
+            if(typeof domIndex === "number" && this.columnOrder.domIndex !== domIndex) {
                 this.reorderAnimation = "active";
             }
         }));
