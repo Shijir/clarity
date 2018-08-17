@@ -195,7 +195,6 @@
             background: none;
             border-bottom: 0;
 
-
             .datagrid-column-title {
                 @include clr-no-styles-button();
                 color: $clr-table-font-color;
@@ -207,6 +206,24 @@
             button.datagrid-column-title:hover {
                 text-decoration: underline;
                 cursor: pointer;
+            }
+
+            .draggable-ghost .datagrid-column-flex {
+                padding: 0.5rem;
+                background-color: $clr-thead-bgcolor;
+                border: solid 1px #bbb;
+                border-left: solid 2px $clr-action-purple-light;
+                box-shadow: 0 3px 4px rgba(116, 116, 116, 0.3);
+
+                .datagrid-column-separator {
+                    display: none;
+                }
+            }
+
+            .datagrid-column-flex {
+                &.being-dragged {
+                    opacity: 0.4;
+                }
             }
 
             .datagrid-header-droppable {
@@ -228,14 +245,14 @@
                 //Other
                 border: none;
 
-                .datagrid-drop-line{
+                .datagrid-drop-line {
                     //Position
                     position: absolute;
                     top: 0;
                     left: 0;
 
                     //Dims
-                    width: 3px;
+                    width: 0.125rem;
                     height: 0;
 
                     //Others
