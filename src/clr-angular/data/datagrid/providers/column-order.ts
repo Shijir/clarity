@@ -36,7 +36,12 @@ export class ColumnOrder {
 
 
     receivedDropFrom(flexOrderDraggedFrom: number) {
-        const flexOrderDraggedTo = this.flexOrder;
+        let flexOrderDraggedTo: number;
+        if (flexOrderDraggedFrom > this.flexOrder) {
+            flexOrderDraggedTo = this.flexOrder + 1;
+        } else {
+            flexOrderDraggedTo = this.flexOrder;
+        }
         const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
         this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, flexOrderDraggedTo);
     }
