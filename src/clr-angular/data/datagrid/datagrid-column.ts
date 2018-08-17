@@ -78,7 +78,7 @@ const DROP_TOLERANCE = "0 50";
         "reorderAnimation",
         [transition(
             "* => active",
-            [style({transform: "translateX(100px)"}), animate("5s ease-in-out", style({transform: "translateX(0px)"}))])])]
+            [style({transform: "translateX(-100px)"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
@@ -102,10 +102,16 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         nbCount++;
         // put index here
 
-        this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((domIndex: number) => {
-            console.log(domIndex);
-            if(typeof domIndex === "number" && this.columnOrder.domIndex !== domIndex) {
-                this.reorderAnimation = "active";
+        this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((droppedData: any) => {
+
+            // We should animate the columns that haven't been dragged.
+            // We should compare the domIndex to figure that out because the flexOrder at this point would be changed.
+            if (droppedData && this.columnOrder.domIndex !== droppedData.domIndex) {
+
+                // Columns that are between the drag range should be animated
+                if ((this.flexOrder >= droppedData.from && this.flexOrder <= droppedData.to) || (this.flexOrder <= droppedData.from && this.flexOrder >= droppedData.to)){
+                    this.reorderAnimation = "active";
+                }
             }
         }));
     }
@@ -116,7 +122,9 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     //@HostBinding("@reorder") leaveAnimConfig = {value: 0, params: {top: "0px", left: "0px"}};
     @HostBinding("@reorderAnimation") reorderAnimation;
-    @HostListener("@reorderAnimation.done") endreorderAnimation() {
+
+    @HostListener("@reorderAnimation.done")
+    endreorderAnimation() {
         delete this.reorderAnimation;
     }
 

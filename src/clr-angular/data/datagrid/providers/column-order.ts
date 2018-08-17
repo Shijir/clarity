@@ -53,6 +53,6 @@ export class ColumnOrder {
     private shiftColumn(domIndex: number, from: number, to: number) {
         this.organizer.orders.splice(from, 1);
         this.organizer.orders.splice(to, 0, domIndex);
-        this.organizer.positionOrders.next(domIndex);
+        this.organizer.positionOrders.next({domIndex, from, to});
     }
 }
