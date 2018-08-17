@@ -8,7 +8,7 @@ import {
     ContentChild,
     ElementRef,
     EventEmitter,
-    HostBinding,
+    HostBinding, HostListener,
     Input,
     Output,
     Renderer2,
@@ -29,6 +29,7 @@ import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
 import {ColumnOrder} from "./providers/column-order";
 import {TableSizeService} from "./providers/table-size.service";
+import {animate, state, style, transition, trigger} from "@angular/animations";
 
 let nbCount: number = 0;
 
@@ -72,7 +73,12 @@ const DROP_TOLERANCE = "0 50";
         </div>
     `,
     host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},
-    providers: [ColumnOrder]
+    providers: [ColumnOrder],
+    animations: [trigger(
+        "reorderAnimation",
+        [transition(
+            "* => active",
+            [style({transform: "translateX(100px)"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> {
@@ -98,6 +104,12 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     @ViewChild("dropLine") dropLine: ElementRef;
+
+    //@HostBinding("@reorder") leaveAnimConfig = {value: 0, params: {top: "0px", left: "0px"}};
+    @HostBinding("@reorderAnimation") reorderAnimation;
+    @HostListener("@reorderAnimation.done") endreorderAnimation() {
+        delete this.reorderAnimation;
+    }
 
     dropTolerance: any;
 
@@ -133,7 +145,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
         this.hideDragEnterLine();
-        this.columnOrder.receivedDropFrom(event.dragDataTransfer);
+
+        this.reorderAnimation = "active";
+
+        //this.columnOrder.receivedDropFrom(event.dragDataTransfer);
 
     }
 
