@@ -31,9 +31,6 @@ export class DatagridHeaderRenderer implements OnDestroy {
     public strictWidth: number;
     private widthSet: boolean = false;
 
-
-
-
     ngOnDestroy() {
         this.subscriptions.forEach(sub => sub.unsubscribe());
     }
@@ -51,6 +48,10 @@ export class DatagridHeaderRenderer implements OnDestroy {
         } else {
             this.strictWidth = this.domAdapter.userDefinedWidth(this.el.nativeElement);
         }
+    }
+
+    get clientWidth():number {
+        return this.domAdapter.clientRect(this.el.nativeElement).width;
     }
 
     public computeWidth(): number {

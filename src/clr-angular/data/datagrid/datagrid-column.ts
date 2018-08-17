@@ -30,6 +30,7 @@ import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
 import {ColumnOrder} from "./providers/column-order";
 import {TableSizeService} from "./providers/table-size.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {DomAdapter} from "../../utils/dom-adapter/dom-adapter";
 
 let nbCount: number = 0;
 
@@ -38,7 +39,7 @@ const DROP_TOLERANCE = "0 50";
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-flex" [clrDraggable]="flexOrder">
+        <div class="datagrid-column-flex" [clrDraggable]="dataOnReorder">
             <!-- I'm really not happy with that select since it's not very scalable -->
             <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
@@ -78,11 +79,11 @@ const DROP_TOLERANCE = "0 50";
         "reorderAnimation",
         [transition(
             "* => active",
-            [style({transform: "translateX({{translateX}})"}), animate("3s ease-in-out", style({transform: "translateX(0px)"}))])])]
+            [style({transform: "translateX({{translateX}})"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2, private domAdapter: DomAdapter, private el: ElementRef) {
         super(filters);
         this.subscriptions.push(_sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -102,19 +103,19 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         nbCount++;
         // put index here
 
-        this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((droppedData: any) => {
+        this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((dataOnReorder: any) => {
 
             // We should animate the columns that haven't been dragged.
             // We should compare the domIndex to figure that out because the flexOrder at this point would be changed.
-            if (droppedData && this.columnOrder.domIndex !== droppedData.domIndex) {
+            if (dataOnReorder && this.columnOrder.domIndex !== dataOnReorder.domIndex) {
 
                 // Columns that are between the drag range should be animated
-                if (this.flexOrder >= droppedData.from && this.flexOrder <= droppedData.to) {
+                if (this.flexOrder >= dataOnReorder.from && this.flexOrder <= dataOnReorder.to) {
                     //this.reorderAnimation = "active";
-                    this.reorderAnimation =  {value: "active", params: {translateX: "300px"}};
-                } else if (this.flexOrder <= droppedData.from && this.flexOrder >= droppedData.to) {
+                    this.reorderAnimation =  {value: "active", params: {translateX: `${dataOnReorder.width}px`}};
+                } else if (this.flexOrder <= dataOnReorder.from && this.flexOrder >= dataOnReorder.to) {
                     //this.reorderAnimation = "active";
-                    this.reorderAnimation =  {value: "active", params: {translateX: "-300px"}};
+                    this.reorderAnimation =  {value: "active", params: {translateX: `-${dataOnReorder.width}px`}};
                 }
             }
         }));
@@ -134,7 +135,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     dropTolerance: any;
 
     determineNeighbor(event) {
-        const draggedFlexOrder = event.dragDataTransfer;
+        const draggedFlexOrder = event.dragDataTransfer.flexOrder;
 
         if (this.flexOrder === draggedFlexOrder || this.flexOrder === draggedFlexOrder - 1) {
             this.dropTolerance = -1;
@@ -159,6 +160,14 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     get flexOrder() {
         return this.columnOrder.flexOrder;
+    }
+
+    get width() {
+        return this.domAdapter.clientRect(this.el.nativeElement).width;
+    }
+
+    get dataOnReorder() {
+        return {flexOrder: this.flexOrder, width: this.width};
     }
 
     notifyDropped(event) {

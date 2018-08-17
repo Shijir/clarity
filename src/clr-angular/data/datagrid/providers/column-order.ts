@@ -39,7 +39,8 @@ export class ColumnOrder {
     constructor(private organizer: DatagridRenderOrganizer) {
     }
 
-    receivedDropFrom(flexOrderDraggedFrom: number) {
+    receivedDropFrom(dataOnReorder: any) {
+        const flexOrderDraggedFrom = dataOnReorder.flexOrder;
         let flexOrderDraggedTo: number;
         if (flexOrderDraggedFrom > this.flexOrder) {
             flexOrderDraggedTo = this.flexOrder + 1;
@@ -47,12 +48,12 @@ export class ColumnOrder {
             flexOrderDraggedTo = this.flexOrder;
         }
         const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
-        this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, flexOrderDraggedTo);
+        this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, flexOrderDraggedTo, dataOnReorder.width);
     }
 
-    private shiftColumn(domIndex: number, from: number, to: number) {
+    private shiftColumn(domIndex: number, from: number, to: number, width: number) {
         this.organizer.orders.splice(from, 1);
         this.organizer.orders.splice(to, 0, domIndex);
-        this.organizer.positionOrders.next({domIndex, from, to});
+        this.organizer.positionOrders.next({domIndex, from, to, width});
     }
 }
