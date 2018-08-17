@@ -9,7 +9,7 @@ import {
     ElementRef,
     EventEmitter,
     HostBinding, HostListener,
-    Input,
+    Input, OnDestroy,
     Output,
     Renderer2,
     ViewChild
@@ -78,13 +78,13 @@ const DROP_TOLERANCE = "0 50";
         "reorderAnimation",
         [transition(
             "* => active",
-            [style({transform: "translateX(100px)"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
+            [style({transform: "translateX(100px)"}), animate("5s ease-in-out", style({transform: "translateX(0px)"}))])])]
 })
 
-export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> {
+export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
     constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2) {
         super(filters);
-        this._sortSubscription = _sort.change.subscribe(sort => {
+        this.subscriptions.push(_sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
             if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
                 this._sortOrder = ClrDatagridSortOrder.UNSORTED;
@@ -96,12 +96,21 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
                 this.sortedChange.emit(false);
             }
             // deprecated: to be removed - END
-        });
+        }));
 
         this.columnId = "dg-col-" + nbCount.toString();  // Approximate a GUID
         nbCount++;
         // put index here
+
+        this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((domIndex: number) => {
+            console.log(domIndex);
+            if(domIndex && this.columnOrder.domIndex !== domIndex) {
+                this.reorderAnimation = "active";
+            }
+        }));
     }
+
+    private subscriptions: Subscription[] = [];
 
     @ViewChild("dropLine") dropLine: ElementRef;
 
@@ -146,10 +155,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         // so event.dragDataTransfer is dragged index
         this.hideDragEnterLine();
 
-        this.reorderAnimation = "active";
-
-        //this.columnOrder.receivedDropFrom(event.dragDataTransfer);
-
+        this.columnOrder.receivedDropFrom(event.dragDataTransfer);
     }
 
     /**
@@ -193,7 +199,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     private _sortSubscription: Subscription;
 
     ngOnDestroy() {
-        this._sortSubscription.unsubscribe();
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     /*

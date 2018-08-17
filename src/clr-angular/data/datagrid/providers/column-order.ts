@@ -7,6 +7,7 @@
 
 import {Injectable} from "@angular/core";
 import {DatagridRenderOrganizer} from "../render/render-organizer";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class ColumnOrder {
@@ -31,9 +32,12 @@ export class ColumnOrder {
         return this.organizer.orders.length === this.flexOrder + 1;
     }
 
-    constructor(private organizer: DatagridRenderOrganizer) {
+    get columnOrderChange(): Observable<number> {
+        return this.organizer.positionOrders.asObservable();
     }
 
+    constructor(private organizer: DatagridRenderOrganizer) {
+    }
 
     receivedDropFrom(flexOrderDraggedFrom: number) {
         let flexOrderDraggedTo: number;
@@ -49,6 +53,6 @@ export class ColumnOrder {
     private shiftColumn(domIndex: number, from: number, to: number) {
         this.organizer.orders.splice(from, 1);
         this.organizer.orders.splice(to, 0, domIndex);
-        this.organizer.positionOrders.next();
+        this.organizer.positionOrders.next(domIndex);
     }
 }
