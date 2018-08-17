@@ -214,6 +214,7 @@
                 border: solid 1px #bbb;
                 border-left: solid 2px $clr-action-purple-light;
                 box-shadow: 0 3px 4px rgba(116, 116, 116, 0.3);
+                margin-top: calc(-0.5rem - 1px);
 
                 .datagrid-column-separator {
                     display: none;
@@ -252,7 +253,7 @@
                     left: 0;
 
                     //Dims
-                    width: 0.125rem;
+                    width: 2px;
                     height: 0;
 
                     //Others
