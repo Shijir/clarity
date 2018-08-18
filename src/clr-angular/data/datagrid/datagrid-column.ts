@@ -80,7 +80,7 @@ const DROP_TOLERANCE = "0 50";
             "reorderSelfAnimation",
             [transition(
                 "* => active",
-                [style({opacity: "0"}), animate("0.2s 0.2s ease-in-out", style({opacity: "1"}))])]),
+                [style({transform: "translateY(100px)"}), animate("0.2s ease-in-out", style({transform: "translateY(0px)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
