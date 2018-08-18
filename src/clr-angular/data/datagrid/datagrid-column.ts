@@ -75,11 +75,17 @@ const DROP_TOLERANCE = "0 50";
     `,
     host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},
     providers: [ColumnOrder],
-    animations: [trigger(
-        "reorderAnimation",
-        [transition(
-            "* => active",
-            [style({transform: "translateX({{translateX}})"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
+    animations: [
+        trigger(
+            "reorderSelfAnimation",
+            [transition(
+                "* => active",
+                [style({opacity: "0"}), animate("0.2s 0.2s ease-in-out", style({opacity: "1"}))])]),
+        trigger(
+            "reorderOthersAnimation",
+            [transition(
+                "* => active",
+                [style({transform: "translateX({{translateX}})"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
@@ -110,16 +116,16 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
             }
 
             if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
-                //start own animation
+                this.reorderSelfAnimation = "active";
             }
             else {
                 // Columns that are between the drag range should be animated
                 if (this.flexOrder >= dataOnReorder.from && this.flexOrder <= dataOnReorder.to) {
-                    //this.reorderAnimation = "active";
-                    this.reorderAnimation = {value: "active", params: {translateX: `${dataOnReorder.width}px`}};
+                    //this.reorderOthersAnimation = "active";
+                    this.reorderOthersAnimation = {value: "active", params: {translateX: `${dataOnReorder.width}px`}};
                 } else if (this.flexOrder <= dataOnReorder.from && this.flexOrder >= dataOnReorder.to) {
-                    //this.reorderAnimation = "active";
-                    this.reorderAnimation = {value: "active", params: {translateX: `-${dataOnReorder.width}px`}};
+                    //this.reorderOthersAnimation = "active";
+                    this.reorderOthersAnimation = {value: "active", params: {translateX: `-${dataOnReorder.width}px`}};
                 }
             }
         }));
@@ -129,11 +135,17 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     @ViewChild("dropLine") dropLine: ElementRef;
 
-    @HostBinding("@reorderAnimation") reorderAnimation;
+    @HostBinding("@reorderSelfAnimation") reorderSelfAnimation;
+    @HostBinding("@reorderOthersAnimation") reorderOthersAnimation;
 
-    @HostListener("@reorderAnimation.done")
-    resetReorderAnimation() {
-        delete this.reorderAnimation;
+    @HostListener("@reorderOthersAnimation.done")
+    resetReorderOthersAnimation() {
+        delete this.reorderOthersAnimation;
+    }
+
+    @HostListener("@reorderSelfAnimation.done")
+    resetReorderSelfAnimation() {
+        delete this.reorderSelfAnimation;
     }
 
     dropTolerance: any;
