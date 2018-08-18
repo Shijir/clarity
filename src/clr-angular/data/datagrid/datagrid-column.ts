@@ -111,21 +111,28 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
         this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((dataOnReorder: any) => {
 
+
             if (!dataOnReorder) {
                 return;
             }
 
+            const dropEvent = dataOnReorder.dropEvent;
+
             if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
                 this.reorderSelfAnimation = "active";
+                console.log(dropEvent);
             }
             else {
+
+                const dragDataTransfer = dropEvent.dragDataTransfer;
                 // Columns that are between the drag range should be animated
                 if (this.flexOrder >= dataOnReorder.from && this.flexOrder <= dataOnReorder.to) {
                     //this.reorderOthersAnimation = "active";
-                    this.reorderOthersAnimation = {value: "active", params: {translateX: `${dataOnReorder.width}px`}};
+
+                    this.reorderOthersAnimation = {value: "active", params: {translateX: `${dragDataTransfer.width}px`}};
                 } else if (this.flexOrder <= dataOnReorder.from && this.flexOrder >= dataOnReorder.to) {
                     //this.reorderOthersAnimation = "active";
-                    this.reorderOthersAnimation = {value: "active", params: {translateX: `-${dataOnReorder.width}px`}};
+                    this.reorderOthersAnimation = {value: "active", params: {translateX: `-${dragDataTransfer.width}px`}};
                 }
             }
         }));
@@ -190,7 +197,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
         this.hideDragEnterLine();
-        this.columnOrder.receivedDropFrom(event.dragDataTransfer);
+        this.columnOrder.receivedDropFrom(event);
     }
 
     /**
