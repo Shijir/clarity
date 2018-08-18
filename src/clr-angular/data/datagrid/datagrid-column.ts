@@ -80,12 +80,12 @@ const DROP_TOLERANCE = "0 50";
             "reorderSelfAnimation",
             [transition(
                 "* => active",
-                [style({transform: "translateY(100px)"}), animate("0.2s ease-in-out", style({transform: "translateY(0px)"}))])]),
+                [style({transform: "translate(100px, 100px)"}), animate("0.2s ease-in-out", style({transform: "translate(0, 0)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
                 "* => active",
-                [style({transform: "translateX({{translateX}})"}), animate("0.2s ease-in-out", style({transform: "translateX(0px)"}))])])]
+                [style({transform: "translate({{translateX}}, 0)"}), animate("0.2s ease-in-out", style({transform: "translate(0, 0)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
