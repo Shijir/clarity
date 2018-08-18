@@ -80,7 +80,7 @@ const DROP_TOLERANCE = "0 50";
             "reorderSelfAnimation",
             [transition(
                 "* => active",
-                [style({transform: "translate(100px, 100px)"}), animate("0.2s ease-in-out", style({transform: "translate(0, 0)"}))])]),
+                [style({transform: "translate({{translateX}}, {{translateY}})"}), animate("0.2s ease-in-out", style({transform: "translate(0, 0)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
@@ -119,7 +119,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
             const dropEvent = dataOnReorder.dropEvent;
 
             if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
-                this.reorderSelfAnimation = "active";
+                this.reorderSelfAnimation = {value: "active", params: {translateX: `${20}px`, translateY: `${20}px`}};
                 console.log(dropEvent);
             }
             else {
