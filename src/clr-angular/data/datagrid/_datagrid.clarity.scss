@@ -212,14 +212,13 @@
                 cursor: pointer;
             }
 
-            .draggable-ghost .datagrid-column-flex {
-                padding: 0.5rem 1rem;
+            .draggable-ghost .datagrid-column-wrapper {
+                width: 100%;
+                height: 100%;
                 background-color: $clr-thead-bgcolor;
                 border: solid 1px #bbb;
                 border-left: solid 2px $clr-action-purple-light;
                 box-shadow: 0 3px 4px rgba(116, 116, 116, 0.3);
-                margin-top: calc(-0.5rem - 1px);
-                margin-left: calc(-0.5rem - 1px);
 
                 .datagrid-column-separator {
                     display: none;
