@@ -39,37 +39,39 @@ const DROP_TOLERANCE = "0 50";
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-flex" [clrDraggable]="dataOnReorder">
-            <!-- I'm really not happy with that select since it's not very scalable -->
-            <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
+        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
+            <div class="datagrid-column-flex">
+                <!-- I'm really not happy with that select since it's not very scalable -->
+                <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
 
-            <clr-dg-string-filter
-                *ngIf="field && !customFilter"
-                [clrDgStringFilter]="registered"
-                [(clrFilterValue)]="filterValue"></clr-dg-string-filter>
+                <clr-dg-string-filter
+                    *ngIf="field && !customFilter"
+                    [clrDgStringFilter]="registered"
+                    [(clrFilterValue)]="filterValue"></clr-dg-string-filter>
 
-            <ng-template #columnTitle>
-                <ng-content></ng-content>
-            </ng-template>
+                <ng-template #columnTitle>
+                    <ng-content></ng-content>
+                </ng-template>
 
-            <button class="datagrid-column-title" *ngIf="sortable" (click)="sort()" type="button">
-                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
-            </button>
+                <button class="datagrid-column-title" *ngIf="sortable" (click)="sort()" type="button">
+                    <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
+                </button>
 
-            <span class="datagrid-column-title" *ngIf="!sortable">
+                <span class="datagrid-column-title" *ngIf="!sortable">
                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
             </span>
 
-            <div class="datagrid-column-separator">
-                <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
-                <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
-            </div>
-            <div class="datagrid-header-droppable" clrDroppable
-                 (clrDragStart)="determineNeighbor($event)"
-                 (clrDragEnter)="showDragEnterLine()"
-                 (clrDragLeave)="hideDragEnterLine()"
-                 (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
-                <div class="datagrid-drop-line" #dropLine></div>
+                <div class="datagrid-column-separator">
+                    <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
+                    <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
+                </div>
+                <div class="datagrid-header-droppable" clrDroppable
+                     (clrDragStart)="determineNeighbor($event)"
+                     (clrDragEnter)="showDragEnterLine()"
+                     (clrDragLeave)="hideDragEnterLine()"
+                     (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
+                    <div class="datagrid-drop-line" #dropLine></div>
+                </div>
             </div>
         </div>
     `,

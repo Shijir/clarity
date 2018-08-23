@@ -4,7 +4,7 @@
 
 @include exports('datagrid.clarity') {
     @include basic-table(".datagrid", ".datagrid-head", ".datagrid-body",
-        ".datagrid-row", ".datagrid-column", ".datagrid-cell");
+        ".datagrid-row", ".datagrid-column-wrapper", ".datagrid-cell");
 
     $clr-datagrid-icon-size: 0.583333rem;
     $clr-datagrid-action-arrow-size: 0.25rem;
@@ -194,6 +194,10 @@
             vertical-align: top;
             background: none;
             border-bottom: 0;
+
+            .datagrid-column-wrapper {
+                flex: 1 1 auto;
+            }
 
             .datagrid-column-title {
                 @include clr-no-styles-button();
