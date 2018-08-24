@@ -42,7 +42,13 @@ export class ColumnOrder {
     constructor(private organizer: DatagridRenderOrganizer) {
     }
 
-    receivedDropFrom(dropEvent: any) {
+    dropReceivedOnFirst(dropEvent: any) {
+        const flexOrderDraggedFrom = dropEvent.dragDataTransfer.flexOrder;
+        const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
+        this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, 0, dropEvent);
+    }
+
+    dropReceived(dropEvent: any) {
         const flexOrderDraggedFrom = dropEvent.dragDataTransfer.flexOrder;
 
         let flexOrderDraggedTo: number;

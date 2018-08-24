@@ -43,7 +43,7 @@ const DROP_TOLERANCE = "0 50";
              (clrDragStart)="determineNeighbor($event)"
              (clrDragEnter)="showHighlight(leftDropLine)"
              (clrDragLeave)="hideHighlight(leftDropLine)"
-             (clrDrop)="notifyDropOn(leftDropLine, $event)" [clrDropTolerance]="dropTolerance">
+             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropTolerance">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
         <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
@@ -78,7 +78,7 @@ const DROP_TOLERANCE = "0 50";
              (clrDragStart)="determineNeighbor($event)"
              (clrDragEnter)="showHighlight(rightDropLine)"
              (clrDragLeave)="hideHighlight(rightDropLine)"
-             (clrDrop)="notifyDropOn(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
+             (clrDrop)="notifyDrop(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
             <div class="datagrid-column-drop-line" #rightDropLine></div>
         </div>
     `,
@@ -205,11 +205,18 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         return {flexOrder: this.flexOrder, width: this.width};
     }
 
-    notifyDropOn(highlightEl: any, event: any) {
+    notifyDropOnFirst(highlightEl: any, event: any) {
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
         this.hideHighlight(highlightEl);
-        this.columnOrder.receivedDropFrom(event);
+        this.columnOrder.dropReceivedOnFirst(event);
+    }
+
+    notifyDrop(highlightEl: any, event: any) {
+        // event is one from dragged and dropped
+        // so event.dragDataTransfer is dragged index
+        this.hideHighlight(highlightEl);
+        this.columnOrder.dropReceived(event);
     }
 
     /**
