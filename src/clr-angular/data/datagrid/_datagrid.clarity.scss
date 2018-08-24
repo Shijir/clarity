@@ -260,7 +260,10 @@
                     height: 0;
 
                     //Others
-                    background: $clr-action-purple-dark;;
+                    background: $clr-action-purple-dark;
+                    &.in-last-column {
+                        left: -2px;
+                    }
                 }
             }
 

@@ -43,7 +43,7 @@ const DROP_TOLERANCE = "0 50";
              (clrDragStart)="determineNeighbor($event)"
              (clrDragEnter)="showHighlight(leftDropLine)"
              (clrDragLeave)="hideHighlight(leftDropLine)"
-             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="firstColumnDropTolerance">
+             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropToleranceOfFirst">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
         <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
@@ -79,7 +79,7 @@ const DROP_TOLERANCE = "0 50";
              (clrDragEnter)="showHighlight(rightDropLine)"
              (clrDragLeave)="hideHighlight(rightDropLine)"
              (clrDrop)="notifyDrop(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
-            <div class="datagrid-column-drop-line" #rightDropLine></div>
+            <div class="datagrid-column-drop-line" [class.in-last-column]="isLastColumn" #rightDropLine></div>
         </div>
     `,
     host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},
@@ -165,10 +165,16 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     dropTolerance: any;
-    readonly firstColumnDropTolerance = DROP_TOLERANCE;
+    dropToleranceOfFirst: any;
 
     determineNeighbor(event) {
         const draggedFlexOrder = event.dragDataTransfer.flexOrder;
+
+        if (this.flexOrder === draggedFlexOrder) {
+            this.dropToleranceOfFirst = Number.NEGATIVE_INFINITY;
+        }else{
+            this.dropToleranceOfFirst = DROP_TOLERANCE;
+        }
 
         if (this.flexOrder === draggedFlexOrder || this.flexOrder === draggedFlexOrder - 1) {
             // neighboring droppables on the right and left sides will have no drop tolerance now.
