@@ -89,7 +89,7 @@ const DROP_TOLERANCE = "0 50";
             "reorderSelfAnimation",
             [transition(
                 "* => active",
-                [style({transform: "translate({{translateX}}, {{translateY}})"}), animate("0.2s ease-in-out", style({transform: "translate(0, 0)"}))])]),
+                [style({transform: "translate({{translateX}}, {{translateY}})"}), animate("0.2s 200ms ease-in-out", style({transform: "translate(0, 0)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
