@@ -65,14 +65,14 @@ const DROP_TOLERANCE = "0 50";
                     <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
                     <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
                 </div>
-                <div class="datagrid-header-droppable" clrDroppable
-                     (clrDragStart)="determineNeighbor($event)"
-                     (clrDragEnter)="showDragEnterLine()"
-                     (clrDragLeave)="hideDragEnterLine()"
-                     (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
-                    <div class="datagrid-drop-line" #dropLine></div>
-                </div>
             </div>
+        </div>
+        <div class="datagrid-drop-line" clrDroppable
+             (clrDragStart)="determineNeighbor($event)"
+             (clrDragEnter)="showDragEnterLine()"
+             (clrDragLeave)="hideDragEnterLine()"
+             (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
+            <div class="drop-highlight" #dropLine></div>
         </div>
     `,
     host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},

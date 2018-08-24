@@ -197,6 +197,10 @@
 
             .datagrid-column-wrapper {
                 flex: 1 1 auto;
+
+                &.being-dragged {
+                    opacity: 0.4;
+                }
             }
 
             .datagrid-column-title {
@@ -225,32 +229,27 @@
                 }
             }
 
-            .datagrid-column-flex {
-                &.being-dragged {
-                    opacity: 0.4;
-                }
-            }
-
-            .datagrid-header-droppable {
+            .datagrid-drop-line {
                 //Display
                 flex: 0 0 auto;
 
                 //Position
                 position: relative;
-                top: -$clr-datagrid-column-separator-expandby;
-                right: -0.5rem;
+                top: 0;
+                right: 0;
 
                 //Dims
                 // This droppable area shouldn't be visible.
-                // Although it has no width, having the full spanning height of the column is important
-                // to have an ample space of droppable area. For the width, we will use dropTolerance.
+                // Although it has no width (we will use dropTolerance on the width), having the full spanning height of
+                // the column is important to have an ample space of droppable area.
                 width: 0;
-                height: calc(100% + #{2*$clr-datagrid-column-separator-expandby});
+                height: 100%;
 
                 //Other
                 border: none;
+                background: red;
 
-                .datagrid-drop-line {
+                .drop-highlight {
                     //Position
                     position: absolute;
                     top: 0;
