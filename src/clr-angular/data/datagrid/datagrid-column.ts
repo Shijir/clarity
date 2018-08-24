@@ -46,7 +46,7 @@ const DROP_TOLERANCE = "0 50";
              (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropToleranceOfFirst">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
-        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
+        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder" [class.being-dropped]="!!reorderSelfAnimation">
             <div class="datagrid-column-flex">
                 <!-- I'm really not happy with that select since it's not very scalable -->
                 <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -89,7 +89,7 @@ const DROP_TOLERANCE = "0 50";
             "reorderSelfAnimation",
             [transition(
                 "* => active",
-                [style({transform: "translate({{translateX}}, {{translateY}})"}), animate("0.2s 200ms ease-in-out", style({transform: "translate(0, 0)"}))])]),
+                [style({transform: "scale(1.2)", opacity: 0.4}), animate("0.2s 200ms ease-in-out", style({transform: "scale(1)", opacity: 1}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
