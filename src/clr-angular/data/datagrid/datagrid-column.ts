@@ -39,6 +39,13 @@ const DROP_TOLERANCE = "0 50";
 @Component({
     selector: "clr-dg-column",
     template: `
+        <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable
+             (clrDragStart)="determineNeighbor($event)"
+             (clrDragEnter)="showHighlight(leftDropLine)"
+             (clrDragLeave)="hideHighlight(leftDropLine)"
+             (clrDrop)="notifyDropOn(leftDropLine, $event)" [clrDropTolerance]="dropTolerance">
+            <div class="datagrid-column-drop-line" #leftDropLine></div>
+        </div>
         <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
             <div class="datagrid-column-flex">
                 <!-- I'm really not happy with that select since it's not very scalable -->
@@ -67,12 +74,12 @@ const DROP_TOLERANCE = "0 50";
                 </div>
             </div>
         </div>
-        <div class="datagrid-drop-line" clrDroppable
+        <div class="datagrid-column-reorder-droppable" clrDroppable
              (clrDragStart)="determineNeighbor($event)"
-             (clrDragEnter)="showDragEnterLine()"
-             (clrDragLeave)="hideDragEnterLine()"
-             (clrDrop)="notifyDropped($event)" [clrDropTolerance]="dropTolerance">
-            <div class="drop-highlight" #dropLine></div>
+             (clrDragEnter)="showHighlight(rightDropLine)"
+             (clrDragLeave)="hideHighlight(rightDropLine)"
+             (clrDrop)="notifyDropOn(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
+            <div class="datagrid-column-drop-line" #rightDropLine></div>
         </div>
     `,
     host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},
@@ -122,7 +129,6 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
             if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
                 this.reorderSelfAnimation = {value: "active", params: {translateX: `${20}px`, translateY: `${20}px`}};
-                console.log(dropEvent);
             }
             else {
 
@@ -142,7 +148,8 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     private subscriptions: Subscription[] = [];
 
-    @ViewChild("dropLine") dropLine: ElementRef;
+    @ViewChild("rightDropLine") rightDropLine: ElementRef;
+    @ViewChild("leftDropLine") leftDropLine: ElementRef;
 
     @HostBinding("@reorderSelfAnimation") reorderSelfAnimation;
     @HostBinding("@reorderOthersAnimation") reorderOthersAnimation;
@@ -169,17 +176,20 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         }
     }
 
-    showDragEnterLine() {
-        this.renderer.setStyle(this.dropLine.nativeElement, "height", `${this.tableSizeService.getColumnDragHeight()}px`);
+    showHighlight(el: any) {
+        this.renderer.setStyle(el, "height", `${this.tableSizeService.getColumnDragHeight()}px`);
     }
 
-    hideDragEnterLine() {
-        this.renderer.setStyle(this.dropLine.nativeElement, "height", `0px`);
+    hideHighlight(el: any) {
+        this.renderer.setStyle(el, "height", `0px`);
     }
 
-
-    get isAtLast() {
+    get isLastColumn() {
         return this.columnOrder.isAtLast;
+    }
+
+    get isFirstColumn() {
+        return this.columnOrder.isAtFirst;
     }
 
 
@@ -195,10 +205,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         return {flexOrder: this.flexOrder, width: this.width};
     }
 
-    notifyDropped(event) {
+    notifyDropOn(highlightEl: any, event: any) {
         // event is one from dragged and dropped
         // so event.dragDataTransfer is dragged index
-        this.hideDragEnterLine();
+        this.hideHighlight(highlightEl);
         this.columnOrder.receivedDropFrom(event);
     }
 

@@ -229,7 +229,7 @@
                 }
             }
 
-            .datagrid-drop-line {
+            .datagrid-column-reorder-droppable {
                 //Display
                 flex: 0 0 auto;
 
@@ -249,7 +249,7 @@
                 border: none;
                 background: red;
 
-                .drop-highlight {
+                .datagrid-column-drop-line {
                     //Position
                     position: absolute;
                     top: 0;

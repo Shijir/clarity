@@ -28,8 +28,11 @@ export class ColumnOrder {
     }
 
     get isAtLast() {
-        console.log(this.organizer.orders.length, this.flexOrder + 1);
         return this.organizer.orders.length === this.flexOrder + 1;
+    }
+
+    get isAtFirst() {
+        return this.flexOrder === 0;
     }
 
     get columnOrderChange(): Observable<number> {
