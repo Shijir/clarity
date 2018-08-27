@@ -19,7 +19,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
                 private domAdapter: DomAdapter, private columnResizer: DatagridColumnResizer, private columnOrder: ColumnOrder) {
         this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
         this.subscriptions.push(organizer.detectStrictWidths.subscribe(() => this.detectStrictWidth()));
-        this.subscriptions.push(organizer.positionOrders.subscribe(() => this.setPositionOrder()));
+        this.subscriptions.push(organizer.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
     }
 
     private subscriptions: Subscription[] = [];

@@ -193,6 +193,6 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             this.columnsSizesStable = true;
         }
 
-        this.organizer.positionOrders.next();
+        this.organizer.positionOrdersUpdated.next();
     }
 }

@@ -15,7 +15,7 @@ export class DatagridCellRenderer implements OnDestroy {
 
     constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer) {
         this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
-        this.subscriptions.push(organizer.positionOrders.subscribe(() => this.setPositionOrder()));
+        this.subscriptions.push(organizer.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
     }
 
 

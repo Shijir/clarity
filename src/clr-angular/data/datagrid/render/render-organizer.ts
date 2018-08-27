@@ -46,7 +46,8 @@ export class DatagridRenderOrganizer {
         return this._alignColumns.asObservable();
     }
 
-    public positionOrders = new Subject<any>();
+    public positionOrdersUpdated = new Subject<any>();
+    public positionOrdersRendered = new Subject<any>();
 
     public scrollbar = new Subject<any>();
     public scrollbarWidth = new Subject<number>();

@@ -36,7 +36,11 @@ export class ColumnOrder {
     }
 
     get columnOrderChange(): Observable<number> {
-        return this.organizer.positionOrders.asObservable();
+        return this.organizer.positionOrdersUpdated.asObservable();
+    }
+
+    get columnOrderRendered(): Observable<number> {
+        return this.organizer.positionOrdersRendered.asObservable();
     }
 
     constructor(private organizer: DatagridRenderOrganizer) {
@@ -64,6 +68,7 @@ export class ColumnOrder {
     private shiftColumn(domIndex: number, from: number, to: number, dropEvent: any) {
         this.organizer.orders.splice(from, 1);
         this.organizer.orders.splice(to, 0, domIndex);
-        this.organizer.positionOrders.next({domIndex, from, to, dropEvent});
+        this.organizer.positionOrdersUpdated.next();
+        this.organizer.positionOrdersRendered.next({domIndex, from, to, dropEvent});
     }
 }

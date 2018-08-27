@@ -34,7 +34,7 @@ import {DomAdapter} from "../../utils/dom-adapter/dom-adapter";
 
 let nbCount: number = 0;
 
-const DROP_TOLERANCE = "0 50";
+const DROP_TOLERANCE = "50";
 
 @Component({
     selector: "clr-dg-column",
@@ -121,7 +121,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         nbCount++;
         // put index here
 
-        this.subscriptions.push(this.columnOrder.columnOrderChange.subscribe((dataOnReorder: any) => {
+        this.subscriptions.push(this.columnOrder.columnOrderRendered.subscribe((dataOnReorder: any) => {
 
 
             if (!dataOnReorder) {
@@ -131,22 +131,25 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
             const dropEvent = dataOnReorder.dropEvent;
 
             if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
-                setTimeout(() => {
-                    const ghostAnchorPosition = dropEvent.ghostAnchorPosition;
-                    const columnClientRect = this.domAdapter.clientRect(this.el.nativeElement);
-                    const columnAnchorPosition = {pageX: columnClientRect.left, pageY: columnClientRect.top};
 
-                    const ghostDropDelta = {
-                        pageX: ghostAnchorPosition.pageX - columnAnchorPosition.pageX,
-                        pageY: ghostAnchorPosition.pageY - columnAnchorPosition.pageY
-                    };
+                const ghostAnchorPosition = dropEvent.ghostAnchorPosition;
+                const columnClientRect = this.domAdapter.clientRect(this.el.nativeElement);
+                const columnAnchorPosition = {pageX: columnClientRect.left, pageY: columnClientRect.top};
 
-                    console.log(ghostDropDelta);
+                const ghostDropDelta = {
+                    pageX: ghostAnchorPosition.pageX - columnAnchorPosition.pageX,
+                    pageY: ghostAnchorPosition.pageY - columnAnchorPosition.pageY
+                };
+
+                console.log(ghostDropDelta);
 
 
-                    console.log(this.el.nativeElement);
-                    this.reorderSelfAnimation = {value: "active", params: {translateX: `${ghostDropDelta.pageX}px`, translateY: `${ghostDropDelta.pageY}px`}};
-                });
+                console.log(this.el.nativeElement);
+                this.reorderSelfAnimation = {
+                    value: "active",
+                    params: {translateX: `${ghostDropDelta.pageX}px`, translateY: `${ghostDropDelta.pageY}px`}
+                };
+
             }
             else {
 
