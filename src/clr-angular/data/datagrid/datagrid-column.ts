@@ -46,8 +46,7 @@ const DROP_TOLERANCE = "50";
              (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropToleranceOfFirst">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
-        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder"
-             [class.being-dropped]="!!reorderSelfAnimation">
+        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
             <div class="datagrid-column-flex">
                 <!-- I'm really not happy with that select since it's not very scalable -->
                 <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -83,7 +82,7 @@ const DROP_TOLERANCE = "50";
             <div class="datagrid-column-drop-line" [class.in-last-column]="isLastColumn" #rightDropLine></div>
         </div>
     `,
-    host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden"},
+    host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden", "[class.datagrid-column--being-dropped]": "!!reorderSelfAnimation"},
     providers: [ColumnOrder],
     animations: [
         trigger(
@@ -91,13 +90,13 @@ const DROP_TOLERANCE = "50";
             [transition(
                 "* => active",
                 [style({
-                    transform: "translate({{translateX}}, {{translateY}})"
-                }), animate("0.2s 200ms ease-in-out", style({transform: "translate(0, 0)"}))])]),
+                    transform: "translate3d({{translateX}}, {{translateY}}, 1px)"
+                }), animate("0.2s 200ms ease-in-out", style({transform: "translate3d(0, 0, 1px)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
                 "* => active",
-                [style({transform: "translate({{translateX}}, 0)"}), animate("0.2s ease-in-out", style({transform: "translate(0, 0)"}))])])]
+                [style({transform: "translate3d({{translateX}}, 0, 0)"}), animate("0.2s ease-in-out", style({transform: "translate3d(0, 0, 0)"}))])])]
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {

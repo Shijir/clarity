@@ -195,6 +195,19 @@
             background: none;
             border-bottom: 0;
 
+            .datagrid-column-title {
+                @include clr-no-styles-button();
+                color: $clr-table-font-color;
+                text-align: left;
+                flex: 1 1 auto;
+                align-self: flex-start;
+            }
+
+            button.datagrid-column-title:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
             @mixin clr-lifted-datagrid-column() {
                 position: relative;
                 background-color: $clr-thead-bgcolor;
@@ -218,29 +231,19 @@
 
             }
 
+            &--being-dropped {
+                z-index: map-get($clr-layers, draggable-ghost);
+                .datagrid-column-wrapper {
+                    @include clr-lifted-datagrid-column();
+                }
+            }
+
             .datagrid-column-wrapper {
                 flex: 1 1 auto;
 
                 &.being-dragged {
                     opacity: 0.4;
                 }
-
-                &.being-dropped {
-                    @include clr-lifted-datagrid-column();
-                }
-            }
-
-            .datagrid-column-title {
-                @include clr-no-styles-button();
-                color: $clr-table-font-color;
-                text-align: left;
-                flex: 1 1 auto;
-                align-self: flex-start;
-            }
-
-            button.datagrid-column-title:hover {
-                text-decoration: underline;
-                cursor: pointer;
             }
 
             .draggable-ghost .datagrid-column-wrapper {
