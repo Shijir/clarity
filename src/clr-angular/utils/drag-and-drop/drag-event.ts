@@ -12,11 +12,13 @@ export class ClrDragEvent<T> {
     public group: string|string[];
     public dragDataTransfer: T;
     public dropPointPosition: {pageX: number; pageY: number};
+    public ghostAnchorPosition: {pageX: number; pageY: number};
 
     constructor(dragEvent: DragEvent<T>) {
         this.dragPosition = dragEvent.dragPosition;
         this.group = dragEvent.group;
         this.dragDataTransfer = dragEvent.dragDataTransfer;
         this.dropPointPosition = dragEvent.dropPointPosition;
+        this.ghostAnchorPosition = dragEvent.ghostAnchorPosition;
     }
 }

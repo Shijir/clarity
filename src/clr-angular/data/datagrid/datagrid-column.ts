@@ -46,7 +46,8 @@ const DROP_TOLERANCE = "0 50";
              (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropToleranceOfFirst">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
-        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder" [class.being-dropped]="!!reorderSelfAnimation">
+        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder"
+             [class.being-dropped]="!!reorderSelfAnimation">
             <div class="datagrid-column-flex">
                 <!-- I'm really not happy with that select since it's not very scalable -->
                 <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -89,7 +90,9 @@ const DROP_TOLERANCE = "0 50";
             "reorderSelfAnimation",
             [transition(
                 "* => active",
-                [style({transform: "scale(1.2)", opacity: 0.4}), animate("0.2s 200ms ease-in-out", style({transform: "scale(1)", opacity: 1}))])]),
+                [style({
+                    transform: "translate({{translateX}}, {{translateY}})"
+                }), animate("0.2s 200ms ease-in-out", style({transform: "translate(0, 0)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
@@ -128,7 +131,22 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
             const dropEvent = dataOnReorder.dropEvent;
 
             if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
-                this.reorderSelfAnimation = {value: "active", params: {translateX: `${20}px`, translateY: `${20}px`}};
+                setTimeout(() => {
+                    const ghostAnchorPosition = dropEvent.ghostAnchorPosition;
+                    const columnClientRect = this.domAdapter.clientRect(this.el.nativeElement);
+                    const columnAnchorPosition = {pageX: columnClientRect.left, pageY: columnClientRect.top};
+
+                    const ghostDropDelta = {
+                        pageX: ghostAnchorPosition.pageX - columnAnchorPosition.pageX,
+                        pageY: ghostAnchorPosition.pageY - columnAnchorPosition.pageY
+                    };
+
+                    console.log(ghostDropDelta);
+
+
+                    console.log(this.el.nativeElement);
+                    this.reorderSelfAnimation = {value: "active", params: {translateX: `${ghostDropDelta.pageX}px`, translateY: `${ghostDropDelta.pageY}px`}};
+                });
             }
             else {
 
@@ -137,10 +155,16 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
                 if (this.flexOrder >= dataOnReorder.from && this.flexOrder <= dataOnReorder.to) {
                     //this.reorderOthersAnimation = "active";
 
-                    this.reorderOthersAnimation = {value: "active", params: {translateX: `${dragDataTransfer.width}px`}};
+                    this.reorderOthersAnimation = {
+                        value: "active",
+                        params: {translateX: `${dragDataTransfer.width}px`}
+                    };
                 } else if (this.flexOrder <= dataOnReorder.from && this.flexOrder >= dataOnReorder.to) {
                     //this.reorderOthersAnimation = "active";
-                    this.reorderOthersAnimation = {value: "active", params: {translateX: `-${dragDataTransfer.width}px`}};
+                    this.reorderOthersAnimation = {
+                        value: "active",
+                        params: {translateX: `-${dragDataTransfer.width}px`}
+                    };
                 }
             }
         }));
@@ -172,7 +196,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
         if (this.flexOrder === draggedFlexOrder) {
             this.dropToleranceOfFirst = Number.NEGATIVE_INFINITY;
-        }else{
+        } else {
             this.dropToleranceOfFirst = DROP_TOLERANCE;
         }
 

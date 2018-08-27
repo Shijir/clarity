@@ -46,6 +46,7 @@ export class ClrDragEventListener<T> {
 
     // DraggableGhost component sets these properties:
     public ghostElement?: any;
+    public ghostAnchorPosition?: any;
     public dropPointPosition?: {pageX: number; pageY: number};
 
     public attachDragListeners(draggableEl: Node) {
@@ -145,6 +146,7 @@ export class ClrDragEventListener<T> {
         // The following properties are set after they are broadcasted to the DraggableGhost component.
         dragEvent.ghostElement = this.ghostElement;
         dragEvent.dropPointPosition = this.dropPointPosition;
+        dragEvent.ghostAnchorPosition = this.ghostAnchorPosition;
 
         this.eventBus.broadcast(dragEvent);
     }

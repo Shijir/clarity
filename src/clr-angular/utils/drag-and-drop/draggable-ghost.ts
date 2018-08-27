@@ -76,9 +76,9 @@ export class ClrDraggableGhost<T> implements OnDestroy {
             }
 
             // Position the draggable ghost.
-            const topLeftPosition: PagePosition = this.findTopLeftPosition(event.dragPosition, offset);
-            this.setPositionStyle(this.draggableGhostEl, topLeftPosition.pageX, topLeftPosition.pageY);
-            this.dragEventListener.dropPointPosition = this.findDropPointPosition(topLeftPosition);
+            this.dragEventListener.ghostAnchorPosition = this.findTopLeftPosition(event.dragPosition, offset);
+            this.setPositionStyle(this.draggableGhostEl, this.dragEventListener.ghostAnchorPosition.pageX, this.dragEventListener.ghostAnchorPosition.pageY);
+            this.dragEventListener.dropPointPosition = this.findDropPointPosition(this.dragEventListener.ghostAnchorPosition);
         }));
     }
 
