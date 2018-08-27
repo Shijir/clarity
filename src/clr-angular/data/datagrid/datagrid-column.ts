@@ -68,7 +68,7 @@ const DROP_TOLERANCE = "50";
                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
             </span>
 
-                <div class="datagrid-column-separator">
+                <div class="datagrid-column-separator" *ngIf="!isLastColumn">
                     <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
                     <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
                 </div>

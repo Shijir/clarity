@@ -270,7 +270,7 @@
 
                 //Other
                 border: none;
-                background: red;
+                transform: translateZ(0);
 
                 .datagrid-column-drop-line {
                     //Position
@@ -331,12 +331,6 @@
                 }
                 .exceeded-max {
                     border-right: $clr-default-borderwidth dotted rgba($clr-red-light-midtone, 0.3);
-                }
-            }
-
-            &:last-child {
-                .datagrid-column-separator {
-                    display: none;
                 }
             }
 
