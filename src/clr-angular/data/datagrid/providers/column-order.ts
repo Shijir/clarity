@@ -19,8 +19,14 @@ export class ColumnOrder {
         return this._dropKey;
     }
 
+    get dropKeyOfPrevious() {
+        if (this.flexOrder - 1 > 0) {
+            return this.columnOrderManager.orders[this.flexOrder - 1].dropKey;
+        }
+    }
+
     get acceptedDropKeys() {
-        return this.columnOrderManager.orders.map(orderModel => orderModel.dropKey);
+        return this.columnOrderManager.orders.map(orderModel => orderModel.dropKey).filter(dropKey => dropKey !== this._dropKey && dropKey !== this.dropKeyOfPrevious);
     }
 
     get domOrder(): number {
@@ -49,7 +55,8 @@ export class ColumnOrder {
         return this.columnOrderManager.positionOrdersRendered.asObservable();
     }
 
-    constructor(private columnOrderManager: ColumnOrderManager) {}
+    constructor(private columnOrderManager: ColumnOrderManager) {
+    }
 
     dropReceivedOnFirst(dropEvent: any) {
         const flexOrderDraggedFrom = dropEvent.dragDataTransfer.flexOrder;
