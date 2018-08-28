@@ -14,8 +14,6 @@ export class DatagridRenderOrganizer {
 
     public widths: {px: number, strict: boolean}[] = [];
 
-    public orders: number[] = [];
-
     protected _noLayout = new Subject<boolean>();
     public get noLayout(): Observable<boolean> {
         return this._noLayout.asObservable();
@@ -45,9 +43,6 @@ export class DatagridRenderOrganizer {
     public get alignColumns(): Observable<any> {
         return this._alignColumns.asObservable();
     }
-
-    public positionOrdersUpdated = new Subject<any>();
-    public positionOrdersRendered = new Subject<any>();
 
     public scrollbar = new Subject<any>();
     public scrollbarWidth = new Subject<number>();

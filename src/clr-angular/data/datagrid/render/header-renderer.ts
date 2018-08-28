@@ -12,14 +12,15 @@ import {DatagridColumnResizer} from "./column-resizer";
 import {STRICT_WIDTH_CLASS} from "./constants";
 import {DatagridRenderOrganizer} from "./render-organizer";
 import {ColumnOrder} from "../providers/column-order";
+import {ColumnOrderManager} from "../providers/column-order-manager";
 
 @Directive({selector: "clr-dg-column"})
 export class DatagridHeaderRenderer implements OnDestroy {
     constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer,
-                private domAdapter: DomAdapter, private columnResizer: DatagridColumnResizer, private columnOrder: ColumnOrder) {
+                private domAdapter: DomAdapter, private columnResizer: DatagridColumnResizer, private columnOrderManager: ColumnOrderManager, private columnOrder: ColumnOrder) {
         this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
         this.subscriptions.push(organizer.detectStrictWidths.subscribe(() => this.detectStrictWidth()));
-        this.subscriptions.push(organizer.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
+        this.subscriptions.push(columnOrderManager.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
     }
 
     private subscriptions: Subscription[] = [];

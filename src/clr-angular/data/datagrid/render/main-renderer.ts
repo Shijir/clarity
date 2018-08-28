@@ -24,7 +24,7 @@ import {Page} from "../providers/page";
 import {DatagridHeaderRenderer} from "./header-renderer";
 import {NoopDomAdapter} from "./noop-dom-adapter";
 import {DatagridRenderOrganizer} from "./render-organizer";
-import {TableSizeService} from "../providers/table-size.service";
+import {ColumnOrderManager} from "../providers/column-order-manager";
 
 // Fixes build error
 // @dynamic (https://github.com/angular/angular/issues/19698#issuecomment-338340211)
@@ -42,7 +42,7 @@ export const domAdapterFactory = (platformId: Object) => {
     {selector: "clr-datagrid", providers: [{provide: DomAdapter, useFactory: domAdapterFactory, deps: [PLATFORM_ID]}]})
 export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked, OnDestroy {
     constructor(private organizer: DatagridRenderOrganizer, private items: Items, private page: Page,
-                private domAdapter: DomAdapter, private el: ElementRef, private renderer: Renderer2) {
+                private domAdapter: DomAdapter, private el: ElementRef, private renderer: Renderer2, private columnOrderManager: ColumnOrderManager) {
         this._subscriptions.push(organizer.computeWidths.subscribe(() => this.computeHeadersWidth()));
         this._subscriptions.push(this.page.sizeChange.subscribe(() => {
             if (this._heightSet) {
@@ -147,7 +147,7 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             header.setDomOrder(index);
 
             // this is where we initially set the original column positions.
-            this.organizer.orders.push(index);
+            this.columnOrderManager.orders.push(index);
         });
     }
 
@@ -193,6 +193,6 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             this.columnsSizesStable = true;
         }
 
-        this.organizer.positionOrdersUpdated.next();
+        this.columnOrderManager.positionOrdersUpdated.next();
     }
 }

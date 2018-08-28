@@ -8,14 +8,15 @@ import {Subscription} from "rxjs/Subscription";
 
 import {STRICT_WIDTH_CLASS} from "./constants";
 import {DatagridRenderOrganizer} from "./render-organizer";
+import {ColumnOrderManager} from "../providers/column-order-manager";
 
 @Directive({selector: "clr-dg-cell"})
 export class DatagridCellRenderer implements OnDestroy {
     private subscriptions: Subscription[] = [];
 
-    constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer) {
+    constructor(private el: ElementRef, private renderer: Renderer2, private organizer: DatagridRenderOrganizer, private columnOrderManager: ColumnOrderManager) {
         this.subscriptions.push(organizer.clearWidths.subscribe(() => this.clearWidth()));
-        this.subscriptions.push(organizer.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
+        this.subscriptions.push(columnOrderManager.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
     }
 
 
@@ -24,7 +25,7 @@ export class DatagridCellRenderer implements OnDestroy {
 
     public setPositionOrder() {
         if(typeof this.domIndex!== "undefined") {
-            this.renderer.setStyle(this.el.nativeElement, "order", this.organizer.orders.indexOf(this.domIndex));
+            this.renderer.setStyle(this.el.nativeElement, "order", this.columnOrderManager.orders.indexOf(this.domIndex));
         }
     }
 

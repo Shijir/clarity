@@ -31,6 +31,7 @@ import {ColumnOrder} from "./providers/column-order";
 import {TableSizeService} from "./providers/table-size.service";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {DomAdapter} from "../../utils/dom-adapter/dom-adapter";
+import {ColumnOrderManager} from "./providers/column-order-manager";
 
 let nbCount: number = 0;
 
@@ -100,7 +101,7 @@ const DROP_TOLERANCE = "50";
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2, private domAdapter: DomAdapter, private el: ElementRef) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private columnOrderManager: ColumnOrderManager, private tableSizeService: TableSizeService, private renderer: Renderer2, private domAdapter: DomAdapter, private el: ElementRef) {
         super(filters);
         this.subscriptions.push(_sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted

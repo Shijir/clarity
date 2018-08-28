@@ -6,8 +6,8 @@
 
 
 import {Injectable} from "@angular/core";
-import {DatagridRenderOrganizer} from "../render/render-organizer";
 import {Observable} from "rxjs/Observable";
+import {ColumnOrderManager} from "./column-order-manager";
 
 @Injectable()
 export class ColumnOrder {
@@ -24,11 +24,11 @@ export class ColumnOrder {
     }
 
     get flexOrder() {
-        return this.organizer.orders.indexOf(this._domIndex);
+        return this.columnOrderManager.orders.indexOf(this._domIndex);
     }
 
     get isAtLast() {
-        return this.organizer.orders.length === this.flexOrder + 1;
+        return this.columnOrderManager.orders.length === this.flexOrder + 1;
     }
 
     get isAtFirst() {
@@ -36,19 +36,19 @@ export class ColumnOrder {
     }
 
     get columnOrderChange(): Observable<number> {
-        return this.organizer.positionOrdersUpdated.asObservable();
+        return this.columnOrderManager.positionOrdersUpdated.asObservable();
     }
 
     get columnOrderRendered(): Observable<number> {
-        return this.organizer.positionOrdersRendered.asObservable();
+        return this.columnOrderManager.positionOrdersRendered.asObservable();
     }
 
-    constructor(private organizer: DatagridRenderOrganizer) {
+    constructor(private columnOrderManager: ColumnOrderManager) {
     }
 
     dropReceivedOnFirst(dropEvent: any) {
         const flexOrderDraggedFrom = dropEvent.dragDataTransfer.flexOrder;
-        const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
+        const domIndexDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
         this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, 0, dropEvent);
     }
 
@@ -61,14 +61,14 @@ export class ColumnOrder {
         } else {
             flexOrderDraggedTo = this.flexOrder;
         }
-        const domIndexDragged = this.organizer.orders[flexOrderDraggedFrom];
+        const domIndexDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
         this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, flexOrderDraggedTo, dropEvent);
     }
 
     private shiftColumn(domIndex: number, from: number, to: number, dropEvent: any) {
-        this.organizer.orders.splice(from, 1);
-        this.organizer.orders.splice(to, 0, domIndex);
-        this.organizer.positionOrdersUpdated.next();
-        this.organizer.positionOrdersRendered.next({domIndex, from, to, dropEvent});
+        this.columnOrderManager.orders.splice(from, 1);
+        this.columnOrderManager.orders.splice(to, 0, domIndex);
+        this.columnOrderManager.positionOrdersUpdated.next();
+        this.columnOrderManager.positionOrdersRendered.next({domIndex, from, to, dropEvent});
     }
 }
