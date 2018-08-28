@@ -7,24 +7,34 @@
 
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {ColumnOrderManager} from "./column-order-manager";
+import {ColumnOrderManager, ColumnOrderModel} from "./column-order-manager";
 
 @Injectable()
 export class ColumnOrder {
-    private _domIndex: number; //domIndex is the identity of the column
+    private _domOrder: number; //domIndex is the identity of the column
+    private _dropKey: string;
 
-    get domIndex(): number {
-        return this._domIndex;
+
+    get dropKey() {
+        return this._dropKey;
     }
 
-    set domIndex(value: number) {
-        if (!this._domIndex) {
-            this._domIndex = value;
-        }
+    get acceptedDropKeys() {
+        return this.columnOrderManager.orders.map(orderModel => orderModel.dropKey);
+    }
+
+    get domOrder(): number {
+        return this._domOrder;
+    }
+
+    set domOrder(value: number) {
+        this._domOrder = value;
+        this._dropKey = this.columnOrderManager.columnGroupId + "-" + value;
+        this.columnOrderManager.orders.push({domOrder: this._domOrder, dropKey: this._dropKey});
     }
 
     get flexOrder() {
-        return this.columnOrderManager.orders.indexOf(this._domIndex);
+        return this.columnOrderManager.flexOrderOf(this.domOrder);
     }
 
     get isAtLast() {
@@ -35,21 +45,16 @@ export class ColumnOrder {
         return this.flexOrder === 0;
     }
 
-    get columnOrderChange(): Observable<number> {
-        return this.columnOrderManager.positionOrdersUpdated.asObservable();
-    }
-
     get columnOrderRendered(): Observable<number> {
         return this.columnOrderManager.positionOrdersRendered.asObservable();
     }
 
-    constructor(private columnOrderManager: ColumnOrderManager) {
-    }
+    constructor(private columnOrderManager: ColumnOrderManager) {}
 
     dropReceivedOnFirst(dropEvent: any) {
         const flexOrderDraggedFrom = dropEvent.dragDataTransfer.flexOrder;
-        const domIndexDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
-        this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, 0, dropEvent);
+        const columnModelDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
+        this.shiftColumn(columnModelDragged, flexOrderDraggedFrom, 0, dropEvent);
     }
 
     dropReceived(dropEvent: any) {
@@ -61,14 +66,14 @@ export class ColumnOrder {
         } else {
             flexOrderDraggedTo = this.flexOrder;
         }
-        const domIndexDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
-        this.shiftColumn(domIndexDragged, flexOrderDraggedFrom, flexOrderDraggedTo, dropEvent);
+        const columnModelDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
+        this.shiftColumn(columnModelDragged, flexOrderDraggedFrom, flexOrderDraggedTo, dropEvent);
     }
 
-    private shiftColumn(domIndex: number, from: number, to: number, dropEvent: any) {
+    private shiftColumn(columnModelDragged: ColumnOrderModel, from: number, to: number, dropEvent: any) {
         this.columnOrderManager.orders.splice(from, 1);
-        this.columnOrderManager.orders.splice(to, 0, domIndex);
+        this.columnOrderManager.orders.splice(to, 0, columnModelDragged);
         this.columnOrderManager.positionOrdersUpdated.next();
-        this.columnOrderManager.positionOrdersRendered.next({domIndex, from, to, dropEvent});
+        this.columnOrderManager.positionOrdersRendered.next({orderModel: columnModelDragged, from, to, dropEvent});
     }
 }

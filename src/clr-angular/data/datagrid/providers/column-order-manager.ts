@@ -8,8 +8,14 @@ import {Subject} from "rxjs/Subject";
 
 let nbColumnGroup = 0;
 
+export interface ColumnOrderModel {
+    domOrder: number;
+    dropKey: string;
+}
+
 @Injectable()
 export class ColumnOrderManager {
+    public orders: ColumnOrderModel[] = [];
 
     private _columnGroupId: string;
 
@@ -18,12 +24,15 @@ export class ColumnOrderManager {
     }
 
     constructor() {
-        this._columnGroupId = "dg-column-group" + nbColumnGroup++;
+        this._columnGroupId = "dg-column-group-" + nbColumnGroup++;
     }
-
-    public orders: number[] = [];
 
     public positionOrdersUpdated = new Subject<any>();
 
     public positionOrdersRendered = new Subject<any>();
+
+    public flexOrderOf(domOrder: number): number {
+        const columnOrder = this.orders.filter(orderModel => orderModel.domOrder === domOrder);
+        return this.orders.indexOf(columnOrder[0]);
+    }
 }

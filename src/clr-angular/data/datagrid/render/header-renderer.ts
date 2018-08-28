@@ -81,11 +81,11 @@ export class DatagridHeaderRenderer implements OnDestroy {
 
     public setDomOrder(domIndex: number) {
         // This method will be called by the main-renderer
-        this.columnOrder.domIndex = domIndex;
+        this.columnOrder.domOrder = domIndex;
     }
 
     public setPositionOrder() {
-        if(typeof this.columnOrder.domIndex !== "undefined") {
+        if(typeof this.columnOrder.domOrder !== "undefined") {
             this.renderer.setStyle(this.el.nativeElement, "order", this.columnOrder.flexOrder);
         }
     }

@@ -41,13 +41,12 @@ const DROP_TOLERANCE = "50";
     selector: "clr-dg-column",
     template: `
         <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable
-             (clrDragStart)="determineNeighbor($event)"
              (clrDragEnter)="showHighlight(leftDropLine)"
              (clrDragLeave)="hideHighlight(leftDropLine)"
              (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropToleranceOfFirst">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
-        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder">
+        <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder" [clrGroup]="acceptedDropKeys">
             <div class="datagrid-column-flex">
                 <!-- I'm really not happy with that select since it's not very scalable -->
                 <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -75,8 +74,7 @@ const DROP_TOLERANCE = "50";
                 </div>
             </div>
         </div>
-        <div class="datagrid-column-reorder-droppable" clrDroppable
-             (clrDragStart)="determineNeighbor($event)"
+        <div class="datagrid-column-reorder-droppable" clrDroppable [clrGroup]="dropKey"
              (clrDragEnter)="showHighlight(rightDropLine)"
              (clrDragLeave)="hideHighlight(rightDropLine)"
              (clrDrop)="notifyDrop(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
@@ -135,7 +133,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
             const dropEvent = dataOnReorder.dropEvent;
 
-            if (this.columnOrder.domIndex === dataOnReorder.domIndex) {
+            if (this.columnOrder.domOrder === dataOnReorder.domOrder) {
 
                 const ghostAnchorPosition = dropEvent.ghostAnchorPosition;
                 const columnClientRect = this.domAdapter.clientRect(this.el.nativeElement);
@@ -196,8 +194,8 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         delete this.reorderSelfAnimation;
     }
 
-    dropTolerance: any;
-    dropToleranceOfFirst: any;
+    dropTolerance: any = DROP_TOLERANCE;
+    dropToleranceOfFirst: any = DROP_TOLERANCE;
 
     determineNeighbor(event) {
         const draggedFlexOrder = event.dragDataTransfer.flexOrder;
@@ -242,6 +240,14 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     get dataOnReorder() {
         return {flexOrder: this.flexOrder, width: this.width};
+    }
+
+    get dropKey() {
+        return this.columnOrder.dropKey;
+    }
+
+    get acceptedDropKeys() {
+        return this.columnOrder.acceptedDropKeys;
     }
 
     notifyDropOnFirst(highlightEl: any, event: any) {

@@ -143,11 +143,7 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
 
     private setHeaderOrder(): void {
         this.headers.forEach((header, index) => {
-
             header.setDomOrder(index);
-
-            // this is where we initially set the original column positions.
-            this.columnOrderManager.orders.push(index);
         });
     }
 
@@ -193,6 +189,7 @@ export class DatagridMainRenderer implements AfterContentInit, AfterViewChecked,
             this.columnsSizesStable = true;
         }
 
+        //TODO: try to remove or move this to somewhere else
         this.columnOrderManager.positionOrdersUpdated.next();
     }
 }

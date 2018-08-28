@@ -19,13 +19,11 @@ export class DatagridCellRenderer implements OnDestroy {
         this.subscriptions.push(columnOrderManager.positionOrdersUpdated.subscribe(() => this.setPositionOrder()));
     }
 
-
-    public domIndex: number;
-
+    public domOrder: number;
 
     public setPositionOrder() {
-        if(typeof this.domIndex!== "undefined") {
-            this.renderer.setStyle(this.el.nativeElement, "order", this.columnOrderManager.orders.indexOf(this.domIndex));
+        if(typeof this.domOrder!== "undefined") {
+            this.renderer.setStyle(this.el.nativeElement, "order", this.columnOrderManager.flexOrderOf(this.domOrder));
         }
     }
 
