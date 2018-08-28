@@ -284,9 +284,16 @@
 
                     //Others
                     background: $clr-action-purple-dark;
-                    &.in-last-column {
-                        left: -2px;
-                    }
+                }
+            }
+
+            &.last-column {
+                .datagrid-column-reorder-droppable .datagrid-column-drop-line {
+                    left: -2px;
+                }
+
+                .datagrid-column-separator {
+                    display: none;
                 }
             }
 

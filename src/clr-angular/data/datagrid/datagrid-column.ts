@@ -69,7 +69,7 @@ const DROP_TOLERANCE = "50";
                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
             </span>
 
-                <div class="datagrid-column-separator" *ngIf="!isLastColumn">
+                <div class="datagrid-column-separator">
                     <button #columnHandle class="datagrid-column-handle" tabindex="-1" type="button"></button>
                     <div #columnHandleTracker class="datagrid-column-handle-tracker"></div>
                 </div>
@@ -80,10 +80,15 @@ const DROP_TOLERANCE = "50";
              (clrDragEnter)="showHighlight(rightDropLine)"
              (clrDragLeave)="hideHighlight(rightDropLine)"
              (clrDrop)="notifyDrop(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
-            <div class="datagrid-column-drop-line" [class.in-last-column]="isLastColumn" #rightDropLine></div>
+            <div class="datagrid-column-drop-line" #rightDropLine></div>
         </div>
     `,
-    host: {"[class.datagrid-column]": "true", "[class.datagrid-column--hidden]": "hidden", "[class.datagrid-column--being-dropped]": "!!reorderSelfAnimation"},
+    host: {
+        "[class.datagrid-column]": "true",
+        "[class.datagrid-column--hidden]": "hidden",
+        "[class.datagrid-column--being-dropped]": "!!reorderSelfAnimation",
+        "[class.last-column]": "isLastColumn"
+    },
     providers: [ColumnOrder],
     animations: [
         trigger(

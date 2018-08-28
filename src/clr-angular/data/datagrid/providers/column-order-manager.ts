@@ -6,8 +6,20 @@
 import {Injectable} from "@angular/core";
 import {Subject} from "rxjs/Subject";
 
+let nbColumnGroup = 0;
+
 @Injectable()
 export class ColumnOrderManager {
+
+    private _columnGroupId: string;
+
+    get columnGroupId() {
+        return this._columnGroupId;
+    }
+
+    constructor() {
+        this._columnGroupId = "dg-column-group" + nbColumnGroup++;
+    }
 
     public orders: number[] = [];
 
