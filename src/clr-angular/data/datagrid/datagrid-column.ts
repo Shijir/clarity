@@ -91,7 +91,7 @@ const DROP_TOLERANCE = "50";
                 "* => active",
                 [style({
                     transform: "translate3d({{translateX}}, {{translateY}}, 1px)"
-                }), animate("0.2s 200ms ease-in-out", style({transform: "translate3d(0, 0, 1px)"}))])]),
+                }), animate("0.2s 0ms ease-in-out", style({transform: "translate3d(0, 0, 1px)"}))])]),
         trigger(
             "reorderOthersAnimation",
             [transition(
