@@ -14,19 +14,26 @@ export class ColumnOrder {
     private _domOrder: number; //domIndex is the identity of the column
     private _dropKey: string;
 
-
     get dropKey() {
         return this._dropKey;
     }
 
+    readonly dropKeyAtFirst = this.columnOrderManager.columnGroupId + "--1";
+
     get dropKeyOfPrevious() {
-        if (this.flexOrder - 1 > 0) {
+        if (this.flexOrder - 1 >= 0) {
             return this.columnOrderManager.orders[this.flexOrder - 1].dropKey;
         }
     }
 
     get acceptedDropKeys() {
-        return this.columnOrderManager.orders.map(orderModel => orderModel.dropKey).filter(dropKey => dropKey !== this._dropKey && dropKey !== this.dropKeyOfPrevious);
+        const acceptedDropKeys = this.columnOrderManager.orders.map(orderModel => orderModel.dropKey).filter(dropKey => dropKey !== this._dropKey && dropKey !== this.dropKeyOfPrevious);
+        if (this.flexOrder === 0) {
+            return acceptedDropKeys;
+        }
+
+        acceptedDropKeys.push(this.dropKeyAtFirst);
+        return acceptedDropKeys;
     }
 
     get domOrder(): number {

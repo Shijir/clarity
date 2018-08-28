@@ -40,10 +40,10 @@ const DROP_TOLERANCE = "50";
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable
+        <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable [clrGroup]="dropKeyAtFirst"
              (clrDragEnter)="showHighlight(leftDropLine)"
              (clrDragLeave)="hideHighlight(leftDropLine)"
-             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropToleranceOfFirst">
+             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropTolerance">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
         <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder" [clrGroup]="acceptedDropKeys">
@@ -144,10 +144,6 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
                     pageY: ghostAnchorPosition.pageY - columnAnchorPosition.pageY
                 };
 
-                console.log(ghostDropDelta);
-
-
-                console.log(this.el.nativeElement);
                 this.reorderSelfAnimation = {
                     value: "active",
                     params: {translateX: `${ghostDropDelta.pageX}px`, translateY: `${ghostDropDelta.pageY}px`}
@@ -195,24 +191,6 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     dropTolerance: any = DROP_TOLERANCE;
-    dropToleranceOfFirst: any = DROP_TOLERANCE;
-
-    determineNeighbor(event) {
-        const draggedFlexOrder = event.dragDataTransfer.flexOrder;
-
-        if (this.flexOrder === draggedFlexOrder) {
-            this.dropToleranceOfFirst = Number.NEGATIVE_INFINITY;
-        } else {
-            this.dropToleranceOfFirst = DROP_TOLERANCE;
-        }
-
-        if (this.flexOrder === draggedFlexOrder || this.flexOrder === draggedFlexOrder - 1) {
-            // neighboring droppables on the right and left sides will have no drop tolerance now.
-            this.dropTolerance = Number.NEGATIVE_INFINITY;
-        } else {
-            this.dropTolerance = DROP_TOLERANCE;
-        }
-    }
 
     showHighlight(el: any) {
         this.renderer.setStyle(el, "height", `${this.tableSizeService.getColumnDragHeight()}px`);
@@ -244,6 +222,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
     get dropKey() {
         return this.columnOrder.dropKey;
+    }
+
+    get dropKeyAtFirst() {
+        return this.columnOrder.dropKeyAtFirst;
     }
 
     get acceptedDropKeys() {
