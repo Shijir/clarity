@@ -103,7 +103,7 @@ const DROP_TOLERANCE = "50";
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2, private domAdapter: DomAdapter, private el: ElementRef) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2) {
         super(filters);
         this.subscriptions.push(_sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -209,12 +209,8 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         return this.columnOrder.flexOrder;
     }
 
-    get width() {
-        return this.domAdapter.clientRect(this.el.nativeElement).width;
-    }
-
     get dataOnReorder() {
-        return {flexOrder: this.flexOrder, width: this.width};
+        return {flexOrder: this.flexOrder, width: this.columnOrder.width};
     }
 
     get dropKey() {

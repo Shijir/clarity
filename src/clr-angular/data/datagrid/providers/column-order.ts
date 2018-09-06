@@ -9,6 +9,7 @@ import {ElementRef, Injectable, Renderer2} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import {ColumnOrderManager, ColumnOrderModel} from "./column-order-manager";
 import {DomAdapter} from "../../../utils/dom-adapter/dom-adapter";
+import {TableSizeService} from "./table-size.service";
 
 @Injectable()
 export class ColumnOrder {
@@ -63,7 +64,7 @@ export class ColumnOrder {
         return this.columnOrderManager.positionOrdersRendered.asObservable();
     }
 
-    constructor(private columnOrderManager: ColumnOrderManager, private domAdapter: DomAdapter, private renderer: Renderer2, private el: ElementRef) {
+    constructor(private columnOrderManager: ColumnOrderManager, private domAdapter: DomAdapter, private renderer: Renderer2, private el: ElementRef, private tableSizeService: TableSizeService) {
 
     }
 
