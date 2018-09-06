@@ -132,7 +132,7 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
 
             const dropEvent = dataOnReorder.dropEvent;
 
-            if (this.columnOrder.domOrder === dataOnReorder.orderModel.domOrder) {
+            if (this.columnOrder.domOrder === dataOnReorder.draggedDomOrder) {
 
                 const ghostAnchorPosition = dropEvent.ghostAnchorPosition;
 

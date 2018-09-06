@@ -5,6 +5,7 @@
  */
 import {Injectable} from "@angular/core";
 import {Subject} from "rxjs/Subject";
+import {ColumnOrder} from "./column-order";
 
 let nbColumnGroup = 0;
 
@@ -15,7 +16,7 @@ export interface ColumnOrderModel {
 
 @Injectable()
 export class ColumnOrderManager {
-    public orders: ColumnOrderModel[] = [];
+    public orders: ColumnOrder[] = [];
 
     private _columnGroupId: string;
 

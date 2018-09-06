@@ -45,7 +45,7 @@ export class ColumnOrder {
     set domOrder(value: number) {
         this._domOrder = value;
         this._dropKey = this.columnOrderManager.columnGroupId + "-" + value;
-        this.columnOrderManager.orders.push({domOrder: this._domOrder, dropKey: this._dropKey});
+
     }
 
     get flexOrder() {
@@ -65,7 +65,7 @@ export class ColumnOrder {
     }
 
     constructor(private columnOrderManager: ColumnOrderManager, private domAdapter: DomAdapter, private renderer: Renderer2, private el: ElementRef, private tableSizeService: TableSizeService) {
-
+        this.columnOrderManager.orders.push(this);
     }
 
     get width() {
@@ -95,14 +95,14 @@ export class ColumnOrder {
         } else {
             flexOrderDraggedTo = this.flexOrder;
         }
-        const columnModelDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
-        this.shiftColumn(columnModelDragged, flexOrderDraggedFrom, flexOrderDraggedTo, dropEvent);
+        const columnOrderModelDragged = this.columnOrderManager.orders[flexOrderDraggedFrom];
+        this.shiftColumn(columnOrderModelDragged, flexOrderDraggedFrom, flexOrderDraggedTo, dropEvent);
     }
 
-    private shiftColumn(columnModelDragged: ColumnOrderModel, from: number, to: number, dropEvent: any) {
+    private shiftColumn(columnModelDragged: ColumnOrder, from: number, to: number, dropEvent: any) {
         this.columnOrderManager.orders.splice(from, 1);
         this.columnOrderManager.orders.splice(to, 0, columnModelDragged);
         this.columnOrderManager.positionOrdersUpdated.next();
-        this.columnOrderManager.positionOrdersRendered.next({orderModel: columnModelDragged, from, to, dropEvent});
+        this.columnOrderManager.positionOrdersRendered.next({draggedDomOrder: columnModelDragged.domOrder, from, to, dropEvent});
     }
 }
