@@ -29,9 +29,8 @@ import {Sort} from "./providers/sort";
 import {DatagridFilterRegistrar} from "./utils/datagrid-filter-registrar";
 import {ColumnOrder} from "./providers/column-order";
 import {TableSizeService} from "./providers/table-size.service";
-import {animate, state, style, transition, trigger} from "@angular/animations";
+import {animate, style, transition, trigger} from "@angular/animations";
 import {DomAdapter} from "../../utils/dom-adapter/dom-adapter";
-import {ColumnOrderManager} from "./providers/column-order-manager";
 
 let nbCount: number = 0;
 
@@ -136,12 +135,10 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
             if (this.columnOrder.domOrder === dataOnReorder.orderModel.domOrder) {
 
                 const ghostAnchorPosition = dropEvent.ghostAnchorPosition;
-                const columnClientRect = this.domAdapter.clientRect(this.el.nativeElement);
-                const columnAnchorPosition = {pageX: columnClientRect.left, pageY: columnClientRect.top};
 
                 const ghostDropDelta = {
-                    pageX: ghostAnchorPosition.pageX - columnAnchorPosition.pageX,
-                    pageY: ghostAnchorPosition.pageY - columnAnchorPosition.pageY
+                    pageX: ghostAnchorPosition.pageX - this.columnOrder.pageX,
+                    pageY: ghostAnchorPosition.pageY - this.columnOrder.pageY
                 };
 
                 this.reorderSelfAnimation = {

@@ -5,9 +5,10 @@
  */
 
 
-import {Injectable} from "@angular/core";
+import {ElementRef, Injectable, Renderer2} from "@angular/core";
 import {Observable} from "rxjs/Observable";
 import {ColumnOrderManager, ColumnOrderModel} from "./column-order-manager";
+import {DomAdapter} from "../../../utils/dom-adapter/dom-adapter";
 
 @Injectable()
 export class ColumnOrder {
@@ -62,7 +63,20 @@ export class ColumnOrder {
         return this.columnOrderManager.positionOrdersRendered.asObservable();
     }
 
-    constructor(private columnOrderManager: ColumnOrderManager) {
+    constructor(private columnOrderManager: ColumnOrderManager, private domAdapter: DomAdapter, private renderer: Renderer2, private el: ElementRef) {
+
+    }
+
+    get width() {
+        return this.domAdapter.clientRect(this.el.nativeElement).width;
+    }
+
+    get pageX() {
+        return this.domAdapter.clientRect(this.el.nativeElement).left;
+    }
+
+    get pageY() {
+        return this.domAdapter.clientRect(this.el.nativeElement).top;
     }
 
     dropReceivedOnFirst(dropEvent: any) {
