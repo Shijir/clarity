@@ -223,6 +223,14 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     setDropTolerance(event: any) {
+
+        // if dragged column's flexorder is less than my column flexorder,
+        // I will set my dropTolerance to the width of the next column in the right direction.
+
+        // But if dragged column's flexorder is more than my column flexorder,
+        // I will set my dropTolerance to my own width in the left direction.
+
+
         if(this.flexOrder > event.dragDataTransfer.flexOrder) {
             this.dropTolerance = {right: this.columnOrder.widthOfNext};
         } else if (this.flexOrder < event.dragDataTransfer.flexOrder) {
