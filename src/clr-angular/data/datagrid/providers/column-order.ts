@@ -7,7 +7,7 @@
 
 import {ElementRef, Injectable, Renderer2} from "@angular/core";
 import {Observable} from "rxjs/Observable";
-import {ColumnOrderManager, ColumnOrderModel} from "./column-order-manager";
+import {ColumnOrderManager } from "./column-order-manager";
 import {DomAdapter} from "../../../utils/dom-adapter/dom-adapter";
 import {TableSizeService} from "./table-size.service";
 

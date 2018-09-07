@@ -9,11 +9,6 @@ import {ColumnOrder} from "./column-order";
 
 let nbColumnGroup = 0;
 
-export interface ColumnOrderModel {
-    domOrder: number;
-    dropKey: string;
-}
-
 @Injectable()
 export class ColumnOrderManager {
     public orders: ColumnOrder[] = [];
