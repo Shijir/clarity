@@ -39,10 +39,10 @@ const DROP_TOLERANCE = "50";
 @Component({
     selector: "clr-dg-column",
     template: `
-        <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable [clrGroup]="dropKeyAtFirst"
+        <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable [clrGroup]="columnOrder.dropKeyAtFirst"
              (clrDragEnter)="showHighlight(leftDropLine)"
              (clrDragLeave)="hideHighlight(leftDropLine)"
-             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="50">
+             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="{left: 50}">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
         <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder" [clrGroup]="acceptedDropKeys">
@@ -104,7 +104,7 @@ const DROP_TOLERANCE = "50";
 })
 
 export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFilterImpl> implements OnDestroy {
-    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, private columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2) {
+    constructor(private _sort: Sort, filters: FiltersProvider, private _dragDispatcher: DragDispatcher, public columnOrder: ColumnOrder, private tableSizeService: TableSizeService, private renderer: Renderer2) {
         super(filters);
         this.subscriptions.push(_sort.change.subscribe(sort => {
             // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
@@ -223,6 +223,11 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
     }
 
     setDropTolerance(event: any) {
+
+        if(this.isLastColumn) {
+            this.dropTolerance = {right: 50};
+            return;
+        }
 
         // if dragged column's flexorder is less than my column flexorder,
         // I will set my dropTolerance to the width of the next column in the right direction.
