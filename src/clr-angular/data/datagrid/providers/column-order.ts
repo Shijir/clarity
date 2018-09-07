@@ -22,6 +22,13 @@ export class ColumnOrder {
 
     readonly dropKeyAtFirst = this.columnOrderManager.columnGroupId + "--1";
 
+    get widthOfNext() {
+        if (this.flexOrder + 1 < this.columnOrderManager.orders.length) {
+            console.log(this.columnOrderManager.orders[this.flexOrder + 1]);
+            return this.columnOrderManager.orders[this.flexOrder + 1].width;
+        }
+    }
+
     get dropKeyOfPrevious() {
         if (this.flexOrder - 1 >= 0) {
             return this.columnOrderManager.orders[this.flexOrder - 1].dropKey;

@@ -42,7 +42,7 @@ const DROP_TOLERANCE = "50";
         <div class="datagrid-column-reorder-droppable" *ngIf="isFirstColumn" clrDroppable [clrGroup]="dropKeyAtFirst"
              (clrDragEnter)="showHighlight(leftDropLine)"
              (clrDragLeave)="hideHighlight(leftDropLine)"
-             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="dropTolerance">
+             (clrDrop)="notifyDropOnFirst(leftDropLine, $event)" [clrDropTolerance]="50">
             <div class="datagrid-column-drop-line" #leftDropLine></div>
         </div>
         <div class="datagrid-column-wrapper" [clrDraggable]="dataOnReorder" [clrGroup]="acceptedDropKeys">
@@ -74,6 +74,7 @@ const DROP_TOLERANCE = "50";
             </div>
         </div>
         <div class="datagrid-column-reorder-droppable" clrDroppable [clrGroup]="dropKey"
+             (clrDragStart)="setDropTolerance($event)"
              (clrDragEnter)="showHighlight(rightDropLine)"
              (clrDragLeave)="hideHighlight(rightDropLine)"
              (clrDrop)="notifyDrop(rightDropLine, $event)" [clrDropTolerance]="dropTolerance">
@@ -217,12 +218,16 @@ export class ClrDatagridColumn extends DatagridFilterRegistrar<DatagridStringFil
         return this.columnOrder.dropKey;
     }
 
-    get dropKeyAtFirst() {
-        return this.columnOrder.dropKeyAtFirst;
-    }
-
     get acceptedDropKeys() {
         return this.columnOrder.acceptedDropKeys;
+    }
+
+    setDropTolerance(event: any) {
+        if(this.flexOrder > event.dragDataTransfer.flexOrder) {
+            this.dropTolerance = {right: this.columnOrder.widthOfNext};
+        } else if (this.flexOrder < event.dragDataTransfer.flexOrder) {
+            this.dropTolerance = {left: this.columnOrder.width};
+        }
     }
 
     notifyDropOnFirst(highlightEl: any, event: any) {
