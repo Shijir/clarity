@@ -55,6 +55,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     private renderer: Renderer2,
     private tableSizeService: TableSizeService
   ) {
+    // DatagridRenderOrganizer service triggers resize steps
     this.subscriptions.push(
       this.organizer
         .filterRenderSteps(DatagridRenderStep.COMPUTE_COLUMN_WIDTHS)

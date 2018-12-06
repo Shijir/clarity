@@ -54,7 +54,7 @@ export default function(): void {
         filtersService = new FiltersProvider(new Page(stateDebouncer), stateDebouncer);
         comparator = new TestComparator();
         dragDispatcherService = undefined;
-        component = new ClrDatagridColumn(sortService, filtersService, dragDispatcherService, null);
+        component = new ClrDatagridColumn(sortService, filtersService, null);
       });
 
       it('has an id for identification', function() {
