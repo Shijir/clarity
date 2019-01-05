@@ -33,7 +33,9 @@ let nbCount: number = 0;
 
 @Component({
   selector: 'clr-dg-column',
-  template: `
+  template: `    
+<clr-dg-column-reorder-droppable></clr-dg-column-reorder-droppable>
+<div class="datagrid-column-wrapper" clrDraggable>
       <div class="datagrid-column-flex">
           <!-- I'm really not happy with that select since it's not very scalable -->
           <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -59,8 +61,10 @@ let nbCount: number = 0;
                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
             </span>
 
-          <clr-dg-column-separator></clr-dg-column-separator>
       </div>
+</div>
+        <clr-dg-column-separator></clr-dg-column-separator>
+        <clr-dg-column-reorder-droppable></clr-dg-column-reorder-droppable>
   `,
   host: {
     '[class.datagrid-column]': 'true',
