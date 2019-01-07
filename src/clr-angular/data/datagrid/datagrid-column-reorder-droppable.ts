@@ -27,8 +27,6 @@ export const enum ColumnHeaderSides {
   `,
 })
 export class ClrDatagridColumnReorderDroppable {
-  dropTolerance: any;
-
   constructor(
     @SkipSelf() private headerElRef: ElementRef,
     private tableSizeService: TableSizeService,
@@ -39,8 +37,14 @@ export class ClrDatagridColumnReorderDroppable {
 
   @Input('side') side: ColumnHeaderSides;
 
+  public dropTolerance: any;
+
   public get columnOrderDropKey() {
     return this.columnOrderModel.dropKey;
+  }
+
+  private get headerWidth() {
+    return this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2;
   }
 
   setDropTolerance(event: any) {
@@ -48,13 +52,13 @@ export class ClrDatagridColumnReorderDroppable {
 
     if (draggedFrom < this.columnOrderModel.flexOrder) {
       if (this.side === ColumnHeaderSides.Right) {
-        this.dropTolerance = { left: this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2 };
+        this.dropTolerance = { left: this.headerWidth };
       } else if (this.side === ColumnHeaderSides.Left) {
         this.dropTolerance = -1;
       }
     } else if (draggedFrom > this.columnOrderModel.flexOrder) {
       if (this.side === ColumnHeaderSides.Left) {
-        this.dropTolerance = { right: this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2 };
+        this.dropTolerance = { right: this.headerWidth };
       } else if (this.side === ColumnHeaderSides.Right) {
         this.dropTolerance = -1;
       }
