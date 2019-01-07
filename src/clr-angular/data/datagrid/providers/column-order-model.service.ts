@@ -12,7 +12,7 @@ export class ColumnOrderModelService {
 
   public flexOrder: number;
 
-  get dropKey() {
+  get columnGroupId() {
     return this.columnOrderCoordinatorService.columnGroupId;
   }
 

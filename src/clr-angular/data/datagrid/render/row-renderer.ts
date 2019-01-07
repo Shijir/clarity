@@ -10,12 +10,17 @@ import { DatagridRenderStep } from '../enums/render-step.enum';
 
 import { DatagridCellRenderer } from './cell-renderer';
 import { DatagridRenderOrganizer } from './render-organizer';
+import { ColumnOrderCoordinatorService } from '../providers/column-order-coordinator.service';
 
 @Directive({ selector: 'clr-dg-row, clr-dg-row-detail' })
 export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
-  constructor(private organizer: DatagridRenderOrganizer) {
+  constructor(
+    private organizer: DatagridRenderOrganizer,
+    private columnOrderCoordinatorService: ColumnOrderCoordinatorService
+  ) {
     this.subscriptions.push(
-      organizer.filterRenderSteps(DatagridRenderStep.ALIGN_COLUMNS).subscribe(() => this.setWidths())
+      this.organizer.filterRenderSteps(DatagridRenderStep.ALIGN_COLUMNS).subscribe(() => this.setWidths()),
+      this.columnOrderCoordinatorService.ordersUpdated.subscribe(() => this.renderCellOrders())
     );
   }
 
@@ -36,9 +41,20 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     });
   }
 
+  private renderCellOrders(): void {
+    // TODO: understand this below and add comment
+    if (this.columnOrderCoordinatorService.orderModels.length !== this.cells.length) {
+      return;
+    }
+    this.cells.forEach((cell, index) => {
+      cell.renderFlexOrder(this.columnOrderCoordinatorService.orderModels[index].flexOrder);
+    });
+  }
+
   ngAfterContentInit() {
     this.cells.changes.subscribe(() => {
       this.setWidths();
+      this.renderCellOrders();
     });
   }
 

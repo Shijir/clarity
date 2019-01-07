@@ -40,7 +40,7 @@ export class ClrDatagridColumnReorderDroppable {
   public dropTolerance: any;
 
   public get columnOrderDropKey() {
-    return this.columnOrderModel.dropKey;
+    return this.columnOrderModel.columnGroupId;
   }
 
   private get headerWidth() {

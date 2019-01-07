@@ -112,7 +112,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
   }
 
   public get columnOrderDropKey() {
-    return this.columnOrderModel.dropKey;
+    return this.columnOrderModel.columnGroupId;
   }
 
   /**
