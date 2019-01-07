@@ -37,7 +37,7 @@ export class ClrDatagridColumnReorderDroppable {
     private domAdapter: DomAdapter
   ) {}
 
-  @Input('side') whichSide: ColumnHeaderSides;
+  @Input('side') side: ColumnHeaderSides;
 
   public get columnOrderDropKey() {
     return this.columnOrderModel.dropKey;
@@ -46,18 +46,16 @@ export class ClrDatagridColumnReorderDroppable {
   setDropTolerance(event: any) {
     const draggedFrom: number = event.dragDataTransfer.flexOrder;
 
-    console.log(draggedFrom, this.columnOrderModel.flexOrder);
-
     if (draggedFrom < this.columnOrderModel.flexOrder) {
-      if (this.whichSide === ColumnHeaderSides.Right) {
+      if (this.side === ColumnHeaderSides.Right) {
         this.dropTolerance = { left: this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2 };
-      } else if (this.whichSide === ColumnHeaderSides.Left) {
+      } else if (this.side === ColumnHeaderSides.Left) {
         this.dropTolerance = -1;
       }
     } else if (draggedFrom > this.columnOrderModel.flexOrder) {
-      if (this.whichSide === ColumnHeaderSides.Left) {
+      if (this.side === ColumnHeaderSides.Left) {
         this.dropTolerance = { right: this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2 };
-      } else if (this.whichSide === ColumnHeaderSides.Right) {
+      } else if (this.side === ColumnHeaderSides.Right) {
         this.dropTolerance = -1;
       }
     } else {
@@ -73,9 +71,8 @@ export class ClrDatagridColumnReorderDroppable {
     this.renderer.setStyle(dropLineEl, 'height', `0px`);
   }
 
-  updateOrder(event: any, dropLineEl: any): void {
-    console.log(this.whichSide);
-    this.columnOrderModel.dropReceived(event);
+  updateOrder(droppedColumnModel: ColumnOrderModelService, dropLineEl: any): void {
+    this.columnOrderModel.dropReceived(droppedColumnModel);
     this.hideHighlight(dropLineEl);
   }
 }
