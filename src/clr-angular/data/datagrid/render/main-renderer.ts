@@ -28,6 +28,7 @@ import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DatagridHeaderRenderer } from './header-renderer';
 import { NoopDomAdapter } from './noop-dom-adapter';
 import { DatagridRenderOrganizer } from './render-organizer';
+import { ColumnOrderCoordinatorService } from '../providers/column-order-coordinator.service';
 
 // Fixes build error
 // @dynamic (https://github.com/angular/angular/issues/19698#issuecomment-338340211)
@@ -53,7 +54,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     private domAdapter: DomAdapter,
     private el: ElementRef,
     private renderer: Renderer2,
-    private tableSizeService: TableSizeService
+    private tableSizeService: TableSizeService,
+    private columnOrderCoordinatorService: ColumnOrderCoordinatorService
   ) {
     this.subscriptions.push(
       this.organizer
@@ -69,6 +71,10 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       })
     );
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
+
+    this.subscriptions.push(
+      this.columnOrderCoordinatorService.ordersUpdated.subscribe(() => this.renderHeaderOrders())
+    );
   }
 
   @ContentChildren(DatagridHeaderRenderer) public headers: QueryList<DatagridHeaderRenderer>;
@@ -80,8 +86,13 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
         // TODO: only re-stabilize if a column was added or removed. Reordering is fine.
         this.columnsSizesStable = false;
         this.stabilizeColumns();
+
+        this.updateHeaderOrders();
       })
     );
+
+    // set initial order of the header
+    this.setHeaderOrders();
   }
 
   // Initialize and set Table width for horizontal scrolling here.
@@ -188,5 +199,59 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       this.organizer.resize();
       this.columnsSizesStable = true;
     }
+  }
+
+  private nbHeaders: number = 0;
+
+  private setHeaderOrders(): void {
+    this.headers.forEach((header, index) => {
+      // set initial flex order
+      header.setFlexOrder(index);
+    });
+
+    // set orders array with headers ColumnOrder
+    this.columnOrderCoordinatorService.orderModels = this.headers.map(header => header.orderModel);
+
+    // save initial headers length
+    this.nbHeaders = this.headers.length;
+  }
+
+  private renderHeaderOrders(): void {
+    this.headers.forEach(header => {
+      header.renderFlexOrder();
+    });
+  }
+
+  private updateHeaderOrders(): void {
+    console.log('up');
+    if (this.nbHeaders < this.headers.length) {
+      // New headers should get their own flex order that will make them appear after the existing headers;
+      // Hence, their flex orders equals greater than the number of existing headers.
+
+      const newHeaders = this.headers.filter(header => typeof header.orderModel.flexOrder === 'undefined');
+      newHeaders.forEach((header, index) => (header.orderModel.flexOrder = index + this.nbHeaders));
+    } else {
+      // When some of the headers are removed, we still need to make sure flex order number values are in sequence.
+      // The datagrid headers' flex orders number values in an array could look like [3, 2, 0, 1];
+      // After removing the 3rd header (The flex order of 3rd header is 2), it would look like [3, 0, 1];
+      // Visually, they are still in order, but their flex order number values should be in a sequence
+      // Right now they are not in a sequence because it's { 0, 1, 3 }
+      // So here we need to make them { 0, 1, 2 } WITHOUT CHANGING THE ACTUAL ORDER
+      // Having them in a sequence is important for the calculation of reordering columns.
+
+      const sortedFlexOrders = this.headers.map(header => header.orderModel.flexOrder).sort();
+      this.headers.forEach(
+        header => (header.orderModel.flexOrder = sortedFlexOrders.indexOf(header.orderModel.flexOrder))
+      );
+    }
+
+    // update the orders array
+    this.columnOrderCoordinatorService.orderModels = this.headers.map(header => header.orderModel);
+
+    // update headers length
+    this.nbHeaders = this.headers.length;
+
+    // notify position order update
+    this.columnOrderCoordinatorService.broadcastOrdersUpdate();
   }
 }

@@ -11,6 +11,7 @@ import { DatagridRenderStep } from '../enums/render-step.enum';
 import { ColumnResizerService } from '../providers/column-resizer.service';
 import { STRICT_WIDTH_CLASS } from './constants';
 import { DatagridRenderOrganizer } from './render-organizer';
+import { ColumnOrderModelService } from '../providers/column-order-model.service';
 
 @Directive({ selector: 'clr-dg-column', providers: [ColumnResizerService] })
 export class DatagridHeaderRenderer implements OnDestroy {
@@ -19,7 +20,8 @@ export class DatagridHeaderRenderer implements OnDestroy {
     private renderer: Renderer2,
     private organizer: DatagridRenderOrganizer,
     private domAdapter: DomAdapter,
-    private columnResizerService: ColumnResizerService
+    private columnResizerService: ColumnResizerService,
+    private columnOrderModel: ColumnOrderModelService
   ) {
     this.subscriptions.push(
       this.organizer.filterRenderSteps(DatagridRenderStep.CLEAR_WIDTHS).subscribe(() => this.clearWidth())
@@ -81,5 +83,17 @@ export class DatagridHeaderRenderer implements OnDestroy {
     this.renderer.removeClass(this.el.nativeElement, STRICT_WIDTH_CLASS);
     this.renderer.setStyle(this.el.nativeElement, 'width', width + 'px');
     this.widthSet = true;
+  }
+
+  public get orderModel() {
+    return this.columnOrderModel;
+  }
+
+  public setFlexOrder(flexOrder: number) {
+    this.columnOrderModel.flexOrder = flexOrder;
+  }
+
+  public renderFlexOrder() {
+    this.renderer.setStyle(this.el.nativeElement, 'order', this.orderModel.flexOrder);
   }
 }

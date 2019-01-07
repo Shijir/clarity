@@ -39,20 +39,20 @@ export class ColumnOrderModelService {
 
     if (to > from) {
       for (let i = from + 1; i < to; i++) {
-        this.columnOrderCoordinatorService.flexOrderOf(i).flexOrder = i - 1;
+        this.columnOrderCoordinatorService.orderModelOfFlexOrder(i).flexOrder = i - 1;
       }
 
       dropEvent.dragDataTransfer.flexOrder = this.flexOrder;
       this.flexOrder = this.flexOrder - 1;
     } else if (to < from) {
       for (let i = from - 1; i > to; i--) {
-        this.columnOrderCoordinatorService.flexOrderOf(i).flexOrder = i + 1;
+        this.columnOrderCoordinatorService.orderModelOfFlexOrder(i).flexOrder = i + 1;
       }
 
       dropEvent.dragDataTransfer.flexOrder = this.flexOrder;
       this.flexOrder = this.flexOrder + 1;
     }
 
-    this.columnOrderCoordinatorService.positionOrdersUpdated.next();
+    this.columnOrderCoordinatorService.broadcastOrdersUpdate();
   }
 }

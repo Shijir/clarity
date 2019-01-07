@@ -4,7 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ColumnOrderModelService } from './column-order-model.service';
 
 let nbColumnGroup = 0;
@@ -13,7 +13,7 @@ let nbColumnGroup = 0;
 export class ColumnOrderCoordinatorService {
   // Here, the order of the items inside the array below should
   // match the order of the QueryList of headers.
-  public orders: ColumnOrderModelService[] = [];
+  public orderModels: ColumnOrderModelService[] = [];
 
   private _columnGroupId: string;
 
@@ -25,9 +25,17 @@ export class ColumnOrderCoordinatorService {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
   }
 
-  public positionOrdersUpdated = new Subject<any>();
+  private ordersUpdate = new Subject<void>();
 
-  public flexOrderOf(flexOrder: number): ColumnOrderModelService {
-    return this.orders.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
+  public get ordersUpdated(): Observable<void> {
+    return this.ordersUpdate.asObservable();
+  }
+
+  public broadcastOrdersUpdate(): void {
+    this.ordersUpdate.next();
+  }
+
+  public orderModelOfFlexOrder(flexOrder: number): ColumnOrderModelService {
+    return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 }
