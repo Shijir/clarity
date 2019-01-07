@@ -4,9 +4,15 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import { Component, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, Renderer2, SkipSelf } from '@angular/core';
 import { TableSizeService } from './providers/table-size.service';
 import { ColumnOrderModelService } from './providers/column-order-model.service';
+import { DomAdapter } from '../../utils/dom-adapter/dom-adapter';
+
+export const enum ColumnHeaderSides {
+  Left,
+  Right,
+}
 
 @Component({
   selector: 'clr-dg-column-reorder-droppable',
@@ -24,22 +30,39 @@ export class ClrDatagridColumnReorderDroppable {
   dropTolerance: any;
 
   constructor(
+    @SkipSelf() private headerElRef: ElementRef,
     private tableSizeService: TableSizeService,
+    private columnOrderModel: ColumnOrderModelService,
     private renderer: Renderer2,
-    private columnOrderModel: ColumnOrderModelService
+    private domAdapter: DomAdapter
   ) {}
+
+  @Input('side') whichSide: ColumnHeaderSides;
 
   public get columnOrderDropKey() {
     return this.columnOrderModel.dropKey;
   }
 
   setDropTolerance(event: any) {
-    this.dropTolerance = 10;
-  }
+    const draggedFrom: number = event.dragDataTransfer.flexOrder;
 
-  updateOrder(event: any, dropLineEl: any): void {
-    this.columnOrderModel.dropReceived(event);
-    this.hideHighlight(dropLineEl);
+    console.log(draggedFrom, this.columnOrderModel.flexOrder);
+
+    if (draggedFrom < this.columnOrderModel.flexOrder) {
+      if (this.whichSide === ColumnHeaderSides.Right) {
+        this.dropTolerance = { left: this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2 };
+      } else if (this.whichSide === ColumnHeaderSides.Left) {
+        this.dropTolerance = -1;
+      }
+    } else if (draggedFrom > this.columnOrderModel.flexOrder) {
+      if (this.whichSide === ColumnHeaderSides.Left) {
+        this.dropTolerance = { right: this.domAdapter.clientRect(this.headerElRef.nativeElement).width / 2 };
+      } else if (this.whichSide === ColumnHeaderSides.Right) {
+        this.dropTolerance = -1;
+      }
+    } else {
+      this.dropTolerance = -1;
+    }
   }
 
   showHighlight(dropLineEl: any) {
@@ -48,5 +71,11 @@ export class ClrDatagridColumnReorderDroppable {
 
   hideHighlight(dropLineEl: any) {
     this.renderer.setStyle(dropLineEl, 'height', `0px`);
+  }
+
+  updateOrder(event: any, dropLineEl: any): void {
+    console.log(this.whichSide);
+    this.columnOrderModel.dropReceived(event);
+    this.hideHighlight(dropLineEl);
   }
 }
