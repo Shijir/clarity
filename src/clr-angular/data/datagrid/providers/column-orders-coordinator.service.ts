@@ -5,6 +5,7 @@
  */
 import { Injectable } from '@angular/core';
 import { ColumnOrderModelService } from './column-order-model.service';
+import { Observable, Subject } from 'rxjs/index';
 
 let nbColumnGroup = 0;
 
@@ -29,6 +30,20 @@ export class ColumnOrdersCoordinatorService {
 
   constructor() {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
+  }
+
+  private _orderChange = new Subject<void>();
+
+  public get orderChange(): Observable<void> {
+    return this._orderChange.asObservable();
+  }
+
+  public broadcastOrderChange() {
+    this._orderChange.next();
+  }
+
+  public modelAtflexOrderOf(flexOrder: number): ColumnOrderModelService {
+    return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 
   // TODO: This service will be expanded in the next PR

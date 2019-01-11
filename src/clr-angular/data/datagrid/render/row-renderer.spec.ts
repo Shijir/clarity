@@ -24,6 +24,7 @@ import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { MOCK_ORGANIZER_PROVIDER, MockDatagridRenderOrganizer } from './render-organizer.mock';
 import { DatagridRowRenderer } from './row-renderer';
+import { ColumnOrdersCoordinatorService } from '../providers/column-orders-coordinator.service';
 
 const PROVIDERS = [
   Selection,
@@ -39,6 +40,7 @@ const PROVIDERS = [
   DatagridWillyWonka,
   StateDebouncer,
   DisplayModeService,
+  ColumnOrdersCoordinatorService,
 ];
 export default function(): void {
   describe('DatagridRowRenderer directive', function() {

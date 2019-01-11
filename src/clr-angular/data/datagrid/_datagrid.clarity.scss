@@ -353,12 +353,11 @@
         // This droppable area shouldn't be visible.
         // Although it has no width (we will use dropTolerance on the width), having the full spanning height of
         // the column is important to have an ample space of droppable area.
-        width: 0px;
+        width: 0;
         height: 100%;
 
         //Other
         border: none;
-        transform: translateZ(0);
 
         .datagrid-column-drop-line {
           //Position
@@ -368,10 +367,12 @@
 
           //Dims
           width: 2px;
-          height: 0px;
+          height: 0;
 
           //Others
-          background: $clr-action-purple-dark;
+          background-color: $clr-action-purple-dark;
+
+          z-index: map-get($clr-layers, datagrid-popover);
         }
       }
 
@@ -394,12 +395,6 @@
           background: transparent;
           border: solid 1px #bbb;
           border-left: solid 2px $clr-action-purple-light;
-        }
-      }
-
-      &:last-child {
-        .datagrid-column-separator {
-          display: none;
         }
       }
 
@@ -538,6 +533,7 @@
           top: 0.25rem;
           left: 0;
           background-color: $clr-table-border-color;
+          z-index: map-get($clr-layers, datagrid-header);
         }
 
         .datagrid-column-handle {

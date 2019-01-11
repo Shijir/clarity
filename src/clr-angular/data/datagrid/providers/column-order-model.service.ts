@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { ColumnOrdersCoordinatorService } from './column-orders-coordinator.service';
 import { DatagridHideableColumnModel } from '../datagrid-hideable-column.model';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
+import { Observable } from 'rxjs/index';
 
 /**
  * This is a model service that's responsible for:
@@ -14,6 +15,9 @@ import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
  * 2. Updating the flex order data and tells ColumnOrderCoordinatorService when it should broadcast
  * 3. Returning models at the previous and next flex orders
  */
+
+// TODO: Fix last visible column width
+// TODO: Optimize dom access
 
 @Injectable()
 export class ColumnOrderModelService {
@@ -37,14 +41,58 @@ export class ColumnOrderModelService {
     return this.flexOrder === this.columnOrderCoordinatorService.orderModels.length - 1;
   }
 
+  get isLastVisible(): boolean {
+    // the last visible header wouldn't have next visible column, and it should be visible itself.
+    return !this.nextVisibleColumnModel && !this.isHidden;
+  }
+
   get isHidden(): boolean {
     return this.hideableColumnModel && this.hideableColumnModel.hidden;
   }
 
-  public dropReceived(dropData: any) {
-    // updates column orders
-    // broadcasts updated order changes
-    console.log(dropData);
+  get orderChange(): Observable<void> {
+    return this.columnOrderCoordinatorService.orderChange;
+  }
+
+  dropReceived(dropEvent: any) {
+    // Each column header has a corresponding index in the array, orders.
+
+    // 1.   replace the flexorder at the drag index with the one at the drop index
+
+    // 2.   a.  if dragged from left to right,
+    //          decrease flexorder of each column from the drag index plus one to the drop index
+    //      b.  if dragged from right to left,
+    //          increase flexorder of each column from the drag index minus one to the drop index
+
+    // Drag from left to right:
+    // At the start : ["fo0", "fo1", "fo2", "fo3", "fo4"]
+    // At the end   : ["fo0", "fo3", "fo1", "fo2", "fo4"]
+
+    // Drag from right to left:
+    // At the start : ["fo0", "fo1", "fo2", "fo3", "fo4"]
+    // At the end   : ["fo0", "fo2", "fo3", "fo1", "fo4"]
+
+    const from = dropEvent.dragDataTransfer.flexOrder;
+    const to = this.flexOrder;
+
+    if (to > from) {
+      for (let i = from + 1; i < to; i++) {
+        this.columnOrderCoordinatorService.modelAtflexOrderOf(i).flexOrder = i - 1;
+      }
+
+      dropEvent.dragDataTransfer.flexOrder = this.flexOrder;
+      this.flexOrder = this.flexOrder - 1;
+    } else if (to < from) {
+      for (let i = from - 1; i > to; i--) {
+        this.columnOrderCoordinatorService.modelAtflexOrderOf(i).flexOrder = i + 1;
+      }
+
+      dropEvent.dragDataTransfer.flexOrder = this.flexOrder;
+      this.flexOrder = this.flexOrder + 1;
+    }
+
+    // headers and cells will listen to the following broadcast and render their flex orders correspondingly
+    this.columnOrderCoordinatorService.broadcastOrderChange();
   }
 
   private findAdjacentVisibleModel(prev = false): ColumnOrderModelService {

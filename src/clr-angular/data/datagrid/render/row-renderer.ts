@@ -10,13 +10,19 @@ import { DatagridRenderStep } from '../enums/render-step.enum';
 
 import { DatagridCellRenderer } from './cell-renderer';
 import { DatagridRenderOrganizer } from './render-organizer';
+import { ColumnOrdersCoordinatorService } from '../providers/column-orders-coordinator.service';
 
 @Directive({ selector: 'clr-dg-row, clr-dg-row-detail' })
 export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
-  constructor(private organizer: DatagridRenderOrganizer) {
+  constructor(
+    private organizer: DatagridRenderOrganizer,
+    private columnOrdersCoordinatorService: ColumnOrdersCoordinatorService
+  ) {
     this.subscriptions.push(
       organizer.filterRenderSteps(DatagridRenderStep.ALIGN_COLUMNS).subscribe(() => this.setWidths())
     );
+
+    this.subscriptions.push(columnOrdersCoordinatorService.orderChange.subscribe(() => this.renderCellOrders()));
   }
 
   private subscriptions: Subscription[] = [];
@@ -33,6 +39,16 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     this.cells.forEach((cell, index) => {
       const width = this.organizer.widths[index];
       cell.setWidth(width.strict, width.px);
+    });
+  }
+
+  private renderCellOrders(): void {
+    // TODO: understand this below and add comment
+    if (this.columnOrdersCoordinatorService.orderModels.length !== this.cells.length) {
+      return;
+    }
+    this.cells.forEach((cell, index) => {
+      cell.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
     });
   }
 
