@@ -32,6 +32,7 @@ import { TableSizeService } from './providers/table-size.service';
 import { Expand } from '../../utils/expand/providers/expand';
 import { DatagridWillyWonka } from './chocolate/datagrid-willy-wonka';
 import { DomAdapter } from '../../utils/dom-adapter/dom-adapter';
+import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
 
 // Reusable list of providers used in a number of tests
 export const DATAGRID_SPEC_PROVIDERS = [
@@ -53,6 +54,7 @@ export const DATAGRID_SPEC_PROVIDERS = [
   StateProvider,
   ColumnToggleButtonsService,
   TableSizeService,
+  ColumnOrdersCoordinatorService,
 ];
 
 export class TestContext<D, C> {

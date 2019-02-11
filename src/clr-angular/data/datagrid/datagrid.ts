@@ -28,6 +28,7 @@ import { ClrDatagridRow } from './datagrid-row';
 import { DatagridDisplayMode } from './enums/display-mode.enum';
 import { ClrDatagridStateInterface } from './interfaces/state.interface';
 import { ColumnToggleButtonsService } from './providers/column-toggle-buttons.service';
+import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
 import { DisplayModeService } from './providers/display-mode.service';
 import { FiltersProvider } from './providers/filters';
 import { ExpandableRowsCount } from './providers/global-expandable-rows';
@@ -61,6 +62,7 @@ import { ColumnsService } from './providers/columns.service';
     StateDebouncer,
     StateProvider,
     ColumnToggleButtonsService,
+    ColumnOrdersCoordinatorService,
     TableSizeService,
     ColumnsService,
     DisplayModeService,

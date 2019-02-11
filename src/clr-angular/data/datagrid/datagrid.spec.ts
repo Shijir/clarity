@@ -338,6 +338,7 @@ class ProjectionTest {
   items = [1, 2, 3];
 }
 
+
 @Component({
   template: `
   <clr-datagrid>
