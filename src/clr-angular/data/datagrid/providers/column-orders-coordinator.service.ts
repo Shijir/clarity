@@ -5,6 +5,7 @@
  */
 import { Injectable } from '@angular/core';
 import { ColumnOrderModelService } from './column-order-model.service';
+import { Observable, Subject } from 'rxjs/index';
 
 let nbColumnGroup = 0;
 
@@ -23,12 +24,26 @@ export class ColumnOrdersCoordinatorService {
   // the common group id that will be shared across Datagrids all reorder draggable and droppables
   private _columnGroupId: string;
 
+  private _orderChange = new Subject<void>();
+
   get columnGroupId() {
     return this._columnGroupId;
   }
 
+  public get orderChange(): Observable<void> {
+    return this._orderChange.asObservable();
+  }
+
   constructor() {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
+  }
+
+  public broadcastOrderChange() {
+    this._orderChange.next();
+  }
+
+  public modelAtflexOrderOf(flexOrder: number): ColumnOrderModelService {
+    return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 
   // TODO: This service will be expanded in the next PR
