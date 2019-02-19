@@ -100,4 +100,8 @@ export class DatagridHeaderRenderer implements OnDestroy {
   public setFlexOrder(flexOrder: number) {
     this.columnOrderModel.flexOrder = flexOrder;
   }
+
+  public renderOrder() {
+    this.renderer.setStyle(this.el.nativeElement, 'order', this.columnOrderModel.flexOrder);
+  }
 }

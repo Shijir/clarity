@@ -55,7 +55,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     private el: ElementRef,
     private renderer: Renderer2,
     private tableSizeService: TableSizeService,
-    private columnOrderCoordinatorService: ColumnOrdersCoordinatorService
+    private columnOrdersCoordinatorService: ColumnOrdersCoordinatorService
   ) {
     this.subscriptions.push(
       this.organizer
@@ -71,6 +71,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       })
     );
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
+
+    this.subscriptions.push(columnOrdersCoordinatorService.orderChange.subscribe(() => this.renderHeaderOrders()));
   }
 
   @ContentChildren(DatagridHeaderRenderer) public headers: QueryList<DatagridHeaderRenderer>;
@@ -202,8 +204,14 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
 
     // set orders array with headers ColumnOrder
-    this.columnOrderCoordinatorService.orderModels = this.headers.map(header => {
+    this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
       return header.orderModel;
+    });
+  }
+
+  private renderHeaderOrders(): void {
+    this.headers.forEach((header: DatagridHeaderRenderer) => {
+      header.renderOrder();
     });
   }
 }
