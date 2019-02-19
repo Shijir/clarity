@@ -53,15 +53,15 @@ export default function(): void {
     });
 
     it('returns correct boolean value if column appears at first', function() {
-      expect(columnOrderModelService.isAtFirst).toBeFalsy();
-      expect(columnOrderModelServicePrev.isAtFirst).toBeTruthy();
-      expect(columnOrderModelServiceNext.isAtFirst).toBeFalsy();
+      expect(columnOrderModelService.isFirst).toBeFalsy();
+      expect(columnOrderModelServicePrev.isFirst).toBeTruthy();
+      expect(columnOrderModelServiceNext.isFirst).toBeFalsy();
     });
 
     it('returns correct boolean value if column appears at end', function() {
-      expect(columnOrderModelService.isAtEnd).toBeFalsy();
-      expect(columnOrderModelServicePrev.isAtEnd).toBeFalsy();
-      expect(columnOrderModelServiceNext.isAtEnd).toBeTruthy();
+      expect(columnOrderModelService.isLast).toBeFalsy();
+      expect(columnOrderModelServicePrev.isLast).toBeFalsy();
+      expect(columnOrderModelServiceNext.isLast).toBeTruthy();
     });
 
     it('returns width of its own column', function() {

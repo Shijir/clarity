@@ -46,10 +46,10 @@ export class ClrDatagridColumnReorderDroppable {
     this.renderer.setStyle(dropLineEl, 'height', `${this.tableSizeService.getColumnDragHeight()}`);
 
     // the drop line should fully appear at first and end columns
-    if (this.columnOrderModel.isAtFirst) {
+    if (this.columnOrderModel.isFirst) {
       this.renderer.setStyle(dropLineEl, 'left', `0px`);
     }
-    if (this.columnOrderModel.isAtEnd) {
+    if (this.columnOrderModel.isLast) {
       this.renderer.setStyle(dropLineEl, 'left', `-2px`);
     }
   }

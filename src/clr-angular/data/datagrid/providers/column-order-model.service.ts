@@ -29,11 +29,11 @@ export class ColumnOrderModelService {
     return this.columnOrderCoordinatorService.columnGroupId;
   }
 
-  get isAtFirst(): boolean {
+  get isFirst(): boolean {
     return this.flexOrder === 0;
   }
 
-  get isAtEnd(): boolean {
+  get isLast(): boolean {
     return this.flexOrder === this.columnOrderCoordinatorService.orderModels.length - 1;
   }
 
