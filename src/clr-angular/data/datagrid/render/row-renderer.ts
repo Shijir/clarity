@@ -47,7 +47,7 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     if (this.columnOrdersCoordinatorService.orderModels.length !== this.cells.length) {
       return;
     }
-    this.cells.forEach((cell, index) => {
+    this.cells.forEach((cell: DatagridCellRenderer, index: number) => {
       cell.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
     });
   }

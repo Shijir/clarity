@@ -210,8 +210,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
   }
 
   private renderHeaderOrders(): void {
-    this.headers.forEach((header: DatagridHeaderRenderer) => {
-      header.renderOrder();
+    this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
+      header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
     });
   }
 }

@@ -38,7 +38,7 @@ export class DatagridCellRenderer implements OnDestroy {
     this.renderer.setStyle(this.el.nativeElement, 'width', value + 'px');
   }
 
-  public renderOrder(newFlexOrder: number) {
-    this.renderer.setStyle(this.el.nativeElement, 'order', newFlexOrder);
+  public renderOrder(flexOrder: number) {
+    this.renderer.setStyle(this.el.nativeElement, 'order', flexOrder);
   }
 }
