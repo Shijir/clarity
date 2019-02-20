@@ -9,6 +9,7 @@ import { ClrDropToleranceInterface } from '../../utils/drag-and-drop/interfaces/
 import { ColumnHeaderSides } from './enums/header-sides.enum';
 import { ColumnOrderModelService } from './providers/column-order-model.service';
 import { TableSizeService } from './providers/table-size.service';
+import { DragEventInterface } from '../../utils/drag-and-drop/interfaces/drag-event.interface';
 
 @Component({
   selector: 'clr-dg-column-reorder-droppable',
@@ -59,7 +60,7 @@ export class ClrDatagridColumnReorderDroppable {
     this.renderer.setStyle(dropLineEl, 'left', `-1px`);
   }
 
-  public updateOrder(droppedColumnModel: ColumnOrderModelService, dropLineEl: any): void {
+  public updateOrder(droppedColumnModel: DragEventInterface<ColumnOrderModelService>, dropLineEl: any): void {
     this.columnOrderModel.dropReceived(droppedColumnModel);
     this.hideHighlight(dropLineEl);
   }

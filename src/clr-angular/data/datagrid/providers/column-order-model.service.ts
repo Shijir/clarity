@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { ColumnOrdersCoordinatorService } from './column-orders-coordinator.service';
 import { DatagridHideableColumnModel } from '../datagrid-hideable-column.model';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
+import { DragEventInterface } from '../../../utils/drag-and-drop/interfaces/drag-event.interface';
 
 /**
  * This is a model service that's responsible for:
@@ -41,7 +42,7 @@ export class ColumnOrderModelService {
     return this.hideableColumnModel && this.hideableColumnModel.hidden;
   }
 
-  public dropReceived(dropEvent: any) {
+  public dropReceived(dropEvent: DragEventInterface<ColumnOrderModelService>) {
     // Each column header has a corresponding index in the array, orders.
 
     // 1.   replace the flexorder at the drag index with the one at the drop index

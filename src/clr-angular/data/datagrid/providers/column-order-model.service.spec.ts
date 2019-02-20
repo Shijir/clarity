@@ -9,13 +9,24 @@ import { ColumnOrdersCoordinatorService } from './column-orders-coordinator.serv
 import { DatagridHideableColumnModel } from '../datagrid-hideable-column.model';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { createMockHeaderEl, destroyMockHeaderEl } from './column-order-model.service.mock';
+import { DragEventInterface, DragEventType } from '../../../utils/drag-and-drop/interfaces/drag-event.interface';
 
 export default function(): void {
-  describe('ColumnOrderModelService', function() {
+  fdescribe('ColumnOrderModelService', function() {
     let columnOrdersCoordinatorService = new ColumnOrdersCoordinatorService();
     let columnOrderModelService: ColumnOrderModelService;
     let columnOrderModelServicePrev: ColumnOrderModelService;
     let columnOrderModelServiceNext: ColumnOrderModelService;
+
+    const generateMockDropHeaderEvent = (
+      columnModelService: ColumnOrderModelService
+    ): DragEventInterface<ColumnOrderModelService> => {
+      return {
+        type: DragEventType.DROP,
+        dragPosition: { pageX: 0, pageY: 0, moveX: 0, moveY: 0 },
+        dragDataTransfer: columnModelService,
+      };
+    };
 
     beforeEach(function() {
       columnOrdersCoordinatorService = new ColumnOrdersCoordinatorService();
@@ -127,6 +138,38 @@ export default function(): void {
       columnOrderModelServicePrev.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', true);
       columnOrderModelServiceNext.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', false);
       expect(columnOrderModelServiceNext.previousVisibleColumnModel).toBeUndefined();
+    });
+
+    fit('swaps flex orders if previous model is dropped on current model', function() {
+      columnOrderModelService.dropReceived(generateMockDropHeaderEvent(columnOrderModelServicePrev));
+
+      expect(columnOrderModelServicePrev.flexOrder).toBe(1);
+      expect(columnOrderModelService.flexOrder).toBe(0);
+      expect(columnOrderModelServiceNext.flexOrder).toBe(2);
+    });
+
+    fit('swaps flex orders if next model is dropped on current model', function() {
+      columnOrderModelService.dropReceived(generateMockDropHeaderEvent(columnOrderModelServiceNext));
+
+      expect(columnOrderModelServicePrev.flexOrder).toBe(0);
+      expect(columnOrderModelService.flexOrder).toBe(2);
+      expect(columnOrderModelServiceNext.flexOrder).toBe(1);
+    });
+
+    fit('swaps flex orders if next model is dropped on previous model', function() {
+      columnOrderModelServicePrev.dropReceived(generateMockDropHeaderEvent(columnOrderModelServiceNext));
+
+      expect(columnOrderModelServicePrev.flexOrder).toBe(1);
+      expect(columnOrderModelService.flexOrder).toBe(2);
+      expect(columnOrderModelServiceNext.flexOrder).toBe(0);
+    });
+
+    fit('swaps flex orders if previous model is dropped on next model', function() {
+      columnOrderModelServiceNext.dropReceived(generateMockDropHeaderEvent(columnOrderModelServicePrev));
+
+      expect(columnOrderModelServicePrev.flexOrder).toBe(2);
+      expect(columnOrderModelService.flexOrder).toBe(0);
+      expect(columnOrderModelServiceNext.flexOrder).toBe(1);
     });
   });
 }
