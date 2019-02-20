@@ -397,12 +397,6 @@
         }
       }
 
-      &:last-child {
-        .datagrid-column-separator {
-          display: none;
-        }
-      }
-
       clr-dg-filter,
       clr-dg-string-filter {
         display: flex;

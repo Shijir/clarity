@@ -42,6 +42,11 @@ export class ColumnOrderModelService {
     return this.hideableColumnModel && this.hideableColumnModel.hidden;
   }
 
+  get isLastVisible(): boolean {
+    // the last visible header wouldn't have next visible column, and it should be visible itself.
+    return !this.nextVisibleColumnModel && !this.isHidden;
+  }
+
   public dropReceived(dropEvent: DragEventInterface<ColumnOrderModelService>) {
     // Each column header has a corresponding index in the array, orders.
 

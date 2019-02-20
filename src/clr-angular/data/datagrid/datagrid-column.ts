@@ -61,7 +61,7 @@ let nbCount: number = 0;
             </span>
       </div>
     </div>
-    <clr-dg-column-separator></clr-dg-column-separator>
+    <clr-dg-column-separator *ngIf="!isLastVisible"></clr-dg-column-separator>
     <clr-dg-column-reorder-droppable [side]="rightReorderDroppable"></clr-dg-column-reorder-droppable>
   `,
   host: {
@@ -113,6 +113,10 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
   public get columnGroupId() {
     return this.columnOrderModel.columnGroupId;
+  }
+
+  public get isLastVisible() {
+    return this.columnOrderModel.isLastVisible;
   }
 
   /**
