@@ -15,7 +15,7 @@ import { DatagridRenderOrganizer } from './render-organizer';
 import { MOCK_ORGANIZER_PROVIDER, MockDatagridRenderOrganizer } from './render-organizer.mock';
 
 export default function(): void {
-  describe('DatagridCellRenderer directive', function() {
+  fdescribe('DatagridCellRenderer directive', function() {
     let context: TestContext<DatagridCellRenderer, SimpleTest>;
     let organizer: MockDatagridRenderOrganizer;
 
@@ -45,6 +45,11 @@ export default function(): void {
       organizer.updateRenderStep.next(DatagridRenderStep.CLEAR_WIDTHS);
       expect(context.clarityElement.style.width).toBeFalsy();
       expect(context.clarityElement.classList).not.toContain(STRICT_WIDTH_CLASS);
+    });
+
+    it('renders flex order', function() {
+      context.clarityDirective.renderOrder(123);
+      expect(context.clarityElement.style.order).toBe('123');
     });
   });
 }
