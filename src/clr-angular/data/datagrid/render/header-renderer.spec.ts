@@ -25,6 +25,11 @@ import { DatagridHeaderRenderer } from './header-renderer';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { MOCK_ORGANIZER_PROVIDER, MockDatagridRenderOrganizer } from './render-organizer.mock';
 import { ColumnOrdersCoordinatorService } from '../providers/column-orders-coordinator.service';
+import { ColumnOrderModelService } from '../providers/column-order-model.service';
+import {
+  MOCK_COLUMN_ORDER_MODEL_PROVIDER,
+  MockColumnOrderModelService,
+} from '../providers/column-order-model.service.mock';
 
 @Component({ template: `<clr-dg-column>Hello world</clr-dg-column>` })
 class SimpleTest {}
@@ -57,15 +62,17 @@ class HeaderResizeTestComponent {
 }
 
 export default function(): void {
-  describe('DatagridHeaderRenderer directive', function() {
+  fdescribe('DatagridHeaderRenderer directive', function() {
     let context: TestContext<DatagridHeaderRenderer, SimpleTest>;
     let domAdapter: MockDomAdapter;
     let organizer: MockDatagridRenderOrganizer;
+    let columnOrderModelService: MockColumnOrderModelService;
 
     beforeEach(function() {
       context = this.create(DatagridHeaderRenderer, SimpleTest, [
         MOCK_ORGANIZER_PROVIDER,
         MOCK_DOM_ADAPTER_PROVIDER,
+        MOCK_COLUMN_ORDER_MODEL_PROVIDER,
         Sort,
         FiltersProvider,
         Page,
@@ -76,6 +83,7 @@ export default function(): void {
       ]);
       domAdapter = <MockDomAdapter>context.getClarityProvider(DomAdapter);
       organizer = <MockDatagridRenderOrganizer>context.getClarityProvider(DatagridRenderOrganizer);
+      columnOrderModelService = <MockColumnOrderModelService>context.getClarityProvider(ColumnOrderModelService);
     });
 
     it('computes the width of header based on its scrollWidth', function() {
@@ -129,6 +137,17 @@ export default function(): void {
       context.clarityDirective.setWidth(123);
       expect(context.clarityElement.style.width).toBe('123px');
       expect(context.clarityElement.classList).not.toContain('datagrid-fixed-width');
+    });
+
+    it('sets model flex order', function() {
+      expect(columnOrderModelService.flexOrder).toBeUndefined();
+      context.clarityDirective.setFlexOrder(123);
+      expect(columnOrderModelService.flexOrder).toBe(123);
+    });
+
+    it('renders flex order', function() {
+      context.clarityDirective.renderOrder(123);
+      expect(context.clarityElement.style.order).toBe('123');
     });
   });
 
