@@ -5,7 +5,7 @@
  */
 import { Injectable } from '@angular/core';
 import { ColumnOrderModelService } from './column-order-model.service';
-import { Observable, Subject } from 'rxjs/index';
+import { Observable, Subject } from 'rxjs';
 
 let nbColumnGroup = 0;
 

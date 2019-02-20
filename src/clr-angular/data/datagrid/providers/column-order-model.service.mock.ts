@@ -14,8 +14,8 @@ export class MockColumnOrderModelService implements Pick<ColumnOrderModelService
   public hideableColumnModel: DatagridHideableColumnModel;
   public nextVisibleColumnModel: any;
   public previousVisibleColumnModel: any;
-  public isAtFirst: boolean = false;
-  public isAtEnd: boolean = false;
+  public isFirst: boolean = false;
+  public isLast: boolean = false;
   public isHidden: boolean;
 
   get headerWidth(): number {
