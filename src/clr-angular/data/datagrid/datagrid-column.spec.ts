@@ -27,6 +27,10 @@ import { DomAdapter } from '../../utils/dom-adapter/dom-adapter';
 import { DatagridRenderOrganizer } from './render/render-organizer';
 import { ColumnOrderModelService } from './providers/column-order-model.service';
 import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
+import {
+  MOCK_COLUMN_ORDER_MODEL_PROVIDER,
+  MockColumnOrderModelService,
+} from './providers/column-order-model.service.mock';
 
 const PROVIDERS_NEEDED = [
   Sort,
@@ -37,7 +41,7 @@ const PROVIDERS_NEEDED = [
   StateDebouncer,
   TableSizeService,
   Renderer2,
-  ColumnOrdersCoordinatorService,
+  MOCK_COLUMN_ORDER_MODEL_PROVIDER,
 ];
 
 export default function(): void {
@@ -307,9 +311,10 @@ export default function(): void {
 
     describe('View basics', function() {
       let context: TestContext<ClrDatagridColumn<number | string>, SimpleTest>;
+      let columnOrderModelService: MockColumnOrderModelService;
 
       beforeEach(function() {
-        context = this.create(ClrDatagridColumn, SimpleTest, PROVIDERS_NEEDED);
+        context = this.createWithOverride(ClrDatagridColumn, SimpleTest, [], [], PROVIDERS_NEEDED);
       });
 
       it('projects content', function() {
@@ -373,6 +378,17 @@ export default function(): void {
         context.clarityDirective.hideable = new DatagridHideableColumnModel(null, 'dg-col-0', true);
         context.detectChanges();
         expect(context.clarityElement.classList.contains('datagrid-column--hidden')).toBeTruthy();
+      });
+
+      it('should not project separator if column is last visible one', function() {
+        let separator = context.clarityElement.querySelectorAll('.datagrid-column-separator');
+        expect(separator.length).toBe(1);
+
+        columnOrderModelService = <MockColumnOrderModelService>context.getClarityProvider(ColumnOrderModelService);
+        columnOrderModelService.isLastVisible = true;
+        context.detectChanges();
+        separator = context.clarityElement.querySelectorAll('.datagrid-column-separator');
+        expect(separator.length).toBe(0);
       });
     });
 
