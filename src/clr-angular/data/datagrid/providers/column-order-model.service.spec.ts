@@ -104,6 +104,15 @@ export default function(): void {
       expect(columnOrderModelServiceNext.isHidden).toBeTruthy();
     });
 
+    it('returns correct boolean value if column is hidden and appears last', function() {
+      columnOrderModelService.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', false);
+      columnOrderModelServicePrev.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', false);
+      columnOrderModelServiceNext.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', true);
+      expect(columnOrderModelService.isLastVisible).toBeTruthy();
+      expect(columnOrderModelServicePrev.isLastVisible).toBeFalsy();
+      expect(columnOrderModelServiceNext.isLastVisible).toBeFalsy();
+    });
+
     it('returns correct next visible model', function() {
       // visually the middle one and hidden
       columnOrderModelService.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', true);
@@ -140,7 +149,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.previousVisibleColumnModel).toBeUndefined();
     });
 
-    fit('rearranges flex orders correctly if previous model is dropped on current model', function() {
+    it('rearranges flex orders correctly if previous model is dropped on current model', function() {
       columnOrderModelService.dropReceived(generateMockDropHeaderEvent(columnOrderModelServicePrev));
 
       expect(columnOrderModelServicePrev.flexOrder).toBe(1);
@@ -148,7 +157,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.flexOrder).toBe(2);
     });
 
-    fit('rearranges flex orders correctly if current model is dropped on previous model', function() {
+    it('rearranges flex orders correctly if current model is dropped on previous model', function() {
       columnOrderModelServicePrev.dropReceived(generateMockDropHeaderEvent(columnOrderModelService));
 
       expect(columnOrderModelServicePrev.flexOrder).toBe(1);
@@ -156,7 +165,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.flexOrder).toBe(2);
     });
 
-    fit('rearranges flex orders correctly if next model is dropped on current model', function() {
+    it('rearranges flex orders correctly if next model is dropped on current model', function() {
       columnOrderModelService.dropReceived(generateMockDropHeaderEvent(columnOrderModelServiceNext));
 
       expect(columnOrderModelServicePrev.flexOrder).toBe(0);
@@ -164,7 +173,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.flexOrder).toBe(1);
     });
 
-    fit('rearranges flex orders correctly if current model is dropped on next model', function() {
+    it('rearranges flex orders correctly if current model is dropped on next model', function() {
       columnOrderModelServiceNext.dropReceived(generateMockDropHeaderEvent(columnOrderModelService));
 
       expect(columnOrderModelServicePrev.flexOrder).toBe(0);
@@ -172,7 +181,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.flexOrder).toBe(1);
     });
 
-    fit('rearranges flex orders correctly if next model is dropped on previous model', function() {
+    it('rearranges flex orders correctly if next model is dropped on previous model', function() {
       columnOrderModelServicePrev.dropReceived(generateMockDropHeaderEvent(columnOrderModelServiceNext));
 
       expect(columnOrderModelServicePrev.flexOrder).toBe(1);
@@ -180,7 +189,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.flexOrder).toBe(0);
     });
 
-    fit('rearranges flex orders correctly if previous model is dropped on next model', function() {
+    it('rearranges flex orders correctly if previous model is dropped on next model', function() {
       columnOrderModelServiceNext.dropReceived(generateMockDropHeaderEvent(columnOrderModelServicePrev));
 
       expect(columnOrderModelServicePrev.flexOrder).toBe(2);
