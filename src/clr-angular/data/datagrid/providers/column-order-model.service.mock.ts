@@ -16,6 +16,7 @@ export class MockColumnOrderModelService implements Pick<ColumnOrderModelService
   public previousVisibleColumnModel: any;
   public isFirst: boolean = false;
   public isLast: boolean = false;
+  public isLastVisible: boolean = false;
   public isHidden: boolean;
 
   get headerWidth(): number {
