@@ -150,22 +150,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
    * Makes each header compute its width.
    */
   private computeHeadersWidth() {
-    const nbColumns: number = this.headers.length;
-    let allStrict = true;
     this.headers.forEach((header, index) => {
-      // On the last header column check whether all columns have strict widths.
-      // If all columns have strict widths, remove the strict width from the last column and make it the column's
-      // minimum width so that when all previous columns shrink, it will get a flexible width and cover the empty
-      // gap in the Datagrid.
-
-      if (!header.strictWidth) {
-        allStrict = false;
-      }
-
-      if (nbColumns === index + 1 && allStrict) {
-        delete header.strictWidth;
-      }
-
       this.organizer.widths[index] = { px: header.computeWidth(), strict: !!header.strictWidth };
     });
 
