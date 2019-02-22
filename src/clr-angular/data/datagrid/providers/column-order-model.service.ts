@@ -48,39 +48,23 @@ export class ColumnOrderModelService {
   }
 
   public dropReceived(dropEvent: DragEventInterface<ColumnOrderModelService>) {
-    // Each column header has a corresponding index in the array, orders.
-
-    // 1.   replace the flexorder at the drag index with the one at the drop index
-
-    // 2.   a.  if dragged from left to right,
-    //          decrease flexorder of each column from the drag index plus one to the drop index
-    //      b.  if dragged from right to left,
-    //          increase flexorder of each column from the drag index minus one to the drop index
-
-    // Drag from left to right:
-    // At the start : ["fo0", "fo1", "fo2", "fo3", "fo4"]
-    // At the end   : ["fo0", "fo3", "fo1", "fo2", "fo4"]
-
-    // Drag from right to left:
-    // At the start : ["fo0", "fo1", "fo2", "fo3", "fo4"]
-    // At the end   : ["fo0", "fo2", "fo3", "fo1", "fo4"]
-
-    const from = dropEvent.dragDataTransfer.flexOrder;
+    const droppedColumnOrderModel: ColumnOrderModelService = dropEvent.dragDataTransfer;
+    const from = droppedColumnOrderModel.flexOrder;
     const to = this.flexOrder;
 
+    droppedColumnOrderModel.flexOrder = this.flexOrder;
+
     if (to > from) {
+      // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = from + 1; i < to; i++) {
         this.columnOrderCoordinatorService.modelAtflexOrderOf(i).flexOrder = i - 1;
       }
-
-      dropEvent.dragDataTransfer.flexOrder = this.flexOrder;
       this.flexOrder = this.flexOrder - 1;
     } else if (to < from) {
+      // Dragged to the left so each in-between columns should decrement their flex orders
       for (let i = from - 1; i > to; i--) {
         this.columnOrderCoordinatorService.modelAtflexOrderOf(i).flexOrder = i + 1;
       }
-
-      dropEvent.dragDataTransfer.flexOrder = this.flexOrder;
       this.flexOrder = this.flexOrder + 1;
     }
 
