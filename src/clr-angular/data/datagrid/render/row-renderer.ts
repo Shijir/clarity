@@ -43,8 +43,7 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
   }
 
   private renderCellOrders(): void {
-    // TODO: understand this below and add comment
-    if (this.columnOrdersCoordinatorService.orderModels.length !== this.cells.length) {
+    if (this.columnOrdersCoordinatorService.orderModels.length === 0) {
       return;
     }
     this.cells.forEach((cell: DatagridCellRenderer, index: number) => {
@@ -55,14 +54,12 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
   ngAfterContentInit() {
     this.cells.changes.subscribe(() => {
       this.setWidths();
-      // necessary in case of async loading cell detail
-      this.renderCellOrders();
+      this.renderCellOrders(); // necessary in case of async loading cell detail
     });
   }
 
   ngAfterViewInit() {
     this.setWidths();
-    // necessary in case of async loading rows or loading rows in another page
-    this.renderCellOrders();
+    this.renderCellOrders(); // necessary in case of async loading rows or loading rows in another page
   }
 }
