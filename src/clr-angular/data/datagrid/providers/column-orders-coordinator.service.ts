@@ -38,13 +38,28 @@ export class ColumnOrdersCoordinatorService {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
   }
 
-  public broadcastOrderChange() {
-    this._orderChange.next();
-  }
-
   public modelAtflexOrderOf(flexOrder: number): ColumnOrderModelService {
     return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 
-  // TODO: This service will be expanded in the next PR
+  public reorder(from: number, to: number) {
+    const columnOrderModelDroppedFrom: ColumnOrderModelService = this.modelAtflexOrderOf(from);
+    const columnOrderModelDroppedTo: ColumnOrderModelService = this.modelAtflexOrderOf(to);
+    // First, the column that has been dragged should get the flex order of the column it has been dropped on.
+    columnOrderModelDroppedFrom.flexOrder = to;
+    if (to > from) {
+      // Dragged to the right so each in-between columns should decrement their flex orders
+      for (let i = from + 1; i < to; i++) {
+        this.modelAtflexOrderOf(i).flexOrder = i - 1;
+      }
+      columnOrderModelDroppedTo.flexOrder = to - 1;
+    } else if (to < from) {
+      // Dragged to the left so each in-between columns should decrement their flex orders
+      for (let i = from - 1; i > to; i--) {
+        this.modelAtflexOrderOf(i).flexOrder = i + 1;
+      }
+      columnOrderModelDroppedTo.flexOrder = to + 1;
+    }
+    this._orderChange.next();
+  }
 }

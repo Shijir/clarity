@@ -48,28 +48,7 @@ export class ColumnOrderModelService {
   }
 
   public dropReceived(dropEvent: DragEventInterface<ColumnOrderModelService>) {
-    const droppedColumnOrderModel: ColumnOrderModelService = dropEvent.dragDataTransfer;
-    const from = droppedColumnOrderModel.flexOrder;
-    const to = this.flexOrder;
-
-    droppedColumnOrderModel.flexOrder = this.flexOrder;
-
-    if (to > from) {
-      // Dragged to the right so each in-between columns should decrement their flex orders
-      for (let i = from + 1; i < to; i++) {
-        this.columnOrderCoordinatorService.modelAtflexOrderOf(i).flexOrder = i - 1;
-      }
-      this.flexOrder = this.flexOrder - 1;
-    } else if (to < from) {
-      // Dragged to the left so each in-between columns should decrement their flex orders
-      for (let i = from - 1; i > to; i--) {
-        this.columnOrderCoordinatorService.modelAtflexOrderOf(i).flexOrder = i + 1;
-      }
-      this.flexOrder = this.flexOrder + 1;
-    }
-
-    // headers and cells will listen to the following broadcast and render their flex orders correspondingly
-    this.columnOrderCoordinatorService.broadcastOrderChange();
+    this.columnOrderCoordinatorService.reorder(dropEvent.dragDataTransfer.flexOrder, this.flexOrder);
   }
 
   private findAdjacentVisibleModel(prev = false): ColumnOrderModelService {
