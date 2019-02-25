@@ -13,7 +13,7 @@ import { DragEventInterface, DragEventType } from '../../../utils/drag-and-drop/
 
 export default function(): void {
   fdescribe('ColumnOrderModelService', function() {
-    let columnOrdersCoordinatorService = new ColumnOrdersCoordinatorService();
+    let columnOrdersCoordinatorService: ColumnOrdersCoordinatorService;
     let columnOrderModelService: ColumnOrderModelService;
     let columnOrderModelServicePrev: ColumnOrderModelService;
     let columnOrderModelServiceNext: ColumnOrderModelService;

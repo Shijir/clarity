@@ -11,6 +11,7 @@ import { DatagridHideableColumnModel } from './datagrid-hideable-column.model';
 import { TestContext } from './helpers.spec';
 import { ColumnToggleButtonsService } from './providers/column-toggle-buttons.service';
 import { HideableColumnService } from './providers/hideable-column.service';
+import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
 
 export default function(): void {
   describe('Datagrid Column Toggle component', function() {
@@ -18,6 +19,7 @@ export default function(): void {
       let hideableColumnService: HideableColumnService;
       let columnToggleButtons: ColumnToggleButtonsService;
       let component: ClrDatagridColumnToggle;
+      let columnOrdersCoordinatorService: ColumnOrdersCoordinatorService;
 
       function getTestColumns(): DatagridHideableColumnModel[] {
         // Mixed columns: 1/2 hidden (true) & 1/2 showing (false)
@@ -45,7 +47,13 @@ export default function(): void {
       beforeEach(function() {
         hideableColumnService = new HideableColumnService();
         columnToggleButtons = new ColumnToggleButtonsService();
-        component = new ClrDatagridColumnToggle(hideableColumnService, columnToggleButtons, {});
+        columnOrdersCoordinatorService = new ColumnOrdersCoordinatorService();
+        component = new ClrDatagridColumnToggle(
+          hideableColumnService,
+          columnToggleButtons,
+          {},
+          columnOrdersCoordinatorService
+        );
       });
 
       it('gets a list of hideable columns from the HideableColumnService', function() {

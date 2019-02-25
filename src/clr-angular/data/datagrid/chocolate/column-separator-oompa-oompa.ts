@@ -19,7 +19,7 @@ export class ColumnSeparatorOompaLoompa extends OompaLoompa {
     columnOrderModelService: ColumnOrderModelService
   ) {
     if (!willyWonka) {
-      throw new Error('clr-dg-row should only be used inside of a clr-datagrid');
+      throw new Error('clr-dg-column should only be used inside of a clr-datagrid');
     }
     super(cdr, willyWonka);
     this.columnOrderModelService = columnOrderModelService;

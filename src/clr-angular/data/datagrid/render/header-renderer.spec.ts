@@ -30,6 +30,7 @@ import {
   MOCK_COLUMN_ORDER_MODEL_PROVIDER,
   MockColumnOrderModelService,
 } from '../providers/column-order-model.service.mock';
+import { DatagridWillyWonka } from '../chocolate/datagrid-willy-wonka';
 
 @Component({ template: `<clr-dg-column>Hello world</clr-dg-column>` })
 class SimpleTest {}
@@ -80,6 +81,7 @@ export default function(): void {
         TableSizeService,
         Renderer2,
         ColumnOrdersCoordinatorService,
+        DatagridWillyWonka,
       ]);
       domAdapter = <MockDomAdapter>context.getClarityProvider(DomAdapter);
       organizer = <MockDatagridRenderOrganizer>context.getClarityProvider(DatagridRenderOrganizer);
