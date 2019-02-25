@@ -793,6 +793,8 @@
           max-height: 12.5rem;
           overflow-y: auto;
           min-height: calc(1rem + #{$clr-default-borderwidth}); // prevents scrollbars in IE.
+          display: flex;
+          flex-direction: column;
 
           li {
             line-height: 1rem;
