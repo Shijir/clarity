@@ -49,6 +49,7 @@ import { DatagridRowRenderer } from './render/row-renderer';
 import { WrappedCell } from './wrapped-cell';
 import { WrappedColumn } from './wrapped-column';
 import { WrappedRow } from './wrapped-row';
+import { ColumnSeparatorOompaLoompa } from './chocolate/column-separator-oompa-oompa';
 
 export const CLR_DATAGRID_DIRECTIVES: Type<any>[] = [
   // Core
@@ -87,6 +88,7 @@ export const CLR_DATAGRID_DIRECTIVES: Type<any>[] = [
   DatagridWillyWonka,
   ActionableOompaLoompa,
   ExpandableOompaLoompa,
+  ColumnSeparatorOompaLoompa,
 
   // Animation hack
   DatagridRowExpandAnimation,
