@@ -26,7 +26,7 @@ export class ColumnResizerService {
     return this._resizedBy;
   }
 
-  public reset(): void {
+  public clear(): void {
     this.widthBeforeResize = 0;
     this._resizedBy = 0;
   }
@@ -43,7 +43,7 @@ export class ColumnResizerService {
   }
 
   public startResize(): void {
-    this.reset();
+    this.clear();
     this.isWithinMaxResizeRange = true;
     this.widthBeforeResize = this.domAdapter.clientRect(this.el.nativeElement).width;
   }

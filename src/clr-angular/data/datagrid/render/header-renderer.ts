@@ -78,7 +78,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
         this.resizeEmitter.emit(width);
         this.renderer.setStyle(this.el.nativeElement, 'width', width + 'px');
         this.widthSet = false;
-        this.columnResizerService.reset();
+        this.columnResizerService.clear();
       }
       // Don't set width if there is a user-defined one. Just add the strict width class.
       this.renderer.addClass(this.el.nativeElement, STRICT_WIDTH_CLASS);

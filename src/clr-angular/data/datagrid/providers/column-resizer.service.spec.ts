@@ -23,7 +23,7 @@ class TestComponent {
 }
 
 export default function(): void {
-  describe('Column Resizer Service', function() {
+  fdescribe('Column Resizer Service', function() {
     let columnResizerService: ColumnResizerService;
     let datagridRenderOrganizer: DatagridRenderOrganizer;
 
@@ -84,6 +84,14 @@ export default function(): void {
       columnResizerService.calculateResize(mockExtDragEventExceededRange);
       expect(columnResizerService.resizedBy).toBe(-columnResizerService.maxResizeRange);
       expect(columnResizerService.widthAfterResize).toBe(columnResizerService.minColumnWidth);
+    });
+
+    it('clears assigned property value if clear method is called', function() {
+      columnResizerService.startResize();
+      columnResizerService.calculateResize(mockExtDragEventWithinRange);
+      expect(columnResizerService.resizedBy).toBe(40);
+      columnResizerService.clear();
+      expect(columnResizerService.resizedBy).toBe(0);
     });
 
     it('provides boolean value of whether resize is within maximum range or not', function() {
