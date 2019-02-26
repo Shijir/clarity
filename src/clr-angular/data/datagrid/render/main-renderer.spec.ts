@@ -51,7 +51,7 @@ const PROVIDERS = [
 ];
 
 export default function(): void {
-  describe('DatagridMainRenderer directive', function() {
+  fdescribe('DatagridMainRenderer directive', function() {
     describe('static loading', function() {
       let context: TestContext<DatagridMainRenderer<number>, StaticTest>;
       let organizer: MockDatagridRenderOrganizer;
@@ -269,6 +269,21 @@ export default function(): void {
         expect(organizer.widths[1].strict).toBe(false);
       });
     });
+
+    describe('reordering columns', () => {
+      let context: ComponentFixture<ColumnOrderTest>;
+      beforeEach(() => {
+        TestBed.configureTestingModule({
+          imports: [BrowserAnimationsModule, ClrDatagridModule],
+          declarations: [ColumnOrderTest],
+          providers: PROVIDERS,
+        });
+        context = TestBed.createComponent(ColumnOrderTest);
+        context.detectChanges();
+      });
+
+      it('should not set flex order style initially', () => {});
+    });
   });
 }
 
@@ -367,6 +382,30 @@ class RenderWidthTest {
     `,
 })
 class StaticTest {
+  secondColumn = true;
+  firstRow = true;
+}
+
+@Component({
+  template: `
+        <clr-datagrid>
+            <clr-dg-column>AAA</clr-dg-column>
+            <clr-dg-column *ngIf="secondColumn">BBB</clr-dg-column>
+            <clr-dg-column>CCC</clr-dg-column>
+            <clr-dg-row *ngIf="firstRow">
+                <clr-dg-cell>XXX</clr-dg-cell>
+                <clr-dg-cell>YYY</clr-dg-cell>
+                <clr-dg-cell>ZZZ</clr-dg-cell>
+            </clr-dg-row>
+            <clr-dg-row>
+                <clr-dg-cell>XXX</clr-dg-cell>
+                <clr-dg-cell>YYY</clr-dg-cell>
+                <clr-dg-cell>ZZZ</clr-dg-cell>
+            </clr-dg-row>
+        </clr-datagrid>
+    `,
+})
+class ColumnOrderTest {
   secondColumn = true;
   firstRow = true;
 }
