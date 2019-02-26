@@ -42,7 +42,7 @@ export class ColumnOrdersCoordinatorService {
     return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 
-  public reorder(from: number, to: number) {
+  public reorder(from: number, to: number): void {
     const columnOrderModelDroppedFrom: ColumnOrderModelService = this.modelAtflexOrderOf(from);
     const columnOrderModelDroppedTo: ColumnOrderModelService = this.modelAtflexOrderOf(to);
     // First, the column that has been dragged should get the flex order of the column it has been dropped on.
