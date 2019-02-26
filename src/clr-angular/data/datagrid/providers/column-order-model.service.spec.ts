@@ -149,7 +149,7 @@ export default function(): void {
       expect(columnOrderModelServiceNext.previousVisibleColumnModel).toBeUndefined();
     });
 
-    it('calls reorder method of order coordinator services ', function() {
+    it('calls reorder method of order coordinator services', function() {
       spyOn(columnOrdersCoordinatorService, 'reorder');
       columnOrderModelService.dropReceived(generateMockDropHeaderEvent(columnOrderModelServicePrev));
       expect(columnOrdersCoordinatorService.reorder).toHaveBeenCalledWith(0, 1);

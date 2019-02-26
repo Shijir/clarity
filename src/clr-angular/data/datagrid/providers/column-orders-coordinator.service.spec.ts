@@ -91,5 +91,14 @@ export default function(): void {
       expect(columnOrderModelService.flexOrder).toBe(0);
       expect(columnOrderModelServiceNext.flexOrder).toBe(1);
     });
+
+    it('should broadcast from orderChange if reorder method is called', function() {
+      let isEmitted = false;
+      service.orderChange.subscribe(() => {
+        isEmitted = true;
+      });
+      service.reorder(0, 2);
+      expect(isEmitted).toBeTruthy();
+    });
   });
 }
