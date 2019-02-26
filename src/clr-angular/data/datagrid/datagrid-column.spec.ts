@@ -31,6 +31,7 @@ import {
   MOCK_COLUMN_ORDER_MODEL_PROVIDER,
   MockColumnOrderModelService,
 } from './providers/column-order-model.service.mock';
+import { DatagridWillyWonka } from './chocolate/datagrid-willy-wonka';
 
 const PROVIDERS_NEEDED = [
   Sort,
@@ -41,11 +42,12 @@ const PROVIDERS_NEEDED = [
   StateDebouncer,
   TableSizeService,
   Renderer2,
-  MOCK_COLUMN_ORDER_MODEL_PROVIDER,
+  ColumnOrdersCoordinatorService,
+  DatagridWillyWonka,
 ];
 
 export default function(): void {
-  describe('DatagridColumn component', function() {
+  fdescribe('DatagridColumn component', function() {
     describe('Typescript API', function() {
       let sortService: Sort<number>;
       let filtersService: FiltersProvider<number>;
@@ -314,7 +316,13 @@ export default function(): void {
       let columnOrderModelService: MockColumnOrderModelService;
 
       beforeEach(function() {
-        context = this.createWithOverride(ClrDatagridColumn, SimpleTest, [], [], PROVIDERS_NEEDED);
+        context = this.createWithOverride(
+          ClrDatagridColumn,
+          SimpleTest,
+          PROVIDERS_NEEDED,
+          [],
+          [MOCK_COLUMN_ORDER_MODEL_PROVIDER]
+        );
       });
 
       it('projects content', function() {
@@ -380,7 +388,7 @@ export default function(): void {
         expect(context.clarityElement.classList.contains('datagrid-column--hidden')).toBeTruthy();
       });
 
-      it('should not project separator if column is last visible one', function() {
+      it('should project separator only if columns is not last visible', function() {
         let separator = context.clarityElement.querySelectorAll('.datagrid-column-separator');
         expect(separator.length).toBe(1);
 
