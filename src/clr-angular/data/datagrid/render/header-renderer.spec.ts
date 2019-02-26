@@ -63,7 +63,7 @@ class HeaderResizeTestComponent {
 }
 
 export default function(): void {
-  fdescribe('DatagridHeaderRenderer directive', function() {
+  describe('DatagridHeaderRenderer directive', function() {
     let context: TestContext<DatagridHeaderRenderer, SimpleTest>;
     let domAdapter: MockDomAdapter;
     let organizer: MockDatagridRenderOrganizer;

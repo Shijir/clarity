@@ -16,6 +16,7 @@ import { TableSizeService } from './providers/table-size.service';
 import { DomAdapter } from '../../utils/dom-adapter/dom-adapter';
 import { DatagridRenderOrganizer } from './render/render-organizer';
 import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
+import { DatagridWillyWonka } from './chocolate/datagrid-willy-wonka';
 
 const PROVIDERS_NEEDED = [
   Sort,
@@ -27,6 +28,7 @@ const PROVIDERS_NEEDED = [
   TableSizeService,
   Renderer2,
   ColumnOrdersCoordinatorService,
+  DatagridWillyWonka,
 ];
 
 export default function(): void {

@@ -47,7 +47,7 @@ const PROVIDERS_NEEDED = [
 ];
 
 export default function(): void {
-  fdescribe('DatagridColumn component', function() {
+  describe('DatagridColumn component', function() {
     describe('Typescript API', function() {
       let sortService: Sort<number>;
       let filtersService: FiltersProvider<number>;

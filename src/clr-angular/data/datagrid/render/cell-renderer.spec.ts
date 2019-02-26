@@ -15,7 +15,7 @@ import { DatagridRenderOrganizer } from './render-organizer';
 import { MOCK_ORGANIZER_PROVIDER, MockDatagridRenderOrganizer } from './render-organizer.mock';
 
 export default function(): void {
-  fdescribe('DatagridCellRenderer directive', function() {
+  describe('DatagridCellRenderer directive', function() {
     let context: TestContext<DatagridCellRenderer, SimpleTest>;
     let organizer: MockDatagridRenderOrganizer;
 

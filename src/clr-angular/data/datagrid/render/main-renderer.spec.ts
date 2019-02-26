@@ -52,7 +52,7 @@ const PROVIDERS = [
 ];
 
 export default function(): void {
-  fdescribe('DatagridMainRenderer directive', function() {
+  describe('DatagridMainRenderer directive', function() {
     describe('static loading', function() {
       let context: TestContext<DatagridMainRenderer<number>, StaticTest>;
       let organizer: MockDatagridRenderOrganizer;
@@ -143,7 +143,7 @@ export default function(): void {
       });
     });
 
-    fdescribe('reordering columns', function() {
+    describe('reordering columns', function() {
       let context: TestContext<DatagridMainRenderer<number>, ColumnOrderTest>;
       let columnOrdersCoordinator: ColumnOrdersCoordinatorService;
 

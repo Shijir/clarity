@@ -23,7 +23,7 @@ class TestComponent {
 }
 
 export default function(): void {
-  fdescribe('Column Resizer Service', function() {
+  describe('Column Resizer Service', function() {
     let columnResizerService: ColumnResizerService;
     let datagridRenderOrganizer: DatagridRenderOrganizer;
 

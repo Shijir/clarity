@@ -118,7 +118,11 @@ export default function(): void {
       let hideableColumnService: HideableColumnService;
 
       beforeEach(function() {
-        context = this.create(ClrDatagridColumnToggle, SimpleTest, [HideableColumnService, ColumnToggleButtonsService]);
+        context = this.create(ClrDatagridColumnToggle, SimpleTest, [
+          HideableColumnService,
+          ColumnToggleButtonsService,
+          ColumnOrdersCoordinatorService,
+        ]);
         hideableColumnService = context.getClarityProvider(HideableColumnService);
       });
 
@@ -301,6 +305,7 @@ export default function(): void {
         context = this.create(ClrDatagridColumnToggle, CustomButtonsTest, [
           HideableColumnService,
           ColumnToggleButtonsService,
+          ColumnOrdersCoordinatorService,
         ]);
       });
 

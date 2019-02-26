@@ -17,6 +17,7 @@ import { StateDebouncer } from './state-debouncer.provider';
 import { TableSizeService } from './table-size.service';
 import { ClrDatagridModule } from '../datagrid.module';
 import { ColumnOrdersCoordinatorService } from './column-orders-coordinator.service';
+import { DatagridWillyWonka } from '../chocolate/datagrid-willy-wonka';
 
 @Component({
   template: `
@@ -49,6 +50,7 @@ const PROVIDERS_NEEDED = [
   Page,
   StateDebouncer,
   ColumnOrdersCoordinatorService,
+  DatagridWillyWonka,
 ];
 
 export default function(): void {

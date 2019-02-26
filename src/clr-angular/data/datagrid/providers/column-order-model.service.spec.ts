@@ -12,7 +12,7 @@ import { createMockHeaderEl, destroyMockHeaderEl } from './column-order-model.se
 import { DragEventInterface, DragEventType } from '../../../utils/drag-and-drop/interfaces/drag-event.interface';
 
 export default function(): void {
-  fdescribe('ColumnOrderModelService', function() {
+  describe('ColumnOrderModelService', function() {
     let columnOrdersCoordinatorService: ColumnOrdersCoordinatorService;
     let columnOrderModelService: ColumnOrderModelService;
     let columnOrderModelServicePrev: ColumnOrderModelService;

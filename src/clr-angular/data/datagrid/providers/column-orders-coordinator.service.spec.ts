@@ -9,7 +9,7 @@ import { ColumnOrderModelService } from './column-order-model.service';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 
 export default function(): void {
-  fdescribe('ColumnOrdersCoordinatorService', function() {
+  describe('ColumnOrdersCoordinatorService', function() {
     let service: ColumnOrdersCoordinatorService;
 
     let columnOrderModelService: ColumnOrderModelService;
