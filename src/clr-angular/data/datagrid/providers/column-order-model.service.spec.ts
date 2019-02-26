@@ -148,5 +148,11 @@ export default function(): void {
       columnOrderModelServiceNext.hideableColumnModel = new DatagridHideableColumnModel(null, 'dg-col-0', false);
       expect(columnOrderModelServiceNext.previousVisibleColumnModel).toBeUndefined();
     });
+
+    it('calls reorder method of order coordinator services ', function() {
+      spyOn(columnOrdersCoordinatorService, 'reorder');
+      columnOrderModelService.dropReceived(generateMockDropHeaderEvent(columnOrderModelServicePrev));
+      expect(columnOrdersCoordinatorService.reorder).toHaveBeenCalledWith(0, 1);
+    });
   });
 }
