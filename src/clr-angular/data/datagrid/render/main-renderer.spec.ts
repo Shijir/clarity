@@ -28,6 +28,7 @@ import { TableSizeService } from '../providers/table-size.service';
 import { ColumnToggleButtonsService } from '../providers/column-toggle-buttons.service';
 import { StateProvider } from '../providers/state.provider';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
+import { ColumnOrdersCoordinatorService } from '../providers/column-orders-coordinator.service';
 
 const PROVIDERS = [
   DisplayModeService,
@@ -139,6 +140,35 @@ export default function(): void {
         context.testComponent.clrDgItems = [1];
         context.detectChanges();
         expect(resizeSpy.calls.count()).toBe(1);
+      });
+    });
+
+    fdescribe('reordering columns', function() {
+      let context: TestContext<DatagridMainRenderer<number>, ColumnOrderTest>;
+      let columnOrdersCoordinator: ColumnOrdersCoordinatorService;
+
+      beforeEach(function() {
+        context = this.create(DatagridMainRenderer, ColumnOrderTest);
+        columnOrdersCoordinator = context.getClarityProvider(ColumnOrdersCoordinatorService);
+      });
+
+      it('assigns flex order to each order model', function() {
+        expect(columnOrdersCoordinator.orderModels[0].flexOrder).toBe(0);
+        expect(columnOrdersCoordinator.orderModels[1].flexOrder).toBe(1);
+        expect(columnOrdersCoordinator.orderModels[2].flexOrder).toBe(2);
+      });
+
+      it('should not set flex order style to headers initially', function() {
+        expect(context.clarityElement.querySelectorAll('.datagrid-column')[0].style.order).toBe('');
+        expect(context.clarityElement.querySelectorAll('.datagrid-column')[1].style.order).toBe('');
+        expect(context.clarityElement.querySelectorAll('.datagrid-column')[2].style.order).toBe('');
+      });
+
+      it('should set appropriate flex order style to headers when coordinator reorders', function() {
+        columnOrdersCoordinator.reorder(0, 2);
+        expect(context.clarityElement.querySelectorAll('.datagrid-column')[0].style.order).toBe('2');
+        expect(context.clarityElement.querySelectorAll('.datagrid-column')[1].style.order).toBe('0');
+        expect(context.clarityElement.querySelectorAll('.datagrid-column')[2].style.order).toBe('1');
       });
     });
 
@@ -269,21 +299,6 @@ export default function(): void {
         expect(organizer.widths[1].strict).toBe(false);
       });
     });
-
-    describe('reordering columns', () => {
-      let context: ComponentFixture<ColumnOrderTest>;
-      beforeEach(() => {
-        TestBed.configureTestingModule({
-          imports: [BrowserAnimationsModule, ClrDatagridModule],
-          declarations: [ColumnOrderTest],
-          providers: PROVIDERS,
-        });
-        context = TestBed.createComponent(ColumnOrderTest);
-        context.detectChanges();
-      });
-
-      it('should not set flex order style initially', () => {});
-    });
   });
 }
 
@@ -392,7 +407,7 @@ class StaticTest {
             <clr-dg-column>AAA</clr-dg-column>
             <clr-dg-column *ngIf="secondColumn">BBB</clr-dg-column>
             <clr-dg-column>CCC</clr-dg-column>
-            <clr-dg-row *ngIf="firstRow">
+            <clr-dg-row>
                 <clr-dg-cell>XXX</clr-dg-cell>
                 <clr-dg-cell>YYY</clr-dg-cell>
                 <clr-dg-cell>ZZZ</clr-dg-cell>
@@ -407,7 +422,6 @@ class StaticTest {
 })
 class ColumnOrderTest {
   secondColumn = true;
-  firstRow = true;
 }
 
 @Component({
