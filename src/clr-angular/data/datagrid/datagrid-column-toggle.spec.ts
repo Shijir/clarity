@@ -12,9 +12,11 @@ import { TestContext } from './helpers.spec';
 import { ColumnToggleButtonsService } from './providers/column-toggle-buttons.service';
 import { HideableColumnService } from './providers/hideable-column.service';
 import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
+import { MockColumnOrderModelService } from './providers/column-order-model.service.mock';
+import { ColumnOrderModelService } from './providers/column-order-model.service';
 
 export default function(): void {
-  describe('Datagrid Column Toggle component', function() {
+  fdescribe('Datagrid Column Toggle component', function() {
     describe('Typescript API', function() {
       let hideableColumnService: HideableColumnService;
       let columnToggleButtons: ColumnToggleButtonsService;
@@ -116,6 +118,7 @@ export default function(): void {
       // Until we can properly type "this"
       let context: TestContext<ClrDatagridColumnToggle, SimpleTest>;
       let hideableColumnService: HideableColumnService;
+      let columnOrdersCoordinator: ColumnOrdersCoordinatorService;
 
       beforeEach(function() {
         context = this.create(ClrDatagridColumnToggle, SimpleTest, [
@@ -124,6 +127,7 @@ export default function(): void {
           ColumnOrdersCoordinatorService,
         ]);
         hideableColumnService = context.getClarityProvider(HideableColumnService);
+        columnOrdersCoordinator = context.getClarityProvider(ColumnOrdersCoordinatorService);
       });
 
       it('has a toggle icon', function() {
@@ -294,6 +298,28 @@ export default function(): void {
         expect(buttons[0].innerText.trim().toUpperCase()).toEqual('Select All'.toUpperCase());
         const title = context.clarityElement.querySelector('.switch-header');
         expect(title.innerHTML).toContain('Show Columns');
+      });
+
+      it('shows column switches in accordance with corresponding column model order', function() {
+        const hideableColumns: DatagridHideableColumnModel[] = [];
+        const iconBtn = context.clarityElement.querySelector('.column-switch-wrapper > button');
+
+        context.testComponent.templates.forEach((col, index) => {
+          hideableColumns.push(new DatagridHideableColumnModel(col, `dg-col-${index}`, true));
+          const orderModel = new MockColumnOrderModelService();
+          orderModel.flexOrder = index;
+          columnOrdersCoordinator.orderModels.push(<ColumnOrderModelService>orderModel);
+        });
+
+        hideableColumnService.updateColumnList(hideableColumns);
+        iconBtn.click();
+        context.detectChanges();
+
+        const columnCheckboxItems = context.clarityElement.querySelectorAll('.switch-content li');
+
+        Array.from(columnCheckboxItems).map((item: HTMLElement, index: number) => {
+          expect(item.style.order).toBe(`${index}`);
+        });
       });
     });
 

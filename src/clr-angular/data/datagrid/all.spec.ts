@@ -61,7 +61,7 @@ import WrappedCellSpec from './wrapped-cell.spec';
 import WrappedColumnSpec from './wrapped-column.spec';
 import WrappedRowSpec from './wrapped-row.spec';
 
-describe('Datagrid', function() {
+fdescribe('Datagrid', function() {
   addHelpers();
 
   describe('Providers', function() {
@@ -78,7 +78,7 @@ describe('Datagrid', function() {
     ColumnOrdersCoordinatorServiceSpecs();
     ColumnOrderModelServiceSpecs();
   });
-  describe('Components', function() {
+  fdescribe('Components', function() {
     DatagridActionBarSpecs();
     DatagridActionOverflowSpecs();
     DatagridCellSpecs();
