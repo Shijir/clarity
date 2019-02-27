@@ -16,7 +16,7 @@ import { MockColumnOrderModelService } from './providers/column-order-model.serv
 import { ColumnOrderModelService } from './providers/column-order-model.service';
 
 export default function(): void {
-  fdescribe('Datagrid Column Toggle component', function() {
+  describe('Datagrid Column Toggle component', function() {
     describe('Typescript API', function() {
       let hideableColumnService: HideableColumnService;
       let columnToggleButtons: ColumnToggleButtonsService;
@@ -307,7 +307,7 @@ export default function(): void {
         context.testComponent.templates.forEach((col, index) => {
           hideableColumns.push(new DatagridHideableColumnModel(col, `dg-col-${index}`, true));
           const orderModel = new MockColumnOrderModelService();
-          orderModel.flexOrder = index;
+          orderModel.flexOrder = 123 - index; // just a random flex order number that should be reflected in the items
           columnOrdersCoordinator.orderModels.push(<ColumnOrderModelService>orderModel);
         });
 
@@ -318,7 +318,7 @@ export default function(): void {
         const columnCheckboxItems = context.clarityElement.querySelectorAll('.switch-content li');
 
         Array.from(columnCheckboxItems).map((item: HTMLElement, index: number) => {
-          expect(item.style.order).toBe(`${index}`);
+          expect(item.style.order).toBe(`${columnOrdersCoordinator.orderModels[index].flexOrder}`);
         });
       });
     });
