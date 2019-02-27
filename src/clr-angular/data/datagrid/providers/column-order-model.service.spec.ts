@@ -12,7 +12,7 @@ import { createMockHeaderEl, destroyMockHeaderEl } from './column-order-model.se
 import { DragEventInterface, DragEventType } from '../../../utils/drag-and-drop/interfaces/drag-event.interface';
 
 export default function(): void {
-  describe('ColumnOrderModelService', function() {
+  fdescribe('ColumnOrderModelService', function() {
     let columnOrdersCoordinatorService: ColumnOrdersCoordinatorService;
     let columnOrderModelService: ColumnOrderModelService;
     let columnOrderModelServicePrev: ColumnOrderModelService;
@@ -31,8 +31,8 @@ export default function(): void {
     beforeEach(function() {
       columnOrdersCoordinatorService = new ColumnOrdersCoordinatorService();
 
-      columnOrderModelService = new ColumnOrderModelService(columnOrdersCoordinatorService, new DomAdapter());
       columnOrderModelServicePrev = new ColumnOrderModelService(columnOrdersCoordinatorService, new DomAdapter());
+      columnOrderModelService = new ColumnOrderModelService(columnOrdersCoordinatorService, new DomAdapter());
       columnOrderModelServiceNext = new ColumnOrderModelService(columnOrdersCoordinatorService, new DomAdapter());
 
       // Here visually their columns would appear in the following order:
@@ -46,8 +46,8 @@ export default function(): void {
       columnOrderModelServiceNext.flexOrder = 2;
       columnOrderModelServiceNext.headerEl = createMockHeaderEl(300, 40);
 
-      columnOrdersCoordinatorService.orderModels.push(columnOrderModelService);
       columnOrdersCoordinatorService.orderModels.push(columnOrderModelServicePrev);
+      columnOrdersCoordinatorService.orderModels.push(columnOrderModelService);
       columnOrdersCoordinatorService.orderModels.push(columnOrderModelServiceNext);
     });
 
@@ -111,6 +111,32 @@ export default function(): void {
       expect(columnOrderModelService.isLastVisible).toBeTruthy();
       expect(columnOrderModelServicePrev.isLastVisible).toBeFalsy();
       expect(columnOrderModelServiceNext.isLastVisible).toBeFalsy();
+    });
+
+    it('returns correct next visible model initially', function() {
+      expect(columnOrderModelServicePrev.nextVisibleColumnModel).toBe(columnOrderModelService);
+      expect(columnOrderModelService.nextVisibleColumnModel).toBe(columnOrderModelServiceNext);
+    });
+
+    it('returns correct previous visible model initially', function() {
+      expect(columnOrderModelService.previousVisibleColumnModel).toBe(columnOrderModelServicePrev);
+      expect(columnOrderModelServiceNext.previousVisibleColumnModel).toBe(columnOrderModelService);
+    });
+
+    it('returns correct next visible model even after reordering', function() {
+      // [0, 1, 2] -> [2, 0, 1]
+      columnOrdersCoordinatorService.reorder(0, 2);
+      expect(columnOrderModelServicePrev.nextVisibleColumnModel).toBeUndefined();
+      expect(columnOrderModelService.nextVisibleColumnModel).toBe(columnOrderModelServiceNext);
+      expect(columnOrderModelServiceNext.nextVisibleColumnModel).toBe(columnOrderModelServicePrev);
+    });
+
+    it('returns correct previous visible model even after reordering', function() {
+      // [0, 1, 2] -> [2, 0, 1]
+      columnOrdersCoordinatorService.reorder(0, 2);
+      expect(columnOrderModelServicePrev.previousVisibleColumnModel).toBe(columnOrderModelServiceNext);
+      expect(columnOrderModelService.previousVisibleColumnModel).toBeUndefined();
+      expect(columnOrderModelServiceNext.previousVisibleColumnModel).toBe(columnOrderModelService);
     });
 
     it('returns correct next visible model', function() {

@@ -45,7 +45,7 @@ const PROVIDERS = [
   ColumnOrdersCoordinatorService,
 ];
 export default function(): void {
-  fdescribe('DatagridRowRenderer directive', function() {
+  describe('DatagridRowRenderer directive', function() {
     let context: TestContext<DatagridRowRenderer, SimpleTest>;
     let organizer: MockDatagridRenderOrganizer;
     let columnOrdersCoordinator: ColumnOrdersCoordinatorService;

@@ -54,7 +54,7 @@ export class ColumnOrderModelService {
   private findAdjacentVisibleModel(prev = false): ColumnOrderModelService {
     const filteredVisibleColumnModels = this.columnOrderCoordinatorService.orderModels
       .filter(model => !model.isHidden && (prev ? model.flexOrder < this.flexOrder : model.flexOrder > this.flexOrder))
-      .sort(model => model.flexOrder);
+      .sort((modelA, modelB) => (modelA.flexOrder > modelB.flexOrder ? 1 : -1));
 
     return prev ? filteredVisibleColumnModels[filteredVisibleColumnModels.length - 1] : filteredVisibleColumnModels[0];
   }
