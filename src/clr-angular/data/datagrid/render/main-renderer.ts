@@ -28,7 +28,8 @@ import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DatagridHeaderRenderer } from './header-renderer';
 import { NoopDomAdapter } from './noop-dom-adapter';
 import { DatagridRenderOrganizer } from './render-organizer';
-import { ColumnOrdersCoordinatorService } from '../providers/column-orders-coordinator.service';
+import { ColumnOrdersCoordinatorService, OrderChangeData } from '../providers/column-orders-coordinator.service';
+import { ColumnOrderModelService } from '../providers/column-order-model.service';
 
 // Fixes build error
 // @dynamic (https://github.com/angular/angular/issues/19698#issuecomment-338340211)
@@ -73,8 +74,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
 
     this.subscriptions.push(
-      columnOrdersCoordinatorService.orderChange.subscribe((modelOfDraggable: ColumnOrderModelService) =>
-        this.renderHeaderOrders(modelOfDraggable)
+      columnOrdersCoordinatorService.orderChange.subscribe((orderChangeData: OrderChangeData) =>
+        this.renderHeaderOrders(orderChangeData)
       )
     );
   }
@@ -203,12 +204,16 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
   }
 
-  private renderHeaderOrders(modelOfDraggable: ColumnOrderModelService): void {
+  private renderHeaderOrders(orderChangeData: OrderChangeData): void {
     this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
       header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
     });
     this.columns.forEach((column: ClrDatagridColumn) => {
-      column.animateReorderShift(modelOfDraggable);
+      column.animateReorderShift(
+        orderChangeData.draggedOrderModel.headerWidth,
+        orderChangeData.from,
+        orderChangeData.to
+      );
     });
   }
 }

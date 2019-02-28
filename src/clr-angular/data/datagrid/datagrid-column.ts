@@ -8,6 +8,7 @@ import {
   ContentChild,
   EventEmitter,
   HostBinding,
+  HostListener,
   Injector,
   Input,
   OnDestroy,
@@ -31,6 +32,7 @@ import { DatagridFilterRegistrar } from './utils/datagrid-filter-registrar';
 import { WrappedColumn } from './wrapped-column';
 import { ColumnOrderModelService } from './providers/column-order-model.service';
 import { ColumnHeaderSides } from './enums/header-sides.enum';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 let nbCount: number = 0;
 
@@ -71,6 +73,14 @@ let nbCount: number = 0;
     role: 'columnheader',
   },
   providers: [ColumnOrderModelService],
+  animations: [
+    trigger('reorderShiftAnimation', [
+      transition('* => active', [
+        style({ transform: 'translate3d({{translateX}}, 0, 0)' }),
+        animate('0.2s ease-in-out', style({ transform: 'translate3d(0, 0, 0)' })),
+      ]),
+    ]),
+  ],
 })
 export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, DatagridStringFilterImpl<T>>
   implements OnDestroy, OnInit {
@@ -119,8 +129,27 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     return this.columnOrderModel.isLastVisible;
   }
 
-  public animateReorderShift(modelOfDraggable: ColumnOrderModelService) {
-    console.log(modelOfDraggable);
+  @HostBinding('@reorderShiftAnimation') reorderShiftAnimation;
+
+  @HostListener('@reorderShiftAnimation.done')
+  resetReorderShiftAnimation() {
+    delete this.reorderShiftAnimation;
+  }
+
+  public animateReorderShift(shiftAmount: number, shiftFrom: number, shiftTo: number) {
+    if (this.columnOrderModel.flexOrder >= shiftFrom && this.columnOrderModel.flexOrder <= shiftTo) {
+      console.log(shiftAmount);
+      this.reorderShiftAnimation = {
+        value: 'active',
+        params: { translateX: `${shiftAmount}px` },
+      };
+    } else if (this.columnOrderModel.flexOrder <= shiftFrom && this.columnOrderModel.flexOrder >= shiftTo) {
+      console.log(-shiftAmount);
+      this.reorderShiftAnimation = {
+        value: 'active',
+        params: { translateX: `-${shiftAmount}px` },
+      };
+    }
   }
 
   /**

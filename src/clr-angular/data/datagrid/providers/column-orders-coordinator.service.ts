@@ -9,6 +9,12 @@ import { Observable, Subject } from 'rxjs';
 
 let nbColumnGroup = 0;
 
+export type OrderChangeData = {
+  draggedOrderModel: ColumnOrderModelService;
+  from: number;
+  to: number;
+};
+
 /**
  * This service is responsible for:
  * 1. Sharing order model data across headers and cells
@@ -24,13 +30,13 @@ export class ColumnOrdersCoordinatorService {
   // the common group id that will be shared across Datagrids all reorder draggable and droppables
   private _columnGroupId: string;
 
-  private _orderChange = new Subject<ColumnOrderModelService>();
+  private _orderChange = new Subject<OrderChangeData>();
 
   get columnGroupId() {
     return this._columnGroupId;
   }
 
-  public get orderChange(): Observable<ColumnOrderModelService> {
+  public get orderChange(): Observable<OrderChangeData> {
     return this._orderChange.asObservable();
   }
 
@@ -43,23 +49,19 @@ export class ColumnOrdersCoordinatorService {
   }
 
   public reorder(from: number, to: number): void {
-    const modelOfDraggableHeader: ColumnOrderModelService = this.modelAtflexOrderOf(from);
-    const modelOfDroppableHeader: ColumnOrderModelService = this.modelAtflexOrderOf(to);
-    // First, the column that has been dragged should get the flex order of the column it has been dropped on.
-    modelOfDraggableHeader.flexOrder = to;
+    const draggedOrderModel: ColumnOrderModelService = this.modelAtflexOrderOf(from);
     if (to > from) {
       // Dragged to the right so each in-between columns should decrement their flex orders
-      for (let i = from + 1; i < to; i++) {
+      for (let i = from + 1; i <= to; i++) {
         this.modelAtflexOrderOf(i).flexOrder = i - 1;
       }
-      modelOfDroppableHeader.flexOrder = to - 1;
     } else if (to < from) {
       // Dragged to the left so each in-between columns should decrement their flex orders
-      for (let i = from - 1; i > to; i--) {
+      for (let i = from - 1; i >= to; i--) {
         this.modelAtflexOrderOf(i).flexOrder = i + 1;
       }
-      modelOfDroppableHeader.flexOrder = to + 1;
     }
-    this._orderChange.next(modelOfDraggableHeader);
+    draggedOrderModel.flexOrder = to;
+    this._orderChange.next({ draggedOrderModel: draggedOrderModel, from: from, to: to });
   }
 }
