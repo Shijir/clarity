@@ -119,6 +119,10 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     return this.columnOrderModel.isLastVisible;
   }
 
+  public animateReorderShift(modelOfDraggable: ColumnOrderModelService) {
+    console.log(modelOfDraggable);
+  }
+
   /**
    * @property columnId
    *

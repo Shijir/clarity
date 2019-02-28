@@ -72,7 +72,11 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     );
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
 
-    this.subscriptions.push(columnOrdersCoordinatorService.orderChange.subscribe(() => this.renderHeaderOrders()));
+    this.subscriptions.push(
+      columnOrdersCoordinatorService.orderChange.subscribe((modelOfDraggable: ColumnOrderModelService) =>
+        this.renderHeaderOrders(modelOfDraggable)
+      )
+    );
   }
 
   @ContentChildren(DatagridHeaderRenderer) public headers: QueryList<DatagridHeaderRenderer>;
@@ -199,9 +203,12 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
   }
 
-  private renderHeaderOrders(): void {
+  private renderHeaderOrders(modelOfDraggable: ColumnOrderModelService): void {
     this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
       header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
+    });
+    this.columns.forEach((column: ClrDatagridColumn) => {
+      column.animateReorderShift(modelOfDraggable);
     });
   }
 }

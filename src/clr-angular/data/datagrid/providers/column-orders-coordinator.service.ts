@@ -24,13 +24,13 @@ export class ColumnOrdersCoordinatorService {
   // the common group id that will be shared across Datagrids all reorder draggable and droppables
   private _columnGroupId: string;
 
-  private _orderChange = new Subject<void>();
+  private _orderChange = new Subject<ColumnOrderModelService>();
 
   get columnGroupId() {
     return this._columnGroupId;
   }
 
-  public get orderChange(): Observable<void> {
+  public get orderChange(): Observable<ColumnOrderModelService> {
     return this._orderChange.asObservable();
   }
 
@@ -43,23 +43,23 @@ export class ColumnOrdersCoordinatorService {
   }
 
   public reorder(from: number, to: number): void {
-    const columnOrderModelDroppedFrom: ColumnOrderModelService = this.modelAtflexOrderOf(from);
-    const columnOrderModelDroppedTo: ColumnOrderModelService = this.modelAtflexOrderOf(to);
+    const modelOfDraggableHeader: ColumnOrderModelService = this.modelAtflexOrderOf(from);
+    const modelOfDroppableHeader: ColumnOrderModelService = this.modelAtflexOrderOf(to);
     // First, the column that has been dragged should get the flex order of the column it has been dropped on.
-    columnOrderModelDroppedFrom.flexOrder = to;
+    modelOfDraggableHeader.flexOrder = to;
     if (to > from) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = from + 1; i < to; i++) {
         this.modelAtflexOrderOf(i).flexOrder = i - 1;
       }
-      columnOrderModelDroppedTo.flexOrder = to - 1;
+      modelOfDroppableHeader.flexOrder = to - 1;
     } else if (to < from) {
       // Dragged to the left so each in-between columns should decrement their flex orders
       for (let i = from - 1; i > to; i--) {
         this.modelAtflexOrderOf(i).flexOrder = i + 1;
       }
-      columnOrderModelDroppedTo.flexOrder = to + 1;
+      modelOfDroppableHeader.flexOrder = to + 1;
     }
-    this._orderChange.next();
+    this._orderChange.next(modelOfDraggableHeader);
   }
 }
