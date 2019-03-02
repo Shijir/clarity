@@ -10,7 +10,7 @@ import { Observable, Subject } from 'rxjs';
 let nbColumnGroup = 0;
 
 export type OrderChangeData = {
-  draggedOrderModel: ColumnOrderModelService;
+  draggedOrderRef: ColumnOrderModelService;
   from: number;
   to: number;
 };
@@ -62,6 +62,6 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedOrderModel.flexOrder = to;
-    this._orderChange.next({ draggedOrderModel: draggedOrderModel, from: from, to: to });
+    this._orderChange.next({ draggedOrderModel, from, to });
   }
 }

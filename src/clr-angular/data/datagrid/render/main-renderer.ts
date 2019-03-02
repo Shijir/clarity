@@ -209,11 +209,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
     });
     this.columns.forEach((column: ClrDatagridColumn) => {
-      column.animateReorderShift(
-        orderChangeData.draggedOrderModel.headerWidth,
-        orderChangeData.from,
-        orderChangeData.to
-      );
+      column.animateReorderShift(orderChangeData.draggedOrderRef.headerWidth, orderChangeData.from, orderChangeData.to);
     });
   }
 }
