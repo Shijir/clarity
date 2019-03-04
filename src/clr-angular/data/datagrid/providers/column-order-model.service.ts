@@ -33,7 +33,7 @@ export class ColumnOrderModelService {
     return this._orderChange.asObservable();
   }
 
-  broadcastOrderChange(orderChangeData: OrderChangeData): void {
+  public broadcastOrderChange(orderChangeData: OrderChangeData): void {
     this._orderChange.next(orderChangeData);
   }
 

@@ -6,6 +6,8 @@
 
 import { ColumnOrderModelService } from './column-order-model.service';
 import { DatagridHideableColumnModel } from '../datagrid-hideable-column.model';
+import { Observable, Subject } from 'rxjs/index';
+import { OrderChangeData } from './column-orders-coordinator.service';
 
 export class MockColumnOrderModelService implements Pick<ColumnOrderModelService, keyof ColumnOrderModelService> {
   public flexOrder: number;
@@ -32,6 +34,10 @@ export class MockColumnOrderModelService implements Pick<ColumnOrderModelService
   }
 
   public dropReceived(event) {}
+
+  public orderChange: Observable<OrderChangeData>;
+
+  public broadcastOrderChange(orderChangeData: OrderChangeData): void {}
 }
 
 export function createMockHeaderEl(width: number, height: number): Node {
