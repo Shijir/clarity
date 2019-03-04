@@ -10,9 +10,9 @@ import { Observable, Subject } from 'rxjs';
 let nbColumnGroup = 0;
 
 export type OrderChangeData = {
-  draggedOrderRef: ColumnOrderModelService;
-  from: number;
-  to: number;
+  draggedFrom: number;
+  draggedTo: number;
+  draggedModelRef: ColumnOrderModelService;
 };
 
 /**
@@ -48,21 +48,21 @@ export class ColumnOrdersCoordinatorService {
     return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 
-  public reorder(from: number, to: number): void {
-    const draggedOrderModel: ColumnOrderModelService = this.modelAtflexOrderOf(from);
-    if (to > from) {
+  public reorder(draggedFrom: number, draggedTo: number): void {
+    const draggedModelRef: ColumnOrderModelService = this.modelAtflexOrderOf(draggedFrom);
+    if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
-      for (let i = from + 1; i <= to; i++) {
+      for (let i = draggedFrom + 1; i <= draggedTo; i++) {
         this.modelAtflexOrderOf(i).updateFlexOrder(i - 1);
       }
-    } else if (to < from) {
+    } else if (draggedTo < draggedFrom) {
       // Dragged to the left so each in-between columns should decrement their flex orders
-      for (let i = from - 1; i >= to; i--) {
+      for (let i = draggedFrom - 1; i >= draggedTo; i--) {
         this.modelAtflexOrderOf(i).updateFlexOrder(i + 1);
       }
     }
-    draggedOrderModel.updateFlexOrder(to);
+    draggedModelRef.updateFlexOrder(draggedTo);
 
-    this.orderModels.forEach(model => model.broadcastOrderChange());
+    this.orderModels.forEach(model => model.broadcastOrderChange({ draggedFrom, draggedTo, draggedModelRef }));
   }
 }

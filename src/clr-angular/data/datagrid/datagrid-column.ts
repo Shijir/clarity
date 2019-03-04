@@ -33,6 +33,7 @@ import { WrappedColumn } from './wrapped-column';
 import { ColumnOrderModelService } from './providers/column-order-model.service';
 import { ColumnHeaderSides } from './enums/header-sides.enum';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { OrderChangeData } from './providers/column-orders-coordinator.service';
 
 let nbCount: number = 0;
 
@@ -107,6 +108,12 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
       })
     );
 
+    this.subscriptions.push(
+      columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
+        this.animateReorderShift(orderChangeData);
+      })
+    );
+
     this.columnId = 'dg-col-' + nbCount.toString(); // Approximate a GUID
     nbCount++;
   }
@@ -144,18 +151,21 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     delete this.reorderShiftAnimation;
   }
 
-  public animateReorderShift(shiftAmount: number, shiftFrom: number, shiftTo: number) {
+  public animateReorderShift(orderChangeData: OrderChangeData) {
+    const shiftBy = orderChangeData.draggedModelRef.headerWidth;
+    const shiftFrom = orderChangeData.draggedFrom;
+    const shiftTo = orderChangeData.draggedTo;
     if (this.columnOrderModel.flexOrder >= shiftFrom && this.columnOrderModel.flexOrder <= shiftTo) {
-      console.log(shiftAmount);
+      console.log(shiftBy);
       this.reorderShiftAnimation = {
         value: 'active',
-        params: { translateX: `${shiftAmount}px` },
+        params: { translateX: `${shiftBy}px` },
       };
     } else if (this.columnOrderModel.flexOrder <= shiftFrom && this.columnOrderModel.flexOrder >= shiftTo) {
-      console.log(-shiftAmount);
+      console.log(-shiftBy);
       this.reorderShiftAnimation = {
         value: 'active',
-        params: { translateX: `-${shiftAmount}px` },
+        params: { translateX: `-${shiftBy}px` },
       };
     }
   }

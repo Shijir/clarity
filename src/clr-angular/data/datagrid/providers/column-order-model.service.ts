@@ -4,7 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { Injectable } from '@angular/core';
-import { ColumnOrdersCoordinatorService } from './column-orders-coordinator.service';
+import { ColumnOrdersCoordinatorService, OrderChangeData } from './column-orders-coordinator.service';
 import { DatagridHideableColumnModel } from '../datagrid-hideable-column.model';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DragEventInterface } from '../../../utils/drag-and-drop/interfaces/drag-event.interface';
@@ -27,9 +27,9 @@ export class ColumnOrderModelService {
 
   public hideableColumnModel: DatagridHideableColumnModel;
 
-  private _orderChange = new Subject<void>();
+  private _orderChange = new Subject<OrderChangeData>();
 
-  public get orderChange(): Observable<void> {
+  public get orderChange(): Observable<OrderChangeData> {
     return this._orderChange.asObservable();
   }
 
@@ -37,8 +37,8 @@ export class ColumnOrderModelService {
     this.flexOrder = newFlexOrder;
   }
 
-  broadcastOrderChange(): void {
-    this._orderChange.next();
+  broadcastOrderChange(orderChangeData: OrderChangeData): void {
+    this._orderChange.next(orderChangeData);
   }
 
   get columnGroupId() {
