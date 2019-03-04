@@ -81,6 +81,7 @@ export class ColumnOrderModelService {
   private _headerWidth: number;
 
   set headerWidth(value: number) {
+    // when a column gets a strict width, we will assign that width to the following property
     this._headerWidth = value;
   }
 
