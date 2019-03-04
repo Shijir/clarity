@@ -62,5 +62,7 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedOrderModel.updateFlexOrder(to);
+
+    this.orderModels.forEach(model => model.broadcastOrderChange());
   }
 }

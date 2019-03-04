@@ -27,15 +27,18 @@ export class ColumnOrderModelService {
 
   public hideableColumnModel: DatagridHideableColumnModel;
 
-  private _orderChange = new Subject<number>();
+  private _orderChange = new Subject<void>();
 
-  public get orderChange(): Observable<number> {
+  public get orderChange(): Observable<void> {
     return this._orderChange.asObservable();
   }
 
-  updateFlexOrder(newFlexOrder: number) {
+  updateFlexOrder(newFlexOrder: number): void {
     this.flexOrder = newFlexOrder;
-    this._orderChange.next(newFlexOrder);
+  }
+
+  broadcastOrderChange(): void {
+    this._orderChange.next();
   }
 
   get columnGroupId() {

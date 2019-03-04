@@ -31,6 +31,11 @@ export class DatagridHeaderRenderer implements OnDestroy {
         .filterRenderSteps(DatagridRenderStep.DETECT_STRICT_WIDTHS)
         .subscribe(() => this.detectStrictWidth())
     );
+    this.subscriptions.push(
+      columnOrderModel.orderChange.subscribe(() => {
+        this.renderOrder(columnOrderModel.flexOrder);
+      })
+    );
     this.columnOrderModel.headerEl = el.nativeElement;
   }
 
