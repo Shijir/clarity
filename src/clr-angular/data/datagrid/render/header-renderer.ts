@@ -110,4 +110,11 @@ export class DatagridHeaderRenderer implements OnDestroy {
   public renderOrder(flexOrder: number) {
     this.renderer.setStyle(this.el.nativeElement, 'order', flexOrder);
   }
+  public renderLastVisible() {
+    if (this.columnOrderModel.isLastVisible) {
+      this.renderer.addClass(this.el.nativeElement, 'last-visible');
+    } else {
+      this.renderer.removeClass(this.el.nativeElement, 'last-visible');
+    }
+  }
 }

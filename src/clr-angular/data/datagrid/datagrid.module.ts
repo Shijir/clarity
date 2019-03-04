@@ -88,7 +88,7 @@ export const CLR_DATAGRID_DIRECTIVES: Type<any>[] = [
   DatagridWillyWonka,
   ActionableOompaLoompa,
   ExpandableOompaLoompa,
-  ColumnSeparatorOompaLoompa,
+  //ColumnSeparatorOompaLoompa,
 
   // Animation hack
   DatagridRowExpandAnimation,

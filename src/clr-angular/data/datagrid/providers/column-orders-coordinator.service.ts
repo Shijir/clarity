@@ -40,6 +40,10 @@ export class ColumnOrdersCoordinatorService {
     return this._modelsChange.asObservable();
   }
 
+  public broadcastModelsChange(orderChangeData?: OrderChangeData) {
+    this._modelsChange.next(orderChangeData);
+  }
+
   constructor() {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
   }
@@ -62,6 +66,6 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedModelRef.updateFlexOrder(draggedTo);
-    this._modelsChange.next({ draggedFrom, draggedTo, draggedModelRef });
+    this.broadcastModelsChange({ draggedFrom, draggedTo, draggedModelRef });
   }
 }

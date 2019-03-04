@@ -559,6 +559,10 @@
         }
       }
 
+      &.last-visible .datagrid-column-separator {
+        display: none;
+      }
+
       .datagrid-signpost-trigger .signpost {
         margin: -0.3rem 0;
         height: 1.03rem;

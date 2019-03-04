@@ -74,7 +74,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
 
     this.subscriptions.push(
-      columnOrdersCoordinatorService.modelsChange.subscribe((orderChangeData: OrderChangeData) =>
+      columnOrdersCoordinatorService.modelsChange.subscribe((orderChangeData?: OrderChangeData) =>
         this.renderHeaderOrders(orderChangeData)
       )
     );
@@ -202,18 +202,24 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
       return header.orderModel;
     });
+
+    this.headers.forEach((header: DatagridHeaderRenderer) => {
+      header.renderLastVisible();
+    });
   }
 
   private renderHeaderOrders(orderChangeData: OrderChangeData): void {
-    this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
-      header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
+    this.headers.forEach((header: DatagridHeaderRenderer) => {
+      header.renderLastVisible();
     });
-    // this.columns.forEach((column: ClrDatagridColumn) => {
-    //   column.animateReorderShift(
-    //     orderChangeData.draggedOrderRef.headerWidth,
-    //     orderChangeData.draggedFrom,
-    //     orderChangeData.draggedTo
-    //   );
-    // });
+
+    if (orderChangeData) {
+      this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
+        header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
+      });
+      this.columns.forEach((column: ClrDatagridColumn) => {
+        column.animateReorderShift(orderChangeData);
+      });
+    }
   }
 }
