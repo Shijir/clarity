@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DatagridRenderStep } from '../enums/render-step.enum';
 import { ColumnResizerService } from '../providers/column-resizer.service';
-import { STRICT_WIDTH_CLASS } from './constants';
+import { LAST_VISIBLE_COLUMN_CLASS, STRICT_WIDTH_CLASS } from './constants';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { ColumnOrderModelService } from '../providers/column-order-model.service';
 
@@ -112,9 +112,9 @@ export class DatagridHeaderRenderer implements OnDestroy {
   }
   public renderLastVisible() {
     if (this.columnOrderModel.isLastVisible) {
-      this.renderer.addClass(this.el.nativeElement, 'last-visible');
+      this.renderer.addClass(this.el.nativeElement, LAST_VISIBLE_COLUMN_CLASS);
     } else {
-      this.renderer.removeClass(this.el.nativeElement, 'last-visible');
+      this.renderer.removeClass(this.el.nativeElement, LAST_VISIBLE_COLUMN_CLASS);
     }
   }
 }
