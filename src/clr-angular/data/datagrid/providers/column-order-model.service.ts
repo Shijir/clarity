@@ -27,16 +27,6 @@ export class ColumnOrderModelService {
 
   public hideableColumnModel: DatagridHideableColumnModel;
 
-  private _orderChange = new Subject<OrderChangeData>();
-
-  public get orderChange(): Observable<OrderChangeData> {
-    return this._orderChange.asObservable();
-  }
-
-  public broadcastOrderChange(orderChangeData: OrderChangeData): void {
-    this._orderChange.next(orderChangeData);
-  }
-
   get columnGroupId() {
     return this.columnOrderCoordinatorService.columnGroupId;
   }

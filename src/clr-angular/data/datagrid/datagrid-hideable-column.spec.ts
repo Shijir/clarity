@@ -18,6 +18,7 @@ import { DatagridRenderOrganizer } from './render/render-organizer';
 import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
 import { ColumnOrderModelService } from './providers/column-order-model.service';
 import { DatagridWillyWonka } from './chocolate/datagrid-willy-wonka';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 const PROVIDERS_NEEDED = [
   Sort,
@@ -38,7 +39,7 @@ export default function(): void {
       let context: TestContext<ClrDatagridColumn<void>, HideableTest>;
 
       beforeEach(function() {
-        context = this.create(ClrDatagridColumn, HideableTest, PROVIDERS_NEEDED);
+        context = this.create(ClrDatagridColumn, HideableTest, PROVIDERS_NEEDED, [], [NoopAnimationsModule]);
       });
 
       it('creates a DatagridHideableColumn instance on the DatagridColumn', function() {
@@ -73,7 +74,7 @@ export default function(): void {
       let context: TestContext<ClrDatagridColumn<void>, HideableOutputTest>;
 
       beforeEach(function() {
-        context = this.create(ClrDatagridColumn, HideableOutputTest, PROVIDERS_NEEDED);
+        context = this.create(ClrDatagridColumn, HideableOutputTest, PROVIDERS_NEEDED, [], [NoopAnimationsModule]);
       });
 
       it('creates a DatagridHideableColumn instance on the DatagridColumn', function() {

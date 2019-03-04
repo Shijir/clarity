@@ -5,7 +5,7 @@
  */
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Needed to recreate issue #1084
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations'; // Needed to recreate issue #1084
 import { DatagridRenderStep } from '../enums/render-step.enum';
 import { ClrDatagridModule } from '../datagrid.module';
 import { TestContext } from '../helpers.spec';
@@ -61,7 +61,7 @@ export default function(): void {
 
       beforeEach(function() {
         resizeSpy = spyOn(DatagridRenderOrganizer.prototype, 'resize');
-        context = this.createWithOverride(DatagridMainRenderer, StaticTest, [], [], PROVIDERS);
+        context = this.createWithOverride(DatagridMainRenderer, StaticTest, [], [], PROVIDERS, [NoopAnimationsModule]);
         organizer = <MockDatagridRenderOrganizer>context.getClarityProvider(DatagridRenderOrganizer);
         computeWidthSpy = spyOn(DatagridHeaderRenderer.prototype, 'computeWidth');
       });
@@ -113,7 +113,7 @@ export default function(): void {
 
       beforeEach(function() {
         resizeSpy = spyOn(DatagridRenderOrganizer.prototype, 'resize');
-        context = this.create(DatagridMainRenderer, DynamicTest);
+        context = this.create(DatagridMainRenderer, DynamicTest, [], [], [NoopAnimationsModule]);
       });
 
       it('does not trigger the render process until the rows are loaded', function() {
@@ -148,7 +148,7 @@ export default function(): void {
       let columnOrdersCoordinator: ColumnOrdersCoordinatorService;
 
       beforeEach(function() {
-        context = this.create(DatagridMainRenderer, ColumnOrderTest);
+        context = this.create(DatagridMainRenderer, ColumnOrderTest, [], [], [NoopAnimationsModule]);
         columnOrdersCoordinator = context.getClarityProvider(ColumnOrdersCoordinatorService);
       });
 
@@ -177,7 +177,7 @@ export default function(): void {
       let containerWidth: number;
       beforeEach(() => {
         TestBed.configureTestingModule({
-          imports: [BrowserAnimationsModule, ClrDatagridModule],
+          imports: [BrowserAnimationsModule, ClrDatagridModule, NoopAnimationsModule],
           declarations: [RenderWidthTest],
           providers: PROVIDERS,
         });
@@ -229,7 +229,7 @@ export default function(): void {
 
       beforeEach(function() {
         TestBed.configureTestingModule({
-          imports: [BrowserAnimationsModule, ClrDatagridModule],
+          imports: [BrowserAnimationsModule, ClrDatagridModule, NoopAnimationsModule],
           declarations: [DatagridHeightTest],
         });
         context = TestBed.createComponent(DatagridHeightTest);
@@ -260,7 +260,7 @@ export default function(): void {
       let organizer: DatagridRenderOrganizer;
 
       beforeEach(function() {
-        context = this.create(DatagridMainRenderer, ColumnsWidthTest);
+        context = this.create(DatagridMainRenderer, ColumnsWidthTest, [], [], [NoopAnimationsModule]);
         organizer = context.getClarityProvider(DatagridRenderOrganizer);
       });
 

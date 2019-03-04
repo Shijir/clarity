@@ -31,6 +31,7 @@ import {
   MockColumnOrderModelService,
 } from '../providers/column-order-model.service.mock';
 import { DatagridWillyWonka } from '../chocolate/datagrid-willy-wonka';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({ template: `<clr-dg-column>Hello world</clr-dg-column>` })
 class SimpleTest {}
@@ -70,19 +71,25 @@ export default function(): void {
     let columnOrderModelService: MockColumnOrderModelService;
 
     beforeEach(function() {
-      context = this.create(DatagridHeaderRenderer, SimpleTest, [
-        MOCK_ORGANIZER_PROVIDER,
-        MOCK_DOM_ADAPTER_PROVIDER,
-        MOCK_COLUMN_ORDER_MODEL_PROVIDER,
-        Sort,
-        FiltersProvider,
-        Page,
-        StateDebouncer,
-        TableSizeService,
-        Renderer2,
-        ColumnOrdersCoordinatorService,
-        DatagridWillyWonka,
-      ]);
+      context = this.create(
+        DatagridHeaderRenderer,
+        SimpleTest,
+        [
+          MOCK_ORGANIZER_PROVIDER,
+          MOCK_DOM_ADAPTER_PROVIDER,
+          MOCK_COLUMN_ORDER_MODEL_PROVIDER,
+          Sort,
+          FiltersProvider,
+          Page,
+          StateDebouncer,
+          TableSizeService,
+          Renderer2,
+          ColumnOrdersCoordinatorService,
+          DatagridWillyWonka,
+        ],
+        [],
+        [NoopAnimationsModule]
+      );
       domAdapter = <MockDomAdapter>context.getClarityProvider(DomAdapter);
       organizer = <MockDatagridRenderOrganizer>context.getClarityProvider(DatagridRenderOrganizer);
       columnOrderModelService = <MockColumnOrderModelService>context.getClarityProvider(ColumnOrderModelService);
@@ -197,7 +204,7 @@ export default function(): void {
     };
 
     beforeEach(function() {
-      context = this.create(ClrDatagrid, HeaderResizeTestComponent);
+      context = this.create(ClrDatagrid, HeaderResizeTestComponent, [], [], [NoopAnimationsModule]);
 
       columnHeader1DebugElement = context.fixture.debugElement.queryAll(By.directive(DatagridHeaderRenderer))[0];
       columnHeader2DebugElement = context.fixture.debugElement.queryAll(By.directive(DatagridHeaderRenderer))[1];

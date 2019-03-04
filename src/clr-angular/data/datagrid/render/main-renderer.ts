@@ -29,7 +29,6 @@ import { DatagridHeaderRenderer } from './header-renderer';
 import { NoopDomAdapter } from './noop-dom-adapter';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { ColumnOrdersCoordinatorService, OrderChangeData } from '../providers/column-orders-coordinator.service';
-import { ColumnOrderModelService } from '../providers/column-order-model.service';
 
 // Fixes build error
 // @dynamic (https://github.com/angular/angular/issues/19698#issuecomment-338340211)

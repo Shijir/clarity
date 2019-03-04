@@ -17,6 +17,7 @@ import { DomAdapter } from '../../utils/dom-adapter/dom-adapter';
 import { DatagridRenderOrganizer } from './render/render-organizer';
 import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
 import { DatagridWillyWonka } from './chocolate/datagrid-willy-wonka';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 const PROVIDERS_NEEDED = [
   Sort,
@@ -37,7 +38,7 @@ export default function(): void {
     let testDgHideableColumn: DatagridHideableColumnModel;
 
     beforeEach(function() {
-      context = this.create(ClrDatagridColumn, SimpleTest, PROVIDERS_NEEDED);
+      context = this.create(ClrDatagridColumn, SimpleTest, PROVIDERS_NEEDED, [], [NoopAnimationsModule]);
       testDgHideableColumn = new DatagridHideableColumnModel(
         context.testComponent.templateRef,
         context.testComponent.id,
