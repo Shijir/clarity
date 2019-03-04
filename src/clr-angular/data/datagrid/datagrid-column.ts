@@ -65,7 +65,7 @@ let nbCount: number = 0;
             </span>
       </div>
     </div>
-    <clr-dg-column-separator *ngIf="!isLastVisible"></clr-dg-column-separator>
+    <clr-dg-column-separator></clr-dg-column-separator>
     <clr-dg-column-reorder-droppable [side]="rightReorderDroppable"></clr-dg-column-reorder-droppable>
   `,
   host: {
@@ -90,8 +90,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     private _sort: Sort<T>,
     filters: FiltersProvider<T>,
     private vcr: ViewContainerRef,
-    private columnOrderModel: ColumnOrderModelService,
-    private cdr: ChangeDetectorRef
+    private columnOrderModel: ColumnOrderModelService
   ) {
     super(filters);
     this.subscriptions.push(
@@ -107,13 +106,6 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
           this.sortedChange.emit(false);
         }
         // deprecated: to be removed - END
-      })
-    );
-
-    this.subscriptions.push(
-      columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
-        this.cdr.detectChanges();
-        this.animateReorderShift(orderChangeData);
       })
     );
 
@@ -143,10 +135,6 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     return this.columnOrderModel.columnGroupId;
   }
 
-  public get isLastVisible() {
-    return this.columnOrderModel.isLastVisible;
-  }
-
   @HostBinding('@reorderShiftAnimation') reorderShiftAnimation;
 
   @HostListener('@reorderShiftAnimation.done')
@@ -159,13 +147,11 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     const shiftFrom = orderChangeData.draggedFrom;
     const shiftTo = orderChangeData.draggedTo;
     if (this.columnOrderModel.flexOrder >= shiftFrom && this.columnOrderModel.flexOrder <= shiftTo) {
-      console.log(shiftBy);
       this.reorderShiftAnimation = {
         value: 'active',
         params: { translateX: `${shiftBy}px` },
       };
     } else if (this.columnOrderModel.flexOrder <= shiftFrom && this.columnOrderModel.flexOrder >= shiftTo) {
-      console.log(-shiftBy);
       this.reorderShiftAnimation = {
         value: 'active',
         params: { translateX: `-${shiftBy}px` },

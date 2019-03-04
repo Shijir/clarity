@@ -62,7 +62,6 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedModelRef.updateFlexOrder(draggedTo);
-
-    this.orderModels.forEach(model => model.broadcastOrderChange({ draggedFrom, draggedTo, draggedModelRef }));
+    this._modelsChange.next({ draggedFrom, draggedTo, draggedModelRef });
   }
 }

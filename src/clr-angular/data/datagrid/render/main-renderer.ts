@@ -208,12 +208,12 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
       header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
     });
-    this.columns.forEach((column: ClrDatagridColumn) => {
-      column.animateReorderShift(
-        orderChangeData.draggedOrderRef.headerWidth,
-        orderChangeData.draggedFrom,
-        orderChangeData.draggedTo
-      );
-    });
+    // this.columns.forEach((column: ClrDatagridColumn) => {
+    //   column.animateReorderShift(
+    //     orderChangeData.draggedOrderRef.headerWidth,
+    //     orderChangeData.draggedFrom,
+    //     orderChangeData.draggedTo
+    //   );
+    // });
   }
 }
