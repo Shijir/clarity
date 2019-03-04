@@ -149,7 +149,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     };
   }
 
-  public animateReorderShift(orderChangeData: OrderChangeData) {
+  public setupShiftAnimation(orderChangeData: OrderChangeData) {
     const shiftBy = orderChangeData.draggedModelRef.headerWidth;
     const shiftFrom = orderChangeData.draggedFrom;
     const shiftTo = orderChangeData.draggedTo;
