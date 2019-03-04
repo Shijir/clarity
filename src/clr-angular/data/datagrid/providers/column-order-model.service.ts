@@ -8,6 +8,7 @@ import { ColumnOrdersCoordinatorService } from './column-orders-coordinator.serv
 import { DatagridHideableColumnModel } from '../datagrid-hideable-column.model';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DragEventInterface } from '../../../utils/drag-and-drop/interfaces/drag-event.interface';
+import { Observable, Subject } from 'rxjs/index';
 
 /**
  * This is a model service that's responsible for:
@@ -25,6 +26,17 @@ export class ColumnOrderModelService {
   public headerEl: any;
 
   public hideableColumnModel: DatagridHideableColumnModel;
+
+  private _orderChange = new Subject<number>();
+
+  public get orderChange(): Observable<number> {
+    return this._modelsChange.asObservable();
+  }
+
+  updateFlexOrder(newFlexOrder: number) {
+    this.flexOrder = newFlexOrder;
+    this._orderChange.next(newFlexOrder);
+  }
 
   get columnGroupId() {
     return this.columnOrderCoordinatorService.columnGroupId;
