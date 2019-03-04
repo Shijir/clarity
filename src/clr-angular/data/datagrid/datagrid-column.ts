@@ -4,6 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import {
+  ChangeDetectorRef,
   Component,
   ContentChild,
   EventEmitter,
@@ -89,7 +90,8 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     private _sort: Sort<T>,
     filters: FiltersProvider<T>,
     private vcr: ViewContainerRef,
-    private columnOrderModel: ColumnOrderModelService
+    private columnOrderModel: ColumnOrderModelService,
+    private cdr: ChangeDetectorRef
   ) {
     super(filters);
     this.subscriptions.push(
@@ -110,6 +112,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
     this.subscriptions.push(
       columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
+        this.cdr.detectChanges();
         this.animateReorderShift(orderChangeData);
       })
     );
@@ -193,15 +196,6 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
    */
   public get hidden(): boolean {
     return !!this._hideable && this._hideable.hidden;
-  }
-
-  /**
-   * Subscription to the sort service changes
-   */
-  private _sortSubscription: Subscription;
-
-  ngOnDestroy() {
-    this._sortSubscription.unsubscribe();
   }
 
   /*

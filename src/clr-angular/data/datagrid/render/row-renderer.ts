@@ -21,8 +21,6 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     this.subscriptions.push(
       organizer.filterRenderSteps(DatagridRenderStep.ALIGN_COLUMNS).subscribe(() => this.setWidths())
     );
-
-    this.subscriptions.push(columnOrdersCoordinatorService.modelsChange.subscribe(() => this.renderCellOrders()));
   }
 
   private subscriptions: Subscription[] = [];
@@ -43,6 +41,7 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
   }
 
   private renderCellOrders(): void {
+    // possible to link with individual column order model service
     if (this.columnOrdersCoordinatorService.orderModels.length === 0) {
       return;
     }
