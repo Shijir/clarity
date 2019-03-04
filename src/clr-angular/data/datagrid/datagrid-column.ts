@@ -142,20 +142,21 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     delete this.reorderShiftAnimation;
   }
 
+  private activateShiftAnimation(shiftBy: number) {
+    this.reorderShiftAnimation = {
+      value: 'active',
+      params: { translateX: `${shiftBy}px` },
+    };
+  }
+
   public animateReorderShift(orderChangeData: OrderChangeData) {
     const shiftBy = orderChangeData.draggedModelRef.headerWidth;
     const shiftFrom = orderChangeData.draggedFrom;
     const shiftTo = orderChangeData.draggedTo;
     if (this.columnOrderModel.flexOrder >= shiftFrom && this.columnOrderModel.flexOrder < shiftTo) {
-      this.reorderShiftAnimation = {
-        value: 'active',
-        params: { translateX: `${shiftBy}px` },
-      };
+      this.activateShiftAnimation(shiftBy);
     } else if (this.columnOrderModel.flexOrder <= shiftFrom && this.columnOrderModel.flexOrder > shiftTo) {
-      this.reorderShiftAnimation = {
-        value: 'active',
-        params: { translateX: `-${shiftBy}px` },
-      };
+      this.activateShiftAnimation(-shiftBy);
     }
   }
 
