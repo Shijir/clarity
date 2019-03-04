@@ -30,14 +30,14 @@ export class ColumnOrdersCoordinatorService {
   // the common group id that will be shared across Datagrids all reorder draggable and droppables
   private _columnGroupId: string;
 
-  private _orderChange = new Subject<OrderChangeData>();
-
   get columnGroupId() {
     return this._columnGroupId;
   }
 
-  public get orderChange(): Observable<OrderChangeData> {
-    return this._orderChange.asObservable();
+  private _modelsChange = new Subject<OrderChangeData>();
+
+  public get modelsChange(): Observable<OrderChangeData> {
+    return this._modelsChange.asObservable();
   }
 
   constructor() {
@@ -62,6 +62,6 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedOrderModel.flexOrder = to;
-    this._orderChange.next({ draggedOrderModel, from, to });
+    this._modelsChange.next({ draggedOrderModel, from, to });
   }
 }

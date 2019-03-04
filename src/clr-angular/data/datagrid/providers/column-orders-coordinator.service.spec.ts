@@ -94,7 +94,7 @@ export default function(): void {
 
     it('should broadcast from orderChange if reorder method is called', function() {
       let isEmitted = false;
-      service.orderChange.subscribe(() => {
+      service.modelsChange.subscribe(() => {
         isEmitted = true;
       });
       service.reorder(0, 2);

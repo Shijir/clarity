@@ -74,7 +74,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
 
     this.subscriptions.push(
-      columnOrdersCoordinatorService.orderChange.subscribe((orderChangeData: OrderChangeData) =>
+      columnOrdersCoordinatorService.modelsChange.subscribe((orderChangeData: OrderChangeData) =>
         this.renderHeaderOrders(orderChangeData)
       )
     );

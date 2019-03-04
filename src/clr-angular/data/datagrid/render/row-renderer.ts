@@ -22,7 +22,7 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
       organizer.filterRenderSteps(DatagridRenderStep.ALIGN_COLUMNS).subscribe(() => this.setWidths())
     );
 
-    this.subscriptions.push(columnOrdersCoordinatorService.orderChange.subscribe(() => this.renderCellOrders()));
+    this.subscriptions.push(columnOrdersCoordinatorService.modelsChange.subscribe(() => this.renderCellOrders()));
   }
 
   private subscriptions: Subscription[] = [];
