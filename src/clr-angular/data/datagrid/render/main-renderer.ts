@@ -215,6 +215,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
 
     if (orderChangeData) {
+      // orderChangeData means columns' flex have orders changed
+      // so we need to render the new flex orders in the columns and setup the reorder shift animation.
       this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
         header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
       });
