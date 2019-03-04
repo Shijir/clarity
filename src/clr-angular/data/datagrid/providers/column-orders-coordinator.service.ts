@@ -41,6 +41,11 @@ export class ColumnOrdersCoordinatorService {
   }
 
   public broadcastModelsChange(orderChangeData?: OrderChangeData) {
+    // There are two case models could change:
+    //  1. Columns' flex orders change.
+    //     In this case, that change should be be broadcasted with OrderChangeData object.
+    //  2. Columns' hide/show toggling could change last visible property of the model.
+    //     In this case, that change should NOT be broadcasted with OrderChangeData object.
     this._modelsChange.next(orderChangeData);
   }
 

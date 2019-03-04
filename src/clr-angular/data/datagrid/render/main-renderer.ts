@@ -203,6 +203,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       return header.orderModel;
     });
 
+    // after setting the flex orders initially, set the appropriate class to the last visible header
     this.headers.forEach((header: DatagridHeaderRenderer) => {
       header.renderLastVisible();
     });
