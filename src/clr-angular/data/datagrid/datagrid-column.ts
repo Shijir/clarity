@@ -91,22 +91,30 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     private columnOrderModel: ColumnOrderModelService
   ) {
     super(filters);
-    this._sortSubscription = _sort.change.subscribe(sort => {
-      // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
-      if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
-        this._sortOrder = ClrDatagridSortOrder.UNSORTED;
-        this.sortOrderChange.emit(this._sortOrder);
-      }
-      // deprecated: to be removed - START
-      if (this.sorted && sort.comparator !== this._sortBy) {
-        this._sorted = false;
-        this.sortedChange.emit(false);
-      }
-      // deprecated: to be removed - END
-    });
+    this.subscriptions.push(
+      _sort.change.subscribe(sort => {
+        // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
+        if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
+          this._sortOrder = ClrDatagridSortOrder.UNSORTED;
+          this.sortOrderChange.emit(this._sortOrder);
+        }
+        // deprecated: to be removed - START
+        if (this.sorted && sort.comparator !== this._sortBy) {
+          this._sorted = false;
+          this.sortedChange.emit(false);
+        }
+        // deprecated: to be removed - END
+      })
+    );
 
     this.columnId = 'dg-col-' + nbCount.toString(); // Approximate a GUID
     nbCount++;
+  }
+
+  private subscriptions: Subscription[] = [];
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public get leftReorderDroppable() {

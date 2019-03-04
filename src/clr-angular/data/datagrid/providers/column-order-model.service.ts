@@ -30,7 +30,7 @@ export class ColumnOrderModelService {
   private _orderChange = new Subject<number>();
 
   public get orderChange(): Observable<number> {
-    return this._modelsChange.asObservable();
+    return this._orderChange.asObservable();
   }
 
   updateFlexOrder(newFlexOrder: number) {
