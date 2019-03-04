@@ -57,15 +57,15 @@ export class ColumnOrdersCoordinatorService {
     if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = draggedFrom + 1; i <= draggedTo; i++) {
-        this.modelAtflexOrderOf(i).updateFlexOrder(i - 1);
+        this.modelAtflexOrderOf(i).flexOrder = i - 1;
       }
     } else if (draggedTo < draggedFrom) {
       // Dragged to the left so each in-between columns should decrement their flex orders
       for (let i = draggedFrom - 1; i >= draggedTo; i--) {
-        this.modelAtflexOrderOf(i).updateFlexOrder(i + 1);
+        this.modelAtflexOrderOf(i).flexOrder = i + 1;
       }
     }
-    draggedModelRef.updateFlexOrder(draggedTo);
+    draggedModelRef.flexOrder = draggedTo;
     this.broadcastModelsChange({ draggedFrom, draggedTo, draggedModelRef });
   }
 }

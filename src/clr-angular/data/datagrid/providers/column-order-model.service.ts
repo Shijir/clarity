@@ -33,10 +33,6 @@ export class ColumnOrderModelService {
     return this._orderChange.asObservable();
   }
 
-  updateFlexOrder(newFlexOrder: number): void {
-    this.flexOrder = newFlexOrder;
-  }
-
   broadcastOrderChange(orderChangeData: OrderChangeData): void {
     this._orderChange.next(orderChangeData);
   }
