@@ -218,7 +218,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
         header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
       });
       this.columns.forEach((column: ClrDatagridColumn) => {
-        column.animateReorderShift(orderChangeData);
+        column.setupShiftAnimation(orderChangeData);
       });
     }
   }
