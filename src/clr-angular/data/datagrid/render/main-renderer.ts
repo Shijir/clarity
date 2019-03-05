@@ -155,15 +155,19 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
    */
 
   private keepLastVisibleFlexible(): void {
-    const hasFlexibleWidths = this.headers.filter(header => !header.strictWidth).length > 0;
+    const hasFlexibleWidths =
+      this.headers.filter(header => !header.orderModel.isHidden && !header.strictWidth).length > 0;
+
     this.headers.forEach((header, index) => {
       // if there is no header with a flexible width, make the last visible header's width flexible.
       if (!hasFlexibleWidths && header.orderModel.isLastVisible) {
         header.strictWidth = 0;
         this.organizer.widths[index] = { px: header.computeWidth(), strict: !!header.strictWidth };
+        header.setWidth(this.organizer.widths[index].px);
       }
     });
   }
+
   private computeHeadersWidth() {
     this.keepLastVisibleFlexible();
 
@@ -216,7 +220,9 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
   }
 
-  private renderHeaderOrders(orderChangeData: OrderChangeData): void {
+  private renderHeaderOrders(orderChangeData?: OrderChangeData): void {
+    this.keepLastVisibleFlexible();
+
     this.headers.forEach((header: DatagridHeaderRenderer) => {
       header.renderLastVisible();
     });
