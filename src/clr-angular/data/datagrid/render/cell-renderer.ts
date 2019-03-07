@@ -4,15 +4,19 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { Directive, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { DatagridRenderStep } from '../enums/render-step.enum';
 
 import { STRICT_WIDTH_CLASS } from './constants';
 import { DatagridRenderOrganizer } from './render-organizer';
+import { ColumnOrderModelService } from '../providers/column-order-model.service';
+import { OrderChangeData } from '../providers/column-orders-coordinator.service';
 
 @Directive({ selector: 'clr-dg-cell' })
 export class DatagridCellRenderer implements OnDestroy {
+  columnOrderModel: ColumnOrderModelService;
+
   constructor(private el: ElementRef, private renderer: Renderer2, organizer: DatagridRenderOrganizer) {
     this.subscriptions.push(
       organizer.filterRenderSteps(DatagridRenderStep.CLEAR_WIDTHS).subscribe(() => this.clearWidth())
@@ -20,8 +24,10 @@ export class DatagridCellRenderer implements OnDestroy {
   }
 
   private subscriptions: Subscription[] = [];
+
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    this._columnModelSubscription!.unsubscribe();
   }
 
   private clearWidth() {
@@ -36,6 +42,18 @@ export class DatagridCellRenderer implements OnDestroy {
       this.renderer.removeClass(this.el.nativeElement, STRICT_WIDTH_CLASS);
     }
     this.renderer.setStyle(this.el.nativeElement, 'width', value + 'px');
+  }
+
+  private _columnModel: ColumnOrderModelService;
+
+  private _columnModelSubscription: Subscription;
+
+  public setColumnModel(columnModel: ColumnOrderModelService) {
+    this._columnModel = columnModel;
+    this._columnModelSubscription!.unsubscribe();
+    this._columnModelSubscription = this._columnModel.orderChange.subscribe(() => {
+      this.renderOrder(this._columnModel.flexOrder);
+    });
   }
 
   public renderOrder(flexOrder: number) {

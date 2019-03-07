@@ -5,7 +5,6 @@
  */
 import { Injectable } from '@angular/core';
 import { ColumnOrderModelService } from './column-order-model.service';
-import { Observable, Subject } from 'rxjs';
 
 let nbColumnGroup = 0;
 
@@ -34,21 +33,6 @@ export class ColumnOrdersCoordinatorService {
     return this._columnGroupId;
   }
 
-  private _modelsChange = new Subject<OrderChangeData>();
-
-  public get modelsChange(): Observable<OrderChangeData> {
-    return this._modelsChange.asObservable();
-  }
-
-  public broadcastModelsChange(orderChangeData?: OrderChangeData) {
-    // There are two case models could change:
-    //  1. Columns' flex orders change.
-    //     In this case, that change should be be broadcasted with OrderChangeData object.
-    //  2. Columns' hide/show toggling could change last visible property of the model.
-    //     In this case, that change should NOT be broadcasted with OrderChangeData object.
-    this._modelsChange.next(orderChangeData);
-  }
-
   constructor() {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
   }
@@ -71,6 +55,6 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedModelRef.flexOrder = draggedTo;
-    this.broadcastModelsChange({ draggedFrom, draggedTo, draggedModelRef });
+    this.orderModels.forEach(model => model.broadcastOrderChange({ draggedFrom, draggedTo, draggedModelRef }));
   }
 }

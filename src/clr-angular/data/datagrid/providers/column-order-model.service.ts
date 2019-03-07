@@ -21,6 +21,16 @@ import { Observable, Subject } from 'rxjs/index';
 export class ColumnOrderModelService {
   constructor(private columnOrderCoordinatorService: ColumnOrdersCoordinatorService, private domAdapter: DomAdapter) {}
 
+  private _orderChange = new Subject<OrderChangeData>();
+
+  public get orderChange(): Observable<OrderChangeData> {
+    return this._orderChange.asObservable();
+  }
+
+  public broadcastOrderChange(orderChangeData?: OrderChangeData) {
+    this._orderChange.next(orderChangeData);
+  }
+
   public flexOrder: number;
 
   public headerEl: any;

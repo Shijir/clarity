@@ -12,6 +12,8 @@ import { ColumnResizerService } from '../providers/column-resizer.service';
 import { LAST_VISIBLE_COLUMN_CLASS, STRICT_WIDTH_CLASS } from './constants';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { ColumnOrderModelService } from '../providers/column-order-model.service';
+import Order = jasmine.Order;
+import { OrderChangeData } from '../providers/column-orders-coordinator.service';
 
 @Directive({ selector: 'clr-dg-column', providers: [ColumnResizerService] })
 export class DatagridHeaderRenderer implements OnDestroy {
@@ -32,6 +34,11 @@ export class DatagridHeaderRenderer implements OnDestroy {
         .subscribe(() => this.detectStrictWidth())
     );
     this.columnOrderModel.headerEl = el.nativeElement;
+    this.subscriptions.push(
+      columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
+        this.renderOrder(this.columnOrderModel.flexOrder);
+      })
+    );
   }
 
   @Output('clrDgColumnResize') resizeEmitter: EventEmitter<number> = new EventEmitter();

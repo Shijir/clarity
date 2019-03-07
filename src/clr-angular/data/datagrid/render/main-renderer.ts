@@ -29,6 +29,7 @@ import { DatagridHeaderRenderer } from './header-renderer';
 import { NoopDomAdapter } from './noop-dom-adapter';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { ColumnOrdersCoordinatorService, OrderChangeData } from '../providers/column-orders-coordinator.service';
+import { DatagridRowRenderer } from './row-renderer';
 
 // Fixes build error
 // @dynamic (https://github.com/angular/angular/issues/19698#issuecomment-338340211)
@@ -71,16 +72,11 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       })
     );
     this.subscriptions.push(this.items.change.subscribe(() => (this.shouldStabilizeColumns = true)));
-
-    this.subscriptions.push(
-      columnOrdersCoordinatorService.modelsChange.subscribe((orderChangeData?: OrderChangeData) =>
-        this.renderHeaderOrders(orderChangeData)
-      )
-    );
   }
 
   @ContentChildren(DatagridHeaderRenderer) public headers: QueryList<DatagridHeaderRenderer>;
   @ContentChildren(ClrDatagridColumn) public columns: QueryList<ClrDatagridColumn>;
+  @ContentChildren(DatagridRowRenderer) private rows: QueryList<DatagridRowRenderer>;
 
   ngAfterContentInit() {
     this.subscriptions.push(
@@ -90,9 +86,9 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
         this.stabilizeColumns();
       })
     );
-
     // set initial order of the header
     this.setHeaderOrders();
+    this.setRowCellOrders();
   }
 
   // Initialize and set Table width for horizontal scrolling here.
@@ -203,6 +199,12 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     }
   }
 
+  private setRowCellOrders(): void {
+    this.rows.forEach(row => {
+      row.setCellOrders();
+    });
+  }
+
   private setHeaderOrders(): void {
     this.headers.forEach((header, index) => {
       // set initial flex order
@@ -213,29 +215,22 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
       return header.orderModel;
     });
-
-    // after setting the flex orders initially, set the appropriate class to the last visible header
-    this.headers.forEach((header: DatagridHeaderRenderer) => {
-      header.renderLastVisible();
-    });
   }
 
-  private renderHeaderOrders(orderChangeData?: OrderChangeData): void {
-    this.keepLastVisibleFlexible();
-
-    this.headers.forEach((header: DatagridHeaderRenderer) => {
-      header.renderLastVisible();
-    });
-
-    if (orderChangeData) {
-      // orderChangeData means columns' flex have orders changed
-      // so we need to render the new flex orders in the columns and setup the reorder shift animation.
-      this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
-        header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
-      });
-      this.columns.forEach((column: ClrDatagridColumn) => {
-        column.setupShiftAnimation(orderChangeData);
-      });
-    }
-  }
+  // private renderHeaderOrders(orderChangeData?: OrderChangeData): void {
+  //   this.headers.forEach((header: DatagridHeaderRenderer) => {
+  //     header.renderLastVisible();
+  //   });
+  //
+  //   if (orderChangeData) {
+  //     // orderChangeData means columns' flex have orders changed
+  //     // so we need to render the new flex orders in the columns and setup the reorder shift animation.
+  //     this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
+  //       header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
+  //     });
+  //     this.columns.forEach((column: ClrDatagridColumn) => {
+  //       column.setupShiftAnimation(orderChangeData);
+  //     });
+  //   }
+  // }
 }

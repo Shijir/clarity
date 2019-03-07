@@ -21,12 +21,6 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     this.subscriptions.push(
       organizer.filterRenderSteps(DatagridRenderStep.ALIGN_COLUMNS).subscribe(() => this.setWidths())
     );
-
-    this.subscriptions.push(
-      columnOrdersCoordinatorService.modelsChange.subscribe((orderChangeData?: OrderChangeData) =>
-        this.renderCellOrders(orderChangeData)
-      )
-    );
   }
 
   private subscriptions: Subscription[] = [];
@@ -46,28 +40,26 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     });
   }
 
-  private renderCellOrders(orderChangeData?: OrderChangeData): void {
+  public setCellOrders(): void {
     // possible to link with individual column order model service
     if (this.columnOrdersCoordinatorService.orderModels.length === 0) {
       return;
     }
-    this.setWidths(); // TODO: only touch the last fixed cell instead of going through the all cells
-    if (orderChangeData) {
-      this.cells.forEach((cell: DatagridCellRenderer, index: number) => {
-        cell.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
-      });
-    }
+    // TODO: how about dynamic column
+    this.cells.forEach((cell: DatagridCellRenderer, index: number) => {
+      cell.setColumnModel(this.columnOrdersCoordinatorService.orderModels[index]);
+    });
   }
 
   ngAfterContentInit() {
     this.cells.changes.subscribe(() => {
       this.setWidths();
-      this.renderCellOrders(); // necessary in case of async loading cell detail
+      this.setCellOrders(); // necessary in case of async loading cell detail
     });
   }
 
   ngAfterViewInit() {
     this.setWidths();
-    this.renderCellOrders(); // necessary in case of async loading rows or loading rows in another page
+    this.setCellOrders(); // necessary in case of async loading rows or loading rows in another page
   }
 }
