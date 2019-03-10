@@ -144,7 +144,6 @@ export class ClrDatagridColumnToggle implements OnInit, OnDestroy {
     this.allColumnsVisible = this.hideableColumnService.checkForAllColumnsVisible;
     this.columnToggleButtons.selectAllDisabled = this.allColumnsVisible;
     this.hideableColumnService.updateForLastVisibleColumn();
-    //this.columnOrdersCoordinatorService.broadcastModelsChange();
   }
 
   toggleUI() {

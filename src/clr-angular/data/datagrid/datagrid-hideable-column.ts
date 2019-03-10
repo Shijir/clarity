@@ -7,6 +7,7 @@ import { Directive, Input, TemplateRef, ViewContainerRef, Output, EventEmitter }
 
 import { ClrDatagridColumn } from './datagrid-column';
 import { DatagridHideableColumnModel } from './datagrid-hideable-column.model';
+import { ColumnOrderModelService } from './providers/column-order-model.service';
 
 @Directive({ selector: '[clrDgHideableColumn]' })
 
@@ -89,7 +90,8 @@ export class ClrDatagridHideableColumn {
   constructor(
     private templateRef: TemplateRef<any>,
     private viewContainerRef: ViewContainerRef,
-    private dgColumn: ClrDatagridColumn<any>
+    private dgColumn: ClrDatagridColumn<any>,
+    private columnOrderModel: ColumnOrderModelService
   ) {
     this.columnId = dgColumn.columnId;
 
@@ -100,5 +102,7 @@ export class ClrDatagridHideableColumn {
     // Note this is on the parent instance of DatagridColumn.
     this.dgColumn.hideable = new DatagridHideableColumnModel(this.templateRef, this.columnId, this._hidden);
     this.dgColumn.hideable.hiddenChangeState.subscribe(state => this.hiddenChange.emit(state));
+
+    console.log(columnOrderModel);
   }
 }

@@ -215,6 +215,14 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
       return header.orderModel;
     });
+
+    // Initially, in order to figure out the last visible header,
+    // we have to run through headers because we need to check both their flex orders after all of them are set
+    // as well as their hidden properties
+    this.headers.forEach(header => {
+      // set initial flex order
+      header.toggleClassIfLastVisible();
+    });
   }
 
   // private renderHeaderOrders(orderChangeData?: OrderChangeData): void {
