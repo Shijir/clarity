@@ -39,9 +39,9 @@ export default function(): void {
     });
 
     it('finds a correct model by its flex order number', function() {
-      expect(service.modelAtflexOrderOf(0)).toBe(columnOrderModelServicePrev);
-      expect(service.modelAtflexOrderOf(1)).toBe(columnOrderModelService);
-      expect(service.modelAtflexOrderOf(2)).toBe(columnOrderModelServiceNext);
+      expect(service.findModelOfFlexOrder(0)).toBe(columnOrderModelServicePrev);
+      expect(service.findModelOfFlexOrder(1)).toBe(columnOrderModelService);
+      expect(service.findModelOfFlexOrder(2)).toBe(columnOrderModelServiceNext);
     });
 
     it('rearranges flex orders correctly if previous model is dropped on current model', function() {

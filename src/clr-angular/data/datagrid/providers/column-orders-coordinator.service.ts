@@ -37,21 +37,25 @@ export class ColumnOrdersCoordinatorService {
     this._columnGroupId = 'dg-column-group-' + nbColumnGroup++;
   }
 
-  public modelAtflexOrderOf(flexOrder: number): ColumnOrderModelService {
+  public findModelOfFlexOrder(flexOrder: number): ColumnOrderModelService {
     return this.orderModels.filter(orderModel => orderModel.flexOrder === flexOrder)[0];
   }
 
+  public findModelOfLastVisible(): ColumnOrderModelService {
+    return this.orderModels.filter(model => model.isLastVisible)[0];
+  }
+
   public reorder(draggedFrom: number, draggedTo: number): void {
-    const draggedModelRef: ColumnOrderModelService = this.modelAtflexOrderOf(draggedFrom);
+    const draggedModelRef: ColumnOrderModelService = this.findModelOfFlexOrder(draggedFrom);
     if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = draggedFrom + 1; i <= draggedTo; i++) {
-        this.modelAtflexOrderOf(i).flexOrder = i - 1;
+        this.findModelOfFlexOrder(i).flexOrder = i - 1;
       }
     } else if (draggedTo < draggedFrom) {
       // Dragged to the left so each in-between columns should decrement their flex orders
       for (let i = draggedFrom - 1; i >= draggedTo; i--) {
-        this.modelAtflexOrderOf(i).flexOrder = i + 1;
+        this.findModelOfFlexOrder(i).flexOrder = i + 1;
       }
     }
     draggedModelRef.flexOrder = draggedTo;

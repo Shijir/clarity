@@ -36,7 +36,10 @@ export class DatagridHeaderRenderer implements OnDestroy {
     this.columnOrderModel.headerEl = el.nativeElement;
     this.subscriptions.push(
       columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
-        this.renderOrder(this.columnOrderModel.flexOrder);
+        if (orderChangeData) {
+          this.renderOrder(this.columnOrderModel.flexOrder);
+        }
+        this.toggleClassIfLastVisible();
       })
     );
   }
@@ -111,7 +114,6 @@ export class DatagridHeaderRenderer implements OnDestroy {
 
   public renderOrder(flexOrder: number) {
     this.renderer.setStyle(this.el.nativeElement, 'order', flexOrder);
-    this.toggleClassIfLastVisible();
   }
   public toggleClassIfLastVisible() {
     if (this.columnOrderModel.isLastVisible) {

@@ -27,7 +27,9 @@ export class DatagridCellRenderer implements OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    this._columnModelSubscription!.unsubscribe();
+    if (this._columnModelSubscription) {
+      this._columnModelSubscription.unsubscribe();
+    }
   }
 
   private clearWidth() {
