@@ -50,7 +50,14 @@ export class DatagridCellRenderer implements OnDestroy {
 
   public setColumnModel(columnModel: ColumnOrderModelService) {
     this._columnModel = columnModel;
-    this._columnModelSubscription!.unsubscribe();
+    // RowRenderer lets all CellRenderer to subscribe in through
+    // Every time cell change occurs, we run cells' subscriptions again
+    // So we need to guard against the same cell from subscribing to the same model change more than once
+    // That's why I haven't push the subscription to array as it would hard to access it back
+    // Saving it to the specific property is easier to access and unsubscribe.
+    if (this._columnModelSubscription) {
+      this._columnModelSubscription.unsubscribe();
+    }
     this._columnModelSubscription = this._columnModel.orderChange.subscribe(() => {
       this.renderOrder(this._columnModel.flexOrder);
     });
