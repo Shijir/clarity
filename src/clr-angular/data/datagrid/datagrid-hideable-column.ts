@@ -101,8 +101,23 @@ export class ClrDatagridHideableColumn {
     // Create instance of the utility class DatagridHideableColumn.
     // Note this is on the parent instance of DatagridColumn.
     this.dgColumn.hideable = new DatagridHideableColumnModel(this.templateRef, this.columnId, this._hidden);
-    this.dgColumn.hideable.hiddenChangeState.subscribe(state => this.hiddenChange.emit(state));
+    this.dgColumn.hideable.hiddenChangeState.subscribe(state => {
+      this.hiddenChange.emit(state);
 
-    console.log(columnOrderModel);
+      if (state) {
+        if (this.columnOrderModel.lastVisibleColumnModel === this.columnOrderModel.previousVisibleColumnModel) {
+          this.columnOrderModel.lastVisibleColumnModel.broadcastOrderChange();
+        }
+      } else {
+        // When a column appears, and it becomes the new last visible column,
+        // broadcast from its model to let its header know it's now the new last visible's header.
+        // Also, broadcast from the previous visible column's model
+        // to let its header know it's no longer the last visible header
+        if (this.columnOrderModel.lastVisibleColumnModel === this.columnOrderModel) {
+          this.columnOrderModel.broadcastOrderChange();
+          this.columnOrderModel.previousVisibleColumnModel.broadcastOrderChange();
+        }
+      }
+    });
   }
 }

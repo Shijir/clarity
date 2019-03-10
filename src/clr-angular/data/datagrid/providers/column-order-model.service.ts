@@ -74,6 +74,10 @@ export class ColumnOrderModelService {
     return this.findAdjacentVisibleModel(false);
   }
 
+  get lastVisibleColumnModel(): ColumnOrderModelService {
+    return this.columnOrderCoordinatorService.findModelOfLastVisible();
+  }
+
   get previousVisibleColumnModel(): ColumnOrderModelService {
     return this.findAdjacentVisibleModel(true);
   }
