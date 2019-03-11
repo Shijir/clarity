@@ -105,12 +105,16 @@ export class ClrDatagridHideableColumn {
       this.hiddenChange.emit(state);
 
       if (state) {
+        // To figure out if the hidden column was previously the last visible header,
+        // we could compare the current last visible column's model with the hidden column's previous visible column model.
+        // If the comparison is true, it means the new last visible header is formed.
+        // And it should broadcast from its model to let its header know, it's now the new last visible header.
         if (this.columnOrderModel.lastVisibleColumnModel === this.columnOrderModel.previousVisibleColumnModel) {
           this.columnOrderModel.lastVisibleColumnModel.broadcastOrderChange();
         }
       } else {
-        // When a column appears, and it becomes the new last visible column,
-        // broadcast from its model to let its header know it's now the new last visible's header.
+        // When a column appears at the end and becomes the new last visible column,
+        // broadcast from its model to let its header know it's now the new last visible header.
         // Also, broadcast from the previous visible column's model
         // to let its header know it's no longer the last visible header
         if (this.columnOrderModel.lastVisibleColumnModel === this.columnOrderModel) {
