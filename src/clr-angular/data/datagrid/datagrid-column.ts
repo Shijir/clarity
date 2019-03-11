@@ -109,6 +109,18 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
       })
     );
 
+    this.subscriptions.push(
+      this.columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
+        if (orderChangeData) {
+          this.setupShiftAnimation(
+            orderChangeData.draggedModelRef.headerWidth,
+            orderChangeData.draggedFrom,
+            orderChangeData.draggedTo
+          );
+        }
+      })
+    );
+
     this.columnId = 'dg-col-' + nbCount.toString(); // Approximate a GUID
     nbCount++;
   }
@@ -149,13 +161,10 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     };
   }
 
-  public setupShiftAnimation(orderChangeData: OrderChangeData) {
-    const shiftBy = orderChangeData.draggedModelRef.headerWidth;
-    const shiftFrom = orderChangeData.draggedFrom;
-    const shiftTo = orderChangeData.draggedTo;
-    if (this.columnOrderModel.flexOrder >= shiftFrom && this.columnOrderModel.flexOrder < shiftTo) {
+  public setupShiftAnimation(shiftBy: number, from: number, to: number) {
+    if (this.columnOrderModel.flexOrder >= from && this.columnOrderModel.flexOrder < to) {
       this.activateShiftAnimation(shiftBy);
-    } else if (this.columnOrderModel.flexOrder <= shiftFrom && this.columnOrderModel.flexOrder > shiftTo) {
+    } else if (this.columnOrderModel.flexOrder <= from && this.columnOrderModel.flexOrder > to) {
       this.activateShiftAnimation(-shiftBy);
     }
   }
