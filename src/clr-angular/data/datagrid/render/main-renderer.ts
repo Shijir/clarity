@@ -205,6 +205,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
 
   private updateHeaderOrders(): void {
     if (this.headers.length < this.nbHeaders) {
+      // columns are added
       const sortedFlexOrders = this.headers.map(header => header.orderModel.flexOrder).sort();
 
       this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
@@ -212,11 +213,9 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
         return header.orderModel;
       });
 
-      //this.setRowCellOrders();
-
       this.columnOrdersCoordinatorService.broadcastOrderChanges();
     } else if (this.headers.length > this.nbHeaders) {
-      console.log(this.headers.map(header => header.orderModel.flexOrder));
+      // columns are removed
 
       this.headers.forEach((header, index) => {
         if (typeof header.orderModel.flexOrder === 'undefined') {
@@ -231,10 +230,6 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
         return header.orderModel;
       });
-
-      console.log(this.headers.map(header => header.orderModel.flexOrder));
-
-      console.log(this.columnOrdersCoordinatorService.orderModels.map(model => model.flexOrder));
 
       this.setRowCellOrders();
       this.columnOrdersCoordinatorService.broadcastOrderChanges();
@@ -264,21 +259,4 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
       row.setCellOrders();
     });
   }
-
-  // private renderHeaderOrders(orderChangeData?: OrderChangeData): void {
-  //   this.headers.forEach((header: DatagridHeaderRenderer) => {
-  //     header.renderLastVisible();
-  //   });
-  //
-  //   if (orderChangeData) {
-  //     // orderChangeData means columns' flex have orders changed
-  //     // so we need to render the new flex orders in the columns and setup the reorder shift animation.
-  //     this.headers.forEach((header: DatagridHeaderRenderer, index: number) => {
-  //       header.renderOrder(this.columnOrdersCoordinatorService.orderModels[index].flexOrder);
-  //     });
-  //     this.columns.forEach((column: ClrDatagridColumn) => {
-  //       column.setupShiftAnimation(orderChangeData);
-  //     });
-  //   }
-  // }
 }
