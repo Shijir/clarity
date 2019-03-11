@@ -36,9 +36,11 @@ export class DatagridHeaderRenderer implements OnDestroy {
     this.columnOrderModel.headerEl = el.nativeElement;
     this.subscriptions.push(
       columnOrderModel.orderChange.subscribe((orderChangeData: OrderChangeData) => {
-        // if (orderChangeData) {
-        //   this.renderOrder(this.columnOrderModel.flexOrder);
-        // }
+        // TODO: find a way to broadcast distinguishable changes from columnOrderModel. For example:
+        // (a) Dynamic header change which
+        // (b) Last visible header change
+        // (c) Reordering header change which triggers animation as well
+
         this.renderOrder(this.columnOrderModel.flexOrder);
         this.toggleClassIfLastVisible();
       })
