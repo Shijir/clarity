@@ -14,6 +14,7 @@ import { ExpandableRowsCount } from './providers/global-expandable-rows';
 import { HideableColumnService } from './providers/hideable-column.service';
 import { RowActionService } from './providers/row-action-service';
 import { Selection, SelectionType } from './providers/selection';
+import { ColumnOrdersCoordinatorService } from './providers/column-orders-coordinator.service';
 
 /**
  * Generic bland container serving various purposes for Datagrid.
@@ -57,7 +58,8 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
     public rowActionService: RowActionService,
     public expand: Expand,
     public hideableColumnService: HideableColumnService,
-    public expandableRows: ExpandableRowsCount
+    public expandableRows: ExpandableRowsCount,
+    private columnOrdersCoordinatorService: ColumnOrdersCoordinatorService
   ) {}
 
   @ContentChildren(ClrDatagridCell) cells: QueryList<ClrDatagridCell>;
@@ -107,6 +109,17 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
       if (currentColumn) {
         cell.id = currentColumn.id;
       }
+    });
+  }
+
+  public setCellOrders(): void {
+    // possible to link with individual column order model service
+    if (this.columnOrdersCoordinatorService.orderModels.length === 0) {
+      return;
+    }
+
+    this.cells.forEach((cell: ClrDatagridCell, index: number) => {
+      cell.setColumnModel(this.columnOrdersCoordinatorService.orderModels[index]);
     });
   }
 

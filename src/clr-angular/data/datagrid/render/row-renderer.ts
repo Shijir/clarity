@@ -41,8 +41,11 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
   }
 
   public setCellOrders(): void {
-    // possible to link with individual column order model service
-    if (this.columnOrdersCoordinatorService.orderModels.length === 0) {
+    // We must make sure that # of models equals # of cells in the row, and vice versa.
+    // Because we shouldn't forget that headers and its corresponding cells are usually added/removed at the same time.
+    // Those changes are eventually reflected in the column models. So in case this method is called before
+    // the models access those changes, we shouldn't try to link and set cells to its corresponding header's model.
+    if (this.columnOrdersCoordinatorService.orderModels.length !== this.cells.length) {
       return;
     }
 
@@ -54,8 +57,9 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
   ngAfterContentInit() {
     this.setCellOrders(); // necessary in case of async loading rows or loading rows in another page
     this.cells.changes.subscribe(() => {
+      // changes due to async expandable cell details or dynamic columns
+      this.setCellOrders(); // this method runs completely only in the case of async expandable cell details
       this.setWidths();
-      // this.setCellOrders(); // necessary in case of async loading cell detail
     });
   }
 
