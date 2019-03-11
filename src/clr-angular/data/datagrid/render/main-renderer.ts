@@ -206,14 +206,38 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
   private updateHeaderOrders(): void {
     if (this.headers.length < this.nbHeaders) {
       const sortedFlexOrders = this.headers.map(header => header.orderModel.flexOrder).sort();
+
       this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
         header.orderModel.flexOrder = sortedFlexOrders.indexOf(header.orderModel.flexOrder);
         return header.orderModel;
       });
+
       //this.setRowCellOrders();
+
       this.columnOrdersCoordinatorService.broadcastOrderChanges();
     } else if (this.headers.length > this.nbHeaders) {
-      console.log('header added');
+      console.log(this.headers.map(header => header.orderModel.flexOrder));
+
+      this.headers.forEach((header, index) => {
+        if (typeof header.orderModel.flexOrder === 'undefined') {
+          this.headers
+            .filter(withOrder => withOrder.orderModel.flexOrder >= index)
+            .forEach(withOrderGreaterThanIndex => withOrderGreaterThanIndex.orderModel.flexOrder++);
+          header.orderModel.flexOrder = index;
+        }
+      });
+
+      // set orders array with headers ColumnOrder
+      this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
+        return header.orderModel;
+      });
+
+      console.log(this.headers.map(header => header.orderModel.flexOrder));
+
+      console.log(this.columnOrdersCoordinatorService.orderModels.map(model => model.flexOrder));
+
+      this.setRowCellOrders();
+      this.columnOrdersCoordinatorService.broadcastOrderChanges();
     }
 
     this.nbHeaders = this.headers.length;

@@ -55,7 +55,7 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     this.setCellOrders(); // necessary in case of async loading rows or loading rows in another page
     this.cells.changes.subscribe(() => {
       this.setWidths();
-      this.setCellOrders(); // necessary in case of async loading cell detail
+      // this.setCellOrders(); // necessary in case of async loading cell detail
     });
   }
 
