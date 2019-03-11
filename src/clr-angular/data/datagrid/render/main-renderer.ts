@@ -199,12 +199,6 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     }
   }
 
-  private setRowCellOrders(): void {
-    this.rows.forEach(row => {
-      row.setCellOrders();
-    });
-  }
-
   private setHeaderOrders(): void {
     this.headers.forEach((header, index) => {
       // set initial flex order
@@ -217,6 +211,12 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
 
     this.columnOrdersCoordinatorService.findModelOfLastVisible().broadcastOrderChange();
+  }
+
+  private setRowCellOrders(): void {
+    this.rows.forEach(row => {
+      row.setCellOrders();
+    });
   }
 
   // private renderHeaderOrders(orderChangeData?: OrderChangeData): void {

@@ -4,14 +4,13 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { Directive, ElementRef, OnDestroy, Renderer2 } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { DatagridRenderStep } from '../enums/render-step.enum';
 
 import { STRICT_WIDTH_CLASS } from './constants';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { ColumnOrderModelService } from '../providers/column-order-model.service';
-import { OrderChangeData } from '../providers/column-orders-coordinator.service';
 
 @Directive({ selector: 'clr-dg-cell' })
 export class DatagridCellRenderer implements OnDestroy {
@@ -27,9 +26,6 @@ export class DatagridCellRenderer implements OnDestroy {
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-    if (this._columnModelSubscription) {
-      this._columnModelSubscription.unsubscribe();
-    }
   }
 
   private clearWidth() {
@@ -46,23 +42,18 @@ export class DatagridCellRenderer implements OnDestroy {
     this.renderer.setStyle(this.el.nativeElement, 'width', value + 'px');
   }
 
-  private _columnModel: ColumnOrderModelService;
-
-  private _columnModelSubscription: Subscription;
+  private _columnModelRef: ColumnOrderModelService;
 
   public setColumnModel(columnModel: ColumnOrderModelService) {
-    this._columnModel = columnModel;
-    // RowRenderer lets all CellRenderers to subscribe in through
-    // Every time cell change occurs, we run cells' subscriptions again
-    // So we need to guard against the same cell from subscribing to the same model change more than once
-    // That's why I haven't push the subscription to array as it would hard to access it back
-    // Saving it to the specific property is easier to access and unsubscribe.
-    if (this._columnModelSubscription) {
-      this._columnModelSubscription.unsubscribe();
+    if (this._columnModelRef !== columnModel) {
+      this._columnModelRef = columnModel;
+      this.renderOrder(this._columnModelRef.flexOrder);
+      this.subscriptions.push(
+        this._columnModelRef.orderChange.subscribe(() => {
+          this.renderOrder(this._columnModelRef.flexOrder);
+        })
+      );
     }
-    this._columnModelSubscription = this._columnModel.orderChange.subscribe(() => {
-      this.renderOrder(this._columnModel.flexOrder);
-    });
   }
 
   public renderOrder(flexOrder: number) {

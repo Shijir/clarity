@@ -10,7 +10,7 @@ import { DatagridRenderStep } from '../enums/render-step.enum';
 
 import { DatagridCellRenderer } from './cell-renderer';
 import { DatagridRenderOrganizer } from './render-organizer';
-import { ColumnOrdersCoordinatorService, OrderChangeData } from '../providers/column-orders-coordinator.service';
+import { ColumnOrdersCoordinatorService } from '../providers/column-orders-coordinator.service';
 
 @Directive({ selector: 'clr-dg-row, clr-dg-row-detail' })
 export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
@@ -45,13 +45,14 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
     if (this.columnOrdersCoordinatorService.orderModels.length === 0) {
       return;
     }
-    // TODO: how about dynamic column
+
     this.cells.forEach((cell: DatagridCellRenderer, index: number) => {
       cell.setColumnModel(this.columnOrdersCoordinatorService.orderModels[index]);
     });
   }
 
   ngAfterContentInit() {
+    this.setCellOrders(); // necessary in case of async loading rows or loading rows in another page
     this.cells.changes.subscribe(() => {
       this.setWidths();
       this.setCellOrders(); // necessary in case of async loading cell detail
@@ -60,6 +61,5 @@ export class DatagridRowRenderer implements AfterContentInit, OnDestroy {
 
   ngAfterViewInit() {
     this.setWidths();
-    this.setCellOrders(); // necessary in case of async loading rows or loading rows in another page
   }
 }
