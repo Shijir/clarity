@@ -81,6 +81,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
   ngAfterContentInit() {
     this.subscriptions.push(
       this.headers.changes.subscribe(() => {
+        this.updateHeaderOrders();
+
         // TODO: only re-stabilize if a column was added or removed. Reordering is fine.
         this.columnsSizesStable = false;
         this.stabilizeColumns();
@@ -199,6 +201,24 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     }
   }
 
+  private nbHeaders: number = 0;
+
+  private updateHeaderOrders(): void {
+    if (this.headers.length < this.nbHeaders) {
+      const sortedFlexOrders = this.headers.map(header => header.orderModel.flexOrder).sort();
+      this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
+        header.orderModel.flexOrder = sortedFlexOrders.indexOf(header.orderModel.flexOrder);
+        return header.orderModel;
+      });
+      //this.setRowCellOrders();
+      this.columnOrdersCoordinatorService.broadcastOrderChanges();
+    } else if (this.headers.length > this.nbHeaders) {
+      console.log('header added');
+    }
+
+    this.nbHeaders = this.headers.length;
+  }
+
   private setHeaderOrders(): void {
     this.headers.forEach((header, index) => {
       // set initial flex order
@@ -211,6 +231,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
     });
 
     this.columnOrdersCoordinatorService.findModelOfLastVisible().broadcastOrderChange();
+
+    this.nbHeaders = this.headers.length;
   }
 
   private setRowCellOrders(): void {

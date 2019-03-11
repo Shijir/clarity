@@ -45,6 +45,10 @@ export class ColumnOrdersCoordinatorService {
     return this.orderModels.filter(model => model.isLastVisible)[0];
   }
 
+  public broadcastOrderChanges(orderChangeData?: OrderChangeData) {
+    this.orderModels.forEach(model => model.broadcastOrderChange(orderChangeData));
+  }
+
   public reorder(draggedFrom: number, draggedTo: number): void {
     const draggedModelRef: ColumnOrderModelService = this.findModelOfFlexOrder(draggedFrom);
     if (draggedTo > draggedFrom) {
@@ -59,6 +63,6 @@ export class ColumnOrdersCoordinatorService {
       }
     }
     draggedModelRef.flexOrder = draggedTo;
-    this.orderModels.forEach(model => model.broadcastOrderChange({ draggedFrom, draggedTo, draggedModelRef }));
+    this.broadcastOrderChanges({ draggedFrom, draggedTo, draggedModelRef });
   }
 }
