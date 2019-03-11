@@ -153,6 +153,8 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
    */
 
   private keepLastVisibleFlexible(): void {
+    // It would be nice to have it as a property(ColumnService.hasFlexibleWidths) in the centralized column service.
+    // Also, this whole method would much simpler.
     const hasFlexibleWidths =
       this.headers.filter(header => !header.orderModel.isHidden && !header.strictWidth).length > 0;
 
@@ -205,7 +207,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
 
   private updateHeaderOrders(): void {
     if (this.headers.length < this.nbHeaders) {
-      // columns are added
+      // columns are removed
       const sortedFlexOrders = this.headers.map(header => header.orderModel.flexOrder).sort();
 
       this.columnOrdersCoordinatorService.orderModels = this.headers.map(header => {
@@ -213,9 +215,9 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
         return header.orderModel;
       });
 
-      this.columnOrdersCoordinatorService.broadcastOrderChanges();
+      //this.columnOrdersCoordinatorService.broadcastOrderChanges();
     } else if (this.headers.length > this.nbHeaders) {
-      // columns are removed
+      // columns are added
 
       this.headers.forEach((header, index) => {
         if (typeof header.orderModel.flexOrder === 'undefined') {
