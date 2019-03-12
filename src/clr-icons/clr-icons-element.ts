@@ -129,7 +129,7 @@ ClarityIconElement.prototype.attributeChangedCallback = function(
   // That's why the size checking placed before detecting changes in shape and title attributes.
   // This means even if the shape is not found, the injected shape will have the user-given size.
 
-  if (attributeName === 'shape') {
+  if (attributeName === 'shape' && newValue) {
     this.currentShapeAttrVal = newValue.split(/\s/)[0];
 
     // transfer change handler callback to new shape name

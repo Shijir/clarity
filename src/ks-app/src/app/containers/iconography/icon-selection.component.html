@@ -41,7 +41,7 @@
     <h5>{{set.name}}</h5>
     <div class="row clr-icon-collection">
       <div *ngFor="let shape of set.shapes" class="clr-icon-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
-        <clr-icon [attr.shape]="shape" [ngClass]="previewClasses"></clr-icon>
+        <clr-icon [shape]="shape" [ngClass]="previewClasses"></clr-icon>
         <span class="icon-shape-name">{{shape}}</span>
       </div>
     </div>
