@@ -30,12 +30,14 @@ import { FiltersProvider } from './providers/filters';
 import { Sort } from './providers/sort';
 import { DatagridFilterRegistrar } from './utils/datagrid-filter-registrar';
 import { WrappedColumn } from './wrapped-column';
-import { ColumnsReorderService, ReorderAnimationState, ReorderDragTransfer } from './providers/columns-reorder.service';
+import { ColumnReorderData, ColumnsReorderService } from './providers/columns-reorder.service';
 import { COLUMN_STATE } from './providers/column-state.provider';
 import { ColumnState } from './interfaces/column-state.interface';
 import { ColumnsService } from './providers/columns.service';
-import { animate, AnimationOptions, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
+import { ReorderAnimationData } from './interfaces/reorder-animation-data.interface';
+import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
 
 @Component({
   selector: 'clr-dg-column',
@@ -130,8 +132,8 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     );
 
     this.subscriptions.push(
-      this.columnsReorderService.reorderAnimation.subscribe(reorderAnimationData => {
-        this.reorderAnimation = reorderAnimationData[this.flexOrder];
+      this.columnsReorderService.reorderAnimation.subscribe(reorderAnimationModel => {
+        this.reorderAnimation = reorderAnimationModel[this.flexOrder];
       })
     );
   }
@@ -154,12 +156,12 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     return this.columnState.value.flexOrder || 0;
   }
 
-  placedAfterDraggedColumn(event: ClrDragEvent<ReorderDragTransfer>) {
+  placedAfterDraggedColumn(event: ClrDragEvent<ColumnReorderData>) {
     const draggedFrom: number = event.dragDataTransfer.flexOrder;
     this.afterDragged = draggedFrom < this.flexOrder;
   }
 
-  requestReorder(event: ClrDragEvent<ReorderDragTransfer>) {
+  requestReorder(event: ClrDragEvent<ColumnReorderData>) {
     this.columnsReorderService.reorderRequested(event, this.flexOrder);
   }
 
@@ -167,7 +169,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     return this.columnsService.flexOrderOfLastVisible === this.flexOrder;
   }
 
-  @HostBinding('@reorderAnimation') reorderAnimation;
+  @HostBinding('@reorderAnimation') reorderAnimation: ReorderAnimationData;
 
   @HostListener('@reorderAnimation.done')
   resetReorderShiftAnimation() {
