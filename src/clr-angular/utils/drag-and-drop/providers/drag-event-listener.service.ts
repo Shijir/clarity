@@ -47,6 +47,7 @@ export class DragEventListenerService<T> {
 
   // DraggableGhost component sets these properties:
   public ghostElement?: any;
+  public ghostAnchorPosition?: { pageX: number; pageY: number };
   public dropPointPosition?: { pageX: number; pageY: number };
 
   public attachDragListeners(draggableEl: Node) {
@@ -182,6 +183,7 @@ export class DragEventListenerService<T> {
       },
       group: this.group,
       dragDataTransfer: this.dragDataTransfer,
+      ghostAnchorPosition: this.ghostAnchorPosition,
       ghostElement: this.ghostElement,
     };
   }

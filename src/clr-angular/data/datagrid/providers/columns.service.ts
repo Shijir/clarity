@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -17,6 +17,18 @@ export class ColumnsService {
 
   get hasHideableColumns(): boolean {
     return this.columnStates.filter(state => state.hideable).length > 0;
+  }
+
+  get hasFlexibleColumns(): boolean {
+    return this.columnStates.filter(state => !state.hidden && !state.strictWidth).length > 0;
+  }
+
+  get flexOrderOfLastVisible(): number {
+    return Math.max(...this.columnStates.filter(state => !state.hidden).map(state => state.flexOrder));
+  }
+
+  ofFlexOrder(flexOrder: number): BehaviorSubject<ColumnState> {
+    return this.columns.filter(column => column.value.flexOrder === flexOrder)[0];
   }
 
   // Helper method to emit a change to a column only when there is an actual diff to process for that column

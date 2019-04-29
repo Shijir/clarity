@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -7,6 +7,9 @@ import {
   Component,
   ContentChild,
   EventEmitter,
+  HostBinding,
+  HostListener,
+  Inject,
   Injector,
   Input,
   OnDestroy,
@@ -14,7 +17,7 @@ import {
   Output,
   ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { HostWrapper } from '../../utils/host-wrapping/host-wrapper';
 import { DatagridPropertyComparator } from './built-in/comparators/datagrid-property-comparator';
@@ -27,10 +30,21 @@ import { FiltersProvider } from './providers/filters';
 import { Sort } from './providers/sort';
 import { DatagridFilterRegistrar } from './utils/datagrid-filter-registrar';
 import { WrappedColumn } from './wrapped-column';
+import { ColumnsReorderService, ReorderAnimationState, ReorderDragTransfer } from './providers/columns-reorder.service';
+import { COLUMN_STATE } from './providers/column-state.provider';
+import { ColumnState } from './interfaces/column-state.interface';
+import { ColumnsService } from './providers/columns.service';
+import { animate, AnimationOptions, style, transition, trigger } from '@angular/animations';
+import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
 
 @Component({
   selector: 'clr-dg-column',
-  template: `
+  template: `    
+    <div class="datagrid-column-wrapper" #columnWrapper
+         [clrDraggable]="{flexOrder: flexOrder, draggedColumnEl: columnWrapper}"
+         [clrGroup]="columnsGroupId"
+         (clrDragStart)="inReorderMode = true;"
+         (clrDragEnd)="inReorderMode = false;">
       <div class="datagrid-column-flex">
           <!-- I'm really not happy with that select since it's not very scalable -->
           <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -54,45 +68,110 @@ import { WrappedColumn } from './wrapped-column';
 
           <span class="datagrid-column-title" *ngIf="!sortable">
                <ng-container *ngTemplateOutlet="columnTitle"></ng-container>
-            </span>
-
-          <clr-dg-column-separator></clr-dg-column-separator>
+          </span>
       </div>
+    </div>
+    <clr-dg-column-separator *ngIf="!isLastVisible"></clr-dg-column-separator>
+    <div class="datagrid-column-droppable" 
+         clrDroppable
+         [clrGroup]="columnsGroupId"
+         (clrDragStart)="placedAfterDraggedColumn($event)"
+         (clrDrop)="requestReorder($event)"
+         [class.after-dragged] = "afterDragged">
+      <div class="datagrid-column-drop-line"></div>
+    </div>
   `,
   host: {
     '[class.datagrid-column]': 'true',
+    '[class.datagrid-column-reorder-mode]': 'inReorderMode',
     '[attr.aria-sort]': 'ariaSort',
     role: 'columnheader',
   },
+  animations: [
+    trigger('reorderAnimation', [
+      transition(`* => ${ReorderAnimationState.SHIFT}`, [
+        style({ transform: 'translate3d({{translateX}}, 0, 0)' }),
+        animate('0.2s ease-in-out', style({ transform: 'translate3d(0, 0, 0)' })),
+      ]),
+      transition(`* => ${ReorderAnimationState.DROP}`, [
+        style({ transform: 'translate3d({{translateX}}, {{translateY}}, 0)' }),
+        animate('0.2s ease-in-out', style({ transform: 'translate3d(0, 0, 0)' })),
+      ]),
+    ]),
+  ],
 })
 export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, DatagridStringFilterImpl<T>>
   implements OnDestroy, OnInit {
-  constructor(private _sort: Sort<T>, filters: FiltersProvider<T>, private vcr: ViewContainerRef) {
+  constructor(
+    private _sort: Sort<T>,
+    filters: FiltersProvider<T>,
+    private vcr: ViewContainerRef,
+    private columnsService: ColumnsService,
+    private columnsReorderService: ColumnsReorderService,
+    @Inject(COLUMN_STATE) private columnState: BehaviorSubject<ColumnState>
+  ) {
     super(filters);
-    this._sortSubscription = _sort.change.subscribe(sort => {
-      // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
-      if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
-        this._sortOrder = ClrDatagridSortOrder.UNSORTED;
-        this.sortOrderChange.emit(this._sortOrder);
-        // removes the sortIcon when column becomes unsorted
-        this.sortIcon = null;
-      }
-      // deprecated: to be removed - START
-      if (this.sorted && sort.comparator !== this._sortBy) {
-        this._sorted = false;
-        this.sortedChange.emit(false);
-      }
-      // deprecated: to be removed - END
-    });
+    this.subscriptions.push(
+      _sort.change.subscribe(sort => {
+        // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
+        if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
+          this._sortOrder = ClrDatagridSortOrder.UNSORTED;
+          this.sortOrderChange.emit(this._sortOrder);
+          // removes the sortIcon when column becomes unsorted
+          this.sortIcon = null;
+        }
+        // deprecated: to be removed - START
+        if (this.sorted && sort.comparator !== this._sortBy) {
+          this._sorted = false;
+          this.sortedChange.emit(false);
+        }
+        // deprecated: to be removed - END
+      })
+    );
+
+    this.subscriptions.push(
+      this.columnsReorderService.reorderAnimation.subscribe(reorderAnimationData => {
+        this.reorderAnimation = reorderAnimationData[this.flexOrder];
+      })
+    );
   }
 
-  /**
-   * Subscription to the sort service changes
-   */
-  private _sortSubscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
   ngOnDestroy() {
-    this._sortSubscription.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  inReorderMode: boolean = false;
+
+  afterDragged: boolean = false; // determines whether the position is before or after the dragged column.
+
+  get columnsGroupId(): string {
+    return this.columnsReorderService.columnsGroupId;
+  }
+
+  get flexOrder(): number {
+    return this.columnState.value.flexOrder || 0;
+  }
+
+  placedAfterDraggedColumn(event: ClrDragEvent<ReorderDragTransfer>) {
+    const draggedFrom: number = event.dragDataTransfer.flexOrder;
+    this.afterDragged = draggedFrom < this.flexOrder;
+  }
+
+  requestReorder(event: ClrDragEvent<ReorderDragTransfer>) {
+    this.columnsReorderService.reorderRequested(event, this.flexOrder);
+  }
+
+  get isLastVisible(): boolean {
+    return this.columnsService.flexOrderOfLastVisible === this.flexOrder;
+  }
+
+  @HostBinding('@reorderAnimation') reorderAnimation;
+
+  @HostListener('@reorderAnimation.done')
+  resetReorderShiftAnimation() {
+    delete this.reorderAnimation;
   }
 
   /*

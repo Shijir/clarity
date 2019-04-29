@@ -90,6 +90,7 @@ export class ClrDraggableGhost<T> implements OnDestroy {
         // Position the draggable ghost.
         const topLeftPosition: PagePosition = this.findTopLeftPosition(event.dragPosition, offset);
         this.setPositionStyle(this.draggableGhostEl, topLeftPosition.pageX, topLeftPosition.pageY);
+        this.dragEventListener.ghostAnchorPosition = topLeftPosition;
         this.dragEventListener.dropPointPosition = this.findDropPointPosition(topLeftPosition);
       })
     );

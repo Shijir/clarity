@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -58,6 +58,9 @@ export class DatagridHeaderRenderer implements OnDestroy {
           case DatagridColumnChanges.HIDDEN:
             this.setHidden(state);
             break;
+          case DatagridColumnChanges.FLEX_ORDER:
+            this.setFlexOrder(state);
+            break;
           default:
             break;
         }
@@ -95,14 +98,24 @@ export class DatagridHeaderRenderer implements OnDestroy {
 
   public getColumnWidthState(): Partial<ColumnState> {
     const strictWidth = this.detectStrictWidth();
+    const isLastVisible = this.columnsService.flexOrderOfLastVisible === this.columnState.value.flexOrder;
     return {
       width: this.computeWidth(strictWidth),
-      strictWidth: strictWidth,
+      strictWidth: isLastVisible ? 0 : strictWidth,
     };
+  }
+
+  private assignFlexOrder(flexorder: number) {
+    // No changes first in order to update the state without emitting value on datagrid initialization
+    this.columnsService.emitStateChange(this.columnState, {
+      changes: [DatagridColumnChanges.FLEX_ORDER],
+      flexOrder: flexorder,
+    });
   }
 
   public setColumnState(index: number) {
     this.columnsService.columns[index] = this.columnState;
+    this.assignFlexOrder(index);
   }
 
   private setWidth(state: ColumnState) {
@@ -126,8 +139,25 @@ export class DatagridHeaderRenderer implements OnDestroy {
   private setHidden(state: ColumnState) {
     if (state.hidden) {
       this.renderer.addClass(this.el.nativeElement, HIDDEN_COLUMN_CLASS);
+      // If there is no flexible columns after hiding a column,
+      // make the last visible column flexible.
+      if (!this.columnsService.hasFlexibleColumns) {
+        const flexOrderOfLastVisible = this.columnsService.flexOrderOfLastVisible;
+        const columnOfLastVisible = this.columnsService.ofFlexOrder(flexOrderOfLastVisible);
+        this.columnsService.emitStateChange(columnOfLastVisible, {
+          changes: [DatagridColumnChanges.WIDTH],
+          strictWidth: 0,
+        });
+      }
     } else {
       this.renderer.removeClass(this.el.nativeElement, HIDDEN_COLUMN_CLASS);
+    }
+  }
+
+  private setFlexOrder(state: ColumnState) {
+    // flex order must be an integer
+    if (typeof state.flexOrder === 'number') {
+      this.renderer.setStyle(this.el.nativeElement, 'order', state.flexOrder);
     }
   }
 }

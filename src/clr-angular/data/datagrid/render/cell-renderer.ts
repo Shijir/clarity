@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -58,6 +58,9 @@ export class DatagridCellRenderer implements OnDestroy {
           case DatagridColumnChanges.HIDDEN:
             this.setHidden(state);
             break;
+          case DatagridColumnChanges.FLEX_ORDER:
+            this.setFlexOrder(state);
+            break;
           default:
             break;
         }
@@ -84,6 +87,13 @@ export class DatagridCellRenderer implements OnDestroy {
       this.renderer.addClass(this.el.nativeElement, HIDDEN_COLUMN_CLASS);
     } else {
       this.renderer.removeClass(this.el.nativeElement, HIDDEN_COLUMN_CLASS);
+    }
+  }
+
+  private setFlexOrder(state: ColumnState) {
+    // flex order must be an integer
+    if (typeof state.flexOrder === 'number') {
+      this.renderer.setStyle(this.el.nativeElement, 'order', state.flexOrder);
     }
   }
 }

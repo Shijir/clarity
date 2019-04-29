@@ -28,4 +28,5 @@ export interface DragEventInterface<T> {
   // For default ghosts, this dropPointPosition denotes the center point of the ghost element.
   // This center point is used to determine whether the ghost is over droppable elements or not.
   dropPointPosition?: { pageX: number; pageY: number };
+  ghostAnchorPosition?: { pageX: number; pageY: number };
 }

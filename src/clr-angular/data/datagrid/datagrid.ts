@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -42,6 +42,7 @@ import { DatagridRenderOrganizer } from './render/render-organizer';
 import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { SelectionType } from './enums/selection-type';
 import { ColumnsService } from './providers/columns.service';
+import { ColumnsReorderService } from './providers/columns-reorder.service';
 
 @Component({
   selector: 'clr-datagrid',
@@ -58,6 +59,7 @@ import { ColumnsService } from './providers/columns.service';
     StateDebouncer,
     StateProvider,
     TableSizeService,
+    ColumnsReorderService,
     ColumnsService,
     DisplayModeService,
   ],
