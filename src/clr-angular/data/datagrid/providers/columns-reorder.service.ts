@@ -15,22 +15,27 @@ import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 
 let nbColumnsGroup = 0;
 
-export type ReorderDragTransfer = {
-  draggedColumnEl: HTMLElement;
-  flexOrder: number;
-};
-
 type ReorderData = {
   column: BehaviorSubject<ColumnState>;
   newFlexOrder: number;
 };
 
-type ReorderAnimationData = { [newFlexOrder: number]: AnimationOptions };
-
 export enum ReorderAnimationState {
   SHIFT = 'REORDER_SHIFT_ANIMATION',
   DROP = 'REORDER_DROP_ANIMATION',
 }
+
+export type ReorderDragTransfer = {
+  draggedColumnEl: HTMLElement;
+  flexOrder: number;
+};
+
+export type ReorderAnimationStateData = {
+  value: ReorderAnimationState;
+  params?: AnimationOptions;
+};
+
+type ReorderAnimationData = { [newFlexOrder: number]: ReorderAnimationStateData };
 
 @Injectable()
 export class ColumnsReorderService {
