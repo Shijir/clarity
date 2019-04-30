@@ -45,8 +45,8 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
     <div class="datagrid-column-wrapper" #columnWrapper
          [clrDraggable]="{flexOrder: flexOrder, draggedColumnEl: columnWrapper}"
          [clrGroup]="columnsGroupId"
-         (clrDragStart)="inReorderMode = true;"
-         (clrDragEnd)="inReorderMode = false;">
+         (clrDragStart)="inDragMode = true;"
+         (clrDragEnd)="inDragMode = false;">
       <div class="datagrid-column-flex">
           <!-- I'm really not happy with that select since it's not very scalable -->
           <ng-content select="clr-dg-filter, clr-dg-string-filter"></ng-content>
@@ -85,7 +85,8 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
   `,
   host: {
     '[class.datagrid-column]': 'true',
-    '[class.datagrid-column-reorder-mode]': 'inReorderMode',
+    '[class.datagrid-column-drag-mode]': 'inDragMode',
+    '[class.datagrid-column-drop-mode]': 'inDropMode',
     '[attr.aria-sort]': 'ariaSort',
     role: 'columnheader',
   },
@@ -134,6 +135,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     this.subscriptions.push(
       this.columnsReorderService.reorderAnimation.subscribe(reorderAnimationModel => {
         this.reorderAnimation = reorderAnimationModel[this.flexOrder];
+        this.inDropMode = this.reorderAnimation && this.reorderAnimation.value === ReorderAnimationState.DROP;
       })
     );
   }
@@ -144,7 +146,9 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  inReorderMode: boolean = false;
+  inDragMode: boolean = false;
+
+  inDropMode: boolean = false;
 
   afterDragged: boolean = false; // determines whether the position is before or after the dragged column.
 
@@ -174,6 +178,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
   @HostListener('@reorderAnimation.done')
   resetReorderShiftAnimation() {
     delete this.reorderAnimation;
+    delete this.inDropMode;
   }
 
   /*
