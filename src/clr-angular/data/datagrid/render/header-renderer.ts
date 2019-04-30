@@ -118,6 +118,19 @@ export class DatagridHeaderRenderer implements OnDestroy {
     this.assignFlexOrder(index);
   }
 
+  private setLastVisibleFree() {
+    // If there is no flexible columns,
+    // make the last visible column flexible.
+    if (!this.columnsService.hasFlexibleColumns) {
+      const flexOrderOfLastVisible = this.columnsService.flexOrderOfLastVisible;
+      const columnOfLastVisible = this.columnsService.ofFlexOrder(flexOrderOfLastVisible);
+      this.columnsService.emitStateChange(columnOfLastVisible, {
+        changes: [DatagridColumnChanges.WIDTH],
+        strictWidth: 0,
+      });
+    }
+  }
+
   private setWidth(state: ColumnState) {
     if (state.strictWidth) {
       if (this.columnResizerService.resizedBy) {
@@ -139,16 +152,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
   private setHidden(state: ColumnState) {
     if (state.hidden) {
       this.renderer.addClass(this.el.nativeElement, HIDDEN_COLUMN_CLASS);
-      // If there is no flexible columns after hiding a column,
-      // make the last visible column flexible.
-      if (!this.columnsService.hasFlexibleColumns) {
-        const flexOrderOfLastVisible = this.columnsService.flexOrderOfLastVisible;
-        const columnOfLastVisible = this.columnsService.ofFlexOrder(flexOrderOfLastVisible);
-        this.columnsService.emitStateChange(columnOfLastVisible, {
-          changes: [DatagridColumnChanges.WIDTH],
-          strictWidth: 0,
-        });
-      }
+      this.setLastVisibleFree();
     } else {
       this.renderer.removeClass(this.el.nativeElement, HIDDEN_COLUMN_CLASS);
     }
