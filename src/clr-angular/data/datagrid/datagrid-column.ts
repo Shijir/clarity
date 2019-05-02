@@ -73,7 +73,7 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
           </span>
       </div>
     </div>
-    <clr-dg-column-separator *ngIf="!isLastVisible"></clr-dg-column-separator>
+    <clr-dg-column-separator [inLastVisible]="isLastVisible"></clr-dg-column-separator>
     <div class="datagrid-column-droppable" 
          clrDroppable
          [clrGroup]="columnsGroupId"

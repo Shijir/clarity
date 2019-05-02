@@ -4,7 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { DOCUMENT } from '@angular/common';
-import { Component, Inject, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Inject, Input, Renderer2, SimpleChanges } from '@angular/core';
 
 import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
 import { ColumnResizerService } from './providers/column-resizer.service';
@@ -31,12 +31,26 @@ export class ClrDatagridColumnSeparator {
   // Every column draggable separator should have its own unique ID
   // in order to not conflict with other draggables/droppables.
   constructor(
+    private el: ElementRef,
     private columnResizerService: ColumnResizerService,
     private renderer: Renderer2,
     private tableSizeService: TableSizeService,
     @Inject(DOCUMENT) private document: any,
     @Inject(UNIQUE_ID) public columnSeparatorId: string
   ) {}
+
+  private _inLastVisibleColumn: boolean;
+
+  @Input('inLastVisible')
+  set inLastVisibleColumn(value: boolean) {
+    if (value && !this._inLastVisibleColumn) {
+      this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
+    } else if (!value && this._inLastVisibleColumn) {
+      this.renderer.setStyle(this.el.nativeElement, 'display', 'block');
+    }
+
+    this._inLastVisibleColumn = value;
+  }
 
   public showTracker(resizeTrackerEl: HTMLElement) {
     this.columnResizerService.startResize();
@@ -59,12 +73,11 @@ export class ClrDatagridColumnSeparator {
     this.renderer.setStyle(this.document.body, 'cursor', 'auto');
   }
 
+  private withinMaxResizeRange: boolean;
   private redFlagTracker(resizeTrackerEl: HTMLElement) {
-    let isWithinMaxResizeRange: boolean;
-    // @TODO(JEREMY) Review this, it will always be true because above is always null
-    if (isWithinMaxResizeRange !== this.columnResizerService.isWithinMaxResizeRange) {
-      isWithinMaxResizeRange = this.columnResizerService.isWithinMaxResizeRange;
-      if (!isWithinMaxResizeRange) {
+    if (this.withinMaxResizeRange !== this.columnResizerService.isWithinMaxResizeRange) {
+      this.withinMaxResizeRange = this.columnResizerService.isWithinMaxResizeRange;
+      if (!this.withinMaxResizeRange) {
         this.renderer.addClass(resizeTrackerEl, 'exceeded-max');
       } else {
         this.renderer.removeClass(resizeTrackerEl, 'exceeded-max');
