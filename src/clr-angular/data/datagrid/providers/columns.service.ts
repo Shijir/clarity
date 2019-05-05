@@ -27,6 +27,10 @@ export class ColumnsService {
     return Math.max(...this.columnStates.filter(state => !state.hidden).map(state => state.flexOrder));
   }
 
+  get flexOrderOfFirstVisible(): number {
+    return Math.min(...this.columnStates.filter(state => !state.hidden).map(state => state.flexOrder));
+  }
+
   ofFlexOrder(flexOrder: number): BehaviorSubject<ColumnState> {
     return this.columns.filter(column => column.value.flexOrder === flexOrder)[0];
   }

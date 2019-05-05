@@ -31,26 +31,12 @@ export class ClrDatagridColumnSeparator {
   // Every column draggable separator should have its own unique ID
   // in order to not conflict with other draggables/droppables.
   constructor(
-    private el: ElementRef,
     private columnResizerService: ColumnResizerService,
     private renderer: Renderer2,
     private tableSizeService: TableSizeService,
     @Inject(DOCUMENT) private document: any,
     @Inject(UNIQUE_ID) public columnSeparatorId: string
   ) {}
-
-  private _inLastVisibleColumn: boolean;
-
-  @Input('inLastVisible')
-  set inLastVisibleColumn(value: boolean) {
-    if (value && !this._inLastVisibleColumn) {
-      this.renderer.setStyle(this.el.nativeElement, 'display', 'none');
-    } else if (!value && this._inLastVisibleColumn) {
-      this.renderer.setStyle(this.el.nativeElement, 'display', 'block');
-    }
-
-    this._inLastVisibleColumn = value;
-  }
 
   public showTracker(resizeTrackerEl: HTMLElement) {
     this.columnResizerService.startResize();

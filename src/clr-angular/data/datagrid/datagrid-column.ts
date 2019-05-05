@@ -73,7 +73,7 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
           </span>
       </div>
     </div>
-    <clr-dg-column-separator [inLastVisible]="isLastVisible"></clr-dg-column-separator>
+    <clr-dg-column-separator></clr-dg-column-separator>
     <div class="datagrid-column-droppable" 
          clrDroppable
          [clrGroup]="columnsGroupId"
@@ -87,6 +87,8 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
     '[class.datagrid-column]': 'true',
     '[class.datagrid-column-drag-mode]': 'inDragMode',
     '[class.datagrid-column-drop-mode]': 'inDropMode',
+    '[class.datagrid-column-first-visible]': 'firstVisible',
+    '[class.datagrid-column-last-visible]': 'lastVisible',
     '[attr.aria-sort]': 'ariaSort',
     role: 'columnheader',
   },
@@ -169,7 +171,11 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     this.columnsReorderService.reorderRequested(event, this.flexOrder);
   }
 
-  get isLastVisible(): boolean {
+  get firstVisible(): boolean {
+    return this.columnsService.flexOrderOfFirstVisible === this.flexOrder;
+  }
+
+  get lastVisible(): boolean {
     return this.columnsService.flexOrderOfLastVisible === this.flexOrder;
   }
 
