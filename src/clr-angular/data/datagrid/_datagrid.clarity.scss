@@ -448,7 +448,7 @@
         height: 100%;
         margin-left: -1px;
 
-        &::after {
+        &::before {
           content: '';
           position: absolute;
           height: calc(100% - 0.5rem);
