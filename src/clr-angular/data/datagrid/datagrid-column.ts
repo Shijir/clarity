@@ -33,7 +33,6 @@ import { WrappedColumn } from './wrapped-column';
 import { ColumnReorderData, ColumnsReorderService } from './providers/columns-reorder.service';
 import { COLUMN_STATE } from './providers/column-state.provider';
 import { ColumnState } from './interfaces/column-state.interface';
-import { ColumnsService } from './providers/columns.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
 import { ReorderAnimationData } from './interfaces/reorder-animation-data.interface';
@@ -87,8 +86,6 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
     '[class.datagrid-column]': 'true',
     '[class.datagrid-column-drag-mode]': 'inDragMode',
     '[class.datagrid-column-drop-mode]': 'inDropMode',
-    '[class.datagrid-column-first-visible]': 'firstVisible',
-    '[class.datagrid-column-last-visible]': 'lastVisible',
     '[attr.aria-sort]': 'ariaSort',
     role: 'columnheader',
   },
@@ -111,7 +108,6 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     private _sort: Sort<T>,
     filters: FiltersProvider<T>,
     private vcr: ViewContainerRef,
-    private columnsService: ColumnsService,
     private columnsReorderService: ColumnsReorderService,
     @Inject(COLUMN_STATE) private columnState: BehaviorSubject<ColumnState>
   ) {
@@ -169,14 +165,6 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
   requestReorder(event: ClrDragEvent<ColumnReorderData>) {
     this.columnsReorderService.reorderRequested(event, this.flexOrder);
-  }
-
-  get firstVisible(): boolean {
-    return this.columnsService.flexOrderOfFirstVisible === this.flexOrder;
-  }
-
-  get lastVisible(): boolean {
-    return this.columnsService.flexOrderOfLastVisible === this.flexOrder;
   }
 
   @HostBinding('@reorderAnimation') reorderAnimation: ReorderAnimationData;

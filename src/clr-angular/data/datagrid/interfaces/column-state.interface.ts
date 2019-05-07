@@ -14,6 +14,8 @@ export interface ColumnState {
   hidden?: boolean; // This is the state of column visibility
   titleTemplateRef?: TemplateRef<any>; // This is the template of the column content that will be used in the column toggle.
   flexOrder?: number; // This is the CSS flex order of the column
+  lastVisible?: boolean;
+  firstVisible?: boolean;
 }
 
 export interface ColumnStateDiff extends ColumnState {

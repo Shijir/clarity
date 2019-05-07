@@ -5,7 +5,8 @@
  */
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ColumnStateDiff, ColumnState } from '../interfaces/column-state.interface';
+import { ColumnState, ColumnStateDiff } from '../interfaces/column-state.interface';
+import { DatagridColumnChanges } from '../enums/column-changes.enum';
 
 @Injectable()
 export class ColumnsService {
@@ -43,8 +44,49 @@ export class ColumnsService {
     this.emitStateChange(this.columns[columnIndex], diff);
   }
 
+  private currentLastVisible: BehaviorSubject<ColumnState>;
+  private currentFirstVisible: BehaviorSubject<ColumnState>;
+
   emitStateChange(column: BehaviorSubject<ColumnState>, diff: ColumnStateDiff) {
     const current = column.value;
     column.next({ ...current, ...diff });
+
+    const newFirstVisible = this.ofFlexOrder(this.flexOrderOfFirstVisible);
+
+    if (newFirstVisible && newFirstVisible !== this.currentFirstVisible) {
+      newFirstVisible.next({
+        ...newFirstVisible.value,
+        changes: [DatagridColumnChanges.FIRST_VISIBLE],
+        firstVisible: true,
+      });
+
+      if (this.currentFirstVisible) {
+        this.currentFirstVisible.next({
+          ...this.currentFirstVisible.value,
+          changes: [DatagridColumnChanges.FIRST_VISIBLE],
+          firstVisible: false,
+        });
+      }
+
+      this.currentFirstVisible = newFirstVisible;
+    }
+
+    const newLastVisible = this.ofFlexOrder(this.flexOrderOfLastVisible);
+
+    if (newLastVisible && newLastVisible !== this.currentLastVisible) {
+      newLastVisible.next({
+        ...newLastVisible.value,
+        changes: [DatagridColumnChanges.LAST_VISIBLE],
+        lastVisible: true,
+      });
+      if (this.currentLastVisible) {
+        this.currentLastVisible.next({
+          ...this.currentLastVisible.value,
+          changes: [DatagridColumnChanges.LAST_VISIBLE],
+          lastVisible: false,
+        });
+      }
+      this.currentLastVisible = newLastVisible;
+    }
   }
 }

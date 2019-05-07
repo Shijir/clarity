@@ -8,6 +8,8 @@ export enum DatagridColumnChanges {
   WIDTH,
   HIDDEN,
   FLEX_ORDER,
+  FIRST_VISIBLE,
+  LAST_VISIBLE,
 }
 
 export const ALL_COLUMN_CHANGES: DatagridColumnChanges[] = Object.keys(DatagridColumnChanges)

@@ -9,7 +9,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 import { DatagridRenderStep } from '../enums/render-step.enum';
 import { ColumnResizerService } from '../providers/column-resizer.service';
-import { HIDDEN_COLUMN_CLASS, STRICT_WIDTH_CLASS } from './constants';
+import { FIRST_VISIBLE_CLASS, HIDDEN_COLUMN_CLASS, LAST_VISIBLE_CLASS, STRICT_WIDTH_CLASS } from './constants';
 import { DatagridRenderOrganizer } from './render-organizer';
 import { ColumnState } from '../interfaces/column-state.interface';
 import { DatagridColumnChanges } from '../enums/column-changes.enum';
@@ -60,6 +60,12 @@ export class DatagridHeaderRenderer implements OnDestroy {
             break;
           case DatagridColumnChanges.FLEX_ORDER:
             this.setFlexOrder(state);
+            break;
+          case DatagridColumnChanges.FIRST_VISIBLE:
+            this.setFirstVisible(state);
+            break;
+          case DatagridColumnChanges.LAST_VISIBLE:
+            this.setLastVisible(state);
             break;
           default:
             break;
@@ -162,6 +168,23 @@ export class DatagridHeaderRenderer implements OnDestroy {
     // flex order must be an integer
     if (typeof state.flexOrder === 'number') {
       this.renderer.setStyle(this.el.nativeElement, 'order', state.flexOrder);
+    }
+  }
+
+  private setFirstVisible(state: ColumnState) {
+    console.log(state);
+    if (state.firstVisible === true) {
+      this.renderer.addClass(this.el.nativeElement, FIRST_VISIBLE_CLASS);
+    } else if (state.firstVisible === false) {
+      this.renderer.removeClass(this.el.nativeElement, FIRST_VISIBLE_CLASS);
+    }
+  }
+
+  private setLastVisible(state: ColumnState) {
+    if (state.lastVisible === true) {
+      this.renderer.addClass(this.el.nativeElement, LAST_VISIBLE_CLASS);
+    } else if (state.lastVisible === false) {
+      this.renderer.removeClass(this.el.nativeElement, LAST_VISIBLE_CLASS);
     }
   }
 }
