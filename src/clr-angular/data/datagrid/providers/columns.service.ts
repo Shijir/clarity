@@ -47,15 +47,10 @@ export class ColumnsService {
   private currentLastVisible: BehaviorSubject<ColumnState>;
   private currentFirstVisible: BehaviorSubject<ColumnState>;
 
-  emitStateChange(column: BehaviorSubject<ColumnState>, diff: ColumnStateDiff) {
-    const current = column.value;
-    column.next({ ...current, ...diff });
-
-    const newFirstVisible = this.ofFlexOrder(this.flexOrderOfFirstVisible);
-
-    if (newFirstVisible && newFirstVisible !== this.currentFirstVisible) {
-      newFirstVisible.next({
-        ...newFirstVisible.value,
+  private isFirstVisible(column: BehaviorSubject<ColumnState>) {
+    if (column && column.value.flexOrder === this.flexOrderOfFirstVisible && column !== this.currentFirstVisible) {
+      column.next({
+        ...column.value,
         changes: [DatagridColumnChanges.FIRST_VISIBLE],
         firstVisible: true,
       });
@@ -67,15 +62,14 @@ export class ColumnsService {
           firstVisible: false,
         });
       }
-
-      this.currentFirstVisible = newFirstVisible;
+      this.currentFirstVisible = column;
     }
+  }
 
-    const newLastVisible = this.ofFlexOrder(this.flexOrderOfLastVisible);
-
-    if (newLastVisible && newLastVisible !== this.currentLastVisible) {
-      newLastVisible.next({
-        ...newLastVisible.value,
+  private isLastVisible(column: BehaviorSubject<ColumnState>) {
+    if (column && column.value.flexOrder === this.flexOrderOfLastVisible && column !== this.currentLastVisible) {
+      column.next({
+        ...column.value,
         changes: [DatagridColumnChanges.LAST_VISIBLE],
         lastVisible: true,
       });
@@ -86,7 +80,15 @@ export class ColumnsService {
           lastVisible: false,
         });
       }
-      this.currentLastVisible = newLastVisible;
+      this.currentLastVisible = column;
     }
+  }
+
+  emitStateChange(column: BehaviorSubject<ColumnState>, diff: ColumnStateDiff) {
+    const current = column.value;
+    column.next({ ...current, ...diff });
+
+    this.isFirstVisible(column);
+    this.isLastVisible(column);
   }
 }
