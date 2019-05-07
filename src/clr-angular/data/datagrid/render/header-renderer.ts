@@ -172,7 +172,6 @@ export class DatagridHeaderRenderer implements OnDestroy {
   }
 
   private setFirstVisible(state: ColumnState) {
-    console.log(state);
     if (state.firstVisible === true) {
       this.renderer.addClass(this.el.nativeElement, FIRST_VISIBLE_CLASS);
     } else if (state.firstVisible === false) {
