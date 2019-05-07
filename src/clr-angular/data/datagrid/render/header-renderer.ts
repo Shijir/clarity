@@ -111,7 +111,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
     };
   }
 
-  private assignFlexOrder(flexorder: number) {
+  private assignInitialFlexOrder(flexorder: number) {
     // No changes first in order to update the state without emitting value on datagrid initialization
     this.columnsService.emitStateChange(this.columnState, {
       changes: [DatagridColumnChanges.FLEX_ORDER],
@@ -121,7 +121,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
 
   public setColumnState(index: number) {
     this.columnsService.columns[index] = this.columnState;
-    this.assignFlexOrder(index);
+    this.assignInitialFlexOrder(index);
   }
 
   private setLastVisibleFree() {

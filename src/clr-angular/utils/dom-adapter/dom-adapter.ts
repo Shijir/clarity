@@ -49,6 +49,10 @@ export class DomAdapter {
     return parseInt(getComputedStyle(element).getPropertyValue('min-width'), 10);
   }
 
+  computedFlexOrderOf(element: any): number {
+    return getComputedStyle(element).getPropertyValue('order');
+  }
+
   focus(element: any): void {
     element.focus();
   }
