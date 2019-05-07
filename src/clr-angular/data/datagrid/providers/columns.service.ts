@@ -48,8 +48,8 @@ export class ColumnsService {
     const current = column.value;
     column.next({ ...current, ...diff });
 
-    this.isFirstVisible();
-    this.isLastVisible();
+    this.checkFirstVisible();
+    this.checkLastVisible();
   }
 
   private currentLastVisible: BehaviorSubject<ColumnState>;
@@ -67,7 +67,7 @@ export class ColumnsService {
     }
   }
 
-  private isFirstVisible() {
+  private checkFirstVisible(): void {
     const column = this.ofFlexOrder(this.flexOrderOfFirstVisible);
     if (column && column.value.flexOrder === this.flexOrderOfFirstVisible && column !== this.currentFirstVisible) {
       this.setComputedProp(column, { firstVisible: true });
@@ -78,7 +78,7 @@ export class ColumnsService {
     }
   }
 
-  private isLastVisible() {
+  private checkLastVisible(): void {
     const column = this.ofFlexOrder(this.flexOrderOfLastVisible);
     if (column && column.value.flexOrder === this.flexOrderOfLastVisible && column !== this.currentLastVisible) {
       this.setComputedProp(column, { lastVisible: true });
