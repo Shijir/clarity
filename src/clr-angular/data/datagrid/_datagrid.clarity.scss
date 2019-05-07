@@ -482,7 +482,7 @@
         }
       }
 
-      &-last-visible .datagrid-column-separator {
+      &.datagrid-last-visible-column .datagrid-column-separator {
         display: none;
       }
 
@@ -526,12 +526,12 @@
             }
           }
         }
-        &.datagrid-column-first-visible .datagrid-column-droppable.draggable-over {
+        &.datagrid-first-visible-column .datagrid-column-droppable.draggable-over {
           .datagrid-column-drop-line {
             left: 0;
           }
         }
-        &.datagrid-column-last-visible .datagrid-column-droppable.draggable-over {
+        &.datagrid-last-visible-column .datagrid-column-droppable.draggable-over {
           .datagrid-column-drop-line {
             left: -2px;
           }
