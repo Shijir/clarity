@@ -48,8 +48,8 @@ export class ColumnsService {
     const current = column.value;
     column.next({ ...current, ...diff });
 
-    this.isFirstVisible(column);
-    this.isLastVisible(column);
+    this.isFirstVisible();
+    this.isLastVisible();
   }
 
   private currentLastVisible: BehaviorSubject<ColumnState>;
@@ -59,20 +59,16 @@ export class ColumnsService {
     column: BehaviorSubject<ColumnState>,
     computedProps: { firstVisible?: boolean; lastVisible?: boolean }
   ): void {
-    column.next({
-      ...column.value,
-      changes: [
-        typeof computedProps.firstVisible === 'boolean'
-          ? DatagridColumnChanges.FIRST_VISIBLE
-          : typeof computedProps.lastVisible === 'boolean'
-            ? DatagridColumnChanges.LAST_VISIBLE
-            : null,
-      ],
-      ...computedProps,
-    });
+    if (typeof computedProps.firstVisible === 'boolean') {
+      column.next({ ...column.value, changes: [DatagridColumnChanges.FIRST_VISIBLE], ...computedProps });
+    }
+    if (typeof computedProps.lastVisible === 'boolean') {
+      column.next({ ...column.value, changes: [DatagridColumnChanges.LAST_VISIBLE], ...computedProps });
+    }
   }
 
-  private isFirstVisible(column: BehaviorSubject<ColumnState>) {
+  private isFirstVisible() {
+    const column = this.ofFlexOrder(this.flexOrderOfFirstVisible);
     if (column && column.value.flexOrder === this.flexOrderOfFirstVisible && column !== this.currentFirstVisible) {
       this.setComputedProp(column, { firstVisible: true });
       if (this.currentFirstVisible) {
@@ -82,7 +78,8 @@ export class ColumnsService {
     }
   }
 
-  private isLastVisible(column: BehaviorSubject<ColumnState>) {
+  private isLastVisible() {
+    const column = this.ofFlexOrder(this.flexOrderOfLastVisible);
     if (column && column.value.flexOrder === this.flexOrderOfLastVisible && column !== this.currentLastVisible) {
       this.setComputedProp(column, { lastVisible: true });
       if (this.currentLastVisible) {
