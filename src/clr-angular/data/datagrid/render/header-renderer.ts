@@ -114,9 +114,12 @@ export class DatagridHeaderRenderer implements OnDestroy {
   public assignFlexOrder(flexorder: number) {
     // we will use the dom order as position order if no flex order is defined...
     const computedOrder = this.domAdapter.computedFlexOrderOf(this.el.nativeElement);
+    const isActualNumber = order => {
+      return order === Number(order);
+    };
     this.columnsService.emitStateChange(this.columnState, {
       changes: [DatagridColumnChanges.FLEX_ORDER],
-      flexOrder: computedOrder === Number(computedOrder) ? computedOrder : flexorder,
+      flexOrder: isActualNumber(computedOrder) ? computedOrder : flexorder,
     });
   }
 
