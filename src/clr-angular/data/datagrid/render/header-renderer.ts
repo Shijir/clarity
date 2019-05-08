@@ -111,17 +111,17 @@ export class DatagridHeaderRenderer implements OnDestroy {
     };
   }
 
-  private assignInitialFlexOrder(flexorder: number) {
-    // No changes first in order to update the state without emitting value on datagrid initialization
+  public assignFlexOrder(flexorder: number) {
+    // we will use the dom order as position order if no flex order is defined...
+    const computedOrder = this.domAdapter.computedFlexOrderOf(this.el.nativeElement);
     this.columnsService.emitStateChange(this.columnState, {
       changes: [DatagridColumnChanges.FLEX_ORDER],
-      flexOrder: flexorder,
+      flexOrder: computedOrder === Number(computedOrder) ? computedOrder : flexorder,
     });
   }
 
   public setColumnState(index: number) {
     this.columnsService.columns[index] = this.columnState;
-    this.assignInitialFlexOrder(index);
   }
 
   private setLastVisibleFree() {

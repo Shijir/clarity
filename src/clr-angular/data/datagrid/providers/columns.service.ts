@@ -52,6 +52,20 @@ export class ColumnsService {
     this.checkLastVisible();
   }
 
+  fixOrderSequence() {
+    // dynamic columns may mess up the orders.
+    // this method will sort the column orders in a correct sequential order while keeping the existing order.
+    this.columns
+      .slice()
+      .sort((column1, column2) => column1.value.flexOrder - column2.value.flexOrder)
+      .forEach((column, index) => {
+        this.emitStateChange(column, {
+          changes: [DatagridColumnChanges.FLEX_ORDER],
+          flexOrder: index,
+        });
+      });
+  }
+
   private currentLastVisible: BehaviorSubject<ColumnState>;
   private currentFirstVisible: BehaviorSubject<ColumnState>;
 
