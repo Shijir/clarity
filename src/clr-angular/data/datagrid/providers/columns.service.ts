@@ -24,16 +24,16 @@ export class ColumnsService {
     return this.columnStates.filter(state => !state.hidden && !state.strictWidth).length > 0;
   }
 
-  get flexOrderOfLastVisible(): number {
-    return Math.max(...this.columnStates.filter(state => !state.hidden).map(state => state.flexOrder));
+  get orderOfLastVisible(): number {
+    return Math.max(...this.columnStates.filter(state => !state.hidden).map(state => state.order));
   }
 
-  get flexOrderOfFirstVisible(): number {
-    return Math.min(...this.columnStates.filter(state => !state.hidden).map(state => state.flexOrder));
+  get orderOfFirstVisible(): number {
+    return Math.min(...this.columnStates.filter(state => !state.hidden).map(state => state.order));
   }
 
-  ofFlexOrder(flexOrder: number): BehaviorSubject<ColumnState> {
-    return this.columns.filter(column => column.value.flexOrder === flexOrder)[0];
+  ofOrder(order: number): BehaviorSubject<ColumnState> {
+    return this.columns.filter(column => column.value.order === order)[0];
   }
 
   // Helper method to emit a change to a column only when there is an actual diff to process for that column
@@ -57,11 +57,11 @@ export class ColumnsService {
     // this method will sort the column orders in a correct sequential order while keeping the existing order.
     this.columns
       .slice()
-      .sort((column1, column2) => column1.value.flexOrder - column2.value.flexOrder)
+      .sort((column1, column2) => column1.value.order - column2.value.order)
       .forEach((column, index) => {
         this.emitStateChange(column, {
           changes: [DatagridColumnChanges.FLEX_ORDER],
-          flexOrder: index,
+          order: index,
         });
       });
   }
@@ -82,8 +82,8 @@ export class ColumnsService {
   }
 
   private checkFirstVisible(): void {
-    const column = this.ofFlexOrder(this.flexOrderOfFirstVisible);
-    if (column && column.value.flexOrder === this.flexOrderOfFirstVisible && column !== this.currentFirstVisible) {
+    const column = this.ofOrder(this.orderOfFirstVisible);
+    if (column && column.value.order === this.orderOfFirstVisible && column !== this.currentFirstVisible) {
       this.setComputedProp(column, { firstVisible: true });
       if (this.currentFirstVisible) {
         this.setComputedProp(this.currentFirstVisible, { firstVisible: false });
@@ -93,8 +93,8 @@ export class ColumnsService {
   }
 
   private checkLastVisible(): void {
-    const column = this.ofFlexOrder(this.flexOrderOfLastVisible);
-    if (column && column.value.flexOrder === this.flexOrderOfLastVisible && column !== this.currentLastVisible) {
+    const column = this.ofOrder(this.orderOfLastVisible);
+    if (column && column.value.order === this.orderOfLastVisible && column !== this.currentLastVisible) {
       this.setComputedProp(column, { lastVisible: true });
       if (this.currentLastVisible) {
         this.setComputedProp(this.currentLastVisible, { lastVisible: false });

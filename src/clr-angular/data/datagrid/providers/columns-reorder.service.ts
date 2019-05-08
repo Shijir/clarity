@@ -18,12 +18,12 @@ let nbColumnsGroup = 0;
 
 type ReorderQueueData = {
   column: BehaviorSubject<ColumnState>;
-  newFlexOrder: number;
+  newOrder: number;
 };
 
 export type ColumnReorderData = {
   draggedColumnEl: HTMLElement;
-  flexOrder: number;
+  order: number;
 };
 
 @Injectable()
@@ -50,22 +50,22 @@ export class ColumnsReorderService {
 
   private reorderAnimationModel: ReorderAnimationModel;
 
-  private queueFlexOrderChangeRequest(oldFlexOrder: number, newFlexOrder: number) {
-    const columnToBeUpdated: BehaviorSubject<ColumnState> = this.columnsService.ofFlexOrder(oldFlexOrder);
+  private queueOrderChangeRequest(oldOrder: number, newOrder: number) {
+    const columnToBeUpdated: BehaviorSubject<ColumnState> = this.columnsService.ofOrder(oldOrder);
     if (columnToBeUpdated) {
-      this.reorderQueue.push({ column: columnToBeUpdated, newFlexOrder });
+      this.reorderQueue.push({ column: columnToBeUpdated, newOrder });
     }
   }
 
-  private queueAnimationRequest(newFlexOrder: number, animationData: any) {
-    this.reorderAnimationModel[newFlexOrder] = animationData;
+  private queueAnimationRequest(newOrder: number, animationData: any) {
+    this.reorderAnimationModel[newOrder] = animationData;
   }
 
   private triggerReorder() {
     this.reorderQueue.forEach(reorderData =>
       this.columnsService.emitStateChange(reorderData.column, {
         changes: [DatagridColumnChanges.FLEX_ORDER],
-        flexOrder: reorderData.newFlexOrder,
+        order: reorderData.newOrder,
       })
     );
   }
@@ -76,26 +76,26 @@ export class ColumnsReorderService {
     if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = draggedFrom + 1; i <= draggedTo; i++) {
-        const newFlexOrder = i - 1;
-        this.queueFlexOrderChangeRequest(i, newFlexOrder);
-        this.queueAnimationRequest(newFlexOrder, { value: ReorderAnimationState.SHIFT });
+        const newOrder = i - 1;
+        this.queueOrderChangeRequest(i, newOrder);
+        this.queueAnimationRequest(newOrder, { value: ReorderAnimationState.SHIFT });
       }
     } else if (draggedTo < draggedFrom) {
       // Dragged to the left so each in-between columns should decrement their flex orders
       for (let i = draggedFrom - 1; i >= draggedTo; i--) {
-        const newFlexOrder = i + 1;
-        this.queueFlexOrderChangeRequest(i, newFlexOrder);
-        this.queueAnimationRequest(newFlexOrder, { value: ReorderAnimationState.SHIFT });
+        const newOrder = i + 1;
+        this.queueOrderChangeRequest(i, newOrder);
+        this.queueAnimationRequest(newOrder, { value: ReorderAnimationState.SHIFT });
       }
     }
-    this.queueFlexOrderChangeRequest(draggedFrom, draggedTo);
+    this.queueOrderChangeRequest(draggedFrom, draggedTo);
     this.queueAnimationRequest(draggedTo, { value: ReorderAnimationState.DROP });
     this.triggerReorder();
   }
 
-  private animateReorder(droppedEvent: ClrDragEvent<ColumnReorderData>, droppedOnFlexOrder: number) {
-    const draggedTo = droppedOnFlexOrder;
-    const draggedFrom = droppedEvent.dragDataTransfer.flexOrder;
+  private animateReorder(droppedEvent: ClrDragEvent<ColumnReorderData>, droppedOnOrder: number) {
+    const draggedTo = droppedOnOrder;
+    const draggedFrom = droppedEvent.dragDataTransfer.order;
     const draggedColumnClientRect = this.domAdapter.clientRect(droppedEvent.dragDataTransfer.draggedColumnEl);
 
     const shiftDirection = draggedTo > draggedFrom ? 1 : -1;
@@ -103,12 +103,12 @@ export class ColumnsReorderService {
     const ghostDropDeltaX = droppedEvent.ghostAnchorPosition.pageX - draggedColumnClientRect.left;
     const ghostDropDeltaY = droppedEvent.ghostAnchorPosition.pageY - draggedColumnClientRect.top;
 
-    Object.keys(this.reorderAnimationModel).forEach(newFlexOrder => {
-      const animationDataOfFlexOrder = this.reorderAnimationModel[newFlexOrder];
-      if (animationDataOfFlexOrder.value === ReorderAnimationState.SHIFT) {
-        animationDataOfFlexOrder.params = { translateX: `${shiftWidth}px` };
-      } else if (animationDataOfFlexOrder.value === ReorderAnimationState.DROP) {
-        animationDataOfFlexOrder.params = {
+    Object.keys(this.reorderAnimationModel).forEach(newOrder => {
+      const animationDataOfOrder = this.reorderAnimationModel[newOrder];
+      if (animationDataOfOrder.value === ReorderAnimationState.SHIFT) {
+        animationDataOfOrder.params = { translateX: `${shiftWidth}px` };
+      } else if (animationDataOfOrder.value === ReorderAnimationState.DROP) {
+        animationDataOfOrder.params = {
           translateX: `${ghostDropDeltaX}px`,
           translateY: `${ghostDropDeltaY}px`,
         };
@@ -117,8 +117,8 @@ export class ColumnsReorderService {
     this._reorderAnimation.next(this.reorderAnimationModel);
   }
 
-  reorderRequested(droppedEvent: ClrDragEvent<ColumnReorderData>, droppedOnFlexOrder: number) {
-    this.reorder(droppedEvent.dragDataTransfer.flexOrder, droppedOnFlexOrder);
-    this.animateReorder(droppedEvent, droppedOnFlexOrder);
+  reorderRequested(droppedEvent: ClrDragEvent<ColumnReorderData>, droppedOnOrder: number) {
+    this.reorder(droppedEvent.dragDataTransfer.order, droppedOnOrder);
+    this.animateReorder(droppedEvent, droppedOnOrder);
   }
 }

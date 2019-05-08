@@ -47,7 +47,7 @@ export class NoopDomAdapter implements DomAdapter {
 
   focus(element: any): void {}
 
-  computedFlexOrderOf(element: any): number {
+  computedOrderOf(element: any): number {
     return 0;
   }
 }

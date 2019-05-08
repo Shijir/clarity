@@ -38,7 +38,7 @@ import { DatagridColumnChanges } from './enums/column-changes.enum';
         </button>
       </div>
       <ul class="switch-content list-unstyled">
-        <li *ngFor="let columnState of hideableColumnStates;" [style.order]="columnState.flexOrder">
+        <li *ngFor="let columnState of hideableColumnStates;" [style.order]="columnState.order">
           <clr-checkbox-wrapper>
             <input clrCheckbox type="checkbox"
                    [disabled]="hasOnlyOneVisibleColumn && !columnState.hidden"

@@ -59,7 +59,7 @@ export class DatagridCellRenderer implements OnDestroy {
             this.setHidden(state);
             break;
           case DatagridColumnChanges.FLEX_ORDER:
-            this.setFlexOrder(state);
+            this.setOrder(state);
             break;
           default:
             break;
@@ -90,10 +90,10 @@ export class DatagridCellRenderer implements OnDestroy {
     }
   }
 
-  private setFlexOrder(state: ColumnState) {
+  private setOrder(state: ColumnState) {
     // flex order must be an integer
-    if (typeof state.flexOrder === 'number') {
-      this.renderer.setStyle(this.el.nativeElement, 'order', state.flexOrder);
+    if (typeof state.order === 'number') {
+      this.renderer.setStyle(this.el.nativeElement, 'order', state.order);
     }
   }
 }

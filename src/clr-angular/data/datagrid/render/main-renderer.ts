@@ -112,7 +112,7 @@ export class DatagridMainRenderer<T = any> implements AfterContentInit, AfterVie
   private setupColumns() {
     this.headers.forEach((header, index) => {
       header.setColumnState(index);
-      header.assignFlexOrder(index);
+      header.assignOrder(index);
     });
     this.columnsService.columns.splice(this.headers.length); // Trim any old columns
     this.columnsService.fixOrderSequence();

@@ -11,4 +11,4 @@ export interface ReorderAnimationData {
   params?: AnimationOptions;
 }
 
-export type ReorderAnimationModel = { [newFlexOrder: number]: ReorderAnimationData };
+export type ReorderAnimationModel = { [newOrder: number]: ReorderAnimationData };

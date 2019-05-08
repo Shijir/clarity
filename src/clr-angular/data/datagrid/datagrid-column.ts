@@ -42,7 +42,7 @@ import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
   selector: 'clr-dg-column',
   template: `    
     <div class="datagrid-column-wrapper" #columnWrapper
-         [clrDraggable]="{flexOrder: flexOrder, draggedColumnEl: columnWrapper}"
+         [clrDraggable]="{order: order, draggedColumnEl: columnWrapper}"
          [clrGroup]="columnsGroupId"
          (clrDragStart)="inDragMode = true;"
          (clrDragEnd)="inDragMode = false;">
@@ -132,7 +132,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
     this.subscriptions.push(
       this.columnsReorderService.reorderAnimation.subscribe(reorderAnimationModel => {
-        this.reorderAnimation = reorderAnimationModel[this.flexOrder];
+        this.reorderAnimation = reorderAnimationModel[this.order];
         this.inDropMode = this.reorderAnimation && this.reorderAnimation.value === ReorderAnimationState.DROP;
       })
     );
@@ -154,17 +154,17 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     return this.columnsReorderService.columnsGroupId;
   }
 
-  get flexOrder(): number {
-    return this.columnState.value.flexOrder || 0;
+  get order(): number {
+    return this.columnState.value.order || 0;
   }
 
   placedAfterDraggedColumn(event: ClrDragEvent<ColumnReorderData>) {
-    const draggedFrom: number = event.dragDataTransfer.flexOrder;
-    this.afterDragged = draggedFrom < this.flexOrder;
+    const draggedFrom: number = event.dragDataTransfer.order;
+    this.afterDragged = draggedFrom < this.order;
   }
 
   requestReorder(event: ClrDragEvent<ColumnReorderData>) {
-    this.columnsReorderService.reorderRequested(event, this.flexOrder);
+    this.columnsReorderService.reorderRequested(event, this.order);
   }
 
   @HostBinding('@reorderAnimation') reorderAnimation: ReorderAnimationData;

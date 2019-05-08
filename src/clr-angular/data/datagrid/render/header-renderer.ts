@@ -59,7 +59,7 @@ export class DatagridHeaderRenderer implements OnDestroy {
             this.setHidden(state);
             break;
           case DatagridColumnChanges.FLEX_ORDER:
-            this.setFlexOrder(state);
+            this.setOrder(state);
             break;
           case DatagridColumnChanges.FIRST_VISIBLE:
             this.setFirstVisible(state);
@@ -104,22 +104,22 @@ export class DatagridHeaderRenderer implements OnDestroy {
 
   public getColumnWidthState(): Partial<ColumnState> {
     const strictWidth = this.detectStrictWidth();
-    const isLastVisible = this.columnsService.flexOrderOfLastVisible === this.columnState.value.flexOrder;
+    const isLastVisible = this.columnsService.orderOfLastVisible === this.columnState.value.order;
     return {
       width: this.computeWidth(strictWidth),
       strictWidth: isLastVisible ? 0 : strictWidth,
     };
   }
 
-  public assignFlexOrder(flexorder: number) {
+  public assignOrder(flexorder: number) {
     // we will use the dom order as position order if no flex order is defined...
-    const computedOrder = this.domAdapter.computedFlexOrderOf(this.el.nativeElement);
+    const computedOrder = this.domAdapter.computedOrderOf(this.el.nativeElement);
     const isActualNumber = order => {
       return order === Number(order);
     };
     this.columnsService.emitStateChange(this.columnState, {
       changes: [DatagridColumnChanges.FLEX_ORDER],
-      flexOrder: isActualNumber(computedOrder) ? computedOrder : flexorder,
+      order: isActualNumber(computedOrder) ? computedOrder : flexorder,
     });
   }
 
@@ -131,8 +131,8 @@ export class DatagridHeaderRenderer implements OnDestroy {
     // If there is no flexible columns,
     // make the last visible column flexible.
     if (!this.columnsService.hasFlexibleColumns) {
-      const flexOrderOfLastVisible = this.columnsService.flexOrderOfLastVisible;
-      const columnOfLastVisible = this.columnsService.ofFlexOrder(flexOrderOfLastVisible);
+      const orderOfLastVisible = this.columnsService.orderOfLastVisible;
+      const columnOfLastVisible = this.columnsService.ofOrder(orderOfLastVisible);
       this.columnsService.emitStateChange(columnOfLastVisible, {
         changes: [DatagridColumnChanges.WIDTH],
         strictWidth: 0,
@@ -167,10 +167,10 @@ export class DatagridHeaderRenderer implements OnDestroy {
     }
   }
 
-  private setFlexOrder(state: ColumnState) {
+  private setOrder(state: ColumnState) {
     // flex order must be an integer
-    if (typeof state.flexOrder === 'number') {
-      this.renderer.setStyle(this.el.nativeElement, 'order', state.flexOrder);
+    if (typeof state.order === 'number') {
+      this.renderer.setStyle(this.el.nativeElement, 'order', state.order);
     }
   }
 
