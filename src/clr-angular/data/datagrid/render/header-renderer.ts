@@ -58,15 +58,15 @@ export class DatagridHeaderRenderer implements OnDestroy {
           case DatagridColumnChanges.HIDDEN:
             this.setHidden(state);
             break;
-          case DatagridColumnChanges.FLEX_ORDER:
-            this.setOrder(state);
-            break;
-          case DatagridColumnChanges.FIRST_VISIBLE:
-            this.setFirstVisible(state);
-            break;
-          case DatagridColumnChanges.LAST_VISIBLE:
-            this.setLastVisible(state);
-            break;
+          // case DatagridColumnChanges.FLEX_ORDER:
+          //   this.setOrder(state);
+          //   break;
+          // case DatagridColumnChanges.FIRST_VISIBLE:
+          //   this.setFirstVisible(state);
+          //   break;
+          // case DatagridColumnChanges.LAST_VISIBLE:
+          //   this.setLastVisible(state);
+          //   break;
           default:
             break;
         }

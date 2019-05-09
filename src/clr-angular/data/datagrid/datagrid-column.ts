@@ -37,12 +37,13 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
 import { ReorderAnimationData } from './interfaces/reorder-animation-data.interface';
 import { ReorderAnimationState } from './enums/reorder-animation-state.enum';
+import { ViewsReorderService } from './providers/views-reorder.service';
 
 @Component({
   selector: 'clr-dg-column',
   template: `    
     <div class="datagrid-column-wrapper" #columnWrapper
-         [clrDraggable]="{order: order, draggedColumnEl: columnWrapper}"
+         [clrDraggable]="{view: _view, draggedColumnEl: columnWrapper}"
          [clrGroup]="columnsGroupId"
          (clrDragStart)="inDragMode = true;"
          (clrDragEnd)="inDragMode = false;">
@@ -109,7 +110,8 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
     filters: FiltersProvider<T>,
     private vcr: ViewContainerRef,
     private columnsReorderService: ColumnsReorderService,
-    @Inject(COLUMN_STATE) private columnState: BehaviorSubject<ColumnState>
+    @Inject(COLUMN_STATE) private columnState: BehaviorSubject<ColumnState>,
+    private viewsReorderService: ViewsReorderService
   ) {
     super(filters);
     this.subscriptions.push(
@@ -164,7 +166,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
   }
 
   requestReorder(event: ClrDragEvent<ColumnReorderData>) {
-    this.columnsReorderService.reorderRequested(event, this.order);
+    this.viewsReorderService.reorderViews(event.dragDataTransfer.view, this._view);
   }
 
   @HostBinding('@reorderAnimation') reorderAnimation: ReorderAnimationData;
