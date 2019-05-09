@@ -36,7 +36,7 @@ export class ColumnsReorderService {
   private _reorderAnimation: Subject<ReorderAnimationModel> = new Subject<ReorderAnimationModel>();
 
   get reorderComplete(): Observable<void> {
-    return this._reorderAnimation.asObservable();
+    return this._reorderComplete.asObservable();
   }
 
   get reorderAnimation(): Observable<ReorderAnimationModel> {

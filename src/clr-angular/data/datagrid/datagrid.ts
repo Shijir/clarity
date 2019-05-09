@@ -43,6 +43,7 @@ import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { SelectionType } from './enums/selection-type';
 import { ColumnsService } from './providers/columns.service';
 import { ColumnsReorderService } from './providers/columns-reorder.service';
+import { ViewsReorderService } from './providers/views-reorder.service';
 
 @Component({
   selector: 'clr-datagrid',
@@ -60,6 +61,7 @@ import { ColumnsReorderService } from './providers/columns-reorder.service';
     StateProvider,
     TableSizeService,
     ColumnsReorderService,
+    ViewsReorderService,
     ColumnsService,
     DisplayModeService,
   ],
@@ -76,7 +78,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     private displayMode: DisplayModeService,
     private renderer: Renderer2,
     private el: ElementRef,
-    public commonStrings: ClrCommonStrings
+    public commonStrings: ClrCommonStrings,
+    private viewsReorderService: ViewsReorderService
   ) {}
 
   /* reference to the enum so that template can access */
@@ -215,6 +218,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   ngAfterViewInit() {
     // TODO: determine if we can get rid of provider wiring in view init so that subscriptions can be done earlier
     this.refresh.emit(this.stateProvider.state);
+    this.viewsReorderService.containerRef = this._projectedDisplayColumns;
     this._subscriptions.push(this.stateProvider.change.subscribe(state => this.refresh.emit(state)));
     this._subscriptions.push(
       this.selection.change.subscribe(s => {
