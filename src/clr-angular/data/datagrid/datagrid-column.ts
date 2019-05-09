@@ -77,9 +77,7 @@ import { ViewsReorderService } from './providers/views-reorder.service';
     <div class="datagrid-column-droppable" 
          clrDroppable
          [clrGroup]="columnsGroupId"
-         (clrDragStart)="placedAfterDraggedColumn($event)"
-         (clrDrop)="requestReorder($event)"
-         [class.after-dragged] = "afterDragged">
+         (clrDrop)="requestReorder($event)">
       <div class="datagrid-column-drop-line"></div>
     </div>
   `,
@@ -158,11 +156,6 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
   get order(): number {
     return this.columnState.value.order || 0;
-  }
-
-  placedAfterDraggedColumn(event: ClrDragEvent<ColumnReorderData>) {
-    const draggedFrom: number = event.dragDataTransfer.order;
-    this.afterDragged = draggedFrom < this.order;
   }
 
   requestReorder(event: ClrDragEvent<ColumnReorderData>) {

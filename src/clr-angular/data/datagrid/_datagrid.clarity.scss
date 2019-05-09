@@ -497,7 +497,7 @@
 
       .in-drag & {
         position: relative;
-        .datagrid-column-droppable.draggable-match {
+        .draggable-match {
           display: flex;
           border: none;
           &.draggable-over {
@@ -520,25 +520,25 @@
                 z-index: map-get($clr-layers, column-switch);
               }
             }
-
-            &.after-dragged .datagrid-column-drop-line {
-              margin-left: auto;
-            }
           }
         }
-        &.datagrid-first-visible-column .datagrid-column-droppable.draggable-over {
+        &.datagrid-first-visible-column .draggable-over {
           .datagrid-column-drop-line {
             left: 0;
           }
         }
-        &.datagrid-last-visible-column .datagrid-column-droppable.draggable-over {
+        &.datagrid-last-visible-column .draggable-over {
           .datagrid-column-drop-line {
             left: -2px;
           }
         }
 
-        &-drag-mode .datagrid-column-droppable.draggable-match {
+        &-drag-mode .draggable-match {
           display: none;
+        }
+
+        &-drag-mode ~ .datagrid-column .draggable-match .datagrid-column-drop-line {
+          margin-left: auto;
         }
       }
       .draggable-ghost .datagrid-column-wrapper {
