@@ -219,6 +219,14 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     // TODO: determine if we can get rid of provider wiring in view init so that subscriptions can be done earlier
     this.refresh.emit(this.stateProvider.state);
     this.viewsReorderService.containerRef = this._projectedDisplayColumns;
+    this.viewsReorderService.computedOrders.subscribe(orderChanges => {
+      orderChanges
+        .map(orderChange => ({
+          view: this._projectedDisplayColumns.get(orderChange.oldOrder),
+          newOrder: orderChange.newOrder,
+        }))
+        .forEach(orderChange => this._projectedDisplayColumns.move(orderChange.view, orderChange.newOrder));
+    });
     this._subscriptions.push(this.stateProvider.change.subscribe(state => this.refresh.emit(state)));
     this._subscriptions.push(
       this.selection.change.subscribe(s => {

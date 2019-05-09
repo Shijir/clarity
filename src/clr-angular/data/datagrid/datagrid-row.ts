@@ -34,6 +34,7 @@ import { Selection } from './providers/selection';
 import { WrappedRow } from './wrapped-row';
 import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { SelectionType } from './enums/selection-type';
+import { ViewsReorderService } from './providers/views-reorder.service';
 
 let nbRow: number = 0;
 
@@ -72,7 +73,8 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
     private vcr: ViewContainerRef,
     private renderer: Renderer2,
     private el: ElementRef,
-    public commonStrings: ClrCommonStrings
+    public commonStrings: ClrCommonStrings,
+    private viewsReorderService: ViewsReorderService
   ) {
     nbRow++;
     this.id = 'clr-dg-row' + nbRow;
@@ -185,6 +187,18 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
             this._scrollableCells.insert(cell._view);
           });
         }
+      })
+    );
+    this.subscriptions.push(
+      this.viewsReorderService.computedOrders.subscribe(orderChanges => {
+        orderChanges
+          .map(orderChange => ({
+            view: this._scrollableCells.get(orderChange.oldOrder),
+            newOrder: orderChange.newOrder,
+          }))
+          .forEach(
+            orderChange => orderChange.view && this._scrollableCells.move(orderChange.view, orderChange.newOrder)
+          );
       })
     );
   }

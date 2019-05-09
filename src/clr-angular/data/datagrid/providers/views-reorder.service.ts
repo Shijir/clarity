@@ -3,25 +3,27 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { Injectable, OnDestroy, ViewContainerRef, ViewRef } from '@angular/core';
+import { Injectable, ViewContainerRef, ViewRef } from '@angular/core';
+import { Observable, Subject } from 'rxjs/index';
+
+export type OrderChangeData = { newOrder: number; oldOrder: number };
 
 @Injectable()
 export class ViewsReorderService {
   containerRef: ViewContainerRef;
 
-  private reorderQueue: { view: ViewRef; newOrder: number }[];
+  constructor() {}
+
+  reorderQueue: OrderChangeData[];
 
   private queueOrderChange(oldOrder: number, newOrder: number) {
-    const viewAtOldOrder = this.containerRef.get(oldOrder);
-    if (viewAtOldOrder) {
-      this.reorderQueue.push({ view: viewAtOldOrder, newOrder });
-    }
+    this.reorderQueue.push({ oldOrder, newOrder });
   }
 
-  private triggerReorder() {
-    this.reorderQueue.forEach(orderChange => {
-      this.containerRef.move(orderChange.view, orderChange.newOrder);
-    });
+  private _computedOrders: Subject<OrderChangeData[]> = new Subject<OrderChangeData[]>();
+
+  get computedOrders(): Observable<OrderChangeData[]> {
+    return this._computedOrders.asObservable();
   }
 
   private reorder(draggedFrom: number, draggedTo: number): void {
@@ -40,7 +42,7 @@ export class ViewsReorderService {
       }
     }
     this.queueOrderChange(draggedFrom, draggedTo);
-    this.triggerReorder();
+    this._computedOrders.next(this.reorderQueue);
   }
 
   reorderViews(draggedView: ViewRef, targetView: ViewRef) {

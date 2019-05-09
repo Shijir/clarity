@@ -58,9 +58,9 @@ export class DatagridCellRenderer implements OnDestroy {
           case DatagridColumnChanges.HIDDEN:
             this.setHidden(state);
             break;
-          case DatagridColumnChanges.FLEX_ORDER:
-            this.setOrder(state);
-            break;
+          // case DatagridColumnChanges.FLEX_ORDER:
+          //   this.setOrder(state);
+          //   break;
           default:
             break;
         }
