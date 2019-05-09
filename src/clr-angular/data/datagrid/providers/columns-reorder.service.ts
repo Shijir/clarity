@@ -32,7 +32,12 @@ export class ColumnsReorderService {
   // Datagrids all reorder draggable and droppables
   private _columnsGroupId: string;
 
+  private _reorderComplete: Subject<void> = new Subject<void>();
   private _reorderAnimation: Subject<ReorderAnimationModel> = new Subject<ReorderAnimationModel>();
+
+  get reorderComplete(): Observable<void> {
+    return this._reorderAnimation.asObservable();
+  }
 
   get reorderAnimation(): Observable<ReorderAnimationModel> {
     return this._reorderAnimation.asObservable();
@@ -68,6 +73,7 @@ export class ColumnsReorderService {
         order: reorderData.newOrder,
       })
     );
+    this._reorderComplete.next();
   }
 
   private reorder(draggedFrom: number, draggedTo: number): void {
