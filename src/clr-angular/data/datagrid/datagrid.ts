@@ -225,8 +225,15 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
           view: this._projectedDisplayColumns.get(orderChange.oldOrder),
           newOrder: orderChange.newOrder,
         }))
-        .forEach(orderChange => this._projectedDisplayColumns.move(orderChange.view, orderChange.newOrder));
+        .forEach(orderChange => {
+          this._projectedDisplayColumns.move(orderChange.view, orderChange.newOrder);
+        });
+
+      this.columns.forEach(column => {
+        column.order = this._projectedDisplayColumns.indexOf(column._view);
+      });
     });
+
     this._subscriptions.push(this.stateProvider.change.subscribe(state => this.refresh.emit(state)));
     this._subscriptions.push(
       this.selection.change.subscribe(s => {
@@ -258,8 +265,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       if (viewChange === DatagridDisplayMode.DISPLAY) {
         // Set state, style for the datagrid to DISPLAY and insert row & columns into containers
         this.renderer.removeClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.columns.forEach(column => {
-          this._projectedDisplayColumns.insert(column._view);
+        this.columns.forEach((column, index) => {
+          this._projectedDisplayColumns.insert(column._view, column.order ? column.order : index);
         });
         this.rows.forEach(row => {
           this._displayedRows.insert(row._view);
@@ -267,8 +274,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       } else {
         // Set state, style for the datagrid to CALCULATE and insert row & columns into containers
         this.renderer.addClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.columns.forEach(column => {
-          this._projectedCalculationColumns.insert(column._view);
+        this.columns.forEach((column, index) => {
+          this._projectedCalculationColumns.insert(column._view, column.order ? column.order : index);
         });
         this.rows.forEach(row => {
           this._calculationRows.insert(row._view);

@@ -178,13 +178,13 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         }
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
-          this.dgCells.forEach(cell => {
-            this._calculatedCells.insert(cell._view);
+          this.dgCells.forEach((cell, index) => {
+            this._calculatedCells.insert(cell._view, cell.order ? cell.order : index);
           });
         } else {
           this.displayCells = true;
-          this.dgCells.forEach(cell => {
-            this._scrollableCells.insert(cell._view);
+          this.dgCells.forEach((cell, index) => {
+            this._scrollableCells.insert(cell._view, cell.order ? cell.order : index);
           });
         }
       })
@@ -199,6 +199,9 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
           .forEach(
             orderChange => orderChange.view && this._scrollableCells.move(orderChange.view, orderChange.newOrder)
           );
+        this.dgCells.forEach(cell => {
+          cell.order = this._scrollableCells.indexOf(cell._view);
+        });
       })
     );
   }
