@@ -179,12 +179,14 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
           this.dgCells.forEach((cell, index) => {
-            this._calculatedCells.insert(cell._view, cell.order ? cell.order : index);
+            const order = typeof cell.order === 'number' ? cell.order : index;
+            this._calculatedCells.insert(cell._view, order);
           });
         } else {
           this.displayCells = true;
           this.dgCells.forEach((cell, index) => {
-            this._scrollableCells.insert(cell._view, cell.order ? cell.order : index);
+            const order = typeof cell.order === 'number' ? cell.order : index;
+            this._scrollableCells.insert(cell._view, order);
           });
         }
       })

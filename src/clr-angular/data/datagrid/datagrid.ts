@@ -266,7 +266,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         // Set state, style for the datagrid to DISPLAY and insert row & columns into containers
         this.renderer.removeClass(this.el.nativeElement, 'datagrid-calculate-mode');
         this.columns.forEach((column, index) => {
-          this._projectedDisplayColumns.insert(column._view, column.order ? column.order : index);
+          const order = typeof column.order === 'number' ? column.order : index;
+          this._projectedDisplayColumns.insert(column._view, order);
         });
         this.rows.forEach(row => {
           this._displayedRows.insert(row._view);
@@ -275,7 +276,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         // Set state, style for the datagrid to CALCULATE and insert row & columns into containers
         this.renderer.addClass(this.el.nativeElement, 'datagrid-calculate-mode');
         this.columns.forEach((column, index) => {
-          this._projectedCalculationColumns.insert(column._view, column.order ? column.order : index);
+          const order = typeof column.order === 'number' ? column.order : index;
+          this._projectedCalculationColumns.insert(column._view, order);
         });
         this.rows.forEach(row => {
           this._calculationRows.insert(row._view);
