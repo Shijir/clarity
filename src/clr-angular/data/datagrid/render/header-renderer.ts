@@ -104,10 +104,15 @@ export class DatagridHeaderRenderer implements OnDestroy {
 
   public getColumnWidthState(): Partial<ColumnState> {
     const strictWidth = this.detectStrictWidth();
-    const isLastVisible = this.columnsService.orderOfLastVisible === this.columnState.value.order;
+    // const isLastVisible = this.columnsService.orderOfLastVisible === this.columnState.value.order;
+    // return {
+    //   width: this.computeWidth(strictWidth),
+    //   strictWidth: isLastVisible ? 0 : strictWidth,
+    // };
+
     return {
       width: this.computeWidth(strictWidth),
-      strictWidth: isLastVisible ? 0 : strictWidth,
+      strictWidth: strictWidth,
     };
   }
 
