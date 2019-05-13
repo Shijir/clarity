@@ -179,31 +179,32 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
           this.dgCells.forEach((cell, index) => {
-            const order = typeof cell.order === 'number' ? cell.order : index;
-            this._calculatedCells.insert(cell._view, order);
+            cell.order = typeof cell.order === 'number' ? cell.order : index;
+            this._calculatedCells.insert(cell._view, cell.order);
           });
         } else {
           this.displayCells = true;
           this.dgCells.forEach((cell, index) => {
-            const order = typeof cell.order === 'number' ? cell.order : index;
-            this._scrollableCells.insert(cell._view, order);
+            cell.order = typeof cell.order === 'number' ? cell.order : index;
+            this._scrollableCells.insert(cell._view, cell.order);
           });
         }
       })
     );
+
+    // A subscription that listens for view reordering
     this.subscriptions.push(
       this.viewsReorderService.computedOrders.subscribe(orderChanges => {
-        orderChanges
-          .map(orderChange => ({
-            view: this._scrollableCells.get(orderChange.oldOrder),
-            newOrder: orderChange.newOrder,
-          }))
-          .forEach(
-            orderChange => orderChange.view && this._scrollableCells.move(orderChange.view, orderChange.newOrder)
-          );
-        this.dgCells.forEach(cell => {
-          cell.order = this._scrollableCells.indexOf(cell._view);
-        });
+        // assign new orders to the columns
+        this.dgCells
+          .filter(cell => typeof orderChanges[cell.order] === 'number')
+          .forEach(cell => (cell.order = orderChanges[cell.order]));
+        // detach cell views from the view container
+        for (let i = this._scrollableCells.length; i > 0; i--) {
+          this._scrollableCells.detach();
+        }
+        // insert cell views in their new orders
+        this.dgCells.forEach(cell => this._scrollableCells.insert(cell._view, cell.order));
       })
     );
   }

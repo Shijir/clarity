@@ -6,7 +6,7 @@
 import { Injectable, ViewContainerRef, ViewRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs/index';
 
-export type OrderChangeData = { newOrder: number; oldOrder: number };
+export type OrderChangeData = { [order: number]: number };
 
 @Injectable()
 export class ViewsReorderService {
@@ -14,20 +14,20 @@ export class ViewsReorderService {
 
   constructor() {}
 
-  reorderQueue: OrderChangeData[];
+  reorderQueue: OrderChangeData = {};
 
   private queueOrderChange(oldOrder: number, newOrder: number) {
-    this.reorderQueue.push({ oldOrder, newOrder });
+    this.reorderQueue[oldOrder] = newOrder;
   }
 
-  private _computedOrders: Subject<OrderChangeData[]> = new Subject<OrderChangeData[]>();
+  private _computedOrders: Subject<OrderChangeData> = new Subject<OrderChangeData>();
 
-  get computedOrders(): Observable<OrderChangeData[]> {
+  get computedOrders(): Observable<OrderChangeData> {
     return this._computedOrders.asObservable();
   }
 
   private reorder(draggedFrom: number, draggedTo: number): void {
-    this.reorderQueue = [];
+    this.reorderQueue = {};
     if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = draggedFrom + 1; i <= draggedTo; i++) {
