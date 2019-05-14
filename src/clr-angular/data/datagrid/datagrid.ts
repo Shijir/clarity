@@ -202,6 +202,12 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     }
 
     this._subscriptions.push(
+      this.columns.changes.subscribe(() => {
+        this.fixOrderSequence();
+      })
+    );
+
+    this._subscriptions.push(
       this.rows.changes.subscribe(() => {
         if (!this.items.smart) {
           this.items.all = this.rows.map((row: ClrDatagridRow<T>) => row.item);
@@ -304,6 +310,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   @ViewChild('calculationRows', { read: ViewContainerRef })
   _calculationRows: ViewContainerRef;
 
+  private removeColumnViews(containerRef: ViewContainerRef): void {}
+
   private insertColumnViews(containerRef: ViewContainerRef): void {
     if (containerRef.length !== 0) {
       return;
@@ -317,5 +325,17 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       })
       .sort((column1, column2) => column1.order - column2.order)
       .forEach(column => containerRef.insert(column._view));
+  }
+
+  fixOrderSequence() {
+    // dynamic columns may mess up the orders.
+    // this method will sort the column orders in a correct sequential order while keeping the existing order.
+    this.columns
+      .map((column, index) => {
+        column.order = typeof column.order === 'number' ? column.order : index;
+        return column;
+      })
+      .sort((column1, column2) => column1.order - column2.order)
+      .forEach((column, index) => (column.order = index));
   }
 }
