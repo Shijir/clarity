@@ -6,6 +6,7 @@
 import {
   AfterContentInit,
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   ContentChildren,
@@ -282,8 +283,13 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
           this._projectedDisplayColumns.detach();
         }
+
+        this._projectedDisplayColumns.injector.get(ChangeDetectorRef).detectChanges();
         // insert column views in their new orders
-        this.columns.forEach(column => this._projectedDisplayColumns.insert(column._view, column.order));
+        this.columns
+          .toArray()
+          .sort((column1, column2) => column1.order - column2.order)
+          .forEach(column => this._projectedDisplayColumns.insert(column._view));
       })
     );
   }

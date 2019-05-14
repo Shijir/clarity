@@ -7,6 +7,7 @@
 import {
   AfterContentInit,
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -203,8 +204,14 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         for (let i = this._scrollableCells.length; i > 0; i--) {
           this._scrollableCells.detach();
         }
+
+        this._scrollableCells.injector.get(ChangeDetectorRef).detectChanges();
+
         // insert cell views in their new orders
-        this.dgCells.forEach(cell => this._scrollableCells.insert(cell._view, cell.order));
+        this.dgCells
+          .toArray()
+          .sort((cell1, cell2) => cell1.order - cell2.order)
+          .forEach(cell => this._scrollableCells.insert(cell._view));
       })
     );
   }
