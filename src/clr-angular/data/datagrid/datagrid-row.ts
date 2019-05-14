@@ -159,9 +159,7 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
 
   ngAfterContentInit() {
     this.dgCells.changes.subscribe(() => {
-      this.dgCells.forEach(cell => {
-        this._scrollableCells.insert(cell._view);
-      });
+      this.insertCellViews(this._scrollableCells);
     });
   }
 
@@ -179,16 +177,10 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         }
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
-          this.dgCells.forEach((cell, index) => {
-            cell.order = typeof cell.order === 'number' ? cell.order : index;
-            this._calculatedCells.insert(cell._view, cell.order);
-          });
+          this.insertCellViews(this._calculatedCells);
         } else {
           this.displayCells = true;
-          this.dgCells.forEach((cell, index) => {
-            cell.order = typeof cell.order === 'number' ? cell.order : index;
-            this._scrollableCells.insert(cell._view, cell.order);
-          });
+          this.insertCellViews(this._scrollableCells);
         }
       })
     );
@@ -204,14 +196,8 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         for (let i = this._scrollableCells.length; i > 0; i--) {
           this._scrollableCells.detach();
         }
-
-        this._scrollableCells.injector.get(ChangeDetectorRef).detectChanges();
-
         // insert cell views in their new orders
-        this.dgCells
-          .toArray()
-          .sort((cell1, cell2) => cell1.order - cell2.order)
-          .forEach(cell => this._scrollableCells.insert(cell._view));
+        this.insertCellViews(this._scrollableCells);
       })
     );
   }
@@ -239,5 +225,20 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
 
   public get _view() {
     return this.wrappedInjector.get(WrappedRow, this.vcr).rowView;
+  }
+
+  private insertCellViews(containerRef: ViewContainerRef): void {
+    if (containerRef.length !== 0) {
+      return;
+    }
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    // insert column views in their new orders
+    this.dgCells
+      .map((cell, index) => {
+        cell.order = typeof cell.order === 'number' ? cell.order : index;
+        return cell;
+      })
+      .sort((cell1, cell2) => cell1.order - cell2.order)
+      .forEach(cell => containerRef.insert(cell._view));
   }
 }

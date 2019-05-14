@@ -252,20 +252,14 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       if (viewChange === DatagridDisplayMode.DISPLAY) {
         // Set state, style for the datagrid to DISPLAY and insert row & columns into containers
         this.renderer.removeClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.columns.forEach((column, index) => {
-          column.order = typeof column.order === 'number' ? column.order : index;
-          this._projectedDisplayColumns.insert(column._view, column.order);
-        });
+        this.insertColumnViews(this._projectedDisplayColumns);
         this.rows.forEach(row => {
           this._displayedRows.insert(row._view);
         });
       } else {
         // Set state, style for the datagrid to CALCULATE and insert row & columns into containers
         this.renderer.addClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.columns.forEach((column, index) => {
-          column.order = typeof column.order === 'number' ? column.order : index;
-          this._projectedCalculationColumns.insert(column._view, column.order);
-        });
+        this.insertColumnViews(this._projectedCalculationColumns);
         this.rows.forEach(row => {
           this._calculationRows.insert(row._view);
         });
@@ -283,13 +277,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
           this._projectedDisplayColumns.detach();
         }
-
-        this._projectedDisplayColumns.injector.get(ChangeDetectorRef).detectChanges();
-        // insert column views in their new orders
-        this.columns
-          .toArray()
-          .sort((column1, column2) => column1.order - column2.order)
-          .forEach(column => this._projectedDisplayColumns.insert(column._view));
+        this.insertColumnViews(this._projectedDisplayColumns);
       })
     );
   }
@@ -315,4 +303,19 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   _displayedRows: ViewContainerRef;
   @ViewChild('calculationRows', { read: ViewContainerRef })
   _calculationRows: ViewContainerRef;
+
+  private insertColumnViews(containerRef: ViewContainerRef): void {
+    if (containerRef.length !== 0) {
+      return;
+    }
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    // insert column views in their new orders
+    this.columns
+      .map((column, index) => {
+        column.order = typeof column.order === 'number' ? column.order : index;
+        return column;
+      })
+      .sort((column1, column2) => column1.order - column2.order)
+      .forEach(column => containerRef.insert(column._view));
+  }
 }
