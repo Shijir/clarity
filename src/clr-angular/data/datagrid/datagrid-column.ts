@@ -149,7 +149,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
   inDropMode: boolean = false;
 
-  _order: number;
+  private _order: number;
 
   public get order() {
     return this._order;

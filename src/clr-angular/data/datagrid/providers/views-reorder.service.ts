@@ -10,11 +10,11 @@ export type OrderChangeData = { [order: number]: number };
 
 @Injectable()
 export class ViewsReorderService {
-  containerRef: ViewContainerRef;
-
   constructor() {}
 
-  reorderQueue: OrderChangeData = {};
+  containerRef: ViewContainerRef;
+
+  private reorderQueue: OrderChangeData = {};
 
   private queueOrderChange(oldOrder: number, newOrder: number) {
     this.reorderQueue[oldOrder] = newOrder;
