@@ -203,7 +203,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
 
     this._subscriptions.push(
       this.columns.changes.subscribe(() => {
-        this.fixOrderSequence();
+        this.fixColumnOrders();
       })
     );
 
@@ -310,8 +310,6 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   @ViewChild('calculationRows', { read: ViewContainerRef })
   _calculationRows: ViewContainerRef;
 
-  private removeColumnViews(containerRef: ViewContainerRef): void {}
-
   private insertColumnViews(containerRef: ViewContainerRef): void {
     if (containerRef.length !== 0) {
       return;
@@ -327,7 +325,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       .forEach(column => containerRef.insert(column._view));
   }
 
-  fixOrderSequence() {
+  private fixColumnOrders() {
     // dynamic columns may mess up the orders.
     // this method will sort the column orders in a correct sequential order while keeping the existing order.
     this.columns
