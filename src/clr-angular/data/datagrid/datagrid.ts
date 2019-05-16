@@ -202,12 +202,6 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     }
 
     this._subscriptions.push(
-      this.columns.changes.subscribe(() => {
-        this.fixColumnOrders();
-      })
-    );
-
-    this._subscriptions.push(
       this.rows.changes.subscribe(() => {
         if (!this.items.smart) {
           this.items.all = this.rows.map((row: ClrDatagridRow<T>) => row.item);
@@ -316,24 +310,26 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     }
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
-    this.columns
-      .map((column, index) => {
-        column.order = typeof column.order === 'number' ? column.order : index;
-        return column;
-      })
-      .sort((column1, column2) => column1.order - column2.order)
-      .forEach(column => containerRef.insert(column._view));
+    return this.setColumnsOrdered().forEach(column => containerRef.insert(column._view));
   }
 
-  private fixColumnOrders() {
-    // dynamic columns may mess up the orders.
-    // this method will sort the column orders in a correct sequential order while keeping the existing order.
-    this.columns
-      .map((column, index) => {
-        column.order = typeof column.order === 'number' ? column.order : index;
-        return column;
-      })
-      .sort((column1, column2) => column1.order - column2.order)
-      .forEach((column, index) => (column.order = index));
+  private setColumnsOrdered(): ClrDatagridColumn[] {
+    return (
+      this.columns
+        // assign orders to columns first. if a column has an existing order, use that.
+        // otherwise use its index as an order.
+        .map((column, index) => {
+          column.order = typeof column.order === 'number' ? column.order : index;
+          return column;
+        })
+        // sort columns by their orders
+        .sort((column1, column2) => column1.order - column2.order)
+        // following transformation will make column orders unique and sequential
+        // while still keeping the current visual order.
+        .map((column, index) => {
+          column.order = index;
+          return column;
+        })
+    );
   }
 }

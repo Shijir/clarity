@@ -149,7 +149,16 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, Datag
 
   inDropMode: boolean = false;
 
-  order: number;
+  _order: number;
+
+  public get order() {
+    return this._order;
+  }
+
+  @Input('clrOrder')
+  public set order(value: number) {
+    this._order = value;
+  }
 
   get columnsGroupId(): string {
     return this.columnsReorderService.columnsGroupId;

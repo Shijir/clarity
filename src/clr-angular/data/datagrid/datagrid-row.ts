@@ -233,12 +233,21 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
     }
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
-    this.dgCells
+    this.setCellsOrdered().forEach(cell => containerRef.insert(cell._view));
+  }
+
+  private setCellsOrdered(): ClrDatagridCell[] {
+    // dynamic columns may mess up the orders.
+    // this method will sort the column orders in a correct sequential order while keeping the existing order.
+    return this.dgCells
       .map((cell, index) => {
         cell.order = typeof cell.order === 'number' ? cell.order : index;
         return cell;
       })
       .sort((cell1, cell2) => cell1.order - cell2.order)
-      .forEach(cell => containerRef.insert(cell._view));
+      .map((cell, index) => {
+        cell.order = index;
+        return cell;
+      });
   }
 }
