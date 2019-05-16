@@ -237,8 +237,6 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
   }
 
   private setCellsOrdered(): ClrDatagridCell[] {
-    // dynamic columns may mess up the orders.
-    // this method will sort the column orders in a correct sequential order while keeping the existing order.
     return this.dgCells
       .map((cell, index) => {
         cell.order = typeof cell.order === 'number' ? cell.order : index;
