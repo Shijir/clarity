@@ -211,6 +211,13 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         });
       })
     );
+
+    this.viewsReorderService.resetReorderQueue();
+
+    this.columns.forEach((column, index) => {
+      column.order = index;
+      this.viewsReorderService.queueOrderChange(column.order, column.userDefinedOrder);
+    });
   }
 
   /**
@@ -280,6 +287,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         this.insertColumnViews(this._projectedDisplayColumns);
       })
     );
+
+    this.viewsReorderService.broadcastOrderChanges();
   }
 
   /**

@@ -16,18 +16,33 @@ export class ViewsReorderService {
 
   private reorderQueue: OrderChangeData = {};
 
-  private queueOrderChange(oldOrder: number, newOrder: number) {
-    this.reorderQueue[oldOrder] = newOrder;
-  }
-
   private _computedOrders: Subject<OrderChangeData> = new Subject<OrderChangeData>();
 
   get computedOrders(): Observable<OrderChangeData> {
     return this._computedOrders.asObservable();
   }
 
-  private reorder(draggedFrom: number, draggedTo: number): void {
+  queueOrderChange(oldOrder: number, newOrder: number) {
+    this.reorderQueue[oldOrder] = newOrder;
+  }
+
+  resetReorderQueue() {
     this.reorderQueue = {};
+  }
+
+  broadcastOrderChanges() {
+    const emptyReorderQueue =
+      Object.keys(this.reorderQueue)
+        .map(order => this.reorderQueue[order])
+        .filter(newOrder => newOrder).length === 0;
+
+    if (!emptyReorderQueue) {
+      this._computedOrders.next(this.reorderQueue);
+    }
+  }
+
+  private reorder(draggedFrom: number, draggedTo: number): void {
+    this.resetReorderQueue();
     if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = draggedFrom + 1; i <= draggedTo; i++) {
@@ -42,7 +57,7 @@ export class ViewsReorderService {
       }
     }
     this.queueOrderChange(draggedFrom, draggedTo);
-    this._computedOrders.next(this.reorderQueue);
+    this.broadcastOrderChanges();
   }
 
   reorderViews(draggedView: ViewRef, targetView: ViewRef) {
