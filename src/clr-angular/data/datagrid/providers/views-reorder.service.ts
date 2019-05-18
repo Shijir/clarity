@@ -34,7 +34,7 @@ export class ViewsReorderService {
     const emptyReorderQueue =
       Object.keys(this.reorderQueue)
         .map(order => this.reorderQueue[order])
-        .filter(newOrder => newOrder).length === 0;
+        .filter(newOrder => typeof newOrder === 'number').length === 0;
 
     if (!emptyReorderQueue) {
       this._computedOrders.next(this.reorderQueue);
