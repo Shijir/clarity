@@ -228,9 +228,6 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
   }
 
   private insertCellViews(containerRef: ViewContainerRef): void {
-    if (containerRef.length !== 0) {
-      return;
-    }
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
     this.setCellsOrdered().forEach(cell => containerRef.insert(cell._view));

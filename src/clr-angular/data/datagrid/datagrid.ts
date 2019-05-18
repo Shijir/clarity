@@ -314,9 +314,6 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   _calculationRows: ViewContainerRef;
 
   private insertColumnViews(containerRef: ViewContainerRef): void {
-    if (containerRef.length !== 0) {
-      return;
-    }
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
     return this.setColumnsOrdered().forEach(column => containerRef.insert(column._view));
