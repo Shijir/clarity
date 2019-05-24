@@ -14,12 +14,14 @@ export class ViewsReorderService {
 
   containerRef: ViewContainerRef;
 
+  currentOrders: number[];
+
   private reorderQueue: OrderChangeData = {};
 
-  private _computedOrders: Subject<OrderChangeData> = new Subject<OrderChangeData>();
+  private _reorderRequested: Subject<OrderChangeData> = new Subject<OrderChangeData>();
 
-  get computedOrders(): Observable<OrderChangeData> {
-    return this._computedOrders.asObservable();
+  get reorderRequested(): Observable<OrderChangeData> {
+    return this._reorderRequested.asObservable();
   }
 
   queueOrderChange(oldOrder: number, newOrder: number) {
@@ -30,14 +32,14 @@ export class ViewsReorderService {
     this.reorderQueue = {};
   }
 
-  broadcastOrderChanges() {
+  broadcastReorderRequest() {
     const emptyReorderQueue =
       Object.keys(this.reorderQueue)
         .map(order => this.reorderQueue[order])
         .filter(newOrder => typeof newOrder === 'number').length === 0;
 
     if (!emptyReorderQueue) {
-      this._computedOrders.next(this.reorderQueue);
+      this._reorderRequested.next(this.reorderQueue);
     }
   }
 
@@ -57,7 +59,7 @@ export class ViewsReorderService {
       }
     }
     this.queueOrderChange(draggedFrom, draggedTo);
-    this.broadcastOrderChanges();
+    this.broadcastReorderRequest();
   }
 
   reorderViews(draggedView: ViewRef, targetView: ViewRef) {

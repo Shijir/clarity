@@ -157,15 +157,10 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
    */
   @ContentChildren(ClrDatagridCell) dgCells: QueryList<ClrDatagridCell>;
 
-  ngAfterContentInit() {
-    this.dgCells.changes.subscribe(() => {
-      this.insertCellViews(this._scrollableCells);
-    });
-  }
-
   ngAfterViewInit() {
     this.subscriptions.push(
       this.displayMode.view.subscribe(viewChange => {
+        console.log(this.viewsReorderService.currentOrders);
         // Listen for view changes and move cells around depending on the current displayType
         // remove cell views from display view
         for (let i = this._scrollableCells.length; i > 0; i--) {
@@ -187,16 +182,13 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
 
     // A subscription that listens for view reordering
     this.subscriptions.push(
-      this.viewsReorderService.computedOrders.subscribe(orderChanges => {
-        // assign new orders to the columns
-        this.dgCells
-          .filter(cell => typeof orderChanges[cell.order] === 'number')
-          .forEach(cell => (cell.order = orderChanges[cell.order]));
-        // detach cell views from the view container
+      this.viewsReorderService.reorderRequested.subscribe(() => {
+        // TODO: create another subject that notifies reorder completion;
+        // do combineLatest with
+        // and do cell ordering here
         for (let i = this._scrollableCells.length; i > 0; i--) {
           this._scrollableCells.detach();
         }
-        // insert cell views in their new orders
         this.insertCellViews(this._scrollableCells);
       })
     );
@@ -236,7 +228,14 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
   private setCellsOrdered(): ClrDatagridCell[] {
     return this.dgCells
       .map((cell, index) => {
-        cell.order = typeof cell.order === 'number' ? cell.order : index;
+        if (
+          this.viewsReorderService.currentOrders &&
+          typeof this.viewsReorderService.currentOrders[index] === 'number'
+        ) {
+          cell.order = this.viewsReorderService.currentOrders[index];
+        } else {
+          cell.order = index;
+        }
         return cell;
       })
       .sort((cell1, cell2) => cell1.order - cell2.order)

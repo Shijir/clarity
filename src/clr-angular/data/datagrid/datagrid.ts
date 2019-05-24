@@ -211,13 +211,6 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         });
       })
     );
-
-    this.viewsReorderService.resetReorderQueue();
-
-    this.columns.forEach((column, index) => {
-      column.order = index;
-      this.viewsReorderService.queueOrderChange(column.order, column.userDefinedOrder);
-    });
   }
 
   /**
@@ -275,7 +268,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
 
     // A subscription that listens for view reordering
     this._subscriptions.push(
-      this.viewsReorderService.computedOrders.subscribe(orderChanges => {
+      this.viewsReorderService.reorderRequested.subscribe(orderChanges => {
         // assign new orders to the columns
         this.columns
           .filter(column => typeof orderChanges[column.order] === 'number')
@@ -287,8 +280,6 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         this.insertColumnViews(this._projectedDisplayColumns);
       })
     );
-
-    this.viewsReorderService.broadcastOrderChanges();
   }
 
   /**
@@ -320,22 +311,31 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   }
 
   private setColumnsOrdered(): ClrDatagridColumn[] {
-    return (
-      this.columns
-        // assign orders to columns first. if a column has an existing order, use that.
-        // otherwise use its index as an order.
-        .map((column, index) => {
-          column.order = typeof column.order === 'number' ? column.order : index;
+    const columnsInOrder = this.columns
+      // assign orders to columns first. if a column has an existing order, use that.
+      // otherwise use its index as an order.
+      .map((column, index) => {
+        if (typeof column.order === 'number') {
           return column;
-        })
-        // sort columns by their orders
-        .sort((column1, column2) => column1.order - column2.order)
-        // following transformation will make column orders unique and sequential
-        // while still keeping the current visual order.
-        .map((column, index) => {
+        }
+        if (typeof column.userDefinedOrder === 'number') {
+          column.order = column.userDefinedOrder;
+        } else {
           column.order = index;
-          return column;
-        })
-    );
+        }
+        return column;
+      })
+      // sort columns by their orders
+      .sort((column1, column2) => column1.order - column2.order)
+      // following transformation will make column orders unique and sequential
+      // while still keeping the current visual order.
+      .map((column, index) => {
+        column.order = index;
+        return column;
+      });
+
+    this.viewsReorderService.currentOrders = this.columns.map(column => column.order);
+
+    return columnsInOrder;
   }
 }
