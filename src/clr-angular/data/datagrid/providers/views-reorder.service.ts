@@ -19,9 +19,14 @@ export class ViewsReorderService {
   private reorderQueue: OrderChangeData = {};
 
   private _reorderRequested: Subject<OrderChangeData> = new Subject<OrderChangeData>();
+  private _reorderCompleted: Subject<void> = new Subject<void>();
 
   get reorderRequested(): Observable<OrderChangeData> {
     return this._reorderRequested.asObservable();
+  }
+
+  get reorderCompleted(): Observable<void> {
+    return this._reorderCompleted.asObservable();
   }
 
   private queueOrderChange(oldOrder: number, newOrder: number) {
@@ -49,9 +54,13 @@ export class ViewsReorderService {
     }
     return -1;
   }
-  public updateOrders(orders: number[]): void {
+
+  public updateOrders(orders: number[], reorderingComplete = false): void {
     if (orders) {
       this.orders = orders;
+      if (reorderingComplete) {
+        this._reorderCompleted.next();
+      }
     }
   }
 

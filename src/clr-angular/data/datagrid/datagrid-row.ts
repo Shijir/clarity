@@ -179,17 +179,12 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     );
 
     // A subscription that listens for view reordering
-    this.subscriptions.push(
-      this.viewsReorderService.reorderRequested.subscribe(() => {
-        // TODO: create another subject that notifies reorder completion;
-        // do combineLatest with
-        // and do cell ordering here
-        for (let i = this._scrollableCells.length; i > 0; i--) {
-          this._scrollableCells.detach();
-        }
-        this.insertCellViews(this._scrollableCells);
-      })
-    );
+    this.viewsReorderService.reorderCompleted.subscribe(() => {
+      for (let i = this._scrollableCells.length; i > 0; i--) {
+        this._scrollableCells.detach();
+      }
+      this.insertCellViews(this._scrollableCells);
+    });
   }
 
   private subscriptions: Subscription[] = [];
