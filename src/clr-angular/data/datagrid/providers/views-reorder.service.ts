@@ -24,15 +24,15 @@ export class ViewsReorderService {
     return this._reorderRequested.asObservable();
   }
 
-  queueOrderChange(oldOrder: number, newOrder: number) {
+  private queueOrderChange(oldOrder: number, newOrder: number) {
     this.reorderQueue[oldOrder] = newOrder;
   }
 
-  resetReorderQueue() {
+  private resetReorderQueue() {
     this.reorderQueue = {};
   }
 
-  broadcastReorderRequest() {
+  private broadcastReorderRequest() {
     const emptyReorderQueue =
       Object.keys(this.reorderQueue)
         .map(order => this.reorderQueue[order])
