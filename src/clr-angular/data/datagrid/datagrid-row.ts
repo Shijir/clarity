@@ -5,7 +5,6 @@
  */
 
 import {
-  AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
   Component,
@@ -50,7 +49,7 @@ let nbRow: number = 0;
   },
   providers: [Expand, { provide: LoadingListener, useExisting: Expand }],
 })
-export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit {
+export class ClrDatagridRow<T = any> implements AfterViewInit {
   public id: string;
   public radioId: string;
   public checkboxId: string;
@@ -160,7 +159,6 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
   ngAfterViewInit() {
     this.subscriptions.push(
       this.displayMode.view.subscribe(viewChange => {
-        console.log(this.viewsReorderService.currentOrders);
         // Listen for view changes and move cells around depending on the current displayType
         // remove cell views from display view
         for (let i = this._scrollableCells.length; i > 0; i--) {
