@@ -226,11 +226,8 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
   private setCellsOrdered(): ClrDatagridCell[] {
     return this.dgCells
       .map((cell, index) => {
-        if (
-          this.viewsReorderService.currentOrders &&
-          typeof this.viewsReorderService.currentOrders[index] === 'number'
-        ) {
-          cell.order = this.viewsReorderService.currentOrders[index];
+        if (this.viewsReorderService.orderAt(index) > -1) {
+          cell.order = this.viewsReorderService.orderAt(index);
         } else {
           cell.order = index;
         }

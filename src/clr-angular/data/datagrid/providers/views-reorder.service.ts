@@ -14,7 +14,7 @@ export class ViewsReorderService {
 
   containerRef: ViewContainerRef;
 
-  currentOrders: number[];
+  orders: number[];
 
   private reorderQueue: OrderChangeData = {};
 
@@ -41,6 +41,13 @@ export class ViewsReorderService {
     if (!emptyReorderQueue) {
       this._reorderRequested.next(this.reorderQueue);
     }
+  }
+
+  orderAt(index: number): number {
+    if (this.orders && typeof this.orders[index] === 'number') {
+      return this.orders[index];
+    }
+    return -1;
   }
 
   private reorder(draggedFrom: number, draggedTo: number): void {

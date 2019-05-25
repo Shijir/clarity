@@ -334,7 +334,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         return column;
       });
 
-    this.viewsReorderService.currentOrders = this.columns.map(column => column.order);
+    this.viewsReorderService.orders = this.columns.map(column => column.order);
 
     return columnsInOrder;
   }
