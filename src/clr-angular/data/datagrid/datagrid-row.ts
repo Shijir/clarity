@@ -179,12 +179,14 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     );
 
     // A subscription that listens for view reordering
-    this.viewsReorderService.reorderCompleted.subscribe(() => {
-      for (let i = this._scrollableCells.length; i > 0; i--) {
-        this._scrollableCells.detach();
-      }
-      this.insertCellViews(this._scrollableCells);
-    });
+    this.subscriptions.push(
+      this.viewsReorderService.reorderCompleted.subscribe(() => {
+        for (let i = this._scrollableCells.length; i > 0; i--) {
+          this._scrollableCells.detach();
+        }
+        this.insertCellViews(this._scrollableCells);
+      })
+    );
   }
 
   private subscriptions: Subscription[] = [];
@@ -213,6 +215,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
   }
 
   private insertCellViews(containerRef: ViewContainerRef): void {
+    // console.log(containerRef.injector.get(ChangeDetectorRef));
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
     this.setCellsOrdered().forEach(cell => containerRef.insert(cell._view));
