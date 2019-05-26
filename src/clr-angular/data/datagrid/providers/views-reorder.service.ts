@@ -55,10 +55,10 @@ export class ViewsReorderService {
     return -1;
   }
 
-  public updateOrders(orders: number[], reorderingComplete = false): void {
+  public updateOrders(orders: number[], byReordering = false): void {
     if (orders) {
       this.orders = orders;
-      if (reorderingComplete) {
+      if (byReordering) {
         this._reorderCompleted.next();
       }
     }

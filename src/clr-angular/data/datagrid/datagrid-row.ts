@@ -215,7 +215,6 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
   }
 
   private insertCellViews(containerRef: ViewContainerRef): void {
-    // console.log(containerRef.injector.get(ChangeDetectorRef));
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
     this.setCellsOrdered().forEach(cell => containerRef.insert(cell._view));
