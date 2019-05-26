@@ -252,7 +252,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       if (viewChange === DatagridDisplayMode.DISPLAY) {
         // Set state, style for the datagrid to DISPLAY and insert row & columns into containers
         this.renderer.removeClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.insertColumnViews(this._projectedDisplayColumns);
+        this.insertColumnViews(this._projectedDisplayColumns, this.placeInSequence(this.giveColumnsRawOrders()));
         this.viewsReorderService.updateOrders(this.columns.map(column => column.order));
         this.rows.forEach(row => {
           this._displayedRows.insert(row._view);
@@ -260,7 +260,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       } else {
         // Set state, style for the datagrid to CALCULATE and insert row & columns into containers
         this.renderer.addClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.insertColumnViews(this._projectedCalculationColumns);
+        this.insertColumnViews(this._projectedCalculationColumns, this.placeInSequence(this.giveColumnsRawOrders()));
         this.viewsReorderService.updateOrders(this.columns.map(column => column.order));
         this.rows.forEach(row => {
           this._calculationRows.insert(row._view);
@@ -279,7 +279,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
         for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
           this._projectedDisplayColumns.detach();
         }
-        this.insertColumnViews(this._projectedDisplayColumns);
+        this.insertColumnViews(this._projectedDisplayColumns, this.placeInSequence(this.giveColumnsRawOrders()));
         this.viewsReorderService.updateOrders(this.columns.map(column => column.order), true);
       })
     );
@@ -307,29 +307,15 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   @ViewChild('calculationRows', { read: ViewContainerRef })
   _calculationRows: ViewContainerRef;
 
-  private insertColumnViews(containerRef: ViewContainerRef): void {
+  private insertColumnViews(containerRef: ViewContainerRef, columnsInSequence: ClrDatagridColumn[]): void {
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
-    return this.setColumnsOrdered().forEach(column => containerRef.insert(column._view));
+    return columnsInSequence.forEach(column => containerRef.insert(column._view));
   }
 
-  private setColumnsOrdered(): ClrDatagridColumn[] {
+  private placeInSequence(columnsWithRawOrder: ClrDatagridColumn[]): ClrDatagridColumn[] {
     return (
-      this.columns
-        // assign orders to columns first. if a column has an existing order, use that.
-        // otherwise use its index as an order.
-        .map((column, index) => {
-          if (typeof column.order === 'number') {
-            return column;
-          }
-          if (typeof column.userDefinedOrder === 'number') {
-            column.order = column.userDefinedOrder;
-          } else {
-            column.order = index;
-          }
-          return column;
-        })
-        // sort columns by their orders
+      columnsWithRawOrder
         .sort((column1, column2) => column1.order - column2.order)
         // following transformation will make column orders unique and sequential
         // while still keeping the current visual order.
@@ -338,5 +324,21 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
           return column;
         })
     );
+  }
+
+  private giveColumnsRawOrders(): ClrDatagridColumn[] {
+    // assign orders to columns first. if a column has an existing order, use that.
+    // otherwise use its index as an order.
+    return this.columns.map((column, index) => {
+      if (typeof column.order === 'number') {
+        return column;
+      }
+      if (typeof column.userDefinedOrder === 'number') {
+        column.order = column.userDefinedOrder;
+      } else {
+        column.order = index;
+      }
+      return column;
+    });
   }
 }

@@ -31,7 +31,7 @@ import { FiltersProvider } from './providers/filters';
 import { Sort } from './providers/sort';
 import { DatagridFilterRegistrar } from './utils/datagrid-filter-registrar';
 import { WrappedColumn } from './wrapped-column';
-import { ColumnReorderData, ColumnsReorderService } from './providers/columns-reorder.service';
+import { ColumnsReorderService } from './providers/columns-reorder.service';
 import { COLUMN_STATE } from './providers/column-state.provider';
 import { ColumnState } from './interfaces/column-state.interface';
 import { animate, style, transition, trigger } from '@angular/animations';

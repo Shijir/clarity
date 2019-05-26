@@ -170,10 +170,10 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
         }
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
-          this.insertCellViews(this._calculatedCells);
+          this.insertCellViews(this._calculatedCells, this.placeInSequence(this.giveCellsRawOrders()));
         } else {
           this.displayCells = true;
-          this.insertCellViews(this._scrollableCells);
+          this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
         }
       })
     );
@@ -184,7 +184,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
         for (let i = this._scrollableCells.length; i > 0; i--) {
           this._scrollableCells.detach();
         }
-        this.insertCellViews(this._scrollableCells);
+        this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
       })
     );
   }
@@ -214,26 +214,27 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     return this.wrappedInjector.get(WrappedRow, this.vcr).rowView;
   }
 
-  private insertCellViews(containerRef: ViewContainerRef): void {
+  private insertCellViews(containerRef: ViewContainerRef, cellsInSequence: ClrDatagridCell[]): void {
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     // insert column views in their new orders
-    this.setCellsOrdered().forEach(cell => containerRef.insert(cell._view));
+    cellsInSequence.forEach(cell => containerRef.insert(cell._view));
   }
 
-  private setCellsOrdered(): ClrDatagridCell[] {
-    return this.dgCells
-      .map((cell, index) => {
-        if (this.viewsReorderService.orderAt(index) > -1) {
-          cell.order = this.viewsReorderService.orderAt(index);
-        } else {
-          cell.order = index;
-        }
-        return cell;
-      })
-      .sort((cell1, cell2) => cell1.order - cell2.order)
-      .map((cell, index) => {
+  private placeInSequence(cellsWithRawOrder: ClrDatagridCell[]): ClrDatagridCell[] {
+    return cellsWithRawOrder.sort((cell1, cell2) => cell1.order - cell2.order).map((cell, index) => {
+      cell.order = index;
+      return cell;
+    });
+  }
+
+  private giveCellsRawOrders(): ClrDatagridCell[] {
+    return this.dgCells.map((cell, index) => {
+      if (this.viewsReorderService.orderAt(index) > -1) {
+        cell.order = this.viewsReorderService.orderAt(index);
+      } else {
         cell.order = index;
-        return cell;
-      });
+      }
+      return cell;
+    });
   }
 }
