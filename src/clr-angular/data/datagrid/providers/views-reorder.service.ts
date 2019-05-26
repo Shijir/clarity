@@ -4,9 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { Injectable, ViewContainerRef, ViewRef } from '@angular/core';
-import { Observable, Subject } from 'rxjs/index';
-
-export type OrderChangeData = { [order: number]: number };
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class ViewsReorderService {
@@ -18,10 +16,10 @@ export class ViewsReorderService {
 
   private reorderQueue: OrderChangeData = {};
 
-  private _reorderRequested: Subject<OrderChangeData> = new Subject<OrderChangeData>();
+  private _reorderRequested: Subject<number[]> = new Subject<number[]>();
   private _reorderCompleted: Subject<void> = new Subject<void>();
 
-  get reorderRequested(): Observable<OrderChangeData> {
+  get reorderRequested(): Observable<number[]> {
     return this._reorderRequested.asObservable();
   }
 
@@ -31,10 +29,6 @@ export class ViewsReorderService {
 
   private queueOrderChange(oldOrder: number, newOrder: number) {
     this.reorderQueue[oldOrder] = newOrder;
-  }
-
-  private resetReorderQueue() {
-    this.reorderQueue = {};
   }
 
   private broadcastReorderRequest() {
@@ -55,17 +49,17 @@ export class ViewsReorderService {
     return -1;
   }
 
-  public updateOrders(orders: number[], byReordering = false): void {
+  public updateOrders(orders: number[], afterReordering = false): void {
     if (orders) {
       this.orders = orders;
-      if (byReordering) {
+      if (afterReordering) {
         this._reorderCompleted.next();
       }
     }
   }
 
   private reorder(draggedFrom: number, draggedTo: number): void {
-    this.resetReorderQueue();
+    this.reorderQueue = {};
     if (draggedTo > draggedFrom) {
       // Dragged to the right so each in-between columns should decrement their flex orders
       for (let i = draggedFrom + 1; i <= draggedTo; i++) {
