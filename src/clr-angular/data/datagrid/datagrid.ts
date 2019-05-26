@@ -314,29 +314,29 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   }
 
   private setColumnsOrdered(): ClrDatagridColumn[] {
-    const columnsInOrder = this.columns
-      // assign orders to columns first. if a column has an existing order, use that.
-      // otherwise use its index as an order.
-      .map((column, index) => {
-        if (typeof column.order === 'number') {
+    return (
+      this.columns
+        // assign orders to columns first. if a column has an existing order, use that.
+        // otherwise use its index as an order.
+        .map((column, index) => {
+          if (typeof column.order === 'number') {
+            return column;
+          }
+          if (typeof column.userDefinedOrder === 'number') {
+            column.order = column.userDefinedOrder;
+          } else {
+            column.order = index;
+          }
           return column;
-        }
-        if (typeof column.userDefinedOrder === 'number') {
-          column.order = column.userDefinedOrder;
-        } else {
+        })
+        // sort columns by their orders
+        .sort((column1, column2) => column1.order - column2.order)
+        // following transformation will make column orders unique and sequential
+        // while still keeping the current visual order.
+        .map((column, index) => {
           column.order = index;
-        }
-        return column;
-      })
-      // sort columns by their orders
-      .sort((column1, column2) => column1.order - column2.order)
-      // following transformation will make column orders unique and sequential
-      // while still keeping the current visual order.
-      .map((column, index) => {
-        column.order = index;
-        return column;
-      });
-
-    return columnsInOrder;
+          return column;
+        })
+    );
   }
 }
