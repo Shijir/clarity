@@ -314,21 +314,13 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   }
 
   private placeInSequence(columnsWithRawOrder: ClrDatagridColumn[]): ClrDatagridColumn[] {
-    return (
-      columnsWithRawOrder
-        .sort((column1, column2) => column1.order - column2.order)
-        // following transformation will make column orders unique and sequential
-        // while still keeping the current visual order.
-        .map((column, index) => {
-          column.order = index;
-          return column;
-        })
-    );
+    return columnsWithRawOrder.sort((column1, column2) => column1.order - column2.order).map((column, index) => {
+      column.order = index;
+      return column;
+    });
   }
 
   private giveColumnsRawOrders(): ClrDatagridColumn[] {
-    // assign orders to columns first. if a column has an existing order, use that.
-    // otherwise use its index as an order.
     return this.columns.map((column, index) => {
       if (typeof column.order === 'number') {
         return column;
