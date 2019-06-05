@@ -170,7 +170,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
 
   ngAfterContentInit() {
     this.dgCells.changes.subscribe(() => {
-      this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
+      this.insertOrderedViews(this._scrollableCells);
     });
   }
 
@@ -179,19 +179,15 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
       this.displayMode.view.subscribe(viewChange => {
         // Listen for view changes and move cells around depending on the current displayType
         // remove cell views from display view
-        for (let i = this._scrollableCells.length; i > 0; i--) {
-          this._scrollableCells.detach();
-        }
+        this.detachAllViews(this._scrollableCells);
         // remove cell views from calculated view
-        for (let i = this._calculatedCells.length; i > 0; i--) {
-          this._calculatedCells.detach();
-        }
+        this.detachAllViews(this._calculatedCells);
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
-          this.insertCellViews(this._calculatedCells, this.placeInSequence(this.giveCellsRawOrders()));
+          this.insertOrderedViews(this._calculatedCells);
         } else {
           this.displayCells = true;
-          this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
+          this.insertOrderedViews(this._scrollableCells);
         }
       }),
       this.expand.animate.subscribe(() => {
@@ -202,10 +198,8 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     // A subscription that listens for view reordering
     this.subscriptions.push(
       this.columnReorderService.reorderCompleted.subscribe(() => {
-        for (let i = this._scrollableCells.length; i > 0; i--) {
-          this._scrollableCells.detach();
-        }
-        this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
+        this.detachAllViews(this._scrollableCells);
+        this.insertOrderedViews(this._scrollableCells);
       })
     );
   }
@@ -235,19 +229,6 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     return this.wrappedInjector.get(WrappedRow, this.vcr).rowView;
   }
 
-  private insertCellViews(containerRef: ViewContainerRef, cellsInSequence: ClrDatagridCell[]): void {
-    containerRef.injector.get(ChangeDetectorRef).detectChanges();
-    // insert column views in their new orders
-    cellsInSequence.forEach(cell => containerRef.insert(cell._view));
-  }
-
-  private placeInSequence(cellsWithRawOrder: ClrDatagridCell[]): ClrDatagridCell[] {
-    return cellsWithRawOrder.sort((cell1, cell2) => cell1.order - cell2.order).map((cell, index) => {
-      cell.order = index;
-      return cell;
-    });
-  }
-
   private giveCellsRawOrders(): ClrDatagridCell[] {
     return this.dgCells.map((cell, index) => {
       if (this.columnReorderService.orderAt(index) > -1) {
@@ -257,5 +238,16 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
       }
       return cell;
     });
+  }
+
+  private insertOrderedViews(containerRef: ViewContainerRef): void {
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    this.columnReorderService.orderProperly(this.giveCellsRawOrders()).forEach(cell => containerRef.insert(cell._view));
+  }
+
+  private detachAllViews(containerRef: ViewContainerRef): void {
+    for (let i = containerRef.length; i > 0; i--) {
+      containerRef.detach();
+    }
   }
 }

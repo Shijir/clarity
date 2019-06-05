@@ -37,6 +37,7 @@ import { COLUMN_STATE } from './providers/column-state.provider';
 import { ColumnState } from './interfaces/column-state.interface';
 import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
 import { ColumnReorderService } from './providers/column-reorder.service';
+import { Reorderable } from './interfaces/reorderable.interface';
 
 @Component({
   selector: 'clr-dg-column',
@@ -113,7 +114,8 @@ import { ColumnReorderService } from './providers/column-reorder.service';
   // ],
 })
 export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, ClrDatagridFilterInterface<T>>
-  implements OnDestroy, OnInit {
+  implements Reorderable, OnDestroy, OnInit {
+
   constructor(
     private _sort: Sort<T>,
     filters: FiltersProvider<T>,

@@ -7,6 +7,7 @@ import { Injectable, ViewContainerRef, ViewRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { ColumnsService } from './columns.service';
 import { DatagridColumnChanges } from '../enums/column-changes.enum';
+import { Reorderable } from '../interfaces/reorderable.interface';
 
 let nbColumnsGroup = 0;
 
@@ -110,5 +111,14 @@ export class ColumnReorderService {
     const draggedFrom = this.containerRef.indexOf(draggedView);
     const draggedTo = this.containerRef.indexOf(targetView);
     this.reorder(draggedFrom, draggedTo);
+  }
+
+  orderProperly(reorderablesWithRawOrder: Reorderable[]): Reorderable[] {
+    return reorderablesWithRawOrder
+      .sort((reorderable1, reorderable2) => reorderable1.order - reorderable2.order)
+      .map((reorderable, index) => {
+        reorderable.order = index;
+        return reorderable;
+      });
   }
 }

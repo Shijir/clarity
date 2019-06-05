@@ -236,34 +236,25 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     // A subscription that listens for displayMode changes on the datagrid
     this.displayMode.view.subscribe(viewChange => {
       // Remove any projected columns from the projectedDisplayColumns container
-      for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
-        this._projectedDisplayColumns.detach();
-      }
+      this.detachAllViews(this._projectedDisplayColumns);
       // Remove any projected columns from the projectedCalculationColumns container
-      for (let i = this._projectedCalculationColumns.length; i > 0; i--) {
-        this._projectedCalculationColumns.detach();
-      }
+      this.detachAllViews(this._projectedCalculationColumns);
       // Remove any projected rows from the calculationRows container
-      for (let i = this._calculationRows.length; i > 0; i--) {
-        this._calculationRows.detach();
-      }
+      this.detachAllViews(this._calculationRows);
       // Remove any projected rows from the displayedRows container
-      for (let i = this._displayedRows.length; i > 0; i--) {
-        this._displayedRows.detach();
-      }
+      this.detachAllViews(this._displayedRows);
+
       if (viewChange === DatagridDisplayMode.DISPLAY) {
         // Set state, style for the datagrid to DISPLAY and insert row & columns into containers
         this.renderer.removeClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.insertColumnViews(this._projectedDisplayColumns, this.placeInSequence(this.giveColumnsRawOrders()));
-        this.columnReorderService.updateOrders(this.columns.map(column => column.order));
+        this.insertOrderedViews(this._projectedDisplayColumns);
         this.rows.forEach(row => {
           this._displayedRows.insert(row._view);
         });
       } else {
         // Set state, style for the datagrid to CALCULATE and insert row & columns into containers
         this.renderer.addClass(this.el.nativeElement, 'datagrid-calculate-mode');
-        this.insertColumnViews(this._projectedCalculationColumns, this.placeInSequence(this.giveColumnsRawOrders()));
-        this.columnReorderService.updateOrders(this.columns.map(column => column.order));
+        this.insertOrderedViews(this._projectedCalculationColumns);
         this.rows.forEach(row => {
           this._calculationRows.insert(row._view);
         });
@@ -278,11 +269,8 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
           .filter(column => typeof orderChanges[column.order] === 'number')
           .forEach(column => (column.order = orderChanges[column.order]));
         // detach column views from the view container
-        for (let i = this._projectedDisplayColumns.length; i > 0; i--) {
-          this._projectedDisplayColumns.detach();
-        }
-        this.insertColumnViews(this._projectedDisplayColumns, this.placeInSequence(this.giveColumnsRawOrders()));
-        this.columnReorderService.updateOrders(this.columns.map(column => column.order), true);
+        this.detachAllViews(this._projectedDisplayColumns);
+        this.insertOrderedViews(this._projectedDisplayColumns, true);
       })
     );
   }
@@ -309,19 +297,6 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   @ViewChild('calculationRows', { static: false, read: ViewContainerRef })
   _calculationRows: ViewContainerRef;
 
-  private insertColumnViews(containerRef: ViewContainerRef, columnsInSequence: ClrDatagridColumn[]): void {
-    containerRef.injector.get(ChangeDetectorRef).detectChanges();
-    // insert column views in their new orders
-    return columnsInSequence.forEach(column => containerRef.insert(column._view));
-  }
-
-  private placeInSequence(columnsWithRawOrder: ClrDatagridColumn[]): ClrDatagridColumn[] {
-    return columnsWithRawOrder.sort((column1, column2) => column1.order - column2.order).map((column, index) => {
-      column.order = index;
-      return column;
-    });
-  }
-
   private giveColumnsRawOrders(): ClrDatagridColumn[] {
     return this.columns.map((column, index) => {
       // Once columns has its order assigned, we will use it from here on
@@ -330,5 +305,19 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
       }
       return column;
     });
+  }
+
+  private insertOrderedViews(containerRef: ViewContainerRef, afterReordering?: boolean): void {
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    this.columnReorderService
+      .orderProperly(this.giveColumnsRawOrders())
+      .forEach(column => containerRef.insert(column._view));
+    this.columnReorderService.updateOrders(this.columns.map(column => column.order), afterReordering);
+  }
+
+  private detachAllViews(containerRef: ViewContainerRef): void {
+    for (let i = containerRef.length; i > 0; i--) {
+      containerRef.detach();
+    }
   }
 }

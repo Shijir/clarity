@@ -85,48 +85,25 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
   public replacedRow = false;
 
   ngAfterContentInit() {
+    this.detachAllViews(this._detailCells);
+    this.insertOrderedViews(this._detailCells);
     this.subscriptions.push(
       this.expand.replace.subscribe(replaceChange => {
         this.replacedRow = replaceChange;
       }),
       this.cells.changes.subscribe(() => {
-        for (let i = this._detailCells.length; i > 0; i--) {
-          this._detailCells.detach();
-        }
-        this.insertCellViews(this._detailCells, this.placeInSequence(this.giveCellsRawOrders()));
-      })
-    );
-    for (let i = this._detailCells.length; i > 0; i--) {
-      this._detailCells.detach();
-    }
-    this.insertCellViews(this._detailCells, this.placeInSequence(this.giveCellsRawOrders()));
-
-    // A subscription that listens for view reordering
-    this.subscriptions.push(
+        this.detachAllViews(this._detailCells);
+        this.insertOrderedViews(this._detailCells);
+      }),
       this.columnReorderService.reorderCompleted.subscribe(() => {
-        for (let i = this._detailCells.length; i > 0; i--) {
-          this._detailCells.detach();
-        }
-        this.insertCellViews(this._detailCells, this.placeInSequence(this.giveCellsRawOrders()));
+        this.detachAllViews(this._detailCells);
+        this.insertOrderedViews(this._detailCells);
       })
     );
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
-  }
-
-  private insertCellViews(containerRef: ViewContainerRef, cellsInSequence: ClrDatagridCell[]): void {
-    containerRef.injector.get(ChangeDetectorRef).detectChanges();
-    // insert column views in their new orders
-    cellsInSequence.forEach(cell => containerRef.insert(cell._view));
-  }
-
-  private placeInSequence(cellsWithRawOrder: ClrDatagridCell[]): ClrDatagridCell[] {
-    return cellsWithRawOrder.sort((cell1, cell2) => cell1.order - cell2.order).map((cell, index) => {
-      cell.order = index;
-      return cell;
-    });
   }
 
   private giveCellsRawOrders(): ClrDatagridCell[] {
@@ -138,5 +115,16 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
       }
       return cell;
     });
+  }
+
+  private insertOrderedViews(containerRef: ViewContainerRef): void {
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    this.columnReorderService.orderProperly(this.giveCellsRawOrders()).forEach(cell => containerRef.insert(cell._view));
+  }
+
+  private detachAllViews(containerRef: ViewContainerRef): void {
+    for (let i = containerRef.length; i > 0; i--) {
+      containerRef.detach();
+    }
   }
 }
