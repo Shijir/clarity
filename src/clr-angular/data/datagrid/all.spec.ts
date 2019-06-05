@@ -54,7 +54,7 @@ import WrappedColumnSpec from './wrapped-column.spec';
 import WrappedRowSpec from './wrapped-row.spec';
 import ColumnResizerServiceSpecs from './providers/column-resizer.service.spec';
 
-describe('Datagrid', function() {
+fdescribe('Datagrid', function() {
   addHelpers();
 
   describe('Providers', function() {

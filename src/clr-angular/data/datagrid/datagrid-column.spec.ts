@@ -6,7 +6,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { DatagridPropertyComparator } from './built-in/comparators/datagrid-property-comparator';
 import { DatagridStringFilter } from './built-in/filters/datagrid-string-filter';
@@ -21,6 +21,9 @@ import { Page } from './providers/page';
 import { Sort } from './providers/sort';
 import { StateDebouncer } from './providers/state-debouncer.provider';
 import { ClrCommonStringsService } from '../../utils/i18n/common-strings.service';
+import { ColumnState } from './interfaces/column-state.interface';
+import { ColumnReorderService } from './providers/column-reorder.service';
+import { MockColumnReorderService } from './providers/column-reorder.mock';
 
 export default function(): void {
   describe('DatagridColumn component', function() {
@@ -28,6 +31,8 @@ export default function(): void {
       let sortService: Sort<number>;
       let filtersService: FiltersProvider<number>;
       let comparator: TestComparator;
+      let columnState: BehaviorSubject<ColumnState>;
+      let columnReorder: ColumnReorderService;
       let component: ClrDatagridColumn<number>;
       const commonStrings = new ClrCommonStringsService();
 
@@ -36,7 +41,14 @@ export default function(): void {
         sortService = new Sort(stateDebouncer);
         filtersService = new FiltersProvider(new Page(stateDebouncer), stateDebouncer);
         comparator = new TestComparator();
+
         component = new ClrDatagridColumn(sortService, filtersService, null, commonStrings);
+
+        columnState = new BehaviorSubject<ColumnState>({
+          changes: [],
+        });
+        columnReorder = new MockColumnReorderService(null);
+        component = new ClrDatagridColumn(sortService, filtersService, null, columnState, columnReorder);
       });
 
       it('receives a comparator to sort the column', function() {
