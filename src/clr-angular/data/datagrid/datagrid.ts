@@ -312,7 +312,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
     this.columnReorderService
       .setInUniqOrders(this.assignRawOrders())
       .forEach(column => containerRef.insert(column._view));
-    this.columnReorderService.updateOrders(this.columns.map(column => column.order), afterReordering);
+    this.columnReorderService.broadcastUpdatedOrders(this.columns.map(column => column.order), afterReordering);
   }
 
   private detachAllViews(containerRef: ViewContainerRef): void {

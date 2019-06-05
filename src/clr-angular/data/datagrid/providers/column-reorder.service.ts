@@ -50,17 +50,6 @@ export class ColumnReorderService {
     this.reorderQueue[oldOrder] = newOrder;
   }
 
-  private broadcastReorderRequest(): void {
-    const emptyReorderQueue =
-      Object.keys(this.reorderQueue)
-        .map(order => this.reorderQueue[order])
-        .filter(newOrder => typeof newOrder === 'number').length === 0;
-
-    if (!emptyReorderQueue) {
-      this._reorderRequested.next(this.reorderQueue);
-    }
-  }
-
   public orderAt(index: number): number {
     if (this.orders && typeof this.orders[index] === 'number') {
       return this.orders[index];
@@ -68,7 +57,44 @@ export class ColumnReorderService {
     return -1;
   }
 
-  public updateOrders(orders: number[], afterReordering = false): void {
+  // The following method queues specs of each order that should be changed.
+  // Why do we queue each order's change spec? Because we cannot order one by one as that would create chaos.
+  // Before changing an order of any column, we should first determine how each column's order should change first
+  // and then finally emit reorder specs at once. The ClrDatagrid component subscribes to reorder specs event
+  // and applies the reorder specs to its columns.
+  private reorder(draggedFrom: number, draggedTo: number): void {
+    this.reorderQueue = [];
+    if (draggedTo > draggedFrom) {
+      // Dragged to the right so each in-between columns should decrement their flex orders
+      for (let i = draggedFrom + 1; i <= draggedTo; i++) {
+        const newOrder = i - 1;
+        this.queueOrderChange(i, newOrder);
+      }
+    } else if (draggedTo < draggedFrom) {
+      // Dragged to the left so each in-between columns should decrement their flex orders
+      for (let i = draggedFrom - 1; i >= draggedTo; i--) {
+        const newOrder = i + 1;
+        this.queueOrderChange(i, newOrder);
+      }
+    }
+    this.queueOrderChange(draggedFrom, draggedTo);
+
+    // After queueing all required specs, emit what kind of reorder is requested
+    if (this.reorderQueue.length > 0) {
+      this._reorderRequested.next(this.reorderQueue);
+    }
+  }
+
+  // The following method is called by column ClrDatagridColumn when one column is dropped on another.
+  public reorderViews(draggedView: ViewRef, targetView: ViewRef): void {
+    const draggedFrom = this.containerRef.indexOf(draggedView);
+    const draggedTo = this.containerRef.indexOf(targetView);
+    this.reorder(draggedFrom, draggedTo);
+  }
+
+  // The following method will be called by ClrDatagrid, after it finishes applying order changes, to broadcast to
+  // all cells how column orders are updated and then cells will start applying changed orders.
+  public broadcastUpdatedOrders(orders: number[], afterReordering = false): void {
     if (orders) {
       // update with new orders
       this.orders = orders;
@@ -88,32 +114,10 @@ export class ColumnReorderService {
     }
   }
 
-  private reorder(draggedFrom: number, draggedTo: number): void {
-    this.reorderQueue = [];
-    if (draggedTo > draggedFrom) {
-      // Dragged to the right so each in-between columns should decrement their flex orders
-      for (let i = draggedFrom + 1; i <= draggedTo; i++) {
-        const newOrder = i - 1;
-        this.queueOrderChange(i, newOrder);
-      }
-    } else if (draggedTo < draggedFrom) {
-      // Dragged to the left so each in-between columns should decrement their flex orders
-      for (let i = draggedFrom - 1; i >= draggedTo; i--) {
-        const newOrder = i + 1;
-        this.queueOrderChange(i, newOrder);
-      }
-    }
-    this.queueOrderChange(draggedFrom, draggedTo);
-    this.broadcastReorderRequest();
-  }
-
-  reorderViews(draggedView: ViewRef, targetView: ViewRef): void {
-    const draggedFrom = this.containerRef.indexOf(draggedView);
-    const draggedTo = this.containerRef.indexOf(targetView);
-    this.reorder(draggedFrom, draggedTo);
-  }
-
-  setInUniqOrders(reorderablesWithRawOrder: Reorderable[]): Reorderable[] {
+  // The following is an utility method that's used to turn the raw orders of ClrDatagridColumn/ClrDatagridCell
+  // into unique sequential order and return them in order. Raw orders mean that order numbers are either not
+  // sequential or placed not in order, or both.
+  public setInUniqOrders(reorderablesWithRawOrder: Reorderable[]): Reorderable[] {
     return reorderablesWithRawOrder
       .sort((reorderable1, reorderable2) => reorderable1.order - reorderable2.order)
       .map((reorderable, index) => {
