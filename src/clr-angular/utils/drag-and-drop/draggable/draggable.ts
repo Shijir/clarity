@@ -12,13 +12,12 @@ import {
   ElementRef,
   EventEmitter,
   Injector,
+  Input,
   OnDestroy,
   Output,
   ViewContainerRef,
 } from '@angular/core';
-import { Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-
 import { DomAdapter } from '../../dom-adapter/dom-adapter';
 import { ClrDragEvent } from '../drag-event';
 import { ClrDraggableGhost } from '../draggable-ghost';
@@ -90,6 +89,7 @@ export class ClrDraggable<T> implements AfterContentInit, OnDestroy {
   @Output('clrDragStart') dragStartEmitter: EventEmitter<ClrDragEvent<T>> = new EventEmitter();
   @Output('clrDragMove') dragMoveEmitter: EventEmitter<ClrDragEvent<T>> = new EventEmitter();
   @Output('clrDragEnd') dragEndEmitter: EventEmitter<ClrDragEvent<T>> = new EventEmitter();
+  @Output('clrDrop') dropEmitter: EventEmitter<ClrDragEvent<T>> = new EventEmitter();
 
   ngAfterContentInit() {
     this.dragHandleRegistrar.defaultHandleEl = this.draggableEl;

@@ -4,25 +4,23 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import { Component, ViewChild } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
-
+import { commonStringsDefault } from '../../utils/i18n/common-strings.default';
 import { DatagridPropertyComparator } from './built-in/comparators/datagrid-property-comparator';
+import { DatagridNumericFilterImpl } from './built-in/filters/datagrid-numeric-filter-impl';
 import { DatagridStringFilter } from './built-in/filters/datagrid-string-filter';
+import { DatagridStringFilterImpl } from './built-in/filters/datagrid-string-filter-impl';
 import { ClrDatagridColumn } from './datagrid-column';
 import { ClrDatagridSortOrder } from './enums/sort-order.enum';
 import { DATAGRID_SPEC_PROVIDERS, TestContext } from './helpers.spec';
 import { ClrDatagridComparatorInterface } from './interfaces/comparator.interface';
 import { ClrDatagridFilterInterface } from './interfaces/filter.interface';
 import { ClrDatagridStringFilterInterface } from './interfaces/string-filter.interface';
+import { DetailService } from './providers/detail.service';
 import { FiltersProvider } from './providers/filters';
 import { Sort } from './providers/sort';
-import { commonStringsDefault } from '../../utils/i18n/common-strings.default';
-import { DetailService } from './providers/detail.service';
-
-import { DatagridNumericFilterImpl } from './built-in/filters/datagrid-numeric-filter-impl';
-import { DatagridStringFilterImpl } from './built-in/filters/datagrid-string-filter-impl';
 
 export default function(): void {
   describe('DatagridColumn component', function() {
@@ -363,14 +361,6 @@ export default function(): void {
         context.detectChanges();
         expect(context.clarityElement.attributes['aria-sort'].value).toBe('descending');
       });
-
-      it('hides the separator when detail pane is open', function() {
-        const detailService = context.getClarityProvider(DetailService);
-        expect(context.clarityElement.querySelector('.datagrid-column-separator')).toBeTruthy();
-        detailService.open({});
-        context.detectChanges();
-        expect(context.clarityElement.querySelector('.datagrid-column-separator')).toBeFalsy();
-      });
     });
 
     describe('View filters', function() {
@@ -448,6 +438,44 @@ export default function(): void {
         expect(context.clarityDirective.registered.filter instanceof DatagridStringFilterImpl).toBe(true);
         expect(context.clarityElement.querySelector('clr-dg-string-filter')).toBeDefined();
       });
+    });
+
+    describe('Column Reorder', function() {
+      it('provides unique string id with columnsGroupId', function() {
+        this.context = this.create(ClrDatagridColumn, ReorderTest, DATAGRID_SPEC_PROVIDERS);
+        expect(this.context.clarityDirective.columnsGroupId).toBeString();
+      });
+
+      it('gets drag mode class during dragging', function() {
+        this.context = this.create(ClrDatagridColumn, ReorderTest, DATAGRID_SPEC_PROVIDERS);
+        this.context.detectChanges();
+        expect(this.context.clarityElement.classList.contains('datagrid-column-drag-mode')).toBeFalsy();
+        this.context.clarityDirective.inDragMode = true;
+        this.context.detectChanges();
+        expect(this.context.clarityElement.classList.contains('datagrid-column-drag-mode')).toBeTruthy();
+      });
+
+      it('accepts order input', function() {
+        this.context = this.create(ClrDatagridColumn, ReorderTest, DATAGRID_SPEC_PROVIDERS);
+        this.context.testComponent.order = 5;
+        this.context.detectChanges();
+        expect(this.context.clarityDirective.userDefinedOrder).toBe(5);
+      });
+
+      it(
+        'emits order change',
+        fakeAsync(function() {
+          this.context = this.create(ClrDatagridColumn, ReorderTest, DATAGRID_SPEC_PROVIDERS);
+          this.context.clarityDirective.order = 4;
+          this.context.detectChanges();
+          tick();
+          expect(this.context.testComponent.emittedOrder).toBeUndefined(`shouldn't emit on first setting.`);
+          this.context.clarityDirective.order = 2;
+          this.context.detectChanges();
+          tick();
+          expect(this.context.testComponent.emittedOrder).toBe(2);
+        })
+      );
     });
   });
 }
@@ -576,4 +604,19 @@ class UnregisterTest {
 class ColTypeTest {
   field: string;
   type: string;
+}
+
+@Component({
+  template: `
+        <clr-dg-column [clrDgColumnOrder]="order" (clrDgColumnOrderChange)="orderChange($event)">
+          ColumnTitle
+        </clr-dg-column>
+    `,
+})
+class ReorderTest {
+  order: number;
+  emittedOrder: number;
+  orderChange(newOrder: number) {
+    this.emittedOrder = newOrder;
+  }
 }

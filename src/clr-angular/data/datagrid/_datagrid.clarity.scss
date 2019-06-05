@@ -8,7 +8,7 @@
     '.datagrid-header',
     '.datagrid-body',
     '.datagrid-row',
-    '.datagrid-column',
+    '.datagrid-column-wrapper',
     '.datagrid-cell'
   );
 
@@ -59,7 +59,7 @@
     }
 
     &.datagrid-column {
-      padding: $clr-table-topcellpadding $clr-table-cellpadding $clr-table-bottomcellpadding;
+      padding: 0;
     }
   }
 
@@ -314,6 +314,7 @@
     min-height: $clr_baselineRem_3; // Includes header and space for a single (non existing) row
     position: relative;
     height: 100%;
+    outline: none; // focus is only SR
 
     .datagrid-body {
       width: auto;
@@ -327,10 +328,21 @@
       vertical-align: top;
       border: none;
 
-      &:last-child {
-        .datagrid-column-separator {
+      .datagrid-column-droppable.draggable-match {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        .datagrid-column-drop-line {
           display: none;
         }
+      }
+
+      .datagrid-column-wrapper {
+        flex: 1 1 auto;
+        width: 100%;
       }
 
       clr-dg-filter,
@@ -420,7 +432,7 @@
         color: $clr-table-font-color;
         text-align: left;
         flex: 1 1 auto;
-        align-items: baseline;
+        align-items: center;
         align-self: center;
         display: flex;
 
@@ -447,19 +459,19 @@
       .datagrid-column-separator {
         $dg-padding-less-border: $clr_baselineRem_0_5 - $clr_baselineRem_1px;
         position: relative;
-        left: $clr_baselineRem_0_5;
+        left: 0;
         flex: 0 0 auto;
         width: $clr-global-borderwidth;
         order: 100;
-        margin-left: auto;
         height: 100%;
+        margin-left: -1px;
 
-        &::after {
+        &::before {
           content: '';
           position: absolute;
-          height: calc(100% + #{$clr-datagrid-column-separator-expandby} - #{$clr-global-borderwidth});
+          height: calc(100% - #{$clr-datagrid-column-separator-expandby});
           width: $clr_baselineRem_1px;
-          top: calc(-0.5 * #{$clr-datagrid-column-separator-expandby} + #{$clr_baselineRem_1px});
+          top: $clr-datagrid-column-separator-expandby/2;
           left: 0;
           background-color: $clr-table-border-color;
         }
@@ -468,25 +480,38 @@
           position: absolute;
           width: $clr_baselineRem_0_5 + $clr_baselineRem_1px;
           right: -1 * $clr_baselineRem_0_25;
-          top: -1 * $clr_baselineRem_0_25;
+          top: 0;
           cursor: col-resize;
-          height: calc(100% + #{$clr_baselineRem_0_5} - #{$clr-global-borderwidth});
+          height: 100%;
           z-index: map-get($clr-layers, datagrid-header);
         }
         .datagrid-column-resize-tracker {
           position: absolute;
-          top: -1 * $clr_baselineRem_0_5;
+          top: 0;
           display: none;
           width: $clr_baselineRem_1px;
           height: 0;
           border-right: $clr-global-borderwidth dotted $clr-color-action-300;
           transform: translateX(0px);
           cursor: col-resize;
+          z-index: map-get($clr-layers, draggable-ghost);
         }
 
         .exceeded-max {
           border-right: $clr-global-borderwidth dotted rgba($clr-color-danger-700, 0.3);
         }
+      }
+
+      &.datagrid-last-visible-column .datagrid-column-separator {
+        display: none;
+      }
+
+      &.datagrid-column-reorder-drop .datagrid-column-separator {
+        display: none;
+      }
+
+      &.datagrid-column-reorder-shift .datagrid-column-separator {
+        display: none;
       }
 
       .datagrid-signpost-trigger .signpost {
@@ -495,6 +520,62 @@
         .signpost-trigger {
           height: inherit;
           line-height: $clr_baselineRem_1;
+        }
+      }
+
+      .in-drag & {
+        position: relative;
+        .draggable-match {
+          display: flex;
+          border: none;
+          &.draggable-over {
+            .datagrid-column-drop-line {
+              position: relative;
+              display: block;
+              left: -1px;
+              width: 0;
+              height: 0;
+              margin-left: 0;
+              &::after {
+                content: '';
+                position: absolute;
+                display: block;
+                top: 0;
+                left: 0;
+                width: 2px;
+                height: 100vh;
+                background-color: $clr-action-purple-dark;
+                z-index: map-get($clr-layers, column-switch);
+              }
+            }
+          }
+        }
+        &.datagrid-first-visible-column .draggable-over {
+          .datagrid-column-drop-line {
+            left: 0;
+          }
+        }
+        &.datagrid-last-visible-column .draggable-over {
+          .datagrid-column-drop-line {
+            left: -2px;
+          }
+        }
+
+        &.datagrid-column-drag-mode .draggable-match {
+          display: none;
+        }
+
+        &.datagrid-column-drag-mode ~ .datagrid-column .draggable-match .datagrid-column-drop-line {
+          margin-left: auto;
+        }
+      }
+      .draggable-ghost .datagrid-column-wrapper {
+        @include clr-datagrid-column-ghost();
+      }
+
+      &.datagrid-column-reorder-drop {
+        .datagrid-column-wrapper {
+          @include clr-datagrid-column-ghost();
         }
       }
     }

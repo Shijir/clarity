@@ -3,15 +3,25 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { AfterContentInit, Component, ContentChildren, Input, OnDestroy, QueryList } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  Input,
+  OnDestroy,
+  QueryList,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
-
 import { ClrDatagridCell } from './datagrid-cell';
+import { DatagridIfExpandService } from './datagrid-if-expanded.service';
+import { SelectionType } from './enums/selection-type';
+import { ColumnReorderService } from './providers/column-reorder.service';
 import { ExpandableRowsCount } from './providers/global-expandable-rows';
 import { RowActionService } from './providers/row-action-service';
 import { Selection } from './providers/selection';
-import { SelectionType } from './enums/selection-type';
-import { DatagridIfExpandService } from './datagrid-if-expanded.service';
+import { ViewManagerService } from './providers/view-manager.service';
 
 /**
  * Generic bland container serving various purposes for Datagrid.
@@ -38,7 +48,11 @@ import { DatagridIfExpandService } from './datagrid-if-expanded.service';
                         class="datagrid-expandable-caret datagrid-fixed-column datagrid-cell">
             </div>
         </ng-container>
-        <ng-content></ng-content>
+        <ng-container #detailCells></ng-container>
+        <!-- for async expandable rows, we need ng-content. But once cells get projected, it should go away -->
+        <ng-container *ngIf="cells.length === 0">
+          <ng-content></ng-content>
+        </ng-container>
     `,
   host: {
     '[class.datagrid-row-flex]': 'true',
@@ -54,10 +68,15 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
     public selection: Selection,
     public rowActionService: RowActionService,
     public expand: DatagridIfExpandService,
-    public expandableRows: ExpandableRowsCount
+    public expandableRows: ExpandableRowsCount,
+    private columnReorderService: ColumnReorderService,
+    private viewManager: ViewManagerService
   ) {}
 
   @ContentChildren(ClrDatagridCell) cells: QueryList<ClrDatagridCell>;
+
+  @ViewChild('detailCells', { static: true, read: ViewContainerRef })
+  _detailCells: ViewContainerRef;
 
   @Input('clrDgReplace')
   set replace(value: boolean) {
@@ -67,14 +86,58 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
   public replacedRow = false;
 
   ngAfterContentInit() {
+    this.viewManager.detachAllViews(this._detailCells);
+    this.viewManager.insertAllViews(this._detailCells, this.assignRawOrders(), true);
+    this.updateCellOrder();
     this.subscriptions.push(
-      this.expand.replace.subscribe(replaceChange => {
-        this.replacedRow = replaceChange;
-      })
+      this.resetViewsOnColumnsChange(),
+      this.setReplacedOnExpandReplace(),
+      this.reorderOnRequest()
     );
+  }
+
+  private setReplacedOnExpandReplace(): Subscription {
+    return this.expand.replace.subscribe(replaceChange => {
+      this.replacedRow = replaceChange;
+    });
+  }
+
+  private resetViewsOnColumnsChange(): Subscription {
+    // This method is to handle a case when a brand new column gets added in the datagrid.
+    return this.columnReorderService.ordersChange.subscribe(() => {
+      this.cells.forEach((cell, index) => {
+        if (this._detailCells.indexOf(cell._view) === -1) {
+          this._detailCells.insert(cell._view, this.columnReorderService.orderAt(index));
+        }
+      });
+      this.updateCellOrder();
+    });
+  }
+
+  private reorderOnRequest(): Subscription {
+    return this.columnReorderService.reorderRequested.subscribe(reorderRequest => {
+      const sourceView = this._detailCells.get(reorderRequest.sourceOrder);
+      this._detailCells.move(sourceView, reorderRequest.targetOrder);
+      this.updateCellOrder();
+    });
+  }
+
+  private updateCellOrder(): void {
+    this.cells.forEach(cell => (cell.order = this._detailCells.indexOf(cell._view)));
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  private assignRawOrders(): ClrDatagridCell[] {
+    return this.cells.map((cell, index) => {
+      if (this.columnReorderService.orderAt(index) > -1) {
+        cell.order = this.columnReorderService.orderAt(index);
+      } else {
+        cell.order = index;
+      }
+      return cell;
+    });
   }
 }

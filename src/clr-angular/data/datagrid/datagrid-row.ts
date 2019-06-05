@@ -5,7 +5,6 @@
  */
 
 import {
-  AfterContentInit,
   AfterViewInit,
   Component,
   ContentChildren,
@@ -13,6 +12,7 @@ import {
   EventEmitter,
   Injector,
   Input,
+  OnDestroy,
   Output,
   QueryList,
   Renderer2,
@@ -37,6 +37,8 @@ import { SelectionType } from './enums/selection-type';
 import { DatagridIfExpandService } from './datagrid-if-expanded.service';
 import { ClrExpandableAnimation } from '../../utils/animations/expandable-animation/expandable-animation';
 import { DetailService } from './providers/detail.service';
+import { ColumnReorderService } from './providers/column-reorder.service';
+import { ViewAccessor, ViewManagerService } from './providers/view-manager.service';
 
 let nbRow: number = 0;
 
@@ -55,7 +57,7 @@ let nbRow: number = 0;
     { provide: LoadingListener, useExisting: DatagridIfExpandService },
   ],
 })
-export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit {
+export class ClrDatagridRow<T = any> implements AfterViewInit, OnDestroy, ViewAccessor {
   public id: string;
   public radioId: string;
   public checkboxId: string;
@@ -85,7 +87,9 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
     private vcr: ViewContainerRef,
     private renderer: Renderer2,
     private el: ElementRef,
-    public commonStrings: ClrCommonStringsService
+    public commonStrings: ClrCommonStringsService,
+    private columnReorderService: ColumnReorderService,
+    private viewManager: ViewManagerService
   ) {
     nbRow++;
     this.id = 'clr-dg-row' + nbRow;
@@ -196,50 +200,70 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
    * A Query List of the ClrDatagrid cells in this row.
    *
    */
-  @ContentChildren(ClrDatagridCell) dgCells: QueryList<ClrDatagridCell>;
-
-  ngAfterContentInit() {
-    this.dgCells.changes.subscribe(() => {
-      this.dgCells.forEach(cell => {
-        this._scrollableCells.insert(cell._view);
-      });
-    });
-  }
+  @ContentChildren(ClrDatagridCell) cells: QueryList<ClrDatagridCell>;
 
   ngAfterViewInit() {
     this.subscriptions.push(
-      this.displayMode.view.subscribe(viewChange => {
-        // Listen for view changes and move cells around depending on the current displayType
-        // remove cell views from display view
-        for (let i = this._scrollableCells.length; i > 0; i--) {
-          this._scrollableCells.detach();
-        }
-        // remove cell views from calculated view
-        for (let i = this._calculatedCells.length; i > 0; i--) {
-          this._calculatedCells.detach();
-        }
-        if (viewChange === DatagridDisplayMode.CALCULATE) {
-          this.displayCells = false;
-          this.dgCells.forEach(cell => {
-            this._calculatedCells.insert(cell._view);
-          });
-        } else {
-          this.displayCells = true;
-          this.dgCells.forEach(cell => {
-            this._scrollableCells.insert(cell._view);
-          });
-        }
-      }),
-      this.expand.animate.subscribe(() => {
-        this.expandAnimationTrigger = !this.expandAnimationTrigger;
-      })
+      this.resetViewsOnDisplayModeChange(),
+      this.resetViewsOnCellsChange(),
+      this.triggerAnimationOnExpandAnimate(),
+      this.reorderOnRequest()
     );
+  }
+
+  private resetViewsOnDisplayModeChange(): Subscription {
+    return this.displayMode.view.subscribe(viewChange => {
+      const viewContainers = [this._scrollableCells, this._calculatedCells];
+      viewContainers.forEach(viewContainer => this.viewManager.detachAllViews(viewContainer));
+      if (viewChange === DatagridDisplayMode.CALCULATE) {
+        this.displayCells = false;
+        this.viewManager.insertAllViews(this._calculatedCells, this.assignRawOrders(), true);
+      } else {
+        this.displayCells = true;
+        this.viewManager.insertAllViews(this._scrollableCells, this.assignRawOrders(), true);
+        this.updateCellOrder();
+      }
+    });
+  }
+
+  private resetViewsOnCellsChange(): Subscription {
+    // This method is to handle a case when cells change without headers changing.
+    // For example, one cell could be replaced by another in place.
+    return this.cells.changes.subscribe(() => {
+      this.cells.forEach((cell, index) => {
+        if (this._scrollableCells.indexOf(cell._view) === -1) {
+          this._scrollableCells.insert(cell._view, this.columnReorderService.orderAt(index));
+        }
+      });
+      this.updateCellOrder();
+    });
+  }
+
+  private reorderOnRequest(): Subscription {
+    return this.columnReorderService.reorderRequested.subscribe(reorderRequest => {
+      const sourceView = this._scrollableCells.get(reorderRequest.sourceOrder);
+      this._scrollableCells.move(sourceView, reorderRequest.targetOrder);
+      this.updateCellOrder();
+    });
+  }
+
+  private triggerAnimationOnExpandAnimate(): Subscription {
+    return this.expand.animate.subscribe(() => {
+      this.expandAnimationTrigger = !this.expandAnimationTrigger;
+    });
+  }
+
+  private updateCellOrder(): void {
+    this.cells.forEach(cell => (cell.order = this._scrollableCells.indexOf(cell._view)));
   }
 
   private subscriptions: Subscription[] = [];
 
   ngOnDestroy() {
     this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+    if (this.wrappedInjector && this._view) {
+      this._view.destroy();
+    }
   }
 
   public displayCells = false;
@@ -259,5 +283,16 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
 
   public get _view() {
     return this.wrappedInjector.get(WrappedRow, this.vcr).rowView;
+  }
+
+  private assignRawOrders(): ClrDatagridCell[] {
+    return this.cells.map((cell, index) => {
+      if (this.columnReorderService.orderAt(index) > -1) {
+        cell.order = this.columnReorderService.orderAt(index);
+      } else {
+        cell.order = index;
+      }
+      return cell;
+    });
   }
 }
