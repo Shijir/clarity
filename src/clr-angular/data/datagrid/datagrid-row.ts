@@ -229,7 +229,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     return this.wrappedInjector.get(WrappedRow, this.vcr).rowView;
   }
 
-  private giveCellsRawOrders(): ClrDatagridCell[] {
+  private assignRawOrders(): ClrDatagridCell[] {
     return this.dgCells.map((cell, index) => {
       if (this.columnReorderService.orderAt(index) > -1) {
         cell.order = this.columnReorderService.orderAt(index);
@@ -242,7 +242,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
 
   private insertOrderedViews(containerRef: ViewContainerRef): void {
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
-    this.columnReorderService.orderProperly(this.giveCellsRawOrders()).forEach(cell => containerRef.insert(cell._view));
+    this.columnReorderService.setInUniqOrders(this.assignRawOrders()).forEach(cell => containerRef.insert(cell._view));
   }
 
   private detachAllViews(containerRef: ViewContainerRef): void {

@@ -297,7 +297,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   @ViewChild('calculationRows', { static: false, read: ViewContainerRef })
   _calculationRows: ViewContainerRef;
 
-  private giveColumnsRawOrders(): ClrDatagridColumn[] {
+  private assignRawOrders(): ClrDatagridColumn[] {
     return this.columns.map((column, index) => {
       // Once columns has its order assigned, we will use it from here on
       if (typeof column.order !== 'number') {
@@ -310,7 +310,7 @@ export class ClrDatagrid<T = any> implements AfterContentInit, AfterViewInit, On
   private insertOrderedViews(containerRef: ViewContainerRef, afterReordering?: boolean): void {
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
     this.columnReorderService
-      .orderProperly(this.giveColumnsRawOrders())
+      .setInUniqOrders(this.assignRawOrders())
       .forEach(column => containerRef.insert(column._view));
     this.columnReorderService.updateOrders(this.columns.map(column => column.order), afterReordering);
   }

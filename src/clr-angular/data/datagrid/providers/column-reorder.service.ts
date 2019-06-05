@@ -46,11 +46,11 @@ export class ColumnReorderService {
     return this._reorderCompleted.asObservable();
   }
 
-  private queueOrderChange(oldOrder: number, newOrder: number) {
+  private queueOrderChange(oldOrder: number, newOrder: number): void {
     this.reorderQueue[oldOrder] = newOrder;
   }
 
-  private broadcastReorderRequest() {
+  private broadcastReorderRequest(): void {
     const emptyReorderQueue =
       Object.keys(this.reorderQueue)
         .map(order => this.reorderQueue[order])
@@ -107,13 +107,13 @@ export class ColumnReorderService {
     this.broadcastReorderRequest();
   }
 
-  reorderViews(draggedView: ViewRef, targetView: ViewRef) {
+  reorderViews(draggedView: ViewRef, targetView: ViewRef): void {
     const draggedFrom = this.containerRef.indexOf(draggedView);
     const draggedTo = this.containerRef.indexOf(targetView);
     this.reorder(draggedFrom, draggedTo);
   }
 
-  orderProperly(reorderablesWithRawOrder: Reorderable[]): Reorderable[] {
+  setInUniqOrders(reorderablesWithRawOrder: Reorderable[]): Reorderable[] {
     return reorderablesWithRawOrder
       .sort((reorderable1, reorderable2) => reorderable1.order - reorderable2.order)
       .map((reorderable, index) => {

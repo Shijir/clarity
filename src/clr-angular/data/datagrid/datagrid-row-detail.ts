@@ -106,7 +106,7 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  private giveCellsRawOrders(): ClrDatagridCell[] {
+  private assignRawOrders(): ClrDatagridCell[] {
     return this.cells.map((cell, index) => {
       if (this.columnReorderService.orderAt(index) > -1) {
         cell.order = this.columnReorderService.orderAt(index);
@@ -119,7 +119,7 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
 
   private insertOrderedViews(containerRef: ViewContainerRef): void {
     containerRef.injector.get(ChangeDetectorRef).detectChanges();
-    this.columnReorderService.orderProperly(this.giveCellsRawOrders()).forEach(cell => containerRef.insert(cell._view));
+    this.columnReorderService.setInUniqOrders(this.assignRawOrders()).forEach(cell => containerRef.insert(cell._view));
   }
 
   private detachAllViews(containerRef: ViewContainerRef): void {
