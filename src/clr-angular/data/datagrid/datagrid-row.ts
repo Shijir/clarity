@@ -36,7 +36,7 @@ import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { SelectionType } from './enums/selection-type';
 import { DatagridIfExpandService } from './datagrid-if-expanded.service';
 import { ClrExpandableAnimation } from '../../utils/animations/expandable-animation/expandable-animation';
-import { ViewsReorderService } from './providers/views-reorder.service';
+import { ColumnReorderService } from './providers/column-reorder.service';
 
 let nbRow: number = 0;
 
@@ -85,7 +85,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
     private renderer: Renderer2,
     private el: ElementRef,
     public commonStrings: ClrCommonStrings,
-    private viewsReorderService: ViewsReorderService
+    private columnReorderService: ColumnReorderService
   ) {
     nbRow++;
     this.id = 'clr-dg-row' + nbRow;
@@ -201,7 +201,7 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
 
     // A subscription that listens for view reordering
     this.subscriptions.push(
-      this.viewsReorderService.reorderCompleted.subscribe(() => {
+      this.columnReorderService.reorderCompleted.subscribe(() => {
         for (let i = this._scrollableCells.length; i > 0; i--) {
           this._scrollableCells.detach();
         }
@@ -250,8 +250,8 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
 
   private giveCellsRawOrders(): ClrDatagridCell[] {
     return this.dgCells.map((cell, index) => {
-      if (this.viewsReorderService.orderAt(index) > -1) {
-        cell.order = this.viewsReorderService.orderAt(index);
+      if (this.columnReorderService.orderAt(index) > -1) {
+        cell.order = this.columnReorderService.orderAt(index);
       } else {
         cell.order = index;
       }

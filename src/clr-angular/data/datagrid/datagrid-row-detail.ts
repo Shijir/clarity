@@ -22,7 +22,7 @@ import { RowActionService } from './providers/row-action-service';
 import { Selection } from './providers/selection';
 import { SelectionType } from './enums/selection-type';
 import { DatagridIfExpandService } from './datagrid-if-expanded.service';
-import { ViewsReorderService } from './providers/views-reorder.service';
+import { ColumnReorderService } from './providers/column-reorder.service';
 
 /**
  * Generic bland container serving various purposes for Datagrid.
@@ -69,7 +69,7 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
     public rowActionService: RowActionService,
     public expand: DatagridIfExpandService,
     public expandableRows: ExpandableRowsCount,
-    private viewsReorderService: ViewsReorderService
+    private columnReorderService: ColumnReorderService
   ) {}
 
   @ContentChildren(ClrDatagridCell) cells: QueryList<ClrDatagridCell>;
@@ -103,7 +103,7 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
 
     // A subscription that listens for view reordering
     this.subscriptions.push(
-      this.viewsReorderService.reorderCompleted.subscribe(() => {
+      this.columnReorderService.reorderCompleted.subscribe(() => {
         for (let i = this._detailCells.length; i > 0; i--) {
           this._detailCells.detach();
         }
@@ -131,8 +131,8 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
 
   private giveCellsRawOrders(): ClrDatagridCell[] {
     return this.cells.map((cell, index) => {
-      if (this.viewsReorderService.orderAt(index) > -1) {
-        cell.order = this.viewsReorderService.orderAt(index);
+      if (this.columnReorderService.orderAt(index) > -1) {
+        cell.order = this.columnReorderService.orderAt(index);
       } else {
         cell.order = index;
       }

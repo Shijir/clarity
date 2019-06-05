@@ -7,8 +7,6 @@ import {
   Component,
   ContentChild,
   EventEmitter,
-  HostBinding,
-  HostListener,
   Inject,
   Injector,
   Input,
@@ -37,9 +35,8 @@ import { WrappedColumn } from './wrapped-column';
 import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { COLUMN_STATE } from './providers/column-state.provider';
 import { ColumnState } from './interfaces/column-state.interface';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
-import { ViewsReorderService } from './providers/views-reorder.service';
+import { ColumnReorderService } from './providers/column-reorder.service';
 
 @Component({
   selector: 'clr-dg-column',
@@ -123,7 +120,8 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, ClrDa
     private vcr: ViewContainerRef,
     public commonStrings: ClrCommonStrings,
     @Inject(COLUMN_STATE) private columnState: BehaviorSubject<ColumnState>,
-    private viewsReorderService: ViewsReorderService) {
+    private columnReorderService: ColumnReorderService
+  ) {
     super(filters);
     this.subscriptions.push(
       _sort.change.subscribe(sort => {
@@ -145,7 +143,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, ClrDa
   }
 
   get columnsGroupId() {
-    return this.viewsReorderService.columnsGroupId;
+    return this.columnReorderService.columnsGroupId;
   }
 
   private subscriptions: Subscription[] = [];
@@ -176,7 +174,7 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, ClrDa
   }
 
   requestReorder(event: ClrDragEvent<ViewRef>) {
-    this.viewsReorderService.reorderViews(event.dragDataTransfer, this._view);
+    this.columnReorderService.reorderViews(event.dragDataTransfer, this._view);
   }
 
   /*

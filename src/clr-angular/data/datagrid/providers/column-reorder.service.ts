@@ -11,7 +11,7 @@ import { DatagridColumnChanges } from '../enums/column-changes.enum';
 let nbColumnsGroup = 0;
 
 @Injectable()
-export class ViewsReorderService {
+export class ColumnReorderService {
   // the common group id that will be shared across
   // Datagrids all reorder draggable and droppables
   private _columnsGroupId: string;
