@@ -5,8 +5,8 @@
  */
 
 import {
-  AfterContentInit,
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -36,6 +36,7 @@ import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { SelectionType } from './enums/selection-type';
 import { DatagridIfExpandService } from './datagrid-if-expanded.service';
 import { ClrExpandableAnimation } from '../../utils/animations/expandable-animation/expandable-animation';
+import { ViewsReorderService } from './providers/views-reorder.service';
 
 let nbRow: number = 0;
 
@@ -54,7 +55,7 @@ let nbRow: number = 0;
     { provide: LoadingListener, useExisting: DatagridIfExpandService },
   ],
 })
-export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit {
+export class ClrDatagridRow<T = any> implements AfterViewInit {
   public id: string;
   public radioId: string;
   public checkboxId: string;
@@ -83,7 +84,8 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
     private vcr: ViewContainerRef,
     private renderer: Renderer2,
     private el: ElementRef,
-    public commonStrings: ClrCommonStrings
+    public commonStrings: ClrCommonStrings,
+    private viewsReorderService: ViewsReorderService
   ) {
     nbRow++;
     this.id = 'clr-dg-row' + nbRow;
@@ -168,9 +170,7 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
 
   ngAfterContentInit() {
     this.dgCells.changes.subscribe(() => {
-      this.dgCells.forEach(cell => {
-        this._scrollableCells.insert(cell._view);
-      });
+      this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
     });
   }
 
@@ -188,18 +188,24 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
         }
         if (viewChange === DatagridDisplayMode.CALCULATE) {
           this.displayCells = false;
-          this.dgCells.forEach(cell => {
-            this._calculatedCells.insert(cell._view);
-          });
+          this.insertCellViews(this._calculatedCells, this.placeInSequence(this.giveCellsRawOrders()));
         } else {
           this.displayCells = true;
-          this.dgCells.forEach(cell => {
-            this._scrollableCells.insert(cell._view);
-          });
+          this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
         }
       }),
       this.expand.animate.subscribe(() => {
         this.expandAnimationTrigger = !this.expandAnimationTrigger;
+      })
+    );
+
+    // A subscription that listens for view reordering
+    this.subscriptions.push(
+      this.viewsReorderService.reorderCompleted.subscribe(() => {
+        for (let i = this._scrollableCells.length; i > 0; i--) {
+          this._scrollableCells.detach();
+        }
+        this.insertCellViews(this._scrollableCells, this.placeInSequence(this.giveCellsRawOrders()));
       })
     );
   }
@@ -227,5 +233,29 @@ export class ClrDatagridRow<T = any> implements AfterContentInit, AfterViewInit 
 
   public get _view() {
     return this.wrappedInjector.get(WrappedRow, this.vcr).rowView;
+  }
+
+  private insertCellViews(containerRef: ViewContainerRef, cellsInSequence: ClrDatagridCell[]): void {
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    // insert column views in their new orders
+    cellsInSequence.forEach(cell => containerRef.insert(cell._view));
+  }
+
+  private placeInSequence(cellsWithRawOrder: ClrDatagridCell[]): ClrDatagridCell[] {
+    return cellsWithRawOrder.sort((cell1, cell2) => cell1.order - cell2.order).map((cell, index) => {
+      cell.order = index;
+      return cell;
+    });
+  }
+
+  private giveCellsRawOrders(): ClrDatagridCell[] {
+    return this.dgCells.map((cell, index) => {
+      if (this.viewsReorderService.orderAt(index) > -1) {
+        cell.order = this.viewsReorderService.orderAt(index);
+      } else {
+        cell.order = index;
+      }
+      return cell;
+    });
   }
 }

@@ -3,7 +3,17 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { AfterContentInit, Component, ContentChildren, Input, OnDestroy, QueryList } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  ContentChildren,
+  Input,
+  OnDestroy,
+  QueryList,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { ClrDatagridCell } from './datagrid-cell';
@@ -12,6 +22,7 @@ import { RowActionService } from './providers/row-action-service';
 import { Selection } from './providers/selection';
 import { SelectionType } from './enums/selection-type';
 import { DatagridIfExpandService } from './datagrid-if-expanded.service';
+import { ViewsReorderService } from './providers/views-reorder.service';
 
 /**
  * Generic bland container serving various purposes for Datagrid.
@@ -38,7 +49,10 @@ import { DatagridIfExpandService } from './datagrid-if-expanded.service';
                         class="datagrid-expandable-caret datagrid-fixed-column datagrid-cell">
             </div>
         </ng-container>
-        <ng-content></ng-content>
+        <ng-container #detailCells></ng-container>
+        <ng-container *ngIf="cells.length === 0">
+          <ng-content></ng-content>
+        </ng-container>
     `,
   host: {
     '[class.datagrid-row-flex]': 'true',
@@ -54,10 +68,14 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
     public selection: Selection,
     public rowActionService: RowActionService,
     public expand: DatagridIfExpandService,
-    public expandableRows: ExpandableRowsCount
+    public expandableRows: ExpandableRowsCount,
+    private viewsReorderService: ViewsReorderService
   ) {}
 
   @ContentChildren(ClrDatagridCell) cells: QueryList<ClrDatagridCell>;
+
+  @ViewChild('detailCells', { read: ViewContainerRef })
+  _detailCells: ViewContainerRef;
 
   @Input('clrDgReplace')
   set replace(value: boolean) {
@@ -70,11 +88,55 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
     this.subscriptions.push(
       this.expand.replace.subscribe(replaceChange => {
         this.replacedRow = replaceChange;
+      }),
+      this.cells.changes.subscribe(() => {
+        for (let i = this._detailCells.length; i > 0; i--) {
+          this._detailCells.detach();
+        }
+        this.insertCellViews(this._detailCells, this.placeInSequence(this.giveCellsRawOrders()));
+      })
+    );
+    for (let i = this._detailCells.length; i > 0; i--) {
+      this._detailCells.detach();
+    }
+    this.insertCellViews(this._detailCells, this.placeInSequence(this.giveCellsRawOrders()));
+
+    // A subscription that listens for view reordering
+    this.subscriptions.push(
+      this.viewsReorderService.reorderCompleted.subscribe(() => {
+        for (let i = this._detailCells.length; i > 0; i--) {
+          this._detailCells.detach();
+        }
+        this.insertCellViews(this._detailCells, this.placeInSequence(this.giveCellsRawOrders()));
       })
     );
   }
 
   ngOnDestroy() {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  private insertCellViews(containerRef: ViewContainerRef, cellsInSequence: ClrDatagridCell[]): void {
+    containerRef.injector.get(ChangeDetectorRef).detectChanges();
+    // insert column views in their new orders
+    cellsInSequence.forEach(cell => containerRef.insert(cell._view));
+  }
+
+  private placeInSequence(cellsWithRawOrder: ClrDatagridCell[]): ClrDatagridCell[] {
+    return cellsWithRawOrder.sort((cell1, cell2) => cell1.order - cell2.order).map((cell, index) => {
+      cell.order = index;
+      return cell;
+    });
+  }
+
+  private giveCellsRawOrders(): ClrDatagridCell[] {
+    return this.cells.map((cell, index) => {
+      if (this.viewsReorderService.orderAt(index) > -1) {
+        cell.order = this.viewsReorderService.orderAt(index);
+      } else {
+        cell.order = index;
+      }
+      return cell;
+    });
   }
 }

@@ -33,6 +33,8 @@ export class ClrDatagridCell implements OnInit {
 
   constructor(private vcr: ViewContainerRef) {}
 
+  order: number;
+
   private wrappedInjector: Injector;
 
   ngOnInit() {

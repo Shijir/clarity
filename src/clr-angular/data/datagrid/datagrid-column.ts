@@ -7,14 +7,18 @@ import {
   Component,
   ContentChild,
   EventEmitter,
+  HostBinding,
+  HostListener,
+  Inject,
   Injector,
   Input,
   OnDestroy,
   OnInit,
   Output,
   ViewContainerRef,
+  ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { HostWrapper } from '../../utils/host-wrapping/host-wrapper';
 import { DatagridPropertyComparator } from './built-in/comparators/datagrid-property-comparator';
@@ -31,10 +35,20 @@ import { DatagridFilterRegistrar } from './utils/datagrid-filter-registrar';
 import { ClrDatagridFilterInterface } from './interfaces/filter.interface';
 import { WrappedColumn } from './wrapped-column';
 import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
+import { COLUMN_STATE } from './providers/column-state.provider';
+import { ColumnState } from './interfaces/column-state.interface';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { ClrDragEvent } from '../../utils/drag-and-drop/drag-event';
+import { ViewsReorderService } from './providers/views-reorder.service';
 
 @Component({
   selector: 'clr-dg-column',
   template: `
+    <div class="datagrid-column-wrapper" #columnWrapper
+         [clrDraggable]="_view"
+         [clrGroup]="columnsGroupId"
+         (clrDragStart)="inDragMode = true;"
+         (clrDragEnd)="inDragMode = false;">
       <div class="datagrid-column-flex">
           <!-- I'm really not happy with that select since it's not very scalable -->
           <ng-content select="clr-dg-filter, clr-dg-string-filter, clr-dg-numeric-filter"></ng-content>
@@ -72,12 +86,34 @@ import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 
           <clr-dg-column-separator></clr-dg-column-separator>
       </div>
+    </div>
+    <clr-dg-column-separator></clr-dg-column-separator>
+    <div class="datagrid-column-droppable"
+         clrDroppable
+         [clrGroup]="columnsGroupId"
+         (clrDrop)="requestReorder($event)">
+      <div class="datagrid-column-drop-line"></div>
+    </div>
   `,
   host: {
     '[class.datagrid-column]': 'true',
+    '[class.datagrid-column-drag-mode]': 'inDragMode',
+    '[class.datagrid-column-drop-mode]': 'inDropMode',
     '[attr.aria-sort]': 'ariaSort',
     role: 'columnheader',
   },
+  // animations: [
+  //   trigger('reorderAnimation', [
+  //     transition(`* => ${ReorderAnimationState.SHIFT}`, [
+  //       style({ transform: 'translate3d({{translateX}}, 0, 0)' }),
+  //       animate('0.2s ease-in-out', style({ transform: 'translate3d(0, 0, 0)' })),
+  //     ]),
+  //     transition(`* => ${ReorderAnimationState.DROP}`, [
+  //       style({ transform: 'translate3d({{translateX}}, {{translateY}}, 0)' }),
+  //       animate('0.2s ease-in-out', style({ transform: 'translate3d(0, 0, 0)' })),
+  //     ]),
+  //   ]),
+  // ],
 })
 export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, ClrDatagridFilterInterface<T>>
   implements OnDestroy, OnInit {
@@ -85,33 +121,62 @@ export class ClrDatagridColumn<T = any> extends DatagridFilterRegistrar<T, ClrDa
     private _sort: Sort<T>,
     filters: FiltersProvider<T>,
     private vcr: ViewContainerRef,
-    public commonStrings: ClrCommonStrings
-  ) {
+    public commonStrings: ClrCommonStrings,
+    @Inject(COLUMN_STATE) private columnState: BehaviorSubject<ColumnState>,
+    private viewsReorderService: ViewsReorderService) {
     super(filters);
-    this._sortSubscription = _sort.change.subscribe(sort => {
-      // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
-      if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
-        this._sortOrder = ClrDatagridSortOrder.UNSORTED;
-        this.sortOrderChange.emit(this._sortOrder);
-        // removes the sortIcon when column becomes unsorted
-        this.sortIcon = null;
-      }
-      // deprecated: to be removed - START
-      if (this.sorted && sort.comparator !== this._sortBy) {
-        this._sorted = false;
-        this.sortedChange.emit(false);
-      }
-      // deprecated: to be removed - END
-    });
+    this.subscriptions.push(
+      _sort.change.subscribe(sort => {
+        // We're only listening to make sure we emit an event when the column goes from sorted to unsorted
+        if (this.sortOrder !== ClrDatagridSortOrder.UNSORTED && sort.comparator !== this._sortBy) {
+          this._sortOrder = ClrDatagridSortOrder.UNSORTED;
+          this.sortOrderChange.emit(this._sortOrder);
+          // removes the sortIcon when column becomes unsorted
+          this.sortIcon = null;
+        }
+        // deprecated: to be removed - START
+        if (this.sorted && sort.comparator !== this._sortBy) {
+          this._sorted = false;
+          this.sortedChange.emit(false);
+        }
+        // deprecated: to be removed - END
+      })
+    );
   }
 
-  /**
-   * Subscription to the sort service changes
-   */
-  private _sortSubscription: Subscription;
+  get columnsGroupId() {
+    return this.viewsReorderService.columnsGroupId;
+  }
+
+  private subscriptions: Subscription[] = [];
 
   ngOnDestroy() {
-    this._sortSubscription.unsubscribe();
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  inDragMode: boolean = false;
+
+  inDropMode: boolean = false;
+
+  @Output('clrDgColumnOrderChange') orderChange = new EventEmitter<number>(true);
+
+  private _order: number;
+
+  get order(): number {
+    return this._order;
+  }
+
+  @Input('clrDgColumnOrder')
+  set order(value: number) {
+    const oldOrder = this._order;
+    this._order = value;
+    if (typeof oldOrder === 'number' && oldOrder !== this._order) {
+      this.orderChange.emit(this._order);
+    }
+  }
+
+  requestReorder(event: ClrDragEvent<ViewRef>) {
+    this.viewsReorderService.reorderViews(event.dragDataTransfer, this._view);
   }
 
   /*
