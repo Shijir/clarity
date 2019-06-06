@@ -198,8 +198,8 @@ export default function(): void {
       column2InitialWidth = widthOf(columnHeader2Element);
       column3InitialWidth = widthOf(columnHeader3Element);
       column4InitialWidth = widthOf(columnHeader4Element);
-      columnHeader1DraggableDebugElement = context.fixture.debugElement.queryAll(By.directive(ClrDraggable))[1];
-      columnHeader3DraggableDebugElement = context.fixture.debugElement.queryAll(By.directive(ClrDraggable))[5];
+      columnHeader1DraggableDebugElement = columnHeader1DebugElement.queryAll(By.directive(ClrDraggable))[1];
+      columnHeader3DraggableDebugElement = columnHeader3DebugElement.queryAll(By.directive(ClrDraggable))[1];
       columnHeader1DraggableDirective = columnHeader1DraggableDebugElement.injector.get(ClrDraggable);
       columnHeader3DraggableDirective = columnHeader3DraggableDebugElement.injector.get(ClrDraggable);
     });
