@@ -6,7 +6,6 @@
 
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   ContentChildren,
   ElementRef,
@@ -241,13 +240,12 @@ export class ClrDatagridRow<T = any> implements AfterViewInit {
   }
 
   private insertOrderedViews(containerRef: ViewContainerRef): void {
-    containerRef.injector.get(ChangeDetectorRef).detectChanges();
     this.columnReorderService.setInUniqOrders(this.assignRawOrders()).forEach(cell => containerRef.insert(cell._view));
   }
 
   private detachAllViews(containerRef: ViewContainerRef): void {
     for (let i = containerRef.length; i > 0; i--) {
-      containerRef.detach();
+      containerRef.detach().detectChanges();
     }
   }
 }
