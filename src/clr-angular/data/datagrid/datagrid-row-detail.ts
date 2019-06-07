@@ -74,7 +74,7 @@ export class ClrDatagridRowDetail<T = any> implements AfterContentInit, OnDestro
 
   @ContentChildren(ClrDatagridCell) cells: QueryList<ClrDatagridCell>;
 
-  @ViewChild('detailCells', { read: ViewContainerRef })
+  @ViewChild('detailCells', { static: true, read: ViewContainerRef })
   _detailCells: ViewContainerRef;
 
   @Input('clrDgReplace')

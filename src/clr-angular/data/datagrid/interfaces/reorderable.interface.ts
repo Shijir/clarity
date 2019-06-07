@@ -4,9 +4,9 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import { ViewRef } from '@angular/core/src/render3/view_ref';
+import { EmbeddedViewRef } from '@angular/core';
 
 export interface Reorderable {
   order: number;
-  _view: ViewRef<void>;
+  _view: EmbeddedViewRef<void>;
 }

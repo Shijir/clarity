@@ -40,15 +40,12 @@ export default function(): void {
         const stateDebouncer = new StateDebouncer();
         sortService = new Sort(stateDebouncer);
         filtersService = new FiltersProvider(new Page(stateDebouncer), stateDebouncer);
-        comparator = new TestComparator();
-
-        component = new ClrDatagridColumn(sortService, filtersService, null, commonStrings);
-
         columnState = new BehaviorSubject<ColumnState>({
           changes: [],
         });
         columnReorder = new MockColumnReorderService(null);
-        component = new ClrDatagridColumn(sortService, filtersService, null, columnState, columnReorder);
+        comparator = new TestComparator();
+        component = new ClrDatagridColumn(sortService, filtersService, null, commonStrings, columnState, columnReorder);
       });
 
       it('receives a comparator to sort the column', function() {
