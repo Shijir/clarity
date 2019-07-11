@@ -21,6 +21,8 @@ import { TabsService } from './providers/tabs.service';
 import { AriaService } from './providers/aria.service';
 import { TABS_ID } from './tabs-id.provider';
 import { TabsLayout } from './enums/tabs-layout.enum';
+import { TabsFocusManagerService } from './providers/tabs-focus-manager.service';
+import { Subscription } from 'rxjs/index';
 
 let nbTabLinkComponents: number = 0;
 
@@ -61,7 +63,8 @@ export class ClrTabLink {
     private cfr: ComponentFactoryResolver,
     private viewContainerRef: ViewContainerRef,
     private tabsService: TabsService,
-    @Inject(TABS_ID) public tabsId: number
+    @Inject(TABS_ID) public tabsId: number,
+    private tabsFocusManager: TabsFocusManagerService
   ) {
     if (!this.tabLinkId) {
       this.tabLinkId = 'clr-tab-link-' + nbTabLinkComponents++;
@@ -102,9 +105,37 @@ export class ClrTabLink {
     return this.ifActiveService.current === this.id;
   }
 
-  focus(): void {
-    if (typeof this.el.nativeElement.focus === 'function') {
-      this.el.nativeElement.focus();
+  private subscriptions: Subscription[] = [];
+
+  @HostListener('keydown.arrowdown', ['$event'])
+  @HostListener('keydown.arrowright', ['$event'])
+  focusNextTabLink(event: KeyboardEvent) {
+    if (this.tabsService.layout !== TabsLayout.VERTICAL && event.key === 'ArrowDown') {
+      return;
     }
+    this.tabsFocusManager.focusSiblingTabLink(this.tabLinkId, 1);
+  }
+
+  @HostListener('keydown.arrowup', ['$event'])
+  @HostListener('keydown.arrowleft', ['$event'])
+  focusPrevTabLink(event: KeyboardEvent) {
+    if (this.tabsService.layout !== TabsLayout.VERTICAL && event.key === 'ArrowUp') {
+      return;
+    }
+    this.tabsFocusManager.focusSiblingTabLink(this.tabLinkId, -1);
+  }
+
+  ngOnInit() {
+    this.subscriptions.push(
+      this.tabsFocusManager.focusMoveRequested.subscribe(tabLinkId => {
+        if (tabLinkId === this.tabLinkId && typeof this.el.nativeElement.focus === 'function') {
+          this.el.nativeElement.focus();
+        }
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 }

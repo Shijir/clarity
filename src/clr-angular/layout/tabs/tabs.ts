@@ -26,6 +26,7 @@ import { TABS_ID, TABS_ID_PROVIDER } from './tabs-id.provider';
 import { ClrCommonStrings } from '../../utils/i18n/common-strings.interface';
 import { TabsLayout } from './enums/tabs-layout.enum';
 import { Subscription } from 'rxjs';
+import { TabsFocusManagerService } from './providers/tabs-focus-manager.service';
 
 @Component({
   selector: 'clr-tabs',
@@ -34,7 +35,7 @@ import { Subscription } from 'rxjs';
       <!--tab links-->
       <ng-container *ngFor="let link of tabLinkDirectives">
         <ng-container *ngIf="link.tabsId === tabsId && !link.inOverflow">
-          <li role="presentation" class="nav-item" (keydown.arrowup)="focusPrevTabLink($event, link.tabLinkId)" (keydown.arrowleft)="focusPrevTabLink($event, link.tabLinkId)" (keydown.arrowdown)="focusNextTabLink($event, link.tabLinkId)" (keydown.arrowright)="focusNextTabLink($event, link.tabLinkId)">
+          <li role="presentation" class="nav-item">
             <ng-container [ngTemplateOutlet]="link.templateRefContainer.template"></ng-container>
           </li>
         </ng-container>
@@ -62,7 +63,7 @@ import { Subscription } from 'rxjs';
     </ul>
     <ng-container #tabContentViewContainer></ng-container>
   `,
-  providers: [IfActiveService, IfOpenService, TabsService, TABS_ID_PROVIDER],
+  providers: [IfActiveService, IfOpenService, TabsService, TABS_ID_PROVIDER, TabsFocusManagerService],
 })
 export class ClrTabs implements AfterContentInit, OnDestroy {
   private subscriptions: Subscription[] = [];
@@ -102,7 +103,8 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     public ifOpenService: IfOpenService,
     public tabsService: TabsService,
     @Inject(TABS_ID) public tabsId: number,
-    public commonStrings: ClrCommonStrings
+    public commonStrings: ClrCommonStrings,
+    private tabsFocusManager: TabsFocusManagerService
   ) {}
 
   get activeTabInOverflow() {
@@ -115,9 +117,11 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
 
   ngAfterContentInit() {
     this._tabLinkDirectives = this.tabs.map(tab => tab.tabLink);
+    this.tabsFocusManager.currentTabLinkIds = this.currentTabLinkIds;
     this.subscriptions.push(
       this.tabs.changes.subscribe(() => {
         this._tabLinkDirectives = this.tabs.map(tab => tab.tabLink);
+        this.tabsFocusManager.currentTabLinkIds = this.currentTabLinkIds;
       })
     );
 
@@ -141,40 +145,7 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     });
   }
 
-  private getCurrentTabLinks(): string[] {
+  private get currentTabLinkIds(): string[] {
     return this._tabLinkDirectives.filter(link => link.tabsId === this.tabsId).map(link => link.tabLinkId);
-  }
-
-  focusNextTabLink(event: KeyboardEvent, focusedTabLinkId: string) {
-    if (!this.isVertical && event.key === 'ArrowDown') {
-      return;
-    }
-    this.findSiblingTabLink(focusedTabLinkId, 1).focus();
-  }
-
-  focusPrevTabLink(event: KeyboardEvent, focusedTabLinkId: string) {
-    if (!this.isVertical && event.key === 'ArrowUp') {
-      return;
-    }
-    this.findSiblingTabLink(focusedTabLinkId, -1).focus();
-  }
-
-  private findSiblingTabLink(tabLinkId, next: 1 | -1): ClrTabLink {
-    // get current state of ClrTabLink ids
-    const currentTabLinkIds = this.getCurrentTabLinks();
-
-    let siblingTabLinkIdIndex: number;
-
-    // for now we only need to find next or previous sibling ClrTabLink
-    siblingTabLinkIdIndex = currentTabLinkIds.indexOf(tabLinkId) + next;
-
-    if (siblingTabLinkIdIndex >= currentTabLinkIds.length) {
-      siblingTabLinkIdIndex = 0;
-    } else if (siblingTabLinkIdIndex < 0) {
-      siblingTabLinkIdIndex = currentTabLinkIds.length - 1;
-    }
-
-    const siblingTabLinkId = currentTabLinkIds[siblingTabLinkIdIndex];
-    return this._tabLinkDirectives.find(link => link.tabLinkId === siblingTabLinkId);
   }
 }
