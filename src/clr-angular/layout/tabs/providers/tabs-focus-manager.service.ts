@@ -5,7 +5,6 @@
  */
 
 import { Injectable } from '@angular/core';
-import { ClrTabLink } from '../tab-link.directive';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable()
@@ -18,7 +17,7 @@ export class TabsFocusManagerService {
     return this._focusMoveRequested.asObservable();
   }
 
-  focusSiblingTabLink(tabLinkId: string, next: 1 | -1): ClrTabLink {
+  focusSiblingTabLink(tabLinkId: string, next: 1 | -1): void {
     let siblingTabLinkIdIndex: number;
 
     // for now we only need to find next or previous sibling ClrTabLink
