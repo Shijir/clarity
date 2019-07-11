@@ -18,7 +18,8 @@ let nbTabContentComponents: number = 0;
                [hidden]="!active"
                [attr.aria-labelledby]="ariaLabelledBy"
                [attr.aria-expanded]="active"
-               [attr.aria-hidden]="!active">
+               [attr.aria-hidden]="!active"
+               [attr.tabindex]="0">
         <ng-content></ng-content>
       </section>
     </ng-template>

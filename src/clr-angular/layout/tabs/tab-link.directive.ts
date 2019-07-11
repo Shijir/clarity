@@ -23,6 +23,7 @@ import { TABS_ID } from './tabs-id.provider';
 import { TabsLayout } from './enums/tabs-layout.enum';
 import { TabsFocusManagerService } from './providers/tabs-focus-manager.service';
 import { Subscription } from 'rxjs/index';
+import { IfOpenService } from '../../utils/conditional/if-open.service';
 
 let nbTabLinkComponents: number = 0;
 
@@ -31,6 +32,7 @@ let nbTabLinkComponents: number = 0;
   host: {
     '[attr.aria-hidden]': 'false',
     '[class.btn]': 'true',
+    '[attr.tabindex]': 'isTabbable',
     role: 'tab',
     type: 'button',
   },
@@ -64,7 +66,8 @@ export class ClrTabLink {
     private viewContainerRef: ViewContainerRef,
     private tabsService: TabsService,
     @Inject(TABS_ID) public tabsId: number,
-    private tabsFocusManager: TabsFocusManagerService
+    private tabsFocusManager: TabsFocusManagerService,
+    private ifOpenService: IfOpenService
   ) {
     if (!this.tabLinkId) {
       this.tabLinkId = 'clr-tab-link-' + nbTabLinkComponents++;
@@ -77,6 +80,12 @@ export class ClrTabLink {
     this.templateRefContainer = this.viewContainerRef.createComponent(factory, 1, undefined, [
       [this.el.nativeElement],
     ]).instance;
+  }
+
+  private shouldFocusOnArrowKey: boolean = false;
+
+  get isTabbable() {
+    return this.active || this.shouldFocusOnArrowKey ? 0 : -1;
   }
 
   @HostBinding('attr.aria-controls')
@@ -128,8 +137,16 @@ export class ClrTabLink {
   ngOnInit() {
     this.subscriptions.push(
       this.tabsFocusManager.focusMoveRequested.subscribe(tabLinkId => {
-        if (tabLinkId === this.tabLinkId && typeof this.el.nativeElement.focus === 'function') {
-          this.el.nativeElement.focus();
+        if (tabLinkId === this.tabLinkId) {
+          if (this.inOverflow && !this.ifOpenService.open) {
+            this.ifOpenService.open = true;
+          }
+          this.shouldFocusOnArrowKey = true;
+          if (typeof this.el.nativeElement.focus === 'function') {
+            this.el.nativeElement.focus();
+          }
+        } else {
+          this.shouldFocusOnArrowKey = false;
         }
       })
     );
