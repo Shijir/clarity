@@ -7,14 +7,13 @@ import {
   AfterContentInit,
   Component,
   ContentChildren,
+  HostBinding,
   Inject,
-  QueryList,
   Input,
   OnDestroy,
-  HostBinding,
-  ViewContainerRef,
+  QueryList,
   ViewChild,
-  HostListener,
+  ViewContainerRef,
 } from '@angular/core';
 
 import { IfActiveService } from '../../utils/conditional/if-active.service';
