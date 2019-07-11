@@ -162,16 +162,12 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     let siblingTabLinkIdIndex: number;
 
     // for now we only need to find next or previous sibling ClrTabLink
-    if (next === 1) {
-      siblingTabLinkIdIndex = currentTabLinkIds.indexOf(tabLinkId) + 1;
-      if (siblingTabLinkIdIndex >= currentTabLinkIds.length) {
-        siblingTabLinkIdIndex = 0;
-      }
-    } else if (next === -1) {
-      siblingTabLinkIdIndex = currentTabLinkIds.indexOf(tabLinkId) - 1;
-      if (siblingTabLinkIdIndex < 0) {
-        siblingTabLinkIdIndex = currentTabLinkIds.length - 1;
-      }
+    siblingTabLinkIdIndex = currentTabLinkIds.indexOf(tabLinkId) + next;
+
+    if (siblingTabLinkIdIndex >= currentTabLinkIds.length) {
+      siblingTabLinkIdIndex = 0;
+    } else if (siblingTabLinkIdIndex < 0) {
+      siblingTabLinkIdIndex = currentTabLinkIds.length - 1;
     }
 
     const siblingTabLinkId = currentTabLinkIds[siblingTabLinkIdIndex];

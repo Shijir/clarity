@@ -4,6 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 import {
+  AfterViewInit,
   ComponentFactoryResolver,
   Directive,
   ElementRef,
@@ -33,7 +34,7 @@ let nbTabLinkComponents: number = 0;
     type: 'button',
   },
 })
-export class ClrTabLink {
+export class ClrTabLink implements AfterViewInit {
   private _inOverflow: boolean;
 
   @Input('clrTabLinkInOverflow')
@@ -103,6 +104,8 @@ export class ClrTabLink {
   }
 
   focus(): void {
-    this.el.nativeElement.focus();
+    if (typeof this.el.nativeElement.focus === 'function') {
+      this.el.nativeElement.focus();
+    }
   }
 }
