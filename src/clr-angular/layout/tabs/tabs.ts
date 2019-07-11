@@ -34,8 +34,7 @@ import { Subscription } from 'rxjs';
       <!--tab links-->
       <ng-container *ngFor="let link of tabLinkDirectives">
         <ng-container *ngIf="link.tabsId === tabsId && !link.inOverflow">
-          <li role="presentation" class="nav-item" (keydown.arrowright)="focusNextTabLink(link.tabLinkId)"
-              (keydown.arrowleft)="focusPrevTabLink(link.tabLinkId)">
+          <li role="presentation" class="nav-item" (keydown.arrowup)="focusPrevTabLink($event, link.tabLinkId)" (keydown.arrowleft)="focusPrevTabLink($event, link.tabLinkId)" (keydown.arrowdown)="focusNextTabLink($event, link.tabLinkId)" (keydown.arrowright)="focusNextTabLink($event, link.tabLinkId)">
             <ng-container [ngTemplateOutlet]="link.templateRefContainer.template"></ng-container>
           </li>
         </ng-container>
@@ -146,11 +145,17 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     return this._tabLinkDirectives.filter(link => link.tabsId === this.tabsId).map(link => link.tabLinkId);
   }
 
-  focusNextTabLink(focusedTabLinkId: string) {
+  focusNextTabLink(event: KeyboardEvent, focusedTabLinkId: string) {
+    if (!this.isVertical && event.key === 'ArrowDown') {
+      return;
+    }
     this.findSiblingTabLink(focusedTabLinkId, 1).focus();
   }
 
-  focusPrevTabLink(focusedTabLinkId: string) {
+  focusPrevTabLink(event: KeyboardEvent, focusedTabLinkId: string) {
+    if (!this.isVertical && event.key === 'ArrowUp') {
+      return;
+    }
     this.findSiblingTabLink(focusedTabLinkId, -1).focus();
   }
 
