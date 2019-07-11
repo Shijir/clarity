@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -100,5 +100,9 @@ export class ClrTabLink {
   @HostBinding('attr.aria-selected')
   get active() {
     return this.ifActiveService.current === this.id;
+  }
+
+  focus(): void {
+    this.el.nativeElement.focus();
   }
 }

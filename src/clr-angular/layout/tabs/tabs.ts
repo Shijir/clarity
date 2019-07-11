@@ -14,6 +14,7 @@ import {
   HostBinding,
   ViewContainerRef,
   ViewChild,
+  HostListener,
 } from '@angular/core';
 
 import { IfActiveService } from '../../utils/conditional/if-active.service';
@@ -30,38 +31,39 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'clr-tabs',
   template: `
-        <ul class="nav" role="tablist" [attr.aria-owns]="tabIds">
-            <!--tab links-->
+    <ul class="nav" role="tablist" [attr.aria-owns]="tabIds">
+      <!--tab links-->
+      <ng-container *ngFor="let link of tabLinkDirectives">
+        <ng-container *ngIf="link.tabsId === tabsId && !link.inOverflow">
+          <li role="presentation" class="nav-item" (keydown.arrowright)="focusNextTabLink(link.tabLinkId)"
+              (keydown.arrowleft)="focusPrevTabLink(link.tabLinkId)">
+            <ng-container [ngTemplateOutlet]="link.templateRefContainer.template"></ng-container>
+          </li>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="tabsService.overflowTabs.length > 0">
+        <div class="tabs-overflow bottom-right" [class.open]="ifOpenService.open"
+             (click)="toggleOverflow($event)">
+          <li role="presentation" class="nav-item">
+            <button class="btn btn-link nav-link dropdown-toggle" type="button" [class.active]="activeTabInOverflow">
+              <clr-icon shape="ellipsis-horizontal"
+                        [class.is-info]="ifOpenService.open"
+                        [attr.title]="commonStrings.more"></clr-icon>
+            </button>
+          </li>
+          <!--tab links in overflow menu-->
+          <clr-tab-overflow-content>
             <ng-container *ngFor="let link of tabLinkDirectives">
-                <ng-container *ngIf="link.tabsId === tabsId && !link.inOverflow">
-                    <li role="presentation" class="nav-item">
-                        <ng-container [ngTemplateOutlet]="link.templateRefContainer.template"></ng-container>
-                    </li>
-                </ng-container>
+              <ng-container *ngIf="link.tabsId === tabsId && link.inOverflow"
+                            [ngTemplateOutlet]="link.templateRefContainer.template">
+              </ng-container>
             </ng-container>
-            <ng-container *ngIf="tabsService.overflowTabs.length > 0">
-                <div class="tabs-overflow bottom-right" [class.open]="ifOpenService.open"
-                     (click)="toggleOverflow($event)">
-                    <li role="presentation" class="nav-item">
-                        <button class="btn btn-link nav-link dropdown-toggle" type="button" [class.active]="activeTabInOverflow">
-                            <clr-icon shape="ellipsis-horizontal"
-                              [class.is-info]="ifOpenService.open"
-                              [attr.title]="commonStrings.more"></clr-icon>
-                        </button>
-                    </li>
-                    <!--tab links in overflow menu-->
-                    <clr-tab-overflow-content>
-                        <ng-container *ngFor="let link of tabLinkDirectives">
-                            <ng-container *ngIf="link.tabsId === tabsId && link.inOverflow"
-                                          [ngTemplateOutlet]="link.templateRefContainer.template">
-                            </ng-container>
-                        </ng-container>
-                    </clr-tab-overflow-content>
-                </div>
-            </ng-container>
-        </ul>
-        <ng-container #tabContentViewContainer></ng-container>
-    `,
+          </clr-tab-overflow-content>
+        </div>
+      </ng-container>
+    </ul>
+    <ng-container #tabContentViewContainer></ng-container>
+  `,
   providers: [IfActiveService, IfOpenService, TabsService, TABS_ID_PROVIDER],
 })
 export class ClrTabs implements AfterContentInit, OnDestroy {
@@ -139,5 +141,40 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
     });
+  }
+
+  private getCurrentTabLinks(): string[] {
+    return this._tabLinkDirectives.filter(link => link.tabsId === this.tabsId).map(link => link.tabLinkId);
+  }
+
+  focusNextTabLink(focusedTabLinkId: string) {
+    this.findSiblingTabLink(focusedTabLinkId, 1).focus();
+  }
+
+  focusPrevTabLink(focusedTabLinkId: string) {
+    this.findSiblingTabLink(focusedTabLinkId, -1).focus();
+  }
+
+  private findSiblingTabLink(tabLinkId, next: 1 | -1): ClrTabLink {
+    // get current state of ClrTabLink ids
+    const currentTabLinkIds = this.getCurrentTabLinks();
+
+    let siblingTabLinkIdIndex: number;
+
+    // for now we only need to find next or previous sibling ClrTabLink
+    if (next === 1) {
+      siblingTabLinkIdIndex = currentTabLinkIds.indexOf(tabLinkId) + 1;
+      if (siblingTabLinkIdIndex >= currentTabLinkIds.length) {
+        siblingTabLinkIdIndex = 0;
+      }
+    } else if (next === -1) {
+      siblingTabLinkIdIndex = currentTabLinkIds.indexOf(tabLinkId) - 1;
+      if (siblingTabLinkIdIndex < 0) {
+        siblingTabLinkIdIndex = currentTabLinkIds.length - 1;
+      }
+    }
+
+    const siblingTabLinkId = currentTabLinkIds[siblingTabLinkIdIndex];
+    return this._tabLinkDirectives.find(link => link.tabLinkId === siblingTabLinkId);
   }
 }
