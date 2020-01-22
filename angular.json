@@ -13,7 +13,9 @@
           "options": {
             "customWebpackConfig": {
               "path": "src/dev/custom-webpack.config.js",
-              "mergeStrategies": { "externals": "replace" }
+              "mergeStrategies": {
+                "externals": "replace"
+              }
             },
             "outputPath": "dist/dev",
             "index": "src/dev/src/index.html",
@@ -73,7 +75,9 @@
           "options": {
             "customWebpackConfig": {
               "path": "src/dev/custom-webpack.config.js",
-              "mergeStrategies": { "externals": "replace" }
+              "mergeStrategies": {
+                "externals": "replace"
+              }
             },
             "browserTarget": "dev:build"
           },
@@ -320,7 +324,11 @@
             "tsConfig": "src/dev-core/tsconfig.app.json",
             "aot": true,
             "assets": [
-              { "glob": "**/*", "input": "src/dev-core/api/", "output": "./api/" },
+              {
+                "glob": "**/*",
+                "input": "src/dev-core/api/",
+                "output": "./api/"
+              },
               "src/dev-core/src/favicon.ico",
               "src/dev-core/src/assets",
               "src/dev-core/src/manifest.json",
@@ -380,5 +388,8 @@
       "styleext": "scss"
     }
   },
-  "defaultProject": "dev"
+  "defaultProject": "dev",
+  "cli": {
+    "analytics": false
+  }
 }
