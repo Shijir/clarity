@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2020 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -70,14 +70,12 @@ export class DatagridNumericFilter<T = any> extends DatagridFilterRegistrar<T, D
   /**
    * We need the actual input element to automatically focus on it
    */
-  @ViewChild('input_low', { static: false })
-  public input: ElementRef;
+  @ViewChild('input_low') public input: ElementRef;
 
   /**
    * We grab the ClrDatagridFilter we wrap to register this StringFilter to it.
    */
-  @ViewChild(ClrDatagridFilter, { static: false })
-  public filterContainer: ClrDatagridFilter<T>;
+  @ViewChild(ClrDatagridFilter) public filterContainer: ClrDatagridFilter<T>;
   ngAfterViewInit() {
     this.subscriptions.push(
       this.popoverToggleService.openChange.subscribe(openChange => {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2020 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -111,10 +111,8 @@ import { DetailService } from './providers/detail.service';
   host: { '[class.pagination]': 'true' },
 })
 export class ClrDatagridPagination implements OnDestroy, OnInit {
-  @ContentChild(ClrDatagridPageSize, { static: false })
-  _pageSizeComponent: ClrDatagridPageSize;
-  @ViewChild('currentPageInput', { static: false })
-  currentPageInputRef: ElementRef;
+  @ContentChild(ClrDatagridPageSize) _pageSizeComponent: ClrDatagridPageSize;
+  @ViewChild('currentPageInput') currentPageInputRef: ElementRef;
 
   constructor(public page: Page, public commonStrings: ClrCommonStringsService, public detailService: DetailService) {
     this.page.activated = true;
