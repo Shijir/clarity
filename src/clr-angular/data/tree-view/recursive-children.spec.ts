@@ -25,20 +25,6 @@ function getChildren(node: TestNode) {
   return node.children;
 }
 
-const TEST_ROOT: RecursiveTreeNodeModel<TestNode> = new RecursiveTreeNodeModel(
-  {
-    name: 'root',
-    children: [
-      { name: 'A', children: [{ name: 'AA' }, { name: 'AB' }] },
-      { name: 'B', children: [{ name: 'BA' }, { name: 'BB' }] },
-      { name: 'C' },
-    ],
-  },
-  null,
-  getChildren,
-  this.featuresService
-);
-
 @Component({
   template: `
     <clr-recursive-children [parent]="parent" [children]="children"></clr-recursive-children>
@@ -48,12 +34,13 @@ const TEST_ROOT: RecursiveTreeNodeModel<TestNode> = new RecursiveTreeNodeModel(
 class TestComponent {
   @ViewChild('template') template: TemplateRef<ClrRecursiveForOfContext<TestNode>>;
 
-  parent = TEST_ROOT;
+  parent: RecursiveTreeNodeModel<TestNode>;
   children: RecursiveTreeNodeModel<TestNode>[];
 }
 
 export default function(): void {
   describe('RecursiveChildren Component', function() {
+    let TEST_ROOT: RecursiveTreeNodeModel<TestNode>;
     type Context = TestContext<RecursiveChildren<TestNode>, TestComponent> & {
       featuresService: TreeFeaturesService<TestNode>;
       expandService: IfExpandService;
@@ -63,10 +50,24 @@ export default function(): void {
     beforeEach(function(this: Context) {
       this.featuresService = this.getProvider<TreeFeaturesService<TestNode>>(TreeFeaturesService);
       this.expandService = this.getProvider(IfExpandService);
+      TEST_ROOT = new RecursiveTreeNodeModel(
+        {
+          name: 'root',
+          children: [
+            { name: 'A', children: [{ name: 'AA' }, { name: 'AB' }] },
+            { name: 'B', children: [{ name: 'BA' }, { name: 'BB' }] },
+            { name: 'C' },
+          ],
+        },
+        null,
+        getChildren,
+        this.featuresService
+      );
       this.featuresService.recursion = {
         template: this.hostComponent.template,
         root: [TEST_ROOT],
       };
+      this.hostComponent.parent = TEST_ROOT;
       this.detectChanges();
     });
 

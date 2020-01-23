@@ -6,6 +6,7 @@
     "ng": "ng",
     "clean": "del ./dist",
     "start": "npm run angular:dev:start",
+    "postinstall": "ngcc && node scripts/ngcc-clean",
     "build": "npm-run-all build:ci website:build build:clean",
     "build:ci": "npm-run-all clean -p format lint -s build:libs build:apps test build:clean",
     "build:libs": "npm-run-all -p ui:build icons:build schematics:build core:build -s angular:build",
@@ -240,8 +241,8 @@
   },
   "lint-staged": {
     "src/clr-core/**/*.{js,ts}": [
-      "npm run core:build:api",
-      "git add"
+      "node scripts/ngcc-clean",
+      "npm run core:build:api"
     ]
   }
 }

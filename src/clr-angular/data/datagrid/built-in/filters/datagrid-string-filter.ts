@@ -47,6 +47,13 @@ export class DatagridStringFilter<T = any> extends DatagridFilterRegistrar<T, Da
     } else {
       this.setFilter(new DatagridStringFilterImpl(value));
     }
+    if (this.initFilterValue) {
+      this.value = this.initFilterValue;
+      // This initFilterValue should be used only once after the filter registration
+      // So deleting this property value to prevent it from being used again
+      // if this customStringFilter property is set again
+      delete this.initFilterValue;
+    }
   }
 
   /**
@@ -80,6 +87,8 @@ export class DatagridStringFilter<T = any> extends DatagridFilterRegistrar<T, Da
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
+  private initFilterValue: string;
+
   /**
    * Common setter for the input value
    */
@@ -88,15 +97,16 @@ export class DatagridStringFilter<T = any> extends DatagridFilterRegistrar<T, Da
   }
   @Input('clrFilterValue')
   public set value(value: string) {
-    if (!this.filter) {
-      return;
-    }
-    if (!value) {
-      value = '';
-    }
-    if (value !== this.filter.value) {
-      this.filter.value = value;
-      this.filterValueChange.emit(value);
+    if (this.filter) {
+      if (!value) {
+        value = '';
+      }
+      if (value !== this.filter.value) {
+        this.filter.value = value;
+        this.filterValueChange.emit(value);
+      }
+    } else {
+      this.initFilterValue = value;
     }
   }
 

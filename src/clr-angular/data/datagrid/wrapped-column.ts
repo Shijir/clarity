@@ -3,19 +3,19 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { AfterViewInit, Component, EmbeddedViewRef, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EmbeddedViewRef, OnDestroy, TemplateRef, ViewChild } from '@angular/core';
 
 import { DynamicWrapper } from '../../utils/host-wrapping/dynamic-wrapper';
 
 @Component({
   selector: 'dg-wrapped-column',
-  template: `        
+  template: `
         <ng-template #columnPortal>
             <ng-content></ng-content>
         </ng-template>
     `,
 })
-export class WrappedColumn implements DynamicWrapper, AfterViewInit {
+export class WrappedColumn implements DynamicWrapper, AfterViewInit, OnDestroy {
   _dynamic = false;
 
   @ViewChild('columnPortal') templateRef: TemplateRef<void>;
@@ -24,5 +24,9 @@ export class WrappedColumn implements DynamicWrapper, AfterViewInit {
   ngAfterViewInit() {
     // Create the cells view in memory, not the DOM.
     this.columnView = this.templateRef.createEmbeddedView(null);
+  }
+
+  ngOnDestroy() {
+    this.columnView.destroy();
   }
 }

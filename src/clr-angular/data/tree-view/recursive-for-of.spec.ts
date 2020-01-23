@@ -77,7 +77,9 @@ export default function(): void {
 
     it('initializes the recursion service with the correct values', function(this: Context) {
       expect(this.featuresService.recursion).toBeTruthy();
-      expect(this.featuresService.recursion.template).toBe(this.hostComponent.template);
+      expect(this.featuresService.recursion.template.elementRef.nativeElement).toBe(
+        this.hostComponent.template.elementRef.nativeElement
+      );
       expect(this.featuresService.recursion.root).toEqual([
         new RecursiveTreeNodeModel(TEST_ROOT, null, getChildren, this.featuresService),
       ]);
