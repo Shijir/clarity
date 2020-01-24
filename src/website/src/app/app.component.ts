@@ -3,12 +3,10 @@
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
-import { Component, ElementRef, OnInit, InjectionToken, ViewChild, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
-
-export const PLATFORM_TOKEN = new InjectionToken<string>('clarity');
 
 declare let ga: Function;
 
@@ -52,12 +50,6 @@ export class AppComponent implements OnInit {
   updateBodyClasses() {
     this.bodyClasses.length = 0;
     this.bodyClasses = this.collectRouteData('bodyClass');
-  }
-
-  trackBannerAction(eventLabel: string) {
-    if (window.trackHiringAlert) {
-      window.trackHiringAlert(eventLabel);
-    }
   }
 
   public productTitle = GLOBAL.alt_title;

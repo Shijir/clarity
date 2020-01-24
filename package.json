@@ -242,7 +242,8 @@
   "lint-staged": {
     "src/clr-core/**/*.{js,ts}": [
       "node scripts/ngcc-clean",
-      "npm run core:build:api"
+      "npm run core:build:api",
+      "git add"
     ]
   }
 }
