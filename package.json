@@ -18,6 +18,8 @@
     "lint": "npm-run-all ui:lint core:lint angular:lint",
     "lint:fix": "npm-run-all ui:lint:fix core:lint:fix angular:lint:fix",
     "license:fix": "node scripts/update-license",
+    "ngcc:check": "node scripts/ngcc-check",
+    "ngcc:fix": "node scripts/ngcc-clean",
     "format": "prettier --list-different './**/*.{js,json,md,ts,scss}'",
     "format:fix": "pretty-quick --staged",
     "format:file": "prettier --write",
@@ -194,7 +196,6 @@
     "karma-parallel": "0.3.1",
     "karma-safari-launcher": "1.0.0",
     "karma-sauce-launcher": "2.0.2",
-    "lint-staged": "9.5.0",
     "lite-server": "2.4.0",
     "netlify-cli": "2.25.0",
     "netlify-lambda": "1.4.5",
@@ -235,15 +236,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run format:fix && npm run license:fix && lint-staged",
+      "pre-commit": "npm run format:fix && npm run ngcc:check && npm run license:fix",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "lint-staged": {
-    "src/clr-core/**/*.{js,ts}": [
-      "node scripts/ngcc-clean",
-      "npm run core:build:api",
-      "git add"
-    ]
   }
 }
