@@ -88,7 +88,7 @@ export class ClrTreeNode<T> implements OnInit, OnDestroy {
         // tslint:disable-next-line
         for (const i in (<any>injector)._lView) {
           const o = (<any>injector)._lView[i];
-          if (o && o.hasOwnProperty(i) && o.clrModel) {
+          if (o && o.clrModel) {
             this._model = o.clrModel;
             continue;
           }
