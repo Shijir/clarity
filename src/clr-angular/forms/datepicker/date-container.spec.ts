@@ -4,7 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TestBed, async } from '@angular/core/testing';
 import { Subscription } from 'rxjs';
@@ -28,6 +28,28 @@ import { DatepickerEnabledService } from './providers/datepicker-enabled.service
 import { MockDatepickerEnabledService } from './providers/datepicker-enabled.service.mock';
 import { LocaleHelperService } from './providers/locale-helper.service';
 import { ClrCommonFormsModule } from '../common/common.module';
+import { ClrPopoverPositions } from '../../utils/popover/enums/positions.enum';
+import { ClrPopoverEventsService } from '../../utils/popover/providers/popover-events.service';
+import { ClrPopoverPositionService } from '../../utils/popover/providers/popover-position.service';
+import { ViewManagerService } from './providers/view-manager.service';
+
+const DATEPICKER_PROVIDERS: any[] = [
+  ClrPopoverEventsService,
+  ClrPopoverPositionService,
+  ClrPopoverToggleService,
+  DateNavigationService,
+  ViewManagerService,
+  LocaleHelperService,
+  ControlClassService,
+  IfErrorService,
+  FocusService,
+  LayoutService,
+  NgControlService,
+  DateIOService,
+  ControlIdService,
+  DateFormControlService,
+  Renderer2,
+];
 
 export default function() {
   describe('Date Container Component', () => {
@@ -42,24 +64,11 @@ export default function() {
       });
       TestBed.overrideComponent(ClrDateContainer, {
         set: {
-          providers: [
-            { provide: DatepickerEnabledService, useClass: MockDatepickerEnabledService },
-            ClrPopoverToggleService,
-            DateNavigationService,
-            LocaleHelperService,
-            ControlClassService,
-            IfErrorService,
-            FocusService,
-            LayoutService,
-            NgControlService,
-            DateIOService,
-            ControlIdService,
-            DateFormControlService,
-          ],
+          providers: [{ provide: DatepickerEnabledService, useClass: MockDatepickerEnabledService }],
         },
       });
 
-      context = this.create(ClrDateContainer, TestComponent, []);
+      context = this.create(ClrDateContainer, TestComponent, DATEPICKER_PROVIDERS);
 
       enabledService = <MockDatepickerEnabledService>context.getClarityProvider(DatepickerEnabledService);
       dateFormControlService = context.getClarityProvider(DateFormControlService);
@@ -71,6 +80,13 @@ export default function() {
     describe('View Basics', () => {
       beforeEach(() => {
         context.detectChanges();
+      });
+
+      afterEach(() => {
+        const viewManager = document.querySelector('clr-datepicker-view-manager');
+        if (viewManager) {
+          viewManager.remove();
+        }
       });
 
       it('should returns focus to calendar when we close it', () => {
@@ -109,13 +125,12 @@ export default function() {
       });
 
       it('clicking on the button toggles the datepicker popover', () => {
-        spyOn(context.clarityDirective, 'toggleDatepicker');
         const button: HTMLButtonElement = context.clarityElement.querySelector('.clr-input-group-icon-action');
 
         button.click();
         context.detectChanges();
 
-        expect(context.clarityDirective.toggleDatepicker).toHaveBeenCalled();
+        expect(context.clarityDirective.open).toEqual(true);
       });
 
       it('projects the date input', () => {
@@ -124,13 +139,12 @@ export default function() {
       });
 
       it('shows the datepicker view manager when icon button is clicked', () => {
-        expect(context.clarityElement.querySelector('clr-datepicker-view-manager')).toBeNull();
+        expect(document.querySelector('clr-datepicker-view-manager')).toBeNull();
 
         const button: HTMLButtonElement = context.clarityElement.querySelector('.clr-input-group-icon-action');
         button.click();
         context.detectChanges();
-
-        expect(context.clarityElement.querySelector('clr-datepicker-view-manager')).not.toBeNull();
+        expect(document.querySelector('clr-datepicker-view-manager')).not.toBeNull();
       });
 
       it('tracks the disabled state', async(() => {
@@ -161,10 +175,9 @@ export default function() {
       });
 
       it('supports clrPosition option', () => {
-        expect(context.clarityDirective.position).toBeUndefined();
         context.testComponent.position = 'top-left';
         context.detectChanges();
-        expect(context.clarityDirective.position).toEqual('top-left');
+        expect(context.clarityDirective.popoverPosition).toEqual(ClrPopoverPositions['top-left']);
       });
     });
 

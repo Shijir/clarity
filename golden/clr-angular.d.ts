@@ -651,6 +651,7 @@ export declare class ClrDataModule {
 export declare class ClrDateContainer implements DynamicWrapper, OnDestroy, AfterViewInit {
     _dynamic: boolean;
     set actionButton(button: ElementRef);
+    set clrPosition(position: string);
     commonStrings: ClrCommonStringsService;
     control: NgControl;
     focus: boolean;
@@ -658,8 +659,9 @@ export declare class ClrDateContainer implements DynamicWrapper, OnDestroy, Afte
     get isEnabled(): boolean;
     get isInputDateDisabled(): boolean;
     label: ClrLabel;
-    position: PopoverPosition;
-    constructor(_toggleService: ClrPopoverToggleService, _dateNavigationService: DateNavigationService, _datepickerEnabledService: DatepickerEnabledService, dateFormControlService: DateFormControlService, commonStrings: ClrCommonStringsService, ifErrorService: IfErrorService, focusService: FocusService, controlClassService: ControlClassService, layoutService: LayoutService, ngControlService: NgControlService);
+    get open(): boolean;
+    get popoverPosition(): ClrPopoverPosition;
+    constructor(toggleService: ClrPopoverToggleService, dateNavigationService: DateNavigationService, datepickerEnabledService: DatepickerEnabledService, dateFormControlService: DateFormControlService, commonStrings: ClrCommonStringsService, ifErrorService: IfErrorService, focusService: FocusService, viewManagerService: ViewManagerService, controlClassService: ControlClassService, layoutService: LayoutService, ngControlService: NgControlService);
     addGrid(): boolean;
     controlClass(): string;
     ngAfterViewInit(): void;
@@ -692,12 +694,11 @@ export declare class ClrDateInput extends WrappedFormControl<ClrDateContainer> i
 export declare class ClrDatepickerModule {
 }
 
-export declare class ClrDatepickerViewManager extends AbstractPopover {
+export declare class ClrDatepickerViewManager {
     get isDayView(): boolean;
     get isMonthView(): boolean;
     get isYearView(): boolean;
-    set position(position: PopoverPosition);
-    constructor(parent: ElementRef, _injector: Injector, _viewManagerService: ViewManagerService);
+    constructor(viewManagerService: ViewManagerService);
 }
 
 export declare class ClrDay {
@@ -1483,8 +1484,7 @@ export declare class ClrTabLink {
     activate(): void;
 }
 
-export declare class ClrTabOverflowContent extends AbstractPopover {
-    constructor(injector: Injector, parentHost: ElementRef);
+export declare class ClrTabOverflowContent {
 }
 
 export declare class ClrTabs implements AfterContentInit, OnDestroy {
@@ -1495,6 +1495,7 @@ export declare class ClrTabs implements AfterContentInit, OnDestroy {
     keyFocus: ClrKeyFocus;
     set layout(layout: TabsLayout);
     get layout(): TabsLayout;
+    skipFocusCheck: boolean;
     get tabIds(): string;
     get tabLinkDirectives(): ClrTabLink[];
     tabLinkElements: HTMLElement[];
