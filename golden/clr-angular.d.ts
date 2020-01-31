@@ -667,7 +667,6 @@ export declare class ClrDateContainer implements DynamicWrapper, OnDestroy, Afte
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     ngOnInit(): void;
-    toggleDatepicker(event: MouseEvent): void;
 }
 
 export declare class ClrDateInput extends WrappedFormControl<ClrDateContainer> implements OnInit, AfterViewInit, OnDestroy {

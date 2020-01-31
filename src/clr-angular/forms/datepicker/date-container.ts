@@ -32,7 +32,6 @@ import { DateNavigationService } from './providers/date-navigation.service';
 import { DatepickerEnabledService } from './providers/datepicker-enabled.service';
 import { LocaleHelperService } from './providers/locale-helper.service';
 import { ClrCommonStringsService } from '../../utils/i18n/common-strings.service';
-import { PopoverPosition } from '../../popover/common/popover-positions';
 import { ClrPopoverPositions } from '../../utils/popover/enums/positions.enum';
 import { ClrPopoverPosition } from '../../utils/popover/interfaces/popover-position.interface';
 import { ClrPopoverEventsService } from '../../utils/popover/providers/popover-events.service';
@@ -132,11 +131,12 @@ export class ClrDateContainer implements DynamicWrapper, OnDestroy, AfterViewIni
     this.subscriptions.push(
       this.focusService.focusChange.subscribe(state => {
         this.focus = state;
-      })
-    );
-    this.subscriptions.push(
+      }),
       this.ngControlService.controlChanges.subscribe(control => {
         this.control = control;
+      }),
+      this.toggleService.openChange.subscribe(state => {
+        this.dateFormControlService.markAsTouched();
       })
     );
   }
@@ -197,14 +197,6 @@ export class ClrDateContainer implements DynamicWrapper, OnDestroy, AfterViewIni
    */
   private initializeCalendar(): void {
     this.dateNavigationService.initializeCalendar();
-  }
-
-  /**
-   * Toggles the Datepicker Popover.
-   */
-  toggleDatepicker(event: MouseEvent) {
-    this.toggleService.toggleWithEvent(event);
-    this.dateFormControlService.markAsTouched();
   }
 
   /**

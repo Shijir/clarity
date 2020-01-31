@@ -76,13 +76,13 @@ export default function() {
     });
 
     // @deprecated these tests refer to the old forms layout only and can be removed when its removed
-
     describe('View Basics', () => {
       beforeEach(() => {
         context.detectChanges();
       });
 
       afterEach(() => {
+        // Close the popover to clear the DOM
         const viewManager = document.querySelector('clr-datepicker-view-manager');
         if (viewManager) {
           viewManager.remove();
@@ -91,12 +91,11 @@ export default function() {
 
       it('should returns focus to calendar when we close it', () => {
         const actionButton: HTMLButtonElement = context.clarityElement.querySelector('.clr-input-group-icon-action');
-        const actionButtonSpy = spyOn(actionButton, 'focus');
-        toggleService.open = true;
+        actionButton.click();
         context.detectChanges();
-        toggleService.open = false;
+        actionButton.click();
         context.detectChanges();
-        expect(actionButtonSpy.calls.count()).toBe(1);
+        expect(document.activeElement).toEqual(actionButton);
       });
 
       it('should not call focus when date-picker is not visible', () => {
@@ -182,28 +181,9 @@ export default function() {
     });
 
     describe('Typescript API', () => {
-      // IE doesn't support MouseEvent constructors
-      itIgnore(['ie'], 'toggles the datepicker popover', () => {
-        const fakeEvent: MouseEvent = new MouseEvent('fakeEvent');
-        let flag: boolean;
-        const sub: Subscription = toggleService.openChange.subscribe(open => {
-          flag = open;
-        });
-
-        expect(flag).toBeUndefined();
-        context.clarityDirective.toggleDatepicker(fakeEvent);
-        context.detectChanges();
-
-        expect(flag).toBe(true);
-
-        sub.unsubscribe();
-      });
-
       it('marks the date control as touched when the datepicker popover is toggled', () => {
         spyOn(dateFormControlService, 'markAsTouched');
-
-        context.clarityDirective.toggleDatepicker(null);
-
+        toggleService.open = true;
         expect(dateFormControlService.markAsTouched).toHaveBeenCalled();
       });
 
