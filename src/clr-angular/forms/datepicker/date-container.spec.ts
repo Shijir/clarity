@@ -7,9 +7,7 @@
 import { Component, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TestBed, async } from '@angular/core/testing';
-import { Subscription } from 'rxjs';
 
-import { itIgnore } from '../../../../tests/tests.helpers';
 import { TestContext } from '../../data/datagrid/helpers.spec';
 import { ClrPopoverToggleService } from '../../utils/popover/providers/popover-toggle.service';
 import { IfErrorService } from '../common/if-error/if-error.service';
