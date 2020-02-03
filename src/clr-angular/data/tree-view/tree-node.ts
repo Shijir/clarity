@@ -38,6 +38,8 @@ import { TreeFeaturesService, TREE_FEATURES_PROVIDER } from './tree-features.ser
 import { TreeFocusManagerService } from './tree-focus-manager.service';
 import { ClrTreeNodeLink } from './tree-node-link';
 
+const LVIEW_CONTEXT_INDEX = 8;
+
 @Component({
   selector: 'clr-tree-node',
   templateUrl: './tree-node.html',
@@ -84,15 +86,9 @@ export class ClrTreeNode<T> implements OnInit, OnDestroy {
       if ((<any>injector).view) {
         this._model = (<any>injector).view.context.clrModel;
       } else {
-        // Ivy has a potentially unpredictable internal API to get a parent's model, so a new hack!
+        // Ivy puts this on a specific index of a _lView property
         // tslint:disable-next-line
-        for (const i in (<any>injector)._lView) {
-          const o = (<any>injector)._lView[i];
-          if (o && o.clrModel) {
-            this._model = o.clrModel;
-            continue;
-          }
-        }
+        this._model = (<any>injector)._.lView[LVIEW_CONTEXT_INDEX];
       }
     } else {
       // Force cast for now, not sure how to tie the correct type here to featuresService.recursion
