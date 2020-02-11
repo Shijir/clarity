@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2020 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -65,7 +65,11 @@ export class ClrKeyFocus {
     if (this.prevKeyPressed(event) && this.currentFocusIsNotFirstItem()) {
       this.keyAction(() => this._current--);
     } else if (this.nextKeyPressed(event) && this.currentFocusIsNotLastItem()) {
+      // if the next one is in overflow content, it won't work
+      // but it will still increment this._current
+      console.log('keydown', 'this._current', this._current);
       this.keyAction(() => this._current++);
+      console.log('keydown', 'this._current', this._current);
     } else if (event.code === KeyCodes.Home) {
       this.keyAction(() => (this._current = 0));
     } else if (event.code === KeyCodes.End) {
@@ -97,7 +101,11 @@ export class ClrKeyFocus {
   }
 
   moveTo(position: number) {
+    console.log(position, 'moveTo');
+    console.log(this._current, 'current');
+    console.log(this.positionInRange(position), 'this.positionInRange(position)');
     if (this.positionInRange(position) && position !== this._current) {
+      console.log(position, 'in position check');
       this.keyAction(() => (this._current = position));
     }
   }
@@ -143,6 +151,8 @@ export class ClrKeyFocus {
   }
 
   private keyAction(action: Function) {
+    console.log('keyaction');
+    console.log(this._current, 'this._current');
     this.currentItem.tabIndex = -1;
     action.call(this);
     this.currentItem.tabIndex = 0;

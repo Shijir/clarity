@@ -154,6 +154,10 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     }
   }
 
+  // TODO:
+  // 1. Should this stay as public method?
+  // 2. This method doesn't do calculations; returns only a boolean value. I see getter is a better fit in this case
+  // 3. Also, naming is not clear here. isCurrentInOverflow could express what it does better.
   inOverflow() {
     return (
       this.tabLinkElements.indexOf(document.activeElement as HTMLElement) > -1 &&
@@ -181,7 +185,8 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
 
   private listenForOverflowMenuFocusChanges() {
     return this.toggleService.openChange.pipe(filter(() => isPlatformBrowser(this.platformId))).subscribe(open => {
-      if (open && !this.inOverflow()) {
+      console.log(open, this.inOverflow());
+      if (open && this.inOverflow()) {
         this.focusToFirstItemInOverflow();
       } else if (!open && this.nextFocusedItemIsNotInOverflow()) {
         this.keyFocus.resetTabFocus();
