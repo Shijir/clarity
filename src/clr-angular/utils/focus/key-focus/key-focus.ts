@@ -157,8 +157,6 @@ export class ClrKeyFocus {
   private listenForItemUpdates() {
     return this.clrKeyFocusItems.changes.subscribe(() => {
       this.focusableItems.forEach(item => (item.tabIndex = -1));
-      this._current = 0;
-      this.currentItem.tabIndex = 0;
     });
   }
 
