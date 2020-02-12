@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2020 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -93,7 +93,7 @@ describe('KeyFocus directive', () => {
       expect(component.changed).toBe(true);
       // Test with position
       component.changed = false;
-      clarityDirective.moveTo(0);
+      clarityDirective.moveCurrentTo(0);
       expect(component.changed).toBe(true);
       // Test arrow at border, no rotation
       component.changed = false;
@@ -135,20 +135,20 @@ describe('KeyFocus directive', () => {
     it('current value updates with moveTo', () => {
       openMenu();
       expect(clarityDirective.current).toBe(0);
-      clarityDirective.moveTo(2);
+      clarityDirective.moveCurrentTo(2);
       expect(clarityDirective.current).toBe(2);
-      clarityDirective.moveTo(0);
+      clarityDirective.moveCurrentTo(0);
       expect(clarityDirective.current).toBe(0);
-      clarityDirective.moveTo(-1);
+      clarityDirective.moveCurrentTo(-1);
       expect(clarityDirective.current).toBe(0);
-      clarityDirective.moveTo(999);
+      clarityDirective.moveCurrentTo(999);
       expect(clarityDirective.current).toBe(0);
     });
 
     it('set focus with mouse click', () => {
       openMenu();
       const savedFirst = document.activeElement;
-      clarityDirective.moveTo(2);
+      clarityDirective.moveCurrentTo(2);
       expect(savedFirst).not.toBe(document.activeElement);
       savedFirst.dispatchEvent(new KeyboardEvent('click'));
       expect(document.activeElement).not.toBe(savedFirst);

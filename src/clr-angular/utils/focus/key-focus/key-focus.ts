@@ -4,14 +4,13 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import { EventEmitter, HostListener, Input, Output, Component, ContentChildren, QueryList } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { ClrKeyFocusItem } from './key-focus-item';
-import { ClrFocusDirection } from './enums/focus-direction.enum';
+import { Component, ContentChildren, EventEmitter, HostListener, Input, Output, QueryList } from '@angular/core';
 import { KeyCodes } from '@clr/core/common';
+import { Subscription } from 'rxjs';
+import { ClrFocusDirection } from './enums/focus-direction.enum';
 import { FocusableItem } from './interfaces';
-import { preventArrowKeyScroll, getKeyCodes } from './util';
+import { ClrKeyFocusItem } from './key-focus-item';
+import { getKeyCodes, preventArrowKeyScroll } from './util';
 
 @Component({
   selector: '[clrKeyFocus]',
@@ -45,8 +44,23 @@ export class ClrKeyFocus {
   }
 
   private _current: number = 0;
+
   get current() {
     return this._current;
+  }
+
+  set current(value: number) {
+    if (this._current !== value) {
+      this.moveCurrentTo(value);
+    }
+  }
+
+  get currentItem() {
+    if (this._current >= this.focusableItems.length) {
+      return null;
+    }
+
+    return this.focusableItems[this._current];
   }
 
   private subscriptions: Subscription[] = [];
@@ -63,17 +77,13 @@ export class ClrKeyFocus {
   @HostListener('keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (this.prevKeyPressed(event) && this.currentFocusIsNotFirstItem()) {
-      this.keyAction(() => this._current--);
+      this.current--;
     } else if (this.nextKeyPressed(event) && this.currentFocusIsNotLastItem()) {
-      // if the next one is in overflow content, it won't work
-      // but it will still increment this._current
-      console.log('keydown', 'this._current', this._current);
-      this.keyAction(() => this._current++);
-      console.log('keydown', 'this._current', this._current);
+      this.current++;
     } else if (event.code === KeyCodes.Home) {
-      this.keyAction(() => (this._current = 0));
+      this.current = 0;
     } else if (event.code === KeyCodes.End) {
-      this.keyAction(() => (this._current = this.focusableItems.length - 1));
+      this.current = this.focusableItems.length - 1;
     }
 
     preventArrowKeyScroll(event);
@@ -100,26 +110,28 @@ export class ClrKeyFocus {
     this.currentItem.tabIndex = 0;
   }
 
-  moveTo(position: number) {
-    console.log(position, 'moveTo');
-    console.log(this._current, 'current');
-    console.log(this.positionInRange(position), 'this.positionInRange(position)');
-    if (this.positionInRange(position) && position !== this._current) {
-      console.log(position, 'in position check');
-      this.keyAction(() => (this._current = position));
+  moveCurrentTo(position: number) {
+    if (this.positionInRange(position)) {
+      this.updateBeforeChangingCurrent();
+      this._current = position;
+      this.focusNewCurrent();
     }
+  }
+
+  private updateBeforeChangingCurrent() {
+    // this method will give us a chance to update current item
+    // before moving to a new current item
+    this.currentItem.tabIndex = -1;
+  }
+
+  private focusNewCurrent() {
+    this.currentItem.tabIndex = 0;
+    this.currentItem.focus();
+    this.focusChange.next();
   }
 
   private positionInRange(position: number) {
     return position >= 0 && position < this.focusableItems.length;
-  }
-
-  private get currentItem() {
-    if (this._current >= this.focusableItems.length) {
-      return null;
-    }
-
-    return this.focusableItems[this._current];
   }
 
   private currentFocusIsNotFirstItem() {
@@ -148,16 +160,6 @@ export class ClrKeyFocus {
       this._current = 0;
       this.currentItem.tabIndex = 0;
     });
-  }
-
-  private keyAction(action: Function) {
-    console.log('keyaction');
-    console.log(this._current, 'this._current');
-    this.currentItem.tabIndex = -1;
-    action.call(this);
-    this.currentItem.tabIndex = 0;
-    this.currentItem.focus();
-    this.focusChange.next();
   }
 
   private nextKeyPressed(event: KeyboardEvent) {

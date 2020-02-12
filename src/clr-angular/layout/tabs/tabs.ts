@@ -7,29 +7,27 @@ import {
   AfterContentInit,
   Component,
   ContentChildren,
+  HostBinding,
   Inject,
-  QueryList,
   Input,
   OnDestroy,
-  HostBinding,
-  ViewContainerRef,
+  QueryList,
   ViewChild,
-  PLATFORM_ID,
+  ViewContainerRef,
+  ElementRef,
 } from '@angular/core';
-
+import { Subscription } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 import { IfActiveService } from '../../utils/conditional/if-active.service';
+import { ClrKeyFocus } from '../../utils/focus/key-focus/key-focus';
+import { ClrCommonStringsService } from '../../utils/i18n/common-strings.service';
 import { ClrPopoverToggleService } from '../../utils/popover/providers/popover-toggle.service';
-
+import { TabsLayout } from './enums/tabs-layout.enum';
 import { TabsService } from './providers/tabs.service';
 import { ClrTab } from './tab';
 import { ClrTabLink } from './tab-link.directive';
+import { ClrTabOverflowContent } from './tab-overflow-content';
 import { TABS_ID, TABS_ID_PROVIDER } from './tabs-id.provider';
-import { ClrCommonStringsService } from '../../utils/i18n/common-strings.service';
-import { TabsLayout } from './enums/tabs-layout.enum';
-import { Subscription } from 'rxjs';
-import { ClrKeyFocus } from '../../utils/focus/key-focus/key-focus';
-import { startWith, filter } from 'rxjs/operators';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'clr-tabs',
@@ -45,17 +43,21 @@ import { isPlatformBrowser } from '@angular/common';
                 </ng-container>
             </ng-container>
             <ng-container *ngIf="tabsService.overflowTabs.length > 0">
-                <div class="tabs-overflow bottom-right" [class.open]="toggleService.open" role="presentation">
-                    <li role="application" class="nav-item" (click)="toggleOverflow($event)">
-                        <button class="btn btn-link nav-link dropdown-toggle" type="button" aria-hidden="true"
-                                [class.active]="activeTabInOverflow" [class.open]="inOverflow()" tabIndex="-1">
+                <div class="tabs-overflow bottom-right" role="presentation" 
+                  [class.open]="toggleService.open" 
+                  (keydown.esc)="toggleOverflow($event); focusDropdownToggle(dropdownToggleEl)">
+                    <li role="application" class="nav-item">
+                        <button #dropdownToggleEl class="btn btn-link nav-link dropdown-toggle" type="button" aria-hidden="true" tabIndex="-1"
+                                [class.active]="activeTabInOverflow"
+                                [class.open]="toggleService.open"
+                                (click)="toggleOverflow($event)">
                             <clr-icon shape="ellipsis-horizontal"
                               [class.is-info]="toggleService.open"
                               [attr.title]="commonStrings.keys.more"></clr-icon>
                         </button>
                     </li>
                     <!--tab links in overflow menu-->
-                    <clr-tab-overflow-content>
+                    <clr-tab-overflow-content *ngIf="toggleService.open">
                         <ng-container *ngFor="let link of tabLinkDirectives">
                             <ng-container *ngIf="link.tabsId === tabsId && link.inOverflow"
                                           [ngTemplateOutlet]="link.templateRefContainer.template">
@@ -115,8 +117,7 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     public toggleService: ClrPopoverToggleService,
     public tabsService: TabsService,
     @Inject(TABS_ID) public tabsId: number,
-    public commonStrings: ClrCommonStringsService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    public commonStrings: ClrCommonStringsService
   ) {}
 
   get activeTabInOverflow() {
@@ -128,7 +129,7 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
   }
 
   ngAfterContentInit() {
-    this.subscriptions.push(this.listenForTabLinkChanges(), this.listenForOverflowMenuFocusChanges());
+    this.subscriptions.push(this.listenForTabLinkChanges());
 
     if (typeof this.ifActiveService.current === 'undefined' && this.tabLinkDirectives[0]) {
       this.tabLinkDirectives[0].activate();
@@ -139,7 +140,17 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
 
   toggleOverflow(event: any) {
     this.skipFocusCheck = true;
+    if (this.toggleService.open) {
+      // The reason why we are moving the current back to the first in tab overflow before closing it
+      // is that to prevent users from pressing their arrow keys many times to move
+      // the focus to the tab links that are not in overflow.
+      this.keyFocus.moveCurrentTo(this.overflowPosition);
+    }
     this.toggleService.toggleWithEvent(event);
+  }
+
+  focusDropdownToggle(dropdownToggleEl: HTMLElement) {
+    dropdownToggleEl.focus();
   }
 
   checkFocusVisible() {
@@ -147,18 +158,14 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
       this.skipFocusCheck = false;
       return;
     }
-    if (!this.toggleService.open && this.inOverflow()) {
+    if (!this.toggleService.open && this.isCurrentInOverflow) {
       this.toggleService.open = true;
-    } else if (this.toggleService.open && !this.inOverflow()) {
+    } else if (this.toggleService.open && !this.isCurrentInOverflow) {
       this.toggleService.open = false;
     }
   }
 
-  // TODO:
-  // 1. Should this stay as public method?
-  // 2. This method doesn't do calculations; returns only a boolean value. I see getter is a better fit in this case
-  // 3. Also, naming is not clear here. isCurrentInOverflow could express what it does better.
-  inOverflow() {
+  get isCurrentInOverflow() {
     return (
       this.tabLinkElements.indexOf(document.activeElement as HTMLElement) > -1 &&
       this.keyFocus.current >= this.overflowPosition
@@ -183,22 +190,11 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     });
   }
 
-  private listenForOverflowMenuFocusChanges() {
-    return this.toggleService.openChange.pipe(filter(() => isPlatformBrowser(this.platformId))).subscribe(open => {
-      console.log(open, this.inOverflow());
-      if (open && this.inOverflow()) {
-        this.focusToFirstItemInOverflow();
-      } else if (!open && this.nextFocusedItemIsNotInOverflow()) {
-        this.keyFocus.resetTabFocus();
-      }
-    });
-  }
-
-  private focusToFirstItemInOverflow() {
-    this.keyFocus.moveTo(this.overflowPosition);
-  }
-
-  private nextFocusedItemIsNotInOverflow() {
-    return this.tabLinkElements.find(e => e === document.activeElement) === undefined;
+  @ViewChild(ClrTabOverflowContent, { static: false })
+  set overflowContent(value: ClrTabOverflowContent) {
+    // only after view tab overflow content view is registered, we need to move the focus
+    if (this.toggleService.open && value) {
+      this.keyFocus.moveCurrentTo(this.overflowPosition);
+    }
   }
 }
