@@ -44,8 +44,7 @@ import { TABS_ID, TABS_ID_PROVIDER } from './tabs-id.provider';
             </ng-container>
             <ng-container *ngIf="tabsService.overflowTabs.length > 0">
                 <div class="tabs-overflow bottom-right" role="presentation" 
-                  [class.open]="toggleService.open" 
-                  (keydown.esc)="toggleOverflow($event); focusDropdownToggle(dropdownToggleEl)">
+                  [class.open]="toggleService.open">
                     <li role="application" class="nav-item">
                         <button #dropdownToggleEl class="btn btn-link nav-link dropdown-toggle" type="button" aria-hidden="true" tabIndex="-1"
                                 [class.active]="activeTabInOverflow"
@@ -57,7 +56,9 @@ import { TABS_ID, TABS_ID_PROVIDER } from './tabs-id.provider';
                         </button>
                     </li>
                     <!--tab links in overflow menu-->
-                    <clr-tab-overflow-content *ngIf="toggleService.open">
+                    <clr-tab-overflow-content 
+                      *ngIf="toggleService.open" 
+                      (keydown.esc)="toggleOverflow($event)">
                         <ng-container *ngFor="let link of tabLinkDirectives">
                             <ng-container *ngIf="link.tabsId === tabsId && link.inOverflow"
                                           [ngTemplateOutlet]="link.templateRefContainer.template">
@@ -144,13 +145,15 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
       // The reason why we are moving the current back to the first in tab overflow before closing it
       // is that to prevent users from pressing their arrow keys many times to move
       // the focus to the tab links that are not in overflow.
-      this.keyFocus.moveCurrentTo(this.overflowPosition);
+      this.keyFocus.moveCurrentTo(this.overflowPosition - 1);
     }
     this.toggleService.toggleWithEvent(event);
   }
 
   focusDropdownToggle(dropdownToggleEl: HTMLElement) {
-    dropdownToggleEl.focus();
+    if (!this.toggleService.open) {
+      dropdownToggleEl.focus();
+    }
   }
 
   checkFocusVisible() {
