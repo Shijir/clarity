@@ -1,17 +1,16 @@
 /*
- * Copyright (c) 2016-2019 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2020 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
-import { EventEmitter, HostListener, Input, Output, Component, ContentChildren, QueryList } from '@angular/core';
-import { Subscription } from 'rxjs';
-
-import { ClrKeyFocusItem } from './key-focus-item';
-import { ClrFocusDirection } from './enums/focus-direction.enum';
+import { Component, ContentChildren, EventEmitter, HostListener, Input, Output, QueryList } from '@angular/core';
 import { KeyCodes } from '@clr/core/common';
+import { Subscription } from 'rxjs';
+import { ClrFocusDirection } from './enums/focus-direction.enum';
 import { FocusableItem } from './interfaces';
-import { preventArrowKeyScroll, getKeyCodes } from './util';
+import { ClrKeyFocusItem } from './key-focus-item';
+import { getKeyCodes, preventArrowKeyScroll } from './util';
 
 @Component({
   selector: '[clrKeyFocus]',
@@ -20,7 +19,7 @@ import { preventArrowKeyScroll, getKeyCodes } from './util';
 export class ClrKeyFocus {
   @Input('clrDirection') direction = ClrFocusDirection.VERTICAL;
   @Input('clrFocusOnLoad') focusOnLoad = false;
-  @Output('clrFocusChange') private focusChange: EventEmitter<void> = new EventEmitter<void>();
+  @Output('clrFocusChange') private focusChange: EventEmitter<number> = new EventEmitter<number>();
   @ContentChildren(ClrKeyFocusItem, { descendants: true })
   private clrKeyFocusItems: QueryList<ClrKeyFocusItem>;
 
@@ -40,13 +39,40 @@ export class ClrKeyFocus {
     if (this._focusableItems) {
       return this._focusableItems;
     } else {
-      return this.clrKeyFocusItems.toArray();
+      return this.clrKeyFocusItems && this.clrKeyFocusItems.toArray();
     }
   }
 
   private _current: number = 0;
+
   get current() {
     return this._current;
+  }
+
+  set current(value: number) {
+    // save the initial current position value even before registering items
+    if (!this.focusableItems) {
+      this._current = value;
+      return;
+    }
+
+    if (this._current !== value && this.positionInRange(value)) {
+      this._current = value;
+      this.focusCurrent();
+    }
+  }
+
+  get currentItem() {
+    if (this._current >= this.focusableItems.length) {
+      return null;
+    }
+
+    return this.focusableItems[this._current];
+  }
+
+  focusCurrent() {
+    this.currentItem.focus();
+    this.focusChange.next(this._current);
   }
 
   private subscriptions: Subscription[] = [];
@@ -63,13 +89,13 @@ export class ClrKeyFocus {
   @HostListener('keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (this.prevKeyPressed(event) && this.currentFocusIsNotFirstItem()) {
-      this.keyAction(() => this._current--);
+      this.current--;
     } else if (this.nextKeyPressed(event) && this.currentFocusIsNotLastItem()) {
-      this.keyAction(() => this._current++);
+      this.current++;
     } else if (event.code === KeyCodes.Home) {
-      this.keyAction(() => (this._current = 0));
+      this.current = 0;
     } else if (event.code === KeyCodes.End) {
-      this.keyAction(() => (this._current = this.focusableItems.length - 1));
+      this.current = this.focusableItems.length - 1;
     }
 
     preventArrowKeyScroll(event);
@@ -86,32 +112,12 @@ export class ClrKeyFocus {
     }
 
     if (position > -1) {
-      this._current = position;
-    }
-  }
-
-  resetTabFocus() {
-    this.currentItem.tabIndex = -1;
-    this._current = 0;
-    this.currentItem.tabIndex = 0;
-  }
-
-  moveTo(position: number) {
-    if (this.positionInRange(position) && position !== this._current) {
-      this.keyAction(() => (this._current = position));
+      this.current = position;
     }
   }
 
   private positionInRange(position: number) {
     return position >= 0 && position < this.focusableItems.length;
-  }
-
-  private get currentItem() {
-    if (this._current >= this.focusableItems.length) {
-      return null;
-    }
-
-    return this.focusableItems[this._current];
   }
 
   private currentFocusIsNotFirstItem() {
@@ -123,31 +129,15 @@ export class ClrKeyFocus {
   }
 
   private initializeFocus() {
-    if (this.focusableItems && this.focusableItems.length) {
-      this.focusableItems.forEach(i => (i.tabIndex = -1));
-      this.currentItem.tabIndex = 0;
-    }
-
     if (this.focusOnLoad) {
-      this.currentItem.focus();
-      this.focusChange.next();
+      this.focusCurrent();
     }
   }
 
   private listenForItemUpdates() {
     return this.clrKeyFocusItems.changes.subscribe(() => {
-      this.focusableItems.forEach(item => (item.tabIndex = -1));
-      this._current = 0;
-      this.currentItem.tabIndex = 0;
+      this.initializeFocus();
     });
-  }
-
-  private keyAction(action: Function) {
-    this.currentItem.tabIndex = -1;
-    action.call(this);
-    this.currentItem.tabIndex = 0;
-    this.currentItem.focus();
-    this.focusChange.next();
   }
 
   private nextKeyPressed(event: KeyboardEvent) {
