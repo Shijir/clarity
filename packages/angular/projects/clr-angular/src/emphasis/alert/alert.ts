@@ -97,4 +97,8 @@ export class ClrAlert implements OnInit, OnDestroy {
     this._closed = false;
     this._closedChanged.emit(false);
   }
+
+  get size(): string {
+    return this.isSmall ? 'sm' : null;
+  }
 }

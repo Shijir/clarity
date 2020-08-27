@@ -10,14 +10,12 @@ import { AlertIconAndTypesService } from './providers/icon-and-types.service';
 @Component({
   selector: 'clr-alert-item',
   template: `
-    <div class="alert-icon-wrapper">
-      <clr-icon
-        class="alert-icon"
-        [attr.shape]="iconService.alertIconShape"
-        [attr.title]="iconService.alertIconTitle"
-      ></clr-icon>
-    </div>
-    <ng-content></ng-content>
+    <cds-alert closable>
+      <ng-content select=".alert-text"></ng-content>
+      <cds-alert-actions>
+        <ng-content select=".alert-actions"></ng-content>
+      </cds-alert-actions>
+    </cds-alert>
   `,
   host: { class: 'alert-item' },
 })
