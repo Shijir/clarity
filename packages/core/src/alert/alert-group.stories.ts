@@ -420,6 +420,49 @@ export function bannerGroup() {
   `;
 }
 
+/** @website */
+export function bannerGroupWithPagination() {
+  return html`
+    <div cds-layout="vertical gap:sm">
+      <cds-alert-group type="banner" status="info" aria-label="This is an example banner alert group">
+        <cds-alert closable>
+          <cds-icon shape="node-group" aria-label="Custom icon of a node group" role="img"></cds-icon>
+          This example is an alert a user may be able to close with a custom icon shape inside a banner alert group.
+        </cds-alert>
+      </cds-alert-group>
+
+      <cds-alert-group
+        type="banner"
+        aria-label="This is an example banner alert group with an alert whose text is really long"
+      >
+        <cds-alert closable>
+          <cds-icon shape="headphones" aria-label="Headphones" role="img"></cds-icon>
+          This example is an alert a user may be able to close with alert action buttons, a custom icon, and multiple
+          lines of text inside a banner alert group. A block of lorem ipsum sample text follows: Drake Equation take
+          root and flourish culture rings of Uranus quasar hundreds of thousands? Cambrian explosion gathered by gravity
+          of brilliant syntheses vanquish the impossible finite but unbounded not a sunrise but a galaxyrise.
+          Intelligent beings two ghostly white figures in coveralls and helmets are soflty dancing something incredible
+          is waiting to be known vanquish the impossible vastness is bearable only through love concept of the number
+          one and billions upon billions upon billions upon billions upon billions upon billions upon billions.
+          <cds-alert-actions>
+            <cds-button>Button 1</cds-button>
+            <a href="#" cds-text="link">Link 1</a>
+          </cds-alert-actions>
+        </cds-alert>
+      </cds-alert-group>
+
+      <cds-alert-group size="sm" type="banner" aria-label="This is an example banner alert group">
+        <cds-alert>
+          This example shows that a banner alert group should ignore compact sizing.
+          <cds-alert-actions>
+            <cds-button>Button 1</cds-button>
+          </cds-alert-actions>
+        </cds-alert>
+      </cds-alert-group>
+    </div>
+  `;
+}
+
 export const darkThemeBannerAlertGroup = () => {
   return html`
     <div cds-theme="dark" cds-layout="vertical gap:sm">
