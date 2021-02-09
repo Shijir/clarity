@@ -1,0 +1,22 @@
+@import './../styles/tokens/generated/index';
+
+:host {
+  --color: inherit;
+  --input-border-color: var(--color);
+  --input-border-width: #{$cds-alias-object-border-width-100};
+  --input-border-radius: #{$cds-alias-object-border-radius-100};
+  --input-padding: 0 var(--cds-global-layout-space-xs);
+  --height: #{$cds-global-space-9};
+  height: var(--height);
+  color: var(--color);
+  display: flex;
+}
+
+::slotted(input) {
+  border-width: var(--input-border-width);
+  border-color: var(--input-border-color);
+  border-radius: var(--input-border-radius);
+  padding: var(--input-padding);
+  border-style: solid;
+  text-align: center;
+}
