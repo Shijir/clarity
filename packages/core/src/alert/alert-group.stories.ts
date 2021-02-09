@@ -425,6 +425,7 @@ export function bannerGroupWithPagination() {
   return html`
     <div cds-layout="vertical gap:sm">
       <cds-alert-group type="banner" status="info" aria-label="This is an example banner alert group">
+        <div class="pager">Lol</div>
         <cds-alert closable>
           <cds-icon shape="node-group" aria-label="Custom icon of a node group" role="img"></cds-icon>
           This example is an alert a user may be able to close with a custom icon shape inside a banner alert group.
@@ -435,6 +436,7 @@ export function bannerGroupWithPagination() {
         type="banner"
         aria-label="This is an example banner alert group with an alert whose text is really long"
       >
+        <div class="pager">Lol</div>
         <cds-alert closable>
           <cds-icon shape="headphones" aria-label="Headphones" role="img"></cds-icon>
           This example is an alert a user may be able to close with alert action buttons, a custom icon, and multiple

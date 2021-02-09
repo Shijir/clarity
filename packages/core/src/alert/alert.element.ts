@@ -74,9 +74,9 @@ export function getAlertContentLayout(
         case 'wrapper':
           return alertGroupHasPager ? fillLayoutValue : '';
         case 'content':
-          return 'align:shrink';
+          return 'align:center';
         case 'actions':
-          return alertGroupHasPager ? fillLayoutValue : '';
+          return alertGroupHasPager ? 'align:center' : '';
         default:
           return '';
       }
