@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2020 VMware, Inc. All Rights Reserved.
+ * Copyright (c) 2016-2021 VMware, Inc. All Rights Reserved.
  * This software is released under MIT license.
  * The full license information can be found in LICENSE in the root directory of this project.
  */
@@ -92,7 +92,7 @@ export class CdsAlertGroup extends LitElement {
   render() {
     return html`
       <div
-        cds-layout="${this.pager ? 'horizontal wrap:none' : 'horizontal'}"
+        cds-layout="${this.pager ? 'horizontal wrap:none align:vertical-stretch' : 'horizontal'}"
         class="${this.pager ? 'private-host' : 'private-host no-pager'}"
       >
         <div class="pager-wrapper" cds-layout="p-x:lg">
