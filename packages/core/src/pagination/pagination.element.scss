@@ -1,1 +1,9 @@
 @import './../styles/tokens/generated/index';
+
+:host {
+  // TODO: consider using --button prefix for the following properties
+  --background: none;
+  --color: #{$cds-global-typography-color-500};
+  --disabled-color: #{$cds-alias-status-disabled};
+  --disabled-background: none;
+}

@@ -1,7 +1,6 @@
 @import './../styles/tokens/generated/index';
 
 :host {
-  --color: inherit;
   --input-border-color: var(--color);
   --input-border-width: #{$cds-alias-object-border-width-100};
   --input-border-radius: #{$cds-alias-object-border-radius-100};

@@ -78,16 +78,13 @@ export const customPaginationStyles = () => {
       .custom-color-pagination cds-pagination-number {
         --color: hotpink;
       }
-      .custom-background-pagination cds-pagination-button {
-        --background: hotpink;
-        --color: white;
-      }
-      .custom-background-pagination cds-pagination-button[disabled] {
-        --background: pink;
-        --color: white;
-      }
-      .custom-background-pagination cds-pagination-number {
-        --color: hotpink;
+
+      .custom-background-pagination cds-pagination {
+        --color: green;
+        --background: orange;
+
+        --disabled-color: pink;
+        --disabled-background: purple;
       }
     </style>
     <div class="custom-color-pagination">

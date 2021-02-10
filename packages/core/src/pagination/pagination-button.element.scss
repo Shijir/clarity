@@ -1,11 +1,9 @@
 @import './../styles/tokens/generated/index';
 
 :host {
-  --background: none;
   --height: #{$cds-global-space-9};
   --width: #{$cds-global-space-9};
   --padding: 0;
-  --color: inherit;
   --border-color: var(--color);
   --border-width: 0;
   --border-radius: #{$cds-alias-object-border-radius-100};
@@ -44,7 +42,8 @@ cds-icon {
 }
 
 :host([disabled]) {
-  --color: #{$cds-alias-status-disabled};
   --box-shadow-color: #{$cds-alias-object-opacity-0};
+  --color: var(--disabled-color);
+  --background: var(--disabled-background);
   pointer-events: none !important;
 }
