@@ -113,6 +113,7 @@
   background-color: var(--pagination-background);
   padding-top: $cds-global-space-2;
   padding-bottom: $cds-global-space-2;
+  display: flex;
 }
 
 :host([type='banner']) .alert-group-wrapper {
@@ -122,13 +123,5 @@
 
 // TODO: THESE STYLES ARE PLACEHOLDERS TO VERIFY THE ADDITION OF THE BANNER ALERT pagination!
 ::slotted(cds-pagination) {
-  --color: red;
-  --disabled-color: orange;
-  width: calc(2 * #{$cds-global-space-12});
-  // color: $cds-global-typography-color-100;
-
-  // height: 100%;
-  // display: inline-flex;
-  // justify-content: center;
-  // align-items: center;
+  --color: #{$cds-global-typography-color-100};
 }

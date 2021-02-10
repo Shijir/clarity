@@ -95,7 +95,7 @@ export class CdsAlertGroup extends LitElement {
         cds-layout="${this.pagination ? 'horizontal wrap:none align:vertical-stretch' : 'horizontal'}"
         class="${this.pagination ? 'private-host' : 'private-host no-pagination'}"
       >
-        <div class="pagination-wrapper" cds-layout="p-x:lg">
+        <div class="pagination-wrapper">
           <slot name="cds-pagination-slot"></slot>
         </div>
         <div class="alert-group-wrapper">

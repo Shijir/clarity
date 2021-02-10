@@ -6,4 +6,7 @@
   --color: #{$cds-global-typography-color-500};
   --disabled-color: #{$cds-alias-status-disabled};
   --disabled-background: none;
+  --min-width: calc(2 * #{$cds-global-space-12});
+  min-width: var(--min-width);
+  display: flex;
 }
