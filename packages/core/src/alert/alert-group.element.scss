@@ -12,7 +12,7 @@
   --border-color: #{$cds-alias-status-neutral};
   --border-width: #{$cds-alias-object-border-width-100};
   --border-radius: #{$cds-alias-object-border-radius-100};
-  --pager-background: #{$cds-alias-status-neutral};
+  --pagination-background: #{$cds-alias-status-neutral};
 
   width: 100%;
 }
@@ -77,40 +77,40 @@
 
 :host([type='banner'][status='info']) {
   --background: #{$cds-alias-status-info};
-  --pager-background: #{$cds-alias-status-info-shade};
+  --pagination-background: #{$cds-alias-status-info-shade};
 }
 
 :host([type='banner'][status='warning']) {
   --background: #{$cds-alias-status-warning};
-  --pager-background: #{$cds-alias-status-warning-shade};
+  --pagination-background: #{$cds-alias-status-warning-shade};
 }
 
 :host([type='banner'][status='danger']) {
   --background: #{$cds-alias-status-danger};
-  --pager-background: #{$cds-alias-status-danger-shade};
+  --pagination-background: #{$cds-alias-status-danger-shade};
 }
 
 :host([type='banner'][status='success']) {
   --background: #{$cds-alias-status-success};
-  --pager-background: #{$cds-alias-status-success-shade};
+  --pagination-background: #{$cds-alias-status-success-shade};
 }
 
 :host([type='banner'][status='neutral']) {
   --background: #{$cds-alias-status-neutral};
-  --pager-background: #{$cds-alias-status-neutral-shade};
+  --pagination-background: #{$cds-alias-status-neutral-shade};
 }
 
 :host([type='banner'][status='alt']) {
   --background: #{$cds-alias-status-alt};
-  --pager-background: #{$cds-alias-status-alt-shade};
+  --pagination-background: #{$cds-alias-status-alt-shade};
 }
 
-.no-pager .pager-wrapper {
+.no-pagination .pagination-wrapper {
   display: none;
 }
 
-.pager-wrapper {
-  background-color: var(--pager-background);
+.pagination-wrapper {
+  background-color: var(--pagination-background);
   padding-top: $cds-global-space-2;
   padding-bottom: $cds-global-space-2;
 }
@@ -120,12 +120,15 @@
   padding-bottom: $cds-global-space-2;
 }
 
-// TODO: THESE STYLES ARE PLACEHOLDERS TO VERIFY THE ADDITION OF THE BANNER ALERT PAGER!
-::slotted(.pager) {
-  color: $cds-global-typography-color-100;
+// TODO: THESE STYLES ARE PLACEHOLDERS TO VERIFY THE ADDITION OF THE BANNER ALERT pagination!
+::slotted(cds-pagination) {
+  --color: red;
+  --disabled-color: orange;
   width: calc(2 * #{$cds-global-space-12});
-  height: 100%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  // color: $cds-global-typography-color-100;
+
+  // height: 100%;
+  // display: inline-flex;
+  // justify-content: center;
+  // align-items: center;
 }

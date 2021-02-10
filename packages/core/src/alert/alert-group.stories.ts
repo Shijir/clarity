@@ -425,12 +425,10 @@ export function bannerGroupWithPagination() {
   return html`
     <div cds-layout="vertical gap:sm">
       <cds-alert-group type="banner" status="info" aria-label="This is an example banner alert group">
-        <div class="pager">
-          <cds-pagination>
-            <cds-pagination-button action="prev"></cds-pagination-button>
-            <cds-pagination-button action="next"></cds-pagination-button>
-          </cds-pagination>
-        </div>
+        <cds-pagination>
+          <cds-pagination-button action="prev" disabled></cds-pagination-button>
+          <cds-pagination-button action="next"></cds-pagination-button>
+        </cds-pagination>
         <cds-alert closable>
           <cds-icon shape="node-group" aria-label="Custom icon of a node group" role="img"></cds-icon>
           This example is an alert a user may be able to close with a custom icon shape inside a banner alert group.
@@ -441,12 +439,10 @@ export function bannerGroupWithPagination() {
         type="banner"
         aria-label="This is an example banner alert group with an alert whose text is really long"
       >
-        <div class="pager">
-          <cds-pagination>
-            <cds-pagination-button action="prev"></cds-pagination-button>
-            <cds-pagination-button action="next"></cds-pagination-button>
-          </cds-pagination>
-        </div>
+        <cds-pagination>
+          <cds-pagination-button action="prev" disabled></cds-pagination-button>
+          <cds-pagination-button action="next"></cds-pagination-button>
+        </cds-pagination>
         <cds-alert closable>
           <cds-icon shape="headphones" aria-label="Headphones" role="img"></cds-icon>
           This example is an alert a user may be able to close with alert action buttons, a custom icon, and multiple
@@ -464,12 +460,10 @@ export function bannerGroupWithPagination() {
       </cds-alert-group>
 
       <cds-alert-group size="sm" type="banner" aria-label="This is an example banner alert group">
-        <div class="pager">
-          <cds-pagination>
-            <cds-pagination-button action="prev"></cds-pagination-button>
-            <cds-pagination-button action="next"></cds-pagination-button>
-          </cds-pagination>
-        </div>
+        <cds-pagination>
+          <cds-pagination-button action="prev" disabled></cds-pagination-button>
+          <cds-pagination-button action="next"></cds-pagination-button>
+        </cds-pagination>
         <cds-alert closable>
           This example shows that a banner alert group should ignore compact sizing.
           <cds-alert-actions>

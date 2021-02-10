@@ -187,7 +187,7 @@ export class CdsAlert extends LitElement {
   }
 
   private get parentGroupHasPager(): boolean {
-    return this.type === 'banner' && !!(this.parentElement as CdsAlertGroup).pager;
+    return this.type === 'banner' && !!(this.parentElement as CdsAlertGroup).pagination;
   }
 
   render() {
