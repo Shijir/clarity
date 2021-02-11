@@ -41,7 +41,7 @@ export const basic = () => {
 export const basicPaginationNumber = () => {
   return html` <cds-pagination>
     <cds-pagination-button action="prev" disabled></cds-pagination-button>
-    <cds-pagination-number>1</cds-pagination-number>
+    <cds-pagination-number>1 / 3</cds-pagination-number>
     <cds-pagination-button action="next"></cds-pagination-button>
   </cds-pagination>`;
 };

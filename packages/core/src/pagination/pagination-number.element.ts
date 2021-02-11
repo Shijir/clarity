@@ -10,7 +10,7 @@ import { styles } from './pagination-number.element.css.js';
 
 export class CdsPaginationNumber extends LitElement {
   render() {
-    return html`<div cds-layout="horizontal gap:sm m-x:sm align:center">
+    return html`<div cds-layout="horizontal gap:sm align:center">
       <slot></slot>
     </div>`;
   }
