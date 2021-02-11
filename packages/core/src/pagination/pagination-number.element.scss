@@ -6,6 +6,7 @@
   --input-border-radius: #{$cds-alias-object-border-radius-100};
   --input-padding: 0 var(--cds-global-layout-space-xs);
   --height: #{$cds-global-space-9};
+  font-size: var(--font-size);
   height: var(--height);
   color: var(--color);
   display: flex;
