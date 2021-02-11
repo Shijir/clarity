@@ -113,7 +113,9 @@
   background-color: var(--pagination-background);
   padding-top: $cds-global-space-2;
   padding-bottom: $cds-global-space-2;
+  width: calc(2 *#{$cds-global-space-13});
   display: flex;
+  justify-content: center;
 }
 
 :host([type='banner']) .alert-group-wrapper {

@@ -427,6 +427,9 @@ export function bannerGroupWithPagination() {
       <cds-alert-group type="banner" status="info" aria-label="This is an example banner alert group">
         <cds-pagination>
           <cds-pagination-button action="prev" disabled></cds-pagination-button>
+          <cds-pagination-number>
+            1/3
+          </cds-pagination-number>
           <cds-pagination-button action="next"></cds-pagination-button>
         </cds-pagination>
         <cds-alert closable>
@@ -441,6 +444,9 @@ export function bannerGroupWithPagination() {
       >
         <cds-pagination>
           <cds-pagination-button action="prev" disabled></cds-pagination-button>
+          <cds-pagination-number>
+            1/3
+          </cds-pagination-number>
           <cds-pagination-button action="next"></cds-pagination-button>
         </cds-pagination>
         <cds-alert closable>
@@ -462,6 +468,9 @@ export function bannerGroupWithPagination() {
       <cds-alert-group size="sm" type="banner" aria-label="This is an example banner alert group">
         <cds-pagination>
           <cds-pagination-button action="prev" disabled></cds-pagination-button>
+          <cds-pagination-number>
+            1/3
+          </cds-pagination-number>
           <cds-pagination-button action="next"></cds-pagination-button>
         </cds-pagination>
         <cds-alert closable>
