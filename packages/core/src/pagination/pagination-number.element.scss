@@ -6,13 +6,15 @@
   --input-border-radius: #{$cds-alias-object-border-radius-100};
   --input-padding: 0 var(--cds-global-layout-space-xs);
   --height: #{$cds-global-space-9};
-  letter-spacing: 0.3em;
+  --letter-spacing: var(--cds-global-space-4);
   text-align: center;
-  padding: 0 0 0 0.3em;
   font-size: var(--font-size);
   height: var(--height);
   color: var(--color);
   display: flex;
+
+  letter-spacing: var(--letter-spacing);
+  padding: 0 0 0 var(--letter-spacing);
 }
 
 ::slotted(input) {

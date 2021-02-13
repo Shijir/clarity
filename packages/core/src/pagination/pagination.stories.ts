@@ -70,13 +70,13 @@ export const customPaginationStyles = () => {
   return html`
     <style>
       .custom-color-pagination cds-pagination-button {
-        --color: hotpink;
+        --color: blue;
       }
       .custom-color-pagination cds-pagination-button[disabled] {
-        --color: pink;
+        --color: lightblue;
       }
       .custom-color-pagination cds-pagination-number {
-        --color: hotpink;
+        --color: blue;
       }
 
       .custom-background-pagination cds-pagination {
