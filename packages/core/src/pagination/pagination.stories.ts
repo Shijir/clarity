@@ -113,5 +113,15 @@ export const customPaginationStyles = () => {
         <cds-pagination-button>last</cds-pagination-button>
       </cds-pagination>
     </div>
+    <div cds-layout="m-y:md">
+      <cds-pagination cds-layout="horizontal gap:xxs align:center">
+        <cds-pagination-button disabled>
+          <cds-icon shape="arrow" direction="left"></cds-icon>
+        </cds-pagination-button>
+        <cds-pagination-button>
+          <cds-icon shape="arrow" direction="right"></cds-icon>
+        </cds-pagination-button>
+      </cds-pagination>
+    </div>
   `;
 };
