@@ -13,7 +13,7 @@ export class CdsPaginationButton extends CdsBaseButton {
 
   render() {
     return html`
-      <div class="private-host" cds-layout="horizontal align:center">
+      <div class="private-host" cds-layout="horizontal align:center ${this.action ? '' : 'p-x:sm'}">
         <slot>
           ${this.action === 'next' ? html`<cds-icon shape="angle" direction="right"></cds-icon>` : ''}
           ${this.action === 'last' ? html`<cds-icon shape="step-forward-2"></cds-icon>` : ''}
