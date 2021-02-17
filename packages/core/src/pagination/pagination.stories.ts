@@ -69,17 +69,17 @@ export const editablePaginationNumber = () => {
 export const customPaginationStyles = () => {
   return html`
     <style>
-      .custom-color-pagination cds-pagination-button {
+      .custom-pagination-color cds-pagination-button {
         --color: blue;
       }
-      .custom-color-pagination cds-pagination-button[disabled] {
+      .custom-pagination-color cds-pagination-button[disabled] {
         --color: lightblue;
       }
-      .custom-color-pagination cds-pagination-number {
+      .custom-pagination-color cds-pagination-number {
         --color: blue;
       }
 
-      .custom-background-pagination cds-pagination {
+      .custom-pagination-button cds-pagination {
         --color: green;
         --background: orange;
 
@@ -87,8 +87,8 @@ export const customPaginationStyles = () => {
         --disabled-background: purple;
       }
     </style>
-    <div class="custom-color-pagination">
-      <cds-pagination cds-layout="horizontal gap:sm align:center">
+    <div cds-layout="m-y:sm" class="custom-pagination-color">
+      <cds-pagination cds-layout="horizontal gap:xs align:center">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
         <cds-pagination-number> <input type="text" value="1" size="1" />/3 </cds-pagination-number>
@@ -96,8 +96,8 @@ export const customPaginationStyles = () => {
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
     </div>
-    <div class="custom-background-pagination">
-      <cds-pagination cds-layout="horizontal gap:sm align:center">
+    <div cds-layout="m-y:md" class="custom-pagination-button">
+      <cds-pagination cds-layout="horizontal gap:xxs align:center">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
         <cds-pagination-number> <input type="text" value="1" size="1" />/3 </cds-pagination-number>
