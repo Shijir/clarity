@@ -123,5 +123,20 @@ export const customPaginationStyles = () => {
         </cds-pagination-button>
       </cds-pagination>
     </div>
+
+    <div cds-layout="m-y:md">
+      <cds-pagination>
+        <cds-pagination-button action="first" disabled></cds-pagination-button>
+        <cds-pagination-button action="prev" disabled></cds-pagination-button>
+        <cds-pagination-button>1</cds-pagination-button>
+        <cds-pagination-button>2</cds-pagination-button>
+        <cds-pagination-button>3</cds-pagination-button>
+        ...
+        <cds-pagination-button>5</cds-pagination-button>
+        <cds-pagination-button>6</cds-pagination-button>
+        <cds-pagination-button action="next"></cds-pagination-button>
+        <cds-pagination-button action="last"></cds-pagination-button>
+      </cds-pagination>
+    </div>
   `;
 };
