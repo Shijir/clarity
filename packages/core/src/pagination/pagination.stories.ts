@@ -66,6 +66,41 @@ export const editablePaginationNumber = () => {
   </cds-pagination>`;
 };
 
+export const customPaginationContent = () => {
+  return html` <div cds-layout="m-y:md">
+      <cds-pagination cds-layout="horizontal gap:xxs align:center">
+        <cds-pagination-button disabled>
+          <cds-icon shape="arrow" direction="left"></cds-icon>
+        </cds-pagination-button>
+        <cds-pagination-button>
+          <cds-icon shape="arrow" direction="right"></cds-icon>
+        </cds-pagination-button>
+      </cds-pagination>
+    </div>
+    <div cds-layout="m-y:md">
+      <cds-pagination>
+        <cds-pagination-button action="first" disabled></cds-pagination-button>
+        <cds-pagination-button action="prev" disabled></cds-pagination-button>
+        <cds-pagination-button>1</cds-pagination-button>
+        <cds-pagination-button>2</cds-pagination-button>
+        <cds-pagination-button>3</cds-pagination-button>
+        ...
+        <cds-pagination-button>5</cds-pagination-button>
+        <cds-pagination-button>6</cds-pagination-button>
+        <cds-pagination-button action="next"></cds-pagination-button>
+        <cds-pagination-button action="last"></cds-pagination-button>
+      </cds-pagination>
+    </div>
+    <div cds-layout="m-y:md">
+      <cds-pagination cds-layout="horizontal gap:xxs align:center">
+        <cds-pagination-button disabled>first</cds-pagination-button>
+        <cds-pagination-button disabled>prev</cds-pagination-button>
+        <cds-pagination-button>next</cds-pagination-button>
+        <cds-pagination-button>last</cds-pagination-button>
+      </cds-pagination>
+    </div>`;
+};
+
 export const customPaginationStyles = () => {
   return html`
     <style>
@@ -101,39 +136,6 @@ export const customPaginationStyles = () => {
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
         <cds-pagination-number> <input type="text" value="1" size="1" />/3 </cds-pagination-number>
-        <cds-pagination-button action="next"></cds-pagination-button>
-        <cds-pagination-button action="last"></cds-pagination-button>
-      </cds-pagination>
-    </div>
-    <div cds-layout="m-y:md">
-      <cds-pagination cds-layout="horizontal gap:xxs align:center">
-        <cds-pagination-button disabled>first</cds-pagination-button>
-        <cds-pagination-button disabled>prev</cds-pagination-button>
-        <cds-pagination-button>next</cds-pagination-button>
-        <cds-pagination-button>last</cds-pagination-button>
-      </cds-pagination>
-    </div>
-    <div cds-layout="m-y:md">
-      <cds-pagination cds-layout="horizontal gap:xxs align:center">
-        <cds-pagination-button disabled>
-          <cds-icon shape="arrow" direction="left"></cds-icon>
-        </cds-pagination-button>
-        <cds-pagination-button>
-          <cds-icon shape="arrow" direction="right"></cds-icon>
-        </cds-pagination-button>
-      </cds-pagination>
-    </div>
-
-    <div cds-layout="m-y:md">
-      <cds-pagination>
-        <cds-pagination-button action="first" disabled></cds-pagination-button>
-        <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-pagination-button>1</cds-pagination-button>
-        <cds-pagination-button>2</cds-pagination-button>
-        <cds-pagination-button>3</cds-pagination-button>
-        ...
-        <cds-pagination-button>5</cds-pagination-button>
-        <cds-pagination-button>6</cds-pagination-button>
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
