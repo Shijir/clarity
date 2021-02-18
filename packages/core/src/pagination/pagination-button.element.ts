@@ -15,12 +15,12 @@ export class CdsPaginationButton extends CdsBaseButton {
   @querySlot('cds-icon', { assign: 'cds-icon-slot' }) cdsIcon: HTMLElement;
 
   get customContent() {
-    return this.action && !this.cdsIcon;
+    return !this.action && !this.cdsIcon;
   }
 
   render() {
     return html`
-      <div class="private-host" cds-layout="horizontal align:center ${this.customContent ? '' : 'p-x:sm'}">
+      <div class="private-host" cds-layout="horizontal align:center ${this.customContent ? 'p-x:sm' : ''}">
         <slot name="cds-icon-slot">
           ${this.action === 'next' ? html`<cds-icon shape="angle" direction="right"></cds-icon>` : ''}
           ${this.action === 'last' ? html`<cds-icon shape="step-forward-2"></cds-icon>` : ''}
