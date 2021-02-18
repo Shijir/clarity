@@ -121,6 +121,15 @@ export const customPaginationStyles = () => {
         --disabled-color: pink;
         --disabled-background: purple;
       }
+
+      .custom-pagination-border cds-pagination-button {
+        --border-color: #666666;
+        --border-width: 1px;
+        --border-radius: 0;
+
+        --disabled-color: #666666;
+        --disabled-background: #999999;
+      }
     </style>
     <div cds-layout="m-y:sm" class="custom-pagination-color">
       <cds-pagination cds-layout="horizontal gap:xs align:center">
@@ -133,6 +142,15 @@ export const customPaginationStyles = () => {
     </div>
     <div cds-layout="m-y:md" class="custom-pagination-button">
       <cds-pagination cds-layout="horizontal gap:xxs align:center">
+        <cds-pagination-button action="first" disabled></cds-pagination-button>
+        <cds-pagination-button action="prev" disabled></cds-pagination-button>
+        <cds-pagination-number> <input type="text" value="1" size="1" />/3 </cds-pagination-number>
+        <cds-pagination-button action="next"></cds-pagination-button>
+        <cds-pagination-button action="last"></cds-pagination-button>
+      </cds-pagination>
+    </div>
+    <div cds-layout="m-y:md" class="custom-pagination-border">
+      <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
         <cds-pagination-number> <input type="text" value="1" size="1" />/3 </cds-pagination-number>
