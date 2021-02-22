@@ -2,7 +2,6 @@
 
 :host {
   --height: #{$cds-global-space-9};
-  --letter-spacing: var(--cds-global-space-4);
 
   --input-border-color: var(--color);
   --input-border-width: #{$cds-alias-object-border-width-100};
@@ -15,9 +14,6 @@
   height: var(--height);
   color: var(--color);
   display: flex;
-
-  letter-spacing: var(--letter-spacing);
-  padding: 0 0 0 var(--letter-spacing);
 }
 
 ::slotted(input) {

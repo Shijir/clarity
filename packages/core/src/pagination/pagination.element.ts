@@ -15,7 +15,7 @@ export class CdsPagination extends LitElement {
   render() {
     return this.hasAttribute('cds-layout')
       ? html`<slot></slot>`
-      : html`<div cds-layout="horizontal gap:sm align:center"><slot></slot></div>`;
+      : html`<div cds-layout="horizontal gap:md align:center"><slot></slot></div>`;
   }
 
   static get styles() {
