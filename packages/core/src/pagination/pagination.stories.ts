@@ -160,3 +160,17 @@ export const customPaginationStyles = () => {
     </div>
   `;
 };
+
+export const darkTheme = () => {
+  return html`
+    <div cds-layout="m-y:sm" cds-theme="dark">
+      <cds-pagination cds-layout="horizontal gap:xs align:center">
+        <cds-pagination-button action="first" disabled></cds-pagination-button>
+        <cds-pagination-button action="prev" disabled></cds-pagination-button>
+        <cds-pagination-number> <input type="text" value="1" size="1" />/3 </cds-pagination-number>
+        <cds-pagination-button action="next"></cds-pagination-button>
+        <cds-pagination-button action="last"></cds-pagination-button>
+      </cds-pagination>
+    </div>
+  `;
+};
