@@ -85,8 +85,8 @@ export const customPaginationContent = () => {
         <cds-pagination-button>2</cds-pagination-button>
         <cds-pagination-button>3</cds-pagination-button>
         ...
-        <cds-pagination-button>5</cds-pagination-button>
-        <cds-pagination-button>6</cds-pagination-button>
+        <cds-pagination-button>99</cds-pagination-button>
+        <cds-pagination-button>100</cds-pagination-button>
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
