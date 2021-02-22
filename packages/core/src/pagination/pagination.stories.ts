@@ -104,13 +104,14 @@ export const customPaginationContent = () => {
     </div>
     <div cds-layout="m-y:md">
       <cds-pagination class="show-pages">
-        <cds-pagination-button action="first" disabled></cds-pagination-button>
-        <cds-pagination-button action="prev" disabled></cds-pagination-button>
+        <cds-pagination-button action="first"></cds-pagination-button>
+        <cds-pagination-button action="prev"></cds-pagination-button>
         <cds-pagination-button>1</cds-pagination-button>
         <cds-pagination-button>2</cds-pagination-button>
-        <cds-pagination-button>3</cds-pagination-button>
         ...
-        <cds-pagination-button class="active">51</cds-pagination-button>
+        <cds-pagination-button>49</cds-pagination-button>
+        <cds-pagination-button class="active">50</cds-pagination-button>
+        <cds-pagination-button>51</cds-pagination-button>
         ...
         <cds-pagination-button>99</cds-pagination-button>
         <cds-pagination-button>100</cds-pagination-button>
@@ -120,11 +121,14 @@ export const customPaginationContent = () => {
     </div>
     <div cds-layout="m-y:md">
       <cds-pagination class="show-pages outline-pagination-items">
-        <cds-pagination-button action="first" disabled></cds-pagination-button>
-        <cds-pagination-button action="prev" disabled></cds-pagination-button>
+        <cds-pagination-button action="first"></cds-pagination-button>
+        <cds-pagination-button action="prev"></cds-pagination-button>
         <cds-pagination-button>1</cds-pagination-button>
         <cds-pagination-button>2</cds-pagination-button>
-        <cds-pagination-button>3</cds-pagination-button>
+        ...
+        <cds-pagination-button>49</cds-pagination-button>
+        <cds-pagination-button class="active">50</cds-pagination-button>
+        <cds-pagination-button>51</cds-pagination-button>
         ...
         <cds-pagination-button>99</cds-pagination-button>
         <cds-pagination-button>100</cds-pagination-button>
