@@ -23,15 +23,14 @@
   border-width: var(--border-width);
 }
 
-:host(:active) .private-host,
-:host(:active) .private-host::after {
+:host(:active) .private-host {
   box-shadow: 0 #{$cds-global-space-2} 0 0 var(--box-shadow-color) inset;
 }
 
 :host(:hover),
 :host(:focus),
 :host(:active) {
-  .private-host::after {
+  .private-host {
     filter: brightness(90%);
   }
 }
