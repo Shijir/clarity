@@ -130,6 +130,12 @@ export const customPaginationStyles = () => {
         --disabled-color: #666666;
         --disabled-background: #999999;
       }
+
+      .custom-pagination-border cds-pagination-number {
+        --input-border-color: #666666;
+        --input-border-width: 1px;
+        --input-border-radius: 0;
+      }
     </style>
     <div cds-layout="m-y:sm" class="custom-pagination-color">
       <cds-pagination cds-layout="horizontal gap:xs align:center">
