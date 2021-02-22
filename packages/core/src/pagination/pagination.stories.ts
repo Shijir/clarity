@@ -69,11 +69,18 @@ export const editablePaginationNumber = () => {
 export const customPaginationContent = () => {
   return html`
     <style>
-      .pagination-border cds-pagination-button {
+      .show-pages {
+        --color: var(--cds-alias-status-neutral);
+      }
+      .show-pages .active {
+        --background: var(--cds-alias-status-neutral);
+        --color: white;
+      }
+      .outline-pagination-items cds-pagination-button {
         --border-width: 1px;
       }
 
-      .pagination-border cds-pagination-number {
+      .outline-pagination-items cds-pagination-number {
         --input-border-width: 1px;
       }
     </style>
@@ -89,19 +96,21 @@ export const customPaginationContent = () => {
     </div>
     <div cds-layout="m-y:md">
       <cds-pagination cds-layout="horizontal gap:xxs align:center">
-        <cds-pagination-button disabled>first</cds-pagination-button>
-        <cds-pagination-button disabled>prev</cds-pagination-button>
-        <cds-pagination-button>next</cds-pagination-button>
-        <cds-pagination-button>last</cds-pagination-button>
+        <cds-pagination-button disabled>First</cds-pagination-button>
+        <cds-pagination-button disabled>Prev</cds-pagination-button>
+        <cds-pagination-button>Next</cds-pagination-button>
+        <cds-pagination-button>Last</cds-pagination-button>
       </cds-pagination>
     </div>
     <div cds-layout="m-y:md">
-      <cds-pagination>
+      <cds-pagination class="show-pages">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
         <cds-pagination-button>1</cds-pagination-button>
         <cds-pagination-button>2</cds-pagination-button>
         <cds-pagination-button>3</cds-pagination-button>
+        ...
+        <cds-pagination-button class="active">51</cds-pagination-button>
         ...
         <cds-pagination-button>99</cds-pagination-button>
         <cds-pagination-button>100</cds-pagination-button>
@@ -110,7 +119,7 @@ export const customPaginationContent = () => {
       </cds-pagination>
     </div>
     <div cds-layout="m-y:md">
-      <cds-pagination class="pagination-border">
+      <cds-pagination class="show-pages outline-pagination-items">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
         <cds-pagination-button>1</cds-pagination-button>
@@ -147,7 +156,7 @@ export const customPaginationStyles = () => {
         --disabled-background: purple;
       }
 
-      .custom-pagination-border cds-pagination-button {
+      .custom-outline-pagination-items cds-pagination-button {
         --border-color: #666666;
         --border-width: 1px;
         --border-radius: 0;
@@ -156,7 +165,7 @@ export const customPaginationStyles = () => {
         --disabled-background: #999999;
       }
 
-      .custom-pagination-border cds-pagination-number {
+      .custom-outline-pagination-items cds-pagination-number {
         --input-border-color: #666666;
         --input-border-width: 1px;
         --input-border-radius: 0;
@@ -180,7 +189,7 @@ export const customPaginationStyles = () => {
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
     </div>
-    <div cds-layout="m-y:md" class="custom-pagination-border">
+    <div cds-layout="m-y:md" class="custom-outline-pagination-items">
       <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
