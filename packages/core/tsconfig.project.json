@@ -22,6 +22,7 @@
     { "path": "./src/internal-components/close-button/entrypoint.tsconfig.json" },
     { "path": "./src/internal-components/overlay/entrypoint.tsconfig.json" },
     { "path": "./src/modal/entrypoint.tsconfig.json" },
+    { "path": "./src/pagination/entrypoint.tsconfig.json" },
     { "path": "./src/password/entrypoint.tsconfig.json" },
     { "path": "./src/progress-circle/entrypoint.tsconfig.json" },
     { "path": "./src/radio/entrypoint.tsconfig.json" },

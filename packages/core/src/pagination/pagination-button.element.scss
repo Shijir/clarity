@@ -1,0 +1,51 @@
+@import './../styles/tokens/generated/index';
+
+:host {
+  --height: #{$cds-global-space-9};
+  --min-width: #{$cds-global-space-9};
+  --padding: 0;
+  --border-color: var(--color);
+  --border-width: 0;
+  --border-radius: #{$cds-alias-object-border-radius-100};
+  --box-shadow-color: #{$cds-alias-object-opacity-100};
+  color: var(--color);
+}
+
+.private-host {
+  --icon-color: var(--color);
+  color: var(--color);
+  background: var(--background);
+  min-width: var(--min-width);
+  height: var(--height);
+  border-color: var(--border-color);
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-width: var(--border-width);
+}
+
+:host(:active) .private-host {
+  box-shadow: 0 #{$cds-global-space-2} 0 0 var(--box-shadow-color) inset;
+}
+
+:host(:hover),
+:host(:focus),
+:host(:active) {
+  .private-host {
+    filter: brightness(90%);
+  }
+}
+
+cds-icon {
+  --color: var(--icon-color);
+}
+
+:host([disabled]) {
+  --box-shadow-color: #{$cds-alias-object-opacity-0};
+  --color: var(--disabled-color);
+  --background: var(--disabled-background);
+  pointer-events: none !important;
+
+  .private-host {
+    filter: none;
+  }
+}

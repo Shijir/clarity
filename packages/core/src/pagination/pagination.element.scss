@@ -1,0 +1,11 @@
+@import './../styles/tokens/generated/index';
+
+:host {
+  --background: none;
+  --color: #{$cds-global-typography-color-500};
+  --font-size: #{$cds-global-typography-font-size-4};
+  --disabled-color: #{$cds-alias-status-disabled};
+  --disabled-background: none;
+  color: var(--color);
+  display: flex;
+}

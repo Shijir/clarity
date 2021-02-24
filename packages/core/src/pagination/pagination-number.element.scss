@@ -1,0 +1,29 @@
+@import './../styles/tokens/generated/index';
+
+:host {
+  --height: #{$cds-global-space-9};
+
+  --input-border-color: var(--color);
+  --input-border-width: #{$cds-alias-object-border-width-100};
+  --input-border-radius: #{$cds-alias-object-border-radius-100};
+  --input-min-height: #{$cds-global-space-9};
+  --input-min-width: #{$cds-global-space-9};
+  --input-background: none;
+  text-align: center;
+  font-size: var(--font-size);
+  height: var(--height);
+  color: var(--color);
+  display: flex;
+}
+
+::slotted(input) {
+  background: var(--input-background);
+  border-width: var(--input-border-width);
+  border-color: var(--input-border-color);
+  border-radius: var(--input-border-radius);
+  border-style: solid;
+  color: var(--color);
+  min-height: var(--input-min-height);
+  min-width: var(--input-min-width);
+  text-align: center;
+}
