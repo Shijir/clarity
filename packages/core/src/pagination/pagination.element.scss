@@ -4,8 +4,9 @@
   // TODO: consider using --button prefix for the following properties
   --background: none;
   --color: #{$cds-global-typography-color-500};
+  --font-size: #{$cds-global-typography-font-size-4};
+
   --disabled-color: #{$cds-alias-status-disabled};
   --disabled-background: none;
-  --font-size: #{$cds-global-typography-font-size-4};
   display: flex;
 }
