@@ -7,7 +7,7 @@
   --border-color: var(--color);
   --border-width: 0;
   --border-radius: #{$cds-alias-object-border-radius-100};
-  --box-shadow-color: #{$cds-alias-object-opacity-100};
+  --box-shadow: 0 #{$cds-global-space-2} 0 0 #{$cds-alias-object-opacity-100} inset;
   color: var(--color);
 }
 
@@ -24,7 +24,7 @@
 }
 
 :host(:active) .private-host {
-  box-shadow: 0 #{$cds-global-space-2} 0 0 var(--box-shadow-color) inset;
+  box-shadow: var(--box-shadow);
 }
 
 :host(:hover),
