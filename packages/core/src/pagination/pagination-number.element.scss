@@ -1,8 +1,6 @@
 @import './../styles/tokens/generated/index';
 
 :host {
-  --height: #{$cds-global-space-9};
-
   --input-border-color: var(--color);
   --input-border-width: #{$cds-alias-object-border-width-100};
   --input-border-radius: #{$cds-alias-object-border-radius-100};
@@ -11,7 +9,6 @@
   --input-background: none;
   text-align: center;
   font-size: var(--font-size);
-  height: var(--height);
   color: var(--color);
   display: flex;
 }
