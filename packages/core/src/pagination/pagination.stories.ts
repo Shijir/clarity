@@ -41,7 +41,7 @@ export const basic = () => {
 export const basicPaginationNumber = () => {
   return html` <cds-pagination>
     <cds-pagination-button action="prev" disabled></cds-pagination-button>
-    <cds-pagination-number>1 / 3</cds-pagination-number>
+    1 / 3
     <cds-pagination-button action="next"></cds-pagination-button>
   </cds-pagination>`;
 };
@@ -50,7 +50,7 @@ export const firstAndLast = () => {
   return html` <cds-pagination>
     <cds-pagination-button action="first" disabled></cds-pagination-button>
     <cds-pagination-button action="prev" disabled></cds-pagination-button>
-    <cds-pagination-number>1 / 3</cds-pagination-number>
+    1 / 3
     <cds-pagination-button action="next"></cds-pagination-button>
     <cds-pagination-button action="last"></cds-pagination-button>
   </cds-pagination>`;
@@ -60,7 +60,13 @@ export const editablePaginationNumber = () => {
   return html` <cds-pagination>
     <cds-pagination-button action="first" disabled></cds-pagination-button>
     <cds-pagination-button action="prev" disabled></cds-pagination-button>
-    <cds-pagination-number><input type="text" value="1" size="1" /> / 3</cds-pagination-number>
+    <cds-input control-width="shrink">
+      <label cds-layout="display:screen-reader-only">
+        Edit current page
+      </label>
+      <input type="text" value="1" size="1" />
+    </cds-input>
+    / 3
     <cds-pagination-button action="next"></cds-pagination-button>
     <cds-pagination-button action="last"></cds-pagination-button>
   </cds-pagination>`;
@@ -184,7 +190,13 @@ export const customPaginationStyles = () => {
       <cds-pagination cds-layout="horizontal gap:xs align:center">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-pagination-number><input type="text" value="1" size="1" /> / 3</cds-pagination-number>
+        <cds-input control-width="shrink">
+          <label cds-layout="display:screen-reader-only">
+            Edit current page
+          </label>
+          <input type="text" value="1" size="1" />
+        </cds-input>
+        / 3
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
@@ -193,7 +205,13 @@ export const customPaginationStyles = () => {
       <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-pagination-number> <input type="text" value="1" size="1" /> / 3</cds-pagination-number>
+        <cds-input control-width="shrink">
+          <label cds-layout="display:screen-reader-only">
+            Edit current page
+          </label>
+          <input type="text" value="1" size="1" />
+        </cds-input>
+        / 3
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
@@ -202,7 +220,13 @@ export const customPaginationStyles = () => {
       <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-pagination-number> <input type="text" value="1" size="1" /> / 3</cds-pagination-number>
+        <cds-input control-width="shrink">
+          <label cds-layout="display:screen-reader-only">
+            Edit current page
+          </label>
+          <input type="text" value="1" size="1" />
+        </cds-input>
+        / 3
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
@@ -216,7 +240,13 @@ export const customPaginationAlignments = () => {
       <cds-pagination cds-layout="horizontal gap:md align:left">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-pagination-number> <input type="text" value="1" size="1" /> / 3 </cds-pagination-number>
+        <cds-input control-width="shrink">
+          <label cds-layout="display:screen-reader-only">
+            Edit current page
+          </label>
+          <input type="text" value="1" size="1" />
+        </cds-input>
+        / 3
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
@@ -225,7 +255,13 @@ export const customPaginationAlignments = () => {
       <cds-pagination cds-layout="horizontal gap:md align:right">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-pagination-number> <input type="text" value="1" size="1" /> / 3 </cds-pagination-number>
+        <cds-input control-width="shrink">
+          <label cds-layout="display:screen-reader-only">
+            Edit current page
+          </label>
+          <input type="text" value="1" size="1" />
+        </cds-input>
+        / 3
         <cds-pagination-button action="next"></cds-pagination-button>
         <cds-pagination-button action="last"></cds-pagination-button>
       </cds-pagination>
@@ -246,7 +282,13 @@ export const customPaginationAlignments = () => {
         <cds-pagination-button disabled>
           <cds-icon shape="angle" direction="up"></cds-icon>
         </cds-pagination-button>
-        <cds-pagination-number> <input type="text" value="1" size="1" /> / 3 </cds-pagination-number>
+        <cds-input control-width="shrink">
+          <label cds-layout="display:screen-reader-only">
+            Edit current page
+          </label>
+          <input type="text" value="1" size="1" />
+        </cds-input>
+        / 3
         <cds-pagination-button>
           <cds-icon shape="angle" direction="down"></cds-icon>
         </cds-pagination-button>
