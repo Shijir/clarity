@@ -6,6 +6,7 @@
 
 import { baseStyles } from '@cds/core/internal';
 import { html, LitElement } from 'lit-element';
+import { CdsInput } from '../input/input.element.js';
 import { styles } from './pagination.element.css.js';
 
 export const PAGINATION_LAYOUT = 'horizontal gap:md align:center';
@@ -19,5 +20,13 @@ export class CdsPagination extends LitElement {
 
   static get styles() {
     return [baseStyles, styles];
+  }
+
+  firstUpdated() {
+    const numberInput = this.querySelector('[cds-pagination-number]') as CdsInput;
+    if (numberInput) {
+      numberInput.controlWidth = 'shrink';
+      numberInput.layout = 'compact';
+    }
   }
 }

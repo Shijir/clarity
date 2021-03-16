@@ -71,7 +71,7 @@ export const editablePaginationNumber = () => {
   return html`<cds-pagination>
     <cds-pagination-button action="first" disabled></cds-pagination-button>
     <cds-pagination-button action="prev" disabled></cds-pagination-button>
-    <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+    <cds-input cds-pagination-number box>
       <label cds-layout="display:screen-reader-only">suffix</label>
       <input type="text" value="40" size="2" />
       <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -199,7 +199,7 @@ export const customPaginationStyles = () => {
       <cds-pagination cds-layout="horizontal gap:xs align:center">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -212,7 +212,7 @@ export const customPaginationStyles = () => {
       <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -225,7 +225,7 @@ export const customPaginationStyles = () => {
       <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -243,7 +243,7 @@ export const customPaginationAlignments = () => {
       <cds-pagination cds-layout="horizontal gap:md align:left">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -256,7 +256,7 @@ export const customPaginationAlignments = () => {
       <cds-pagination cds-layout="horizontal gap:md align:right">
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -281,7 +281,7 @@ export const customPaginationAlignments = () => {
         <cds-pagination-button disabled>
           <cds-icon shape="angle" direction="up"></cds-icon>
         </cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
@@ -300,7 +300,7 @@ export const darkTheme = () => {
       <cds-pagination>
         <cds-pagination-button action="first" disabled></cds-pagination-button>
         <cds-pagination-button action="prev" disabled></cds-pagination-button>
-        <cds-input cds-pagination-number layout="inline" control-width="shrink" box>
+        <cds-input cds-pagination-number box>
           <label cds-layout="display:screen-reader-only">suffix</label>
           <input type="text" value="40" size="2" />
           <cds-control-message action="suffix" readonly>/ 80</cds-control-message>
