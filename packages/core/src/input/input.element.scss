@@ -18,6 +18,7 @@
   --color: #{$cds-global-typography-color-500};
   --line-height: #{$cds-global-space-9};
   --transition: background-size #{$cds-global-animation-duration-quick} ease;
+  --text-align: inherit;
   display: block;
   width: 100%;
 }
@@ -36,6 +37,7 @@
   -webkit-appearance: none !important;
   background: #{$cds-alias-object-opacity-0} !important;
   box-shadow: none !important;
+  text-align: var(--text-align);
 
   &::placeholder {
     --color: $cds-global-typography-color-200 !important;
@@ -108,4 +110,12 @@
 
 :host([_disabled]) {
   --border-color: #{$cds-alias-status-disabled};
+}
+
+:host([box]) {
+  --background: var(--cds-alias-object-container-background);
+  --border-radius: var(--cds-alias-object-border-radius-100);
+  --border: var(--cds-alias-object-border-width-100) solid var(--cds-alias-object-border-color);
+  --border-bottom: 0;
+  --padding: var(--cds-global-space-2) var(--cds-global-space-4) 0 var(--cds-global-space-4);
 }
