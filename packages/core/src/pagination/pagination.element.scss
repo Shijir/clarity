@@ -10,10 +10,3 @@
   display: flex;
   font-size: var(--font-size);
 }
-
-::slotted(cds-input[box]) {
-  --font-size: var(--font-size);
-  --text-align: center;
-  --padding: 0 #{$cds-global-space-3};
-  display: inline-flex;
-}

@@ -23,7 +23,7 @@ export class CdsPagination extends LitElement {
   }
 
   firstUpdated() {
-    const numberInput = this.querySelector('[cds-pagination-number]') as CdsInput;
+    const numberInput = this.querySelector<CdsInput>('[cds-pagination-number]');
     if (numberInput) {
       numberInput.controlWidth = 'shrink';
       numberInput.layout = 'compact';
