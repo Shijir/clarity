@@ -22,7 +22,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  ignorePatterns: ['.eslintrc.js', 'postcss.config.js'],
+  ignorePatterns: ['.eslintrc.js', 'postcss.config.js', 'webpack.config.js'],
   plugins: ['@typescript-eslint', 'jasmine', 'clarity', 'unused-imports'],
   rules: {
     '@typescript-eslint/no-explicit-any': OFF, // Would LOVE to turn this on
