@@ -2,7 +2,6 @@
   "name": "clarity",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
     "start": "ng serve dev",
     "test:angular": "ng test clr-angular --watch false --source-map=false",
     "test:angular:watch": "ng test clr-angular --source-map=false",
