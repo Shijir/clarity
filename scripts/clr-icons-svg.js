@@ -4,6 +4,7 @@
  * The full license information can be found in LICENSE in the root directory of this project.
  */
 
+/* eslint-disable @typescript-eslint/no-var-requires */
 const writeSVGIcons = require('./write-svg-icons');
 const shell = require('shelljs');
 
