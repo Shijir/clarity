@@ -25,7 +25,7 @@ if (typeof window !== 'undefined') {
 
   // Defining clr-icon custom element
   if (!customElements.get('clr-icon')) {
-    customElements.define('clr-icon', ClarityIconElement);
+    customElements.define('clr-icon', ClarityIconElement as any);
   }
 }
 
