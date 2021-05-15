@@ -8,6 +8,7 @@
     "test:angular:watch": "ng test clr-angular --source-map=false",
     "test:icons": "karma start ./projects/icons/karma.conf.js",
     "test:icons:watch": "karma start ./projects/icons/karma.conf.js --single-run=false",
+    "test": "npm-run-all test:angular test:icons",
     "format": "prettier --list-different './**/*.{js,json,md,ts,scss}'",
     "format:fix": "pretty-quick --staged",
     "format:file": "prettier --write .",
@@ -33,7 +34,7 @@
     "build:icons:webpack": "webpack --config projects/icons/webpack.config.js",
     "build:icons:package": "cpy projects/icons/npm.json projects/icons/README.md ./dist/clr-icons/; mv ./dist/clr-icons/npm.json ./dist/clr-icons/package.json;",
     "build:icons": "npm-run-all build:icons:css build:icons:optimize build:icons:webpack build:icons:package",
-    "build:projects": "npm-run-all clean:build build:angular build:ui build:website build:dev",
+    "build:projects": "npm-run-all clean:build build:angular build:ui build:icons build:website build:dev",
     "build:ci": "npm-run-all format lint test build:projects"
   },
   "private": true,
