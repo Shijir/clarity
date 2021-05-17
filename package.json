@@ -1,6 +1,6 @@
 {
   "name": "clarity",
-  "version": "0.0.0",
+  "version": "5.2.0",
   "scripts": {
     "start": "ng serve dev",
     "test:angular": "ng test clr-angular --watch false --source-map=false",
@@ -34,7 +34,8 @@
     "build:icons:package": "cpy projects/icons/npm.json projects/icons/README.md ./dist/clr-icons/; mv ./dist/clr-icons/npm.json ./dist/clr-icons/package.json;",
     "build:icons:zip": "node ./scripts/clr-icons-svg.js",
     "build:icons": "npm-run-all build:icons:css build:icons:optimize build:icons:webpack build:icons:zip build:icons:package",
-    "build:projects": "npm-run-all clean:build build:angular build:ui build:icons build:website build:dev",
+    "build:sync-versions": "node ./scripts/sync-versions.js",
+    "build:projects": "npm-run-all clean:build build:angular build:ui build:icons build:website build:dev build:sync-versions",
     "build:ci": "npm-run-all format lint test build:projects"
   },
   "private": true,
