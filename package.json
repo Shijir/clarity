@@ -36,7 +36,8 @@
     "build:icons": "npm-run-all build:icons:css build:icons:optimize build:icons:webpack build:icons:zip build:icons:package",
     "build:sync-versions": "node ./scripts/sync-versions.js",
     "build:projects": "npm-run-all clean:build build:angular build:ui build:icons build:website build:dev build:sync-versions",
-    "build:ci": "npm-run-all format lint test build:projects"
+    "build:ci": "npm-run-all format lint test build:projects",
+    "publish": "yarn publish dist/clr-angular; yarn publish dist/clr-ui; yarn publish dist/clr-icons;"
   },
   "private": true,
   "dependencies": {
