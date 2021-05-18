@@ -60,7 +60,7 @@ module.exports = {
       {
         test: /\.ts$/,
         exclude: /node_modules/,
-        loaders: [
+        rules: [
           {
             loader: 'awesome-typescript-loader',
             options: {
