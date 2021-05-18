@@ -25,10 +25,15 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": ["projects/clr-angular/src/main.scss", "src/styles.scss"],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -120,7 +125,6 @@
             "main": "projects/website/src/main.ts",
             "polyfills": "projects/website/src/polyfills.ts",
             "tsConfig": "projects/website/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/website/src/favicon.ico",
               "projects/website/src/manifest.json",
@@ -143,7 +147,13 @@
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components/prism-typescript.min.js",
               "node_modules/@webcomponents/custom-elements/custom-elements.min.js"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -248,14 +258,19 @@
             "main": "projects/clarity-adoption/src/main.ts",
             "polyfills": "projects/clarity-adoption/src/polyfills.ts",
             "tsConfig": "projects/clarity-adoption/tsconfig.app.json",
-            "aot": true,
             "assets": ["projects/clarity-adoption/src/favicon.ico", "projects/clarity-adoption/src/assets"],
             "styles": [
               "projects/clr-angular/src/main.scss",
               "node_modules/prismjs/themes/prism.css",
               "projects/clarity-adoption/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
