@@ -77,7 +77,7 @@ This schematic wires up with the Angular CLI to support automatically adding `@c
 
 ##### How it works
 
-In the `packages/angular/projects/clr-angular/package.json` file, we have declared a line in the package, `"schematics": "./schematics/collection.json",`. Similarly, in the `packages/angular/projects/cds-angular/package.json` file, we have a line, `"schematics": "./schematics/cds-collection.json",`. This denotes to the Angular CLI that the package has a set of schematics.
+In the `packages/angular/projects/angular/package.json` file, we have declared a line in the package, `"schematics": "./schematics/collection.json",`. Similarly, in the `packages/angular/projects/cds-angular/package.json` file, we have a line, `"schematics": "./schematics/cds-collection.json",`. This denotes to the Angular CLI that the package has a set of schematics.
 
 Then when the schematics are parsed, there are special schematics by the name of `ng-add` in `packages/schematics/src/collection.json` and `packages/schematics/src/cds-collection.json` files. Running `ng add @clr/angular` or `ng add @cds/angular` will look for the setup script specified for the library.
 
@@ -117,7 +117,7 @@ This schematic wires up with the Angular CLI to support automatically updating `
 
 ##### How it works
 
-In the `packages/angular/projects/clr-angular/package.json` file, we have declared a line in the package you see below. This denotes to the Angular CLI that this package has a set of migration schematics.
+In the `packages/angular/projects/angular/package.json` file, we have declared a line in the package you see below. This denotes to the Angular CLI that this package has a set of migration schematics.
 
 ```json
   "ng-update": {
