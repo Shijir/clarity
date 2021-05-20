@@ -77,11 +77,7 @@ export default function (): void {
       it('exposes state', function () {
         fullFilter.high = 10;
         fullFilter.low = null;
-        expect(fullFilter.state).toEqual({
-          property: 'a.b.c',
-          high: 10,
-          low: null,
-        });
+        expect(fullFilter.state).toEqual({ property: 'a.b.c', high: 10, low: null });
       });
 
       it('compares filters', function () {
@@ -115,7 +111,6 @@ class TestFilter implements ClrDatagridNumericFilterInterface<number> {
 }
 
 class IncompatibleFilter implements ClrDatagridFilterInterface<number> {
-  // eslint-disable-next-line
   accepts(_item: number): boolean {
     return true;
   }

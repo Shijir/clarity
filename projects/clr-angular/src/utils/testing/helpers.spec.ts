@@ -50,9 +50,7 @@ export class TestContext<C, H> {
   }
 
   // The Function type here is just to tell Typescript to be nice with abstract classes. Weird.
-  /* eslint-disable */
   getClarityProvider<T>(token: Type<T> | InjectionToken<T> | Function, notFoundValue?: T): T {
-    /* eslint-enable */
     return this.clarityDebugElement.injector.get(token, notFoundValue);
   }
 
@@ -109,11 +107,7 @@ export function spec<C, H>(
     if (moduleMetadata && moduleMetadata.declarations) {
       declarations.push(...moduleMetadata.declarations);
     }
-    this.testingModule = TestBed.configureTestingModule({
-      ...moduleMetadata,
-      imports,
-      declarations,
-    });
+    this.testingModule = TestBed.configureTestingModule({ ...moduleMetadata, imports, declarations });
     this.clarityDirectiveType = clarityDirectiveType;
     this.hostType = hostType;
     if (autoInit) {
@@ -145,11 +139,7 @@ export function addHelpersDeprecated(
      * is a bit too new for all IDEs to correctly process it.
      */
     this.create = <D, C>(clarityDirective: Type<D>, testComponent: Type<C>, providers: any[] = []) => {
-      TestBed.configureTestingModule({
-        imports: modulesToImport,
-        declarations: [testComponent],
-        providers: providers,
-      });
+      TestBed.configureTestingModule({ imports: modulesToImport, declarations: [testComponent], providers: providers });
       this._context = new TestContext<D, C>();
       this._context.clarityDirectiveType = clarityDirective;
       this._context.hostType = testComponent;

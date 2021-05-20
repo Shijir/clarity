@@ -14,7 +14,7 @@ import { FocusableItem } from './focusable-item/focusable-item';
 export class FocusService {
   constructor(private renderer: Renderer2) {}
 
-  private _unlistenFuncs: (() => void)[] = [];
+  private _unlistenFuncs: Function[] = [];
   private _current: FocusableItem;
   public get current() {
     return this._current;

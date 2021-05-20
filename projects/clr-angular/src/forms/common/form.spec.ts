@@ -40,6 +40,7 @@ class SimpleTest {
 export default function (): void {
   describe('ClrForm', () => {
     let fixture, directive, layoutService;
+    let commonStrings: ClrCommonStringsService;
 
     beforeEach(function () {
       TestBed.configureTestingModule({
@@ -50,6 +51,7 @@ export default function (): void {
       fixture = TestBed.createComponent(SimpleTest);
       directive = fixture.debugElement.query(By.directive(ClrForm));
       layoutService = directive.injector.get(LayoutService);
+      commonStrings = new ClrCommonStringsService();
     });
 
     it('adds the .clr-form class to host', function () {

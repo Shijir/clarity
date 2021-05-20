@@ -525,7 +525,6 @@ export default function (): void {
         );
         it(
           'should support trackBy index',
-          // eslint-disable-next-line
           testTrackBy((index, _item) => index)
         );
       });
@@ -583,10 +582,8 @@ export default function (): void {
           'should support trackBy item',
           testTrackBy((_index, item) => item.id)
         );
-
         it(
           'should support trackBy index',
-          // eslint-disable-next-line
           testTrackBy((index, _item) => index)
         );
       });

@@ -71,7 +71,7 @@ class MockNgZone extends NgZone {
     super({ enableLongStackTrace: false });
   }
 
-  runOutsideAngular(fn: () => any): any {
+  runOutsideAngular(fn: Function): any {
     return fn();
   }
 

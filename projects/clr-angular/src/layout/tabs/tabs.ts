@@ -101,10 +101,8 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
     return this._tabLinkDirectives.filter(link => !link.inOverflow).length;
   }
 
-  @ViewChild('tabContentViewContainer', {
-    static: true,
-    read: ViewContainerRef,
-  })
+  @ViewChild('tabContentViewContainer', { static: true, read: ViewContainerRef })
+  // @ts-ignore
   private set tabContentViewContainer(value: ViewContainerRef) {
     this.tabsService.tabContentViewContainer = value;
   }

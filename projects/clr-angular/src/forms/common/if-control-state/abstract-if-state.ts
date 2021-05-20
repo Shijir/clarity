@@ -41,7 +41,6 @@ export abstract class AbstractIfState {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  // eslint-disable-next-line
   protected handleState(state: CONTROL_STATE): void {
     /* overwrite in implementation to handle status change */
   }

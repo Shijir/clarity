@@ -38,7 +38,6 @@ export default function (): void {
 
     it('receives an input for the trackBy option', function () {
       expect(this.itemsProvider.trackBy).toBeUndefined();
-      // eslint-disable-next-line
       this.testComponent.trackBy = (index: number, _item: number) => index;
       this.fixture.detectChanges();
       expect(this.itemsProvider.trackBy).toBe(this.testComponent.trackBy);
@@ -46,9 +45,7 @@ export default function (): void {
   });
 }
 
-@Component({
-  template: `<div *ngFor="let n of numbers; trackBy: trackBy">{{ n }}</div>`,
-})
+@Component({ template: `<div *ngFor="let n of numbers; trackBy: trackBy">{{ n }}</div>` })
 class FullTest {
   @ViewChild(ClrDatagridItems) datagridItems: ClrDatagridItems<number>;
 

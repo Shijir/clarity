@@ -59,7 +59,7 @@ export default function (): void {
 
     it('emits selection changes only when it actually changes', function () {
       let nbChanges = 0;
-      child.selected.subscribe(() => nbChanges++);
+      child.selected.subscribe(_ => nbChanges++);
       // BehaviorSubject sends us the first state on subscription
       expect(nbChanges).toBe(1);
       child.setSelected(ClrSelectedState.UNSELECTED, false, false);

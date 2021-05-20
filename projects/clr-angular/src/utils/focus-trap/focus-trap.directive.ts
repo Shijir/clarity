@@ -173,7 +173,6 @@ export class FocusTrapDirective implements OnInit, AfterViewInit, OnDestroy {
         return el;
       }
     }
-    return null;
   }
 
   ngOnDestroy() {
