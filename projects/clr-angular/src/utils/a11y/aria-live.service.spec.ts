@@ -17,7 +17,6 @@ const ARIA_LIVE_TICK = 100;
   providers: [ClrAriaLiveService],
 })
 class AriaLiveTest {
-  // @ts-ignore
   constructor(private ariaLiveService: ClrAriaLiveService) {}
 }
 

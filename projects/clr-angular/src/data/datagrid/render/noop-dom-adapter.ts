@@ -14,27 +14,27 @@ import { DomAdapter } from '../../../utils/dom-adapter/dom-adapter';
 
 @Injectable()
 export class NoopDomAdapter implements DomAdapter {
-  // @ts-ignore
+  // eslint-disable-next-line
   userDefinedWidth(element: any): number {
     return 0;
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line
   scrollBarWidth(element: any) {
     return 0;
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line
   scrollWidth(element: any) {
     return 0;
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line
   computedHeight(element: any): number {
     return 0;
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line
   clientRect(element: any): ClientRect {
     return {
       top: 0,
@@ -46,12 +46,12 @@ export class NoopDomAdapter implements DomAdapter {
     };
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line
   minWidth(element: any): number {
     return 0;
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line
   focus(element: any): void {
     // Do nothing
   }

@@ -47,7 +47,6 @@ export class ClrTabContent implements OnDestroy {
   // components in the content from initializing before a content container exists.
   // Some child components need their container for sizing calculations.
   @ViewChild('tabContentProjectedRef', { static: true })
-  // @ts-ignore
   private set templateRef(value: TemplateRef<ClrTabContent>) {
     this.viewRef = this.tabsService.tabContentViewContainer.createEmbeddedView(value);
   }

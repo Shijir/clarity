@@ -36,7 +36,7 @@ export class DropdownFocusHandler implements FocusableItem {
     }
   }
 
-  private _unlistenFuncs: Function[] = [];
+  private _unlistenFuncs: (() => void)[] = [];
 
   /**
    * If the dropdown was opened by clicking on the trigger, we automatically move to the first item
@@ -205,7 +205,7 @@ export class DropdownFocusHandler implements FocusableItem {
   }
 
   ngOnDestroy() {
-    this._unlistenFuncs.forEach((unlisten: Function) => unlisten());
+    this._unlistenFuncs.forEach((unlisten: () => void) => unlisten());
     this.focusService.detachListeners();
   }
 }

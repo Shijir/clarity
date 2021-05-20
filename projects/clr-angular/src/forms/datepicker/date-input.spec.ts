@@ -48,7 +48,6 @@ export default function () {
 
     @Injectable()
     class MockNgControlService extends NgControlService {
-      // @ts-ignore
       setControl = setControlSpy;
     }
 

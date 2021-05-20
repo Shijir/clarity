@@ -519,14 +519,14 @@ export default function (): void {
           });
         }
 
-        it(
-          'should support trackBy item',
-          testTrackBy((_index, item) => item.id)
-        );
-        it(
-          'should support trackBy index',
-          testTrackBy((index, _item) => index)
-        );
+        it('should support trackBy item', function () {
+          // eslint-disable-next-line
+          testTrackBy((_index, item) => item.id);
+        });
+        it('should support trackBy index', function () {
+          // eslint-disable-next-line
+          testTrackBy((index, _item) => index);
+        });
       });
 
       describe('single selection', function () {
@@ -578,14 +578,13 @@ export default function (): void {
           });
         }
 
-        it(
-          'should support trackBy item',
-          testTrackBy((_index, item) => item.id)
-        );
-        it(
-          'should support trackBy index',
-          testTrackBy((index, _item) => index)
-        );
+        it('should support trackBy item', () => {
+          testTrackBy((_index, item) => item.id);
+        });
+        it('should support trackBy index', () => {
+          // eslint-disable-next-line
+          testTrackBy((index, _item) => index);
+        });
       });
     });
 

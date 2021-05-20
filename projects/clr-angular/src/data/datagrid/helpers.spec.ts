@@ -83,6 +83,7 @@ export class TestContext<D, C> {
   }
 
   // The Function type here is just to tell Typescript to be nice with abstract classes. Weird.
+  // eslint-disable-next-line
   getClarityProvider<T>(token: Type<T> | InjectionToken<T> | Function): T {
     return this.clarityDebugElement.injector.get(token);
   }

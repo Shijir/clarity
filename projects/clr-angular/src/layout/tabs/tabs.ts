@@ -102,7 +102,6 @@ export class ClrTabs implements AfterContentInit, OnDestroy {
   }
 
   @ViewChild('tabContentViewContainer', { static: true, read: ViewContainerRef })
-  // @ts-ignore
   private set tabContentViewContainer(value: ViewContainerRef) {
     this.tabsService.tabContentViewContainer = value;
   }

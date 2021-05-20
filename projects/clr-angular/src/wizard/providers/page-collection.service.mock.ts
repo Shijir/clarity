@@ -24,6 +24,7 @@ export class PageCollectionMock {
   }
 
   public _previousPageIsCompleted = true;
+  // eslint-disable-next-line
   public previousPageIsCompleted(_page: any = null): boolean {
     return this._previousPageIsCompleted;
   }
