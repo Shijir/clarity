@@ -18,7 +18,7 @@
     "lint:ts:fix": "eslint --fix -c .eslintrc.js \"projects/clr-angular/**/*.ts\" \"projects/icons/**/*.ts\"",
     "lint:styles": "stylelint \"src/**/*.scss\" \"projects/**/*.scss\"",
     "lint:styles:fix": "stylelint --fix \"src/**/*.scss\" \"projects/**/*.scss\"",
-    "golden:fix": "ts-api-guardian --out ./dist/golden/clr-angular.d.ts --stripExportPattern '^Çlr' --allowModuleIdentifiers 'i0' dist/clr-angular/index.d.ts",
+    "golden:generate": "ts-api-guardian --out ./dist/golden/clr-angular.d.ts --stripExportPattern '^Çlr' --allowModuleIdentifiers 'i0' dist/clr-angular/index.d.ts",
     "golden:test": "diff -u golden/clr-angular.d.ts ./dist/golden/clr-angular.d.ts",
     "golden:save": "rm golden/clr-angular.d.ts && cpy dist/golden/clr-angular.d.ts golden/clr-angular.d.ts",
     "clean:build": "rm -rf dist",
@@ -45,7 +45,7 @@
     "schematics:build": "npm-run-all schematics:clean schematics:build:clr schematics:copy:clr",
     "build:sync-versions": "node ./scripts/sync-versions.js",
     "build:projects": "npm-run-all clean:build build:angular schematics:build build:ui build:icons build:website build:dev build:sync-versions",
-    "build:ci": "npm-run-all format lint test build:projects golden:test",
+    "build:ci": "npm-run-all format lint test build:projects golden:generate golden:test",
     "publish": "yarn publish dist/clr-angular; yarn publish dist/clr-ui; yarn publish dist/clr-icons;"
   },
   "private": true,
