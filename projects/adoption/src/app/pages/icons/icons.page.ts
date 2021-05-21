@@ -59,7 +59,7 @@ export class IconsPage {
   eslintSetup = `
 "plugins": ["@clr/clarity-migration"],
 "rules": {
-  "@clr/clarity-adoption/no-clr-icon": "warn",
+  "@clr/adoption/no-clr-icon": "warn",
 },
 "overrides": [
   {

@@ -229,31 +229,31 @@
         }
       }
     },
-    "clarity-adoption": {
+    "adoption": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "projects/clarity-adoption",
-      "sourceRoot": "projects/clarity-adoption/src",
+      "root": "projects/adoption",
+      "sourceRoot": "projects/adoption/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "./dist/website/adoption-guide",
-            "index": "projects/clarity-adoption/src/index.html",
-            "main": "projects/clarity-adoption/src/main.ts",
-            "polyfills": "projects/clarity-adoption/src/polyfills.ts",
-            "tsConfig": "projects/clarity-adoption/tsconfig.app.json",
+            "index": "projects/adoption/src/index.html",
+            "main": "projects/adoption/src/main.ts",
+            "polyfills": "projects/adoption/src/polyfills.ts",
+            "tsConfig": "projects/adoption/tsconfig.app.json",
             "aot": true,
-            "assets": ["projects/clarity-adoption/src/favicon.ico", "projects/clarity-adoption/src/assets"],
+            "assets": ["projects/adoption/src/favicon.ico", "projects/adoption/src/assets"],
             "styles": [
               "projects/angular/src/main.scss",
               "node_modules/prismjs/themes/prism.css",
-              "projects/clarity-adoption/src/styles.scss"
+              "projects/adoption/src/styles.scss"
             ],
             "scripts": []
           },
@@ -261,8 +261,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/clarity-adoption/src/environments/environment.ts",
-                  "with": "projects/clarity-adoption/src/environments/environment.prod.ts"
+                  "replace": "projects/adoption/src/environments/environment.ts",
+                  "with": "projects/adoption/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -290,11 +290,11 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "clarity-adoption:build"
+            "browserTarget": "adoption:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "clarity-adoption:build:production"
+              "browserTarget": "adoption:build:production"
             }
           }
         }
