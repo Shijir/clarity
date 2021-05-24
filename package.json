@@ -1,6 +1,6 @@
 {
   "name": "clarity",
-  "version": "5.2.0",
+  "version": "5.2.1-local.2",
   "scripts": {
     "start": "ng serve dev",
     "test:angular": "ng test clr-angular --watch false --source-map=false",
@@ -47,7 +47,8 @@
     "build:sync-versions": "node ./scripts/sync-versions.js",
     "build:projects": "npm-run-all clean:build build:angular schematics:build build:ui build:icons build:website build:adoption build:dev build:sync-versions",
     "build:ci": "npm-run-all format lint test build:projects golden:fix golden:test",
-    "publish": "yarn publish dist/clr-angular; yarn publish dist/clr-ui; yarn publish dist/clr-icons;"
+    "publish": "yarn publish dist/clr-angular; yarn publish dist/clr-ui; yarn publish dist/clr-icons;",
+    "publish:local": "yarn publish dist/clr-ui --registry http://localhost:4873 --tag local; yarn publish dist/clr-angular --registry http://localhost:4873 --tag local; yarn publish dist/clr-icons --registry http://localhost:4873 --tag local;"
   },
   "private": true,
   "dependencies": {
