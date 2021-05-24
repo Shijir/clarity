@@ -1,6 +1,6 @@
 {
   "name": "clarity",
-  "version": "5.2.1-local.2",
+  "version": "5.2.1-local.4",
   "scripts": {
     "start": "ng serve dev",
     "test:angular": "ng test clr-angular --watch false --source-map=false",
@@ -18,11 +18,11 @@
     "lint:ts:fix": "eslint --fix -c .eslintrc.js \"projects/angular/**/*.ts\" \"projects/icons/**/*.ts\"",
     "lint:styles": "stylelint \"src/**/*.scss\" \"projects/**/*.scss\"",
     "lint:styles:fix": "stylelint --fix \"src/**/*.scss\" \"projects/**/*.scss\"",
-    "golden:fix": "ts-api-guardian --out ./dist/golden/clr-angular.d.ts --stripExportPattern '^Çlr' --allowModuleIdentifiers 'i0' dist/clr-angular/index.d.ts",
+    "golden:fix": "ts-api-guardian --out ./dist/golden/clr-angular.d.ts --stripExportPattern '^Çlr' --allowModuleIdentifiers 'i0' --allowModuleIdentifiers 'ɵngcc0' dist/clr-angular/index.d.ts",
     "golden:test": "diff -u golden/clr-angular.d.ts ./dist/golden/clr-angular.d.ts",
     "golden:save": "rm -rf ./golden/clr-angular.d.ts && cpy ./dist/golden/clr-angular.d.ts ./golden/",
     "clean:build": "rm -rf dist",
-    "build:angular": "ng build clr-angular",
+    "build:angular": "ng build clr-angular --prod",
     "build:adoption": "ng build adoption",
     "build:website": "ng build website",
     "build:dev": "ng build dev",
