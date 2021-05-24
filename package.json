@@ -1,6 +1,6 @@
 {
   "name": "clarity",
-  "version": "5.2.1-local.4",
+  "version": "5.2.1-local.5",
   "scripts": {
     "start": "ng serve dev",
     "test:angular": "ng test clr-angular --watch false --source-map=false",
