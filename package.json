@@ -1,6 +1,6 @@
 {
   "name": "clarity",
-  "version": "5.2.1-local.5",
+  "version": "5.2.1-local.9",
   "scripts": {
     "start": "ng serve dev",
     "test:angular": "ng test clr-angular --watch false --source-map=false",
@@ -45,10 +45,10 @@
     "schematics:copy:clr": "cpy --parents --cwd='src/' '**/*.json' ../../../dist/clr-angular/schematics",
     "schematics:build": "npm-run-all schematics:clean schematics:build:clr schematics:copy:clr",
     "build:sync-versions": "node ./scripts/sync-versions.js",
-    "build:projects": "npm-run-all clean:build build:angular schematics:build build:ui build:icons build:website build:adoption build:dev build:sync-versions",
-    "build:ci": "npm-run-all format lint test build:projects golden:fix golden:test",
+    "build:release": "npm-run-all clean:build format lint test build:angular schematics:build build:ui build:icons build:sync-versions golden:fix golden:test",
+    "build:ci": "npm-run-all build:release build:website build:adoption build:dev",
     "publish": "yarn publish dist/clr-angular; yarn publish dist/clr-ui; yarn publish dist/clr-icons;",
-    "publish:local": "yarn publish dist/clr-ui --registry http://localhost:4873 --tag local; yarn publish dist/clr-angular --registry http://localhost:4873 --tag local; yarn publish dist/clr-icons --registry http://localhost:4873 --tag local;"
+    "publish:local": "yarn publish dist/clr-icons --registry http://localhost:4873 --tag local; yarn publish dist/clr-ui --registry http://localhost:4873 --tag local; yarn publish dist/clr-angular --registry http://localhost:4873 --tag local;"
   },
   "private": true,
   "dependencies": {
