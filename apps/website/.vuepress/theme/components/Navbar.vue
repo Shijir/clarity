@@ -1,5 +1,5 @@
 <template>
-  <header class="header header-6">
+  <header class="header header-6" cds-layout="horizontal">
     <slot name="sidebar-toggle"></slot>
     <div class="branding">
       <RouterLink :to="$localePath" class="nav-link">
@@ -16,6 +16,31 @@
       <AlgoliaSearchBox v-if="isAlgoliaSearch" :options="algolia" />
       <SearchBox v-else-if="$site.themeConfig.search !== false && $page.frontmatter.search !== false" />
     </template>
+    <div class="site-switcher" cds-layout="align:right align:vertical-center m-r:md">
+      <div class="dropdown bottom-left" :class="{ open: themeSwitcherOpen }">
+        <button class="dropdown-toggle btn btn-link btn-inverse" type="button" @click="toggleThemeSwitcher()">
+          <span cds-layout="p-r:sm">LIGHT THEME</span>
+          <cds-icon shape="caret" direction="down" size="lg" inverse cds-layout="align:center"></cds-icon>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item active" href="javascript: void(0)">Light Theme</a>
+          <a class="dropdown-item">Dark Theme</a>
+        </div>
+      </div>
+
+      <div class="dropdown bottom-right" :class="{ open: siteSwitcherOpen }">
+        <button class="dropdown-toggle btn btn-link btn-inverse" type="button" @click="toggleSiteSwitcher()">
+          <span cds-layout="p-r:sm">CLARITY CORE</span>
+          <cds-icon shape="caret" direction="down" size="lg" inverse cds-layout="align:center"></cds-icon>
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item active" href="javascript: void(0)">Clarity Core</a>
+          <a class="dropdown-item" v-bind:href="siteSwitchUrl" target="_blank">Clarity Angular</a>
+          <div class="dropdown-divider" role="separator"></div>
+          <div class="dropdown-item" href="javascript: void(0)">What are the differences?</div>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -34,6 +59,10 @@ export default {
   data() {
     return {
       linksWrapMaxWidth: null,
+      siteSwitcherOpen: false,
+      themeSwitcherOpen: false,
+      componentPath: null,
+      siteSwitchUrl: 'https://angular.clarity.design',
     };
   },
 
@@ -67,6 +96,28 @@ export default {
       }
     }
   },
+  methods: {
+    toggleSiteSwitcher: function () {
+      this.siteSwitcherOpen = !this.siteSwitcherOpen;
+    },
+    toggleThemeSwitcher: function () {
+      this.themeSwitcherOpen = !this.themeSwitcherOpen;
+    },
+  },
+  watch: {
+    $route(to, from) {
+      this.componentPath = to.path;
+
+      this.siteSwitchUrl = 'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/';
+
+      if (this.componentPath === '/core-components/alert/') {
+        this.siteSwitchUrl =
+          'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/documentation/alerts';
+      }
+
+      console.log(this.siteSwitchUrl);
+    },
+  },
 };
 
 function css(el, property) {
@@ -91,5 +142,10 @@ function css(el, property) {
 // Search override: hide the divider
 .header .search-box + .settings::after {
   display: none;
+}
+
+.site-switcher cds-select {
+  --color: #ffffff;
+  text-transform: uppercase;
 }
 </style>
