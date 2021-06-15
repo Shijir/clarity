@@ -94,3 +94,10 @@
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+.site-switcher .dropdown-toggle {
+  border: none;
+  &:hover {
+    background-color: transparent;
+  }
+}
