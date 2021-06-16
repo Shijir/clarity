@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
     private titleService: Title
   ) {}
 
+  currentUrl: string;
+  siteSwitchUrl: string;
+
   ngOnInit() {
     this.router.events.subscribe((change: any) => {
       if (change instanceof NavigationEnd) {
@@ -41,6 +44,17 @@ export class AppComponent implements OnInit {
         if (typeof ga !== 'undefined') {
           ga('send', 'pageview', change.urlAfterRedirects);
         }
+
+        this.currentUrl = change.urlAfterRedirects;
+
+        this.siteSwitchUrl = 'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/';
+
+        if (this.currentUrl === '/documentation/alerts') {
+          this.siteSwitchUrl =
+            'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/documentation/alerts';
+        }
+
+        console.log(this.currentUrl);
       }
     });
   }
