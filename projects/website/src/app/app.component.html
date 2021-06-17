@@ -42,7 +42,7 @@
         </button>
         <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
           <a clrDropdownItem href="javascript: void(0)" class="active">Clarity Angular</a>
-          <a clrDropdownItem [routerLink]="siteSwitchUrl" target="_blank">Clarity Core</a>
+          <a clrDropdownItem [attr.href]="siteSwitchUrl" target="_blank">Clarity Core</a>
           <div class="dropdown-divider" role="separator"></div>
           <div clrDropdownItem href="javascript: void(0)">What are the differences?</div>
         </clr-dropdown-menu>

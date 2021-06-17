@@ -12,6 +12,8 @@ declare let ga: any;
 
 import * as GLOBAL from '../settings/global.json';
 
+const DEFAULT_CORE_SITE_URL = 'https://60cba1c951705e1be7ddc2ae--vmware-clarity.netlify.app/';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -29,7 +31,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   currentUrl: string;
-  siteSwitchUrl: string;
+  siteSwitchUrl = DEFAULT_CORE_SITE_URL;
 
   ngOnInit() {
     this.router.events.subscribe((change: any) => {
@@ -47,11 +49,10 @@ export class AppComponent implements OnInit {
 
         this.currentUrl = change.urlAfterRedirects;
 
-        this.siteSwitchUrl = 'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/';
+        this.siteSwitchUrl = DEFAULT_CORE_SITE_URL;
 
         if (this.currentUrl === '/documentation/alerts') {
-          this.siteSwitchUrl =
-            'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/documentation/alerts';
+          this.siteSwitchUrl = 'https://60cba1c951705e1be7ddc2ae--vmware-clarity.netlify.app/core-components/alert/';
         }
 
         console.log(this.currentUrl);
