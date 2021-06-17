@@ -48,7 +48,7 @@
 import AlgoliaSearchBox from '@AlgoliaSearchBox';
 import SearchBox from '@SearchBox';
 
-const defaultAngularSiteURL = 'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/';
+const defaultAngularSiteURL = 'https://60cba56fecae1119bbbbe47e--angular-clarity-design.netlify.app/';
 
 export default {
   name: 'Navbar',
@@ -113,8 +113,7 @@ export default {
       this.siteSwitchUrl = defaultAngularSiteURL;
 
       if (this.componentPath === '/core-components/alert/') {
-        this.siteSwitchUrl =
-          'https://60c92c69e42548417039ccc5--angular-clarity-design.netlify.app/documentation/alerts';
+        this.siteSwitchUrl = defaultAngularSiteURL + 'documentation/alerts';
       }
 
       console.log(this.siteSwitchUrl);
