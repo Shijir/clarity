@@ -12,7 +12,7 @@ declare let ga: any;
 
 import * as GLOBAL from '../settings/global.json';
 
-const DEFAULT_CORE_SITE_URL = 'https://60cba1c951705e1be7ddc2ae--vmware-clarity.netlify.app/';
+const DEFAULT_CORE_SITE_URL = 'https://60cbb6bedb7fe800a0f1db46--vmware-clarity.netlify.app/';
 
 @Component({
   selector: 'app-root',
@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
         this.siteSwitchUrl = DEFAULT_CORE_SITE_URL;
 
         if (this.currentUrl === '/documentation/alerts') {
-          this.siteSwitchUrl = 'https://60cba1c951705e1be7ddc2ae--vmware-clarity.netlify.app/core-components/alert/';
+          this.siteSwitchUrl = DEFAULT_CORE_SITE_URL + 'core-components/alert/';
         }
 
         console.log(this.currentUrl);
