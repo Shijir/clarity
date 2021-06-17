@@ -35,9 +35,13 @@
         </button>
         <div class="dropdown-menu">
           <a class="dropdown-item active" href="javascript: void(0)">Clarity Core</a>
-          <a class="dropdown-item" v-bind:href="siteSwitchUrl" target="_blank">Clarity Angular</a>
+          <a class="dropdown-item" v-bind:href="siteSwitchUrl" target="_blank"
+            >Clarity Angular <cds-icon shape="pop-out"></cds-icon
+          ></a>
           <div class="dropdown-divider" role="separator"></div>
-          <div class="dropdown-item" href="javascript: void(0)">What are the differences?</div>
+          <div class="dropdown-item" href="javascript: void(0)">
+            What are the differences? <cds-icon shape="pop-out"></cds-icon>
+          </div>
         </div>
       </div>
     </div>
@@ -146,7 +150,10 @@ function css(el, property) {
 }
 
 .site-switcher cds-select {
-  --color: #ffffff;
   text-transform: uppercase;
+}
+
+.dropdown-menu cds-icon {
+  --color: var(--clr-dropdown-item-color, #666);
 }
 </style>
