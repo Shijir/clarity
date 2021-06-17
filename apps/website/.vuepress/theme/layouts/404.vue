@@ -18,5 +18,11 @@
 </template>
 
 <script>
-export default {};
+export default {
+  beforeCreate() {
+    if (this.$route.path.includes('core-components/stepper')) {
+      this.$router.push({ path: `/core-components/`, query: { missingComponent: 'stepper' } });
+    }
+  },
+};
 </script>

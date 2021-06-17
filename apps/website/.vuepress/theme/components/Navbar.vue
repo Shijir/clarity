@@ -52,7 +52,7 @@
 import AlgoliaSearchBox from '@AlgoliaSearchBox';
 import SearchBox from '@SearchBox';
 
-const defaultAngularSiteURL = 'https://60cba56fecae1119bbbbe47e--angular-clarity-design.netlify.app/';
+const defaultAngularSiteURL = 'https://angular.clarity.design/';
 
 export default {
   name: 'Navbar',
