@@ -12,7 +12,7 @@ declare let ga: any;
 
 import * as GLOBAL from '../settings/global.json';
 
-const DEFAULT_CORE_SITE_URL = 'https://60cbb6bedb7fe800a0f1db46--vmware-clarity.netlify.app/';
+const DEFAULT_CORE_SITE_URL = 'https://60cbf8af0d9f123f159f85de--vmware-clarity.netlify.app/';
 
 @Component({
   selector: 'app-root',
