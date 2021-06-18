@@ -1,5 +1,5 @@
 <template>
-  <Layout :is404="true">
+  <Layout :is404="is404">
     <div cds-layout="vertical gap:md align:vertical-center">
       <p cds-text="message semibold">404 ERROR</p>
 
@@ -19,9 +19,16 @@
 
 <script>
 export default {
-  beforeCreate() {
+  data() {
+    return {
+      is404: false,
+    };
+  },
+  mounted() {
+    this.is404 = true;
     if (this.$route.path.includes('core-components/stepper')) {
       this.$router.push({ path: `/core-components/`, query: { missingComponent: 'stepper' } });
+      this.is404 = false;
     }
   },
 };
