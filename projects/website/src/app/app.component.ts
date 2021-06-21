@@ -52,7 +52,7 @@ export class AppComponent implements OnInit {
         this.siteSwitchUrl = DEFAULT_CORE_SITE_URL;
 
         if (this.currentUrl === '/documentation/alerts') {
-          this.siteSwitchUrl = DEFAULT_CORE_SITE_URL + 'core-components/alerts';
+          this.siteSwitchUrl = DEFAULT_CORE_SITE_URL + 'core-components/alert';
         } else if (this.currentUrl === '/documentation/stepper') {
           this.siteSwitchUrl = DEFAULT_CORE_SITE_URL + 'core-components/stepper';
         }
