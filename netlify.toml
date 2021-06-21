@@ -5,67 +5,11 @@
   publish = ""
   environment = { CI = "true" }
 
-# Legacy Website Redirects
-
-# getting started
-[[redirects]]
-  from = "/documentation/get-started"
-  to = "/get-started/"
-  status = 301
-
-# news -> releases
-[[redirects]]
-  from = "/news/*"
-  to = "/releases/"
-  status = 301
-
-# community -> (re-direct to homepage)
-[[redirects]]
-  from = "/community"
-  to = "/"
-  status = 301
-
-# Icons
-[[redirects]]
-  from = "/icons"
-  to = "/foundation/icons/"
-  status = 301
-
-# foundation pages
-[[redirects]]
-  from = "/documentation/accessibility"
-  to = "/"
-  status = 301
 
 [[redirects]]
-  from = "/documentation/app-layout"
-  to = "/foundation/app-layout/"
-  status = 301
-
-[[redirects]]
-  from = "/documentation/color"
-  to = "/foundation/color/"
-  status = 301
-
-[[redirects]]
-  from = "/documentation/internationalization"
-  to = "/foundation/internationalization/"
-  status = 301
-
-[[redirects]]
-  from = "/documentation/navigation"
-  to = "/foundation/navigation/"
-  status = 301
-
-[[redirects]]
-  from = "/documentation/themes"
-  to = "/foundation/themes/"
-  status = 301
-
-[[redirects]]
-  from = "/documentation/typography"
-  to = "/foundation/typography/"
-  status = 301
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 # Redirects for all images to CDN
 [[redirects]]
