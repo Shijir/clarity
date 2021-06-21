@@ -1,7 +1,9 @@
 <template>
   <div>
-    <cds-alert-group status="info" v-if="$route.query.missingComponent">
-      <cds-alert> The {{ $route.query.missingComponent }} component is not available in Clarity Core yet. </cds-alert>
+    <cds-alert-group status="info" v-if="showAlert">
+      <cds-alert closable v-on:closeChange="alertClose()">
+        The {{ $route.query.missingComponent }} component is not available in Clarity Core yet.
+      </cds-alert>
     </cds-alert-group>
     <section cds-layout="m-y:xl grid gap:md cols@sm:12 cols@md:6 cols@lg:4 align:vertical-stretch">
       <ItemOverview
@@ -24,6 +26,11 @@ export default {
   name: 'ComponentsOverview',
   props: {
     framework: String,
+  },
+  data: function () {
+    return {
+      showAlert: this.$route.query.missingComponent,
+    };
   },
   filters: {
     adjustToSvgUrl: componentName => {
@@ -50,6 +57,12 @@ export default {
       // }
 
       return [];
+    },
+  },
+  methods: {
+    alertClose: function () {
+      delete this.$route.query.missingComponent;
+      this.showAlert = null;
     },
   },
 };
